@@ -57,11 +57,9 @@ public class WaterProjectile extends Projectile
 	
 	public void collide(Entity ent)
 	{
-		if(!ent.isDodging())
-		{
-			ent.setHealth(ent.getHealth() - damage);
-			die();
-		}
+		ent.mark();
+		ent.setHealth(ent.getHealth() - damage);
+		die();
 	}
 	
 	public void collide(Wall wall)

@@ -48,7 +48,7 @@ public abstract class Stage
 	public static final double GRAVITY = 3;
 	public static final double FRICTION = 3;
 	public static final double TERMINAL_VELOCITY = 100; // Warning - Glitchable
-	public static final double SKY_LIMIT = -1000;
+	public static final double SKY_LIMIT = 0;
 	
 	public Stage(PlayState playState)
 	{
@@ -78,7 +78,7 @@ public abstract class Stage
 					
 					if((otherEnt).isActive())
 					{
-						if(otherEnt.isSolid() && ent.intersects(otherEnt))
+						if(ent.intersects(otherEnt))
 						{
 							// May be subject to change depending on how the interaction works out
 							if(ent.getX() < otherEnt.getX())
@@ -106,53 +106,57 @@ public abstract class Stage
 								{
 									data.setKiller(ent.getName());
 								}
-								// Else gain experience
+								else if(ent.isMarked())
+								{
+									// TODO Gain experienced - Add experience variable to Entity class
+								}
 							}
 						}
 					}
 				}
 				
+				Land ground = null;
+
 				// Entity-platform: Landing on platforms
-				if(ent.isSolid())
+				if(ent.getVelY() >= 0 && !ent.isFlying())
 				{
-					Land ground = null;
-					
-					// Checks if the entity is eligible to land on a platform
-					// Change 0 to platform's velocity if implementing vertically moving platforms
-					if(ent.getVelY() >= 0 && !ent.isFlying())
+					for (Platform plat: platforms)
 					{
-						for (Platform plat: platforms)
+						Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
+						
+						if(feetTravel.intersectsLine(plat.getLine()))
 						{
-							Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
-							
-							if(feetTravel.intersectsLine(plat.getLine()))
+							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+						}
+						if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())) && ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX())
+						{
+							ent.setVelY(0);
+							ground = plat;
+						}
+					}
+				}
+				
+				// Entity-wall: Colliding with and landing on walls
+				for(Wall wall: walls)
+				{
+					if(wall.killsEntities())
+					{
+						if(ent.intersects(wall.getLine()))
+						{
+							ent.die();
+							if(ent.equals(player))
 							{
-								ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+								data.setKiller(wall.getName());
 							}
-							if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())) && ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX())
+							else if(ent.isMarked())
 							{
-								ent.setVelY(0);
-								ground = plat;
+								// TODO Gain experienced - Add experience variable to Entity class
 							}
 						}
 					}
-					
-					// Entity-wall: Colliding with and landing on walls
-					for(Wall wall: walls)
+					if(wall.blocksEntities())
 					{
-						if(wall.killsEntities() || (wall.killsSolidEntities() && ent.isSolid()))
-						{
-							if(ent.intersects(wall.getLine()))
-							{
-								if(ent.equals(player))
-								{
-									data.setKiller(wall.getName());
-								}
-								// Else add experience?
-								ent.die();
-							}
-						}
-						else if(!wall.isHorizontal())
+						if(!wall.isHorizontal())
 						{
 							// Leftward collision into wall
 							if(ent.isRightOfLine(wall.getLine()))
@@ -212,15 +216,15 @@ public abstract class Stage
 							}
 						}
 					}
+				}
 
-					if(ground != null)
-					{
-						ent.setGround(ground);
-					}
-					else
-					{
-						ent.removeGround();
-					}
+				if(ground != null)
+				{
+					ent.setGround(ground);
+				}
+				else
+				{
+					ent.removeGround();
 				}
 				
 				// Entity-projectile: Taking damage and tracking kills
@@ -237,13 +241,16 @@ public abstract class Stage
 							{
 								data.setKiller(proj.getName());
 							}
-							// Else gain experience
+							else if(ent.isMarked())
+							{
+								// TODO Gain experienced - Add experience variable to Entity class
+							}
 						}
 					}
 				}
 			}
 			
-			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT || ent.getY() > getMapY())
+			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() > getMapY())
 			{
 				if(count == 0)
 				{
@@ -260,47 +267,78 @@ public abstract class Stage
 			Projectile proj = projectiles.get(count);
 			proj.update();
 			
-			// Projectile-wall: Solid projectiles die after collision
-			if(proj.isActive() && proj.isSolid())
+			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
+			for (Wall wall: walls)
 			{
-				for (Wall wall: walls)
+				if(proj.isActive())
 				{
-					if(proj.intersects(wall.getLine()))
+					// TODO Proximity check
+					if(wall.killsNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
 					{
-						if(wall.killsProjectiles() || (wall.killsSolidProjectiles() && proj.isSolid()))
+						proj.die();
+					}
+					else if(wall.killsSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						proj.die();
+					}
+					if(wall.blocksNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						double xInt = 0;
+						double yInt = 0;
+						
+						// Calculate intersection point
+						if(proj.getPrevX() != proj.getX())
 						{
-							proj.die(); // Considering simply removing the projectile
+							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
+							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
+							double projYInt = -proj.getX() * slope + proj.getY();
+							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
+							yInt = xInt * slope + projYInt;
 						}
 						else
 						{
-							double xInt = 0;
-							double yInt = 0;
-							
-							// Calculate intersection point
-							if(proj.getPrevX() != proj.getX())
-							{
-								double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-								double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-								double projYInt = -proj.getX() * slope + proj.getY();
-								xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-								yInt = xInt * slope + projYInt;
-							}
-							else
-							{
-								xInt = proj.getX();
-								yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
-							}
-							
-							proj.setX(xInt);
-							proj.setY(yInt);
+							xInt = proj.getX();
+							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+						}
+						
+						proj.setX(xInt);
+						proj.setY(yInt);
+						if(proj.isActive())
+						{
 							proj.collide(wall);
-							break;
+						}
+					}
+					else if(wall.blocksSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						double xInt = 0;
+						double yInt = 0;
+						
+						// Calculate intersection point
+						if(proj.getPrevX() != proj.getX())
+						{
+							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
+							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
+							double projYInt = -proj.getX() * slope + proj.getY();
+							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
+							yInt = xInt * slope + projYInt;
+						}
+						else
+						{
+							xInt = proj.getX();
+							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+						}
+						
+						proj.setX(xInt);
+						proj.setY(yInt);
+						if(proj.isActive())
+						{
+							proj.collide(wall);
 						}
 					}
 				}
 			}
 
-			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY())
+			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() > getMapY())
 			{
 				projectiles.remove(proj);
 				count--;

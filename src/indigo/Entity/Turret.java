@@ -29,7 +29,6 @@ public class Turret extends Entity
 		height = TURRET_HEIGHT;
 		
 		movability = 0;
-		solid = true;
 		flying = false;
 		friendly = false;
 		

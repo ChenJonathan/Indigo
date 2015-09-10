@@ -14,11 +14,16 @@ public class Wall implements Land
 	private double maxX;
 	
 	private boolean horizontal;
-
-	protected boolean killsEntities; // Kills all entities
-	protected boolean killsSolidEntities; // Kills solid entities
-	protected boolean killsProjectiles; // Kills all projectiles
-	protected boolean killsSolidProjectiles; // Kills solid projectiles
+	
+	// Blocks movement for entities; triggers collide method for projectiles
+	protected boolean blocksEntities;
+	protected boolean blocksNonsolidProjectiles;
+	protected boolean blocksSolidProjectiles;
+	
+	// Kills entities upon touch; triggers die method for projectiles
+	protected boolean killsEntities;
+	protected boolean killsNonsolidProjectiles;
+	protected boolean killsSolidProjectiles;
 	
 	public Wall(double x1, double y1, double x2, double y2)
 	{
@@ -36,10 +41,13 @@ public class Wall implements Land
 			horizontal = true;
 		}
 		
-		killsProjectiles = false;
-		killsSolidProjectiles = false;
+		blocksEntities = true;
+		blocksNonsolidProjectiles = false;
+		blocksSolidProjectiles = true;
+		
 		killsEntities = false;
-		killsSolidEntities = false;
+		killsNonsolidProjectiles = false;
+		killsSolidProjectiles = false;
 	}
 	
 	public void render(Graphics2D g)
@@ -83,19 +91,29 @@ public class Wall implements Land
 		return horizontal;
 	}
 	
+	public boolean blocksEntities()
+	{
+		return blocksEntities;
+	}
+	
+	public boolean blocksNonsolidProjectiles()
+	{
+		return blocksNonsolidProjectiles;
+	}
+	
+	public boolean blocksSolidProjectiles()
+	{
+		return blocksSolidProjectiles;
+	}
+	
 	public boolean killsEntities()
 	{
 		return killsEntities;
 	}
 	
-	public boolean killsSolidEntities()
+	public boolean killsNonsolidProjectiles()
 	{
-		return killsSolidEntities;
-	}
-	
-	public boolean killsProjectiles()
-	{
-		return killsProjectiles;
+		return killsNonsolidProjectiles;
 	}
 	
 	public boolean killsSolidProjectiles()

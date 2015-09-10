@@ -1,5 +1,6 @@
 package indigo.Entity;
 
+import indigo.Landscape.Land;
 import indigo.Landscape.Wall;
 import indigo.Manager.Content;
 import indigo.Melee.IceSword;
@@ -24,9 +25,11 @@ public class Player extends Entity
 	private int manaRegenTime; // Last time when mana was regenerated
 	private int staminaRegenTime; // Last time when stamina was regenerated
 	
+	// Phase related mechanics
 	private Phase phase;
 	private int mistX;
 	private int mistY;
+	private boolean canDoubleJump;
 	
 	// Values corresponding to each animation
 	private final int GROUND_LEFT = 0;
@@ -40,7 +43,9 @@ public class Player extends Entity
 	private final int MIST = 8;
 	
 	private final double ACCELERATION = 5;
-	private final double MOVE_SPEED = 20;
+	private final double REDUCED_ACCELERATION = 4; // Lower acceleration in air or when moving backwards
+	private final double MOVE_SPEED = 24;
+	private final double REDUCED_MOVE_SPEED = 18; // Lower maximum movement speed when moving backwards
 	private final double JUMP_SPEED = 40;
 	
 	public static final int PLAYER_WIDTH = 60;
@@ -86,7 +91,6 @@ public class Player extends Entity
 		healthRegenTime = manaRegenTime = staminaRegenTime = -50; // Prevents initial regeneration check
 
 		movability = 5;
-		solid = true;
 		friendly = true;
 		
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
@@ -121,55 +125,48 @@ public class Player extends Entity
 					
 					for(Wall wall: stage.getWalls())
 					{
-						/* TODO
-						if(wall.killsEntities())
+						if(wall.blocksEntities())
 						{
-							if(intersects(wall.getLine()))
+							if(!wall.isHorizontal())
 							{
-								data.setKiller(wall.getName());
-								die();
-							}
-						}
-						*/
-						if(!wall.isHorizontal())
-						{
-							// Leftward collision into wall
-							if(isRightOfLine(wall.getLine()))
-							{
-								while(intersects(wall.getLine()))
+								// Leftward collision into wall
+								if(isRightOfLine(wall.getLine()))
 								{
-									setX(getX() + Stage.PUSH_AMOUNT);
-									setVelX(Math.max(getVelX(), 0));
+									while(intersects(wall.getLine()))
+									{
+										setX(getX() + Stage.PUSH_AMOUNT);
+										setVelX(Math.max(getVelX(), 0));
+									}
+								}
+								// Rightward collision into wall
+								else
+								{
+									while(intersects(wall.getLine()))
+									{
+										setX(getX() - Stage.PUSH_AMOUNT);
+										setVelX(Math.min(getVelX(), 0));
+									}
 								}
 							}
-							// Rightward collision into wall
 							else
 							{
-								while(intersects(wall.getLine()))
+								// Downward collision into wall
+								if(isAboveLine(wall.getLine()))
 								{
-									setX(getX() - Stage.PUSH_AMOUNT);
-									setVelX(Math.min(getVelX(), 0));
+									while(intersects(wall.getLine()))
+									{
+										setY(getY() - Stage.PUSH_AMOUNT);
+										setVelY(Math.min(getVelY(), 0));
+									}
 								}
-							}
-						}
-						else
-						{
-							// Downward collision into wall
-							if(isAboveLine(wall.getLine()))
-							{
-								while(intersects(wall.getLine()))
+								// Upward collision into wall
+								else
 								{
-									setY(getY() - Stage.PUSH_AMOUNT);
-									setVelY(Math.min(getVelY(), 0));
-								}
-							}
-							// Upward collision into wall
-							else
-							{
-								while(intersects(wall.getLine()))
-								{
-									setY(getY() + Stage.PUSH_AMOUNT);
-									setVelY(Math.max(getVelY(), 0));
+									while(intersects(wall.getLine()))
+									{
+										setY(getY() + Stage.PUSH_AMOUNT);
+										setVelY(Math.max(getVelY(), 0));
+									}
 								}
 							}
 						}
@@ -186,7 +183,7 @@ public class Player extends Entity
 			weapon.update();
 		}
 		
-		// Change direction
+		// Set direction
 		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation
 		{
 			setDirection(stage.getMouseX() > this.getX());
@@ -319,17 +316,29 @@ public class Player extends Entity
 	{
 		if(isGrounded())
 		{
-			// Y velocity changed if on slope
-			setVelX(getVelX() - ACCELERATION);
+			if(!isFacingRight() && getVelX() > -MOVE_SPEED)
+			{
+				// Moving forwards
+				setVelX(Math.max(getVelX() - ACCELERATION, -MOVE_SPEED));
+			}
+			else if(isFacingRight() && getVelX() > -REDUCED_MOVE_SPEED)
+			{
+				// Slower acceleration and maximum move speed when moving backwards
+				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION, -REDUCED_MOVE_SPEED));
+			}
 		}
 		else
 		{
-			// Slower ACCELERATION in air
-			setVelX(getVelX() - ACCELERATION * 0.75);
-		}
-		if(getVelX() < -MOVE_SPEED)
-		{
-			setVelX(-MOVE_SPEED);
+			if(!isFacingRight() && getVelX() > -MOVE_SPEED)
+			{
+				// Slower acceleration when in air
+				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION, -MOVE_SPEED));
+			}
+			else if(isFacingRight() && getVelX() > -REDUCED_MOVE_SPEED)
+			{
+				// Slower acceleration and maximum move speed when moving backwards in air
+				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION, -REDUCED_MOVE_SPEED));
+			}
 		}
 	}
 	
@@ -337,27 +346,36 @@ public class Player extends Entity
 	{
 		if(isGrounded())
 		{
-			// Y velocity changed if on slope
-			setVelX(getVelX() + ACCELERATION);
+			if(isFacingRight() && getVelX() < MOVE_SPEED)
+			{
+				// Moving forwards
+				setVelX(Math.min(getVelX() + ACCELERATION, MOVE_SPEED));
+			}
+			else if(!isFacingRight() && getVelX() < REDUCED_MOVE_SPEED)
+			{
+				// Slower acceleration and maximum move speed when moving backwards
+				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION, REDUCED_MOVE_SPEED));
+			}
 		}
 		else
 		{
-			// Slower acceleration in air
-			setVelX(getVelX() + ACCELERATION * 0.75);
-		}
-		if(getVelX() > MOVE_SPEED)
-		{
-			setVelX(MOVE_SPEED);
+			if(isFacingRight() && getVelX() < MOVE_SPEED)
+			{
+				// Slower acceleration when in air
+				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION, MOVE_SPEED));
+			}
+			else if(!isFacingRight() && getVelX() < REDUCED_MOVE_SPEED)
+			{
+				// Slower acceleration and maximum move speed when moving backwards in air
+				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION, REDUCED_MOVE_SPEED));
+			}
 		}
 	}
 	
 	public void jump()
 	{
-		if(isGrounded()) // TODO Move to PlayState when audio is implemented
-		{
-			setVelY(-JUMP_SPEED);
-			removeGround();
-		}
+		setVelY(-JUMP_SPEED);
+		removeGround();
 	}
 	
 	// Called every update
@@ -370,21 +388,21 @@ public class Player extends Entity
 			{
 				this.crouching = true;
 				blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
-				
-				// TODO Change weapon animation
-				if(!isFacingRight())
-				{
-					setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
-				}
-				else
-				{
-					setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
-				}
 			}
-
+			
 			if(isCrouching())
 			{
 				setStamina(stamina - CROUCH_STAMINA_COST);
+				
+				// TODO Change weapon animation
+				if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
+				{
+					setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
+				}
+				else if(isFacingRight() && currentAnimation != CROUCH_RIGHT)
+				{
+					setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
+				}
 			}
 			else
 			{
@@ -418,7 +436,7 @@ public class Player extends Entity
 		}
 		else
 		{
-			// TODO Ice shift
+			// TODO Ice charge
 		}
 	}
 	
@@ -512,10 +530,26 @@ public class Player extends Entity
 		this.phase = phase;
 	}
 	
+	public void setGround(Land ground)
+	{
+		super.setGround(ground);
+		canDoubleJump = true;
+	}
+	
 	public void setMistDirection(int x, int y)
 	{
 		mistX = x;
 		mistY = y;
+	}
+	
+	public boolean canDoubleJump()
+	{
+		return phase.id() == Phase.ICE && canDoubleJump;
+	}
+	
+	public void canDoubleJump(boolean canDoubleJump)
+	{
+		this.canDoubleJump = canDoubleJump;
 	}
 	
 	public boolean isCrouching()

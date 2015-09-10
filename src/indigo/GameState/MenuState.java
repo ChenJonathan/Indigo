@@ -47,19 +47,19 @@ public class MenuState extends GameState
 		if(instructions)
 		{
 			// Draw instructions
-			g.drawImage(Content.INSTRUCTIONS_BACKGROUND, 0, 0, 1600, 900, null);
+			g.drawImage(Content.INSTRUCTIONS_BACKGROUND, 0, 0, 1920, 1080, null);
 			g.drawImage(Content.BACK_BUTTON, 180, 800, 200, 60, null);
 		}
 		else if(credits)
 		{
 			// Draw credits
-			g.drawImage(Content.CREDITS_BACKGROUND, 0, 0, 1600, 900, null);
+			g.drawImage(Content.CREDITS_BACKGROUND, 0, 0, 1920, 1080, null);
 			g.drawImage(Content.BACK_BUTTON, 180, 800, 200, 60, null);
 		}
 		else
 		{
 			// Draw main menu
-			g.drawImage(Content.MENU_BACKGROUND, 0, 0, 1600, 900, null);
+			g.drawImage(Content.MENU_BACKGROUND, 0, 0, 1920, 1080, null);
 			g.drawImage(Content.TITLE, 200, 200, 800, 382, null);
 			g.drawImage(Content.PLAY_BUTTON, 1235, 285, 150, 100, null);
 			g.drawImage(Content.HELP_BUTTON, 1235, 385, 160, 100, null);

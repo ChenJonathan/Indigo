@@ -23,7 +23,7 @@ public class StageSelectState extends GameState
 	
 	public void render(Graphics2D g)
 	{
-		g.drawImage(Content.STAGE_SELECT_BACKGROUND, 0, 0, 1600, 900, null);
+		g.drawImage(Content.STAGE_SELECT_BACKGROUND, 0, 0, 1920, 1080, null);
 	}
 	
 	public void handleInput()

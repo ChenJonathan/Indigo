@@ -14,7 +14,7 @@ public class Content
 	// Menus
 	public static BufferedImage BACK_BUTTON = load("/menus/back_button.png", 200, 60);
 	public static BufferedImage CONFIRM_BUTTON = load("/menus/confirm_button.png", 200, 60);
-	public static BufferedImage CREDITS_BACKGROUND = load("/menus/credits_background.png", 1600, 900);
+	public static BufferedImage CREDITS_BACKGROUND = load("/menus/credits_background.png", 1920, 1080);
 	public static BufferedImage CREDITS_BUTTON = load("/menus/credits.png", 250, 100);
 	public static BufferedImage CREDITS_BUTTON_HOVER = load("/menus/credits_hover.png", 250, 100);
 	public static BufferedImage EXIT_BUTTON_HOVER = load("/menus/exit_hover.png", 130, 100);
@@ -22,16 +22,16 @@ public class Content
 	public static BufferedImage GLOW = load("/menus/glow.png", 500, 160);
 	public static BufferedImage HELP_BUTTON = load("/menus/help.png", 160, 100);
 	public static BufferedImage HELP_BUTTON_HOVER = load("/menus/help_hover.png", 160, 100);
-	public static BufferedImage INSTRUCTIONS_BACKGROUND = load("/menus/instructions_background.png", 1600, 900);
-	public static BufferedImage MENU_BACKGROUND = load("/menus/menu_background.png", 1600, 900);
-	public static BufferedImage OPTIONS_BACKGROUND = load("/menus/options_background.png", 1600, 900);
+	public static BufferedImage INSTRUCTIONS_BACKGROUND = load("/menus/instructions_background.png", 1920, 1080);
+	public static BufferedImage MENU_BACKGROUND = load("/menus/menu_background.png", 1920, 1080);
+	public static BufferedImage OPTIONS_BACKGROUND = load("/menus/options_background.png", 1920, 1080);
 	public static BufferedImage OPTIONS_BUTTON = load("/menus/options.png", 280, 100);
 	public static BufferedImage OPTIONS_BUTTON_HOVER = load("/menus/options_hover.png", 280, 100);
 	public static BufferedImage PLAY_BUTTON = load("/menus/play.png", 150, 100);
 	public static BufferedImage PLAY_BUTTON_HOVER = load("/menus/play_hover.png", 150, 100);
 	public static BufferedImage SELECT_BAR = load("/menus/select_bar.png", 268, 46);
-	public static BufferedImage STAGE_SELECT_BACKGROUND = load("/menus/stage_select_background.png", 1600, 900);
-	public static BufferedImage TALENTS_BACKGROUND = load("/menus/talents.png", 1600, 900);
+	public static BufferedImage STAGE_SELECT_BACKGROUND = load("/menus/stage_select_background.png", 1920, 1080);
+	public static BufferedImage TALENTS_BACKGROUND = load("/menus/talents.png", 1920, 1080);
 	public static BufferedImage TITLE = load("/menus/title.png", 800, 382);
 	
 	// Projectiles

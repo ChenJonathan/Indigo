@@ -47,6 +47,7 @@ public class GeyserParticle extends Projectile
 	{
 		if(stage.getTime() % 2 == 0 && !ent.isDodging())
 		{
+			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
 		}
 	}

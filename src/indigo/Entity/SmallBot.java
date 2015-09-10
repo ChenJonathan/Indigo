@@ -32,7 +32,6 @@ public class SmallBot extends Entity
 		height = SMALLBOT_HEIGHT;
 		
 		movability = 5;
-		solid = true;
 		flying = true;
 		friendly = false;
 		

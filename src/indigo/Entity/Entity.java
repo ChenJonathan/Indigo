@@ -27,8 +27,7 @@ public abstract class Entity
 	private Line2D.Double travel; // Line formed by previous and current positions; used for collision checking
 	
 	protected double width, height;
-	protected double movability; // How much an entity moves when pushed by another entity; meaningless for non-solids
-	protected boolean solid; // TODO Not used yet (set true always)
+	protected double movability; // How much an entity moves when pushed by another entity
 	
 	private int health, maxHealth;
 	
@@ -48,6 +47,7 @@ public abstract class Entity
 	
 	protected boolean friendly;
 	protected boolean flying;
+	protected boolean marked;
 	protected boolean dead;
 	
 	// Consider making Grounded and Flying subclasses
@@ -68,6 +68,8 @@ public abstract class Entity
 		canAttack = true;
 		canMove = true;
 		
+		marked = false;
+		
 		animation = new Animation();
 	}
 	
@@ -84,18 +86,6 @@ public abstract class Entity
 	{
 		prevX = x;
 		prevY = y;
-		
-		x += velX;
-		y += velY;
-		
-		// If the entity is grounded, take the y position corresponding to the ground
-		// Important for slanted surfaces
-		if(ground != null)
-		{
-			y = ground.getSurface(x) - getHeight() / 2;
-		}
-		
-		updateTravelLine();
 		
 		// Applying friction; ground entities gradually slow down
 		if(!flying)
@@ -133,6 +123,18 @@ public abstract class Entity
 		{
 			velY = Stage.TERMINAL_VELOCITY;
 		}
+		
+		x += velX;
+		y += velY;
+		
+		// If the entity is grounded, take the y position corresponding to the ground
+		// Important for slanted surfaces
+		if(ground != null)
+		{
+			y = ground.getSurface(x) - getHeight() / 2;
+		}
+		
+		updateTravelLine();
 		
 		animation.update();
 	}
@@ -288,11 +290,6 @@ public abstract class Entity
 	{
 		return height;
 	}
-
-	public boolean isSolid()
-	{
-		return solid;
-	}
 	
 	public double getMovability()
 	{
@@ -410,6 +407,16 @@ public abstract class Entity
 	public boolean isDodging()
 	{
 		return dodging;
+	}
+	
+	public boolean isMarked()
+	{
+		return marked;
+	}
+	
+	public void mark()
+	{
+		marked = true;
 	}
 	
 	public boolean isDead()

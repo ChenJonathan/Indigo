@@ -50,6 +50,7 @@ public class IceSword extends Melee
 	{
 		if(!entitiesHit.contains(ent))
 		{
+			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
 			entitiesHit.add(ent);
 		}

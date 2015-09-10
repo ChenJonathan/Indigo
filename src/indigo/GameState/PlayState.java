@@ -116,6 +116,11 @@ public class PlayState extends GameState
 			{
 				player.jump();
 			}
+			else if(input.keyPress(InputManager.W) && player.canDoubleJump())
+			{
+				player.canDoubleJump(false);
+				player.jump();
+			}
 			if(input.keyDown(InputManager.S))
 			{
 				player.crouch(true);
@@ -164,7 +169,7 @@ public class PlayState extends GameState
 		{
 			if(activePhase.skillSelected())
 			{
-				// Cast skill // TODO Consider placing skill selection check in canCast
+				// Cast skill
 				if(activePhase.getSkillState(activePhase.selectedSkill()) == Phase.AIM 
 						&& activePhase.canCast(activePhase.selectedSkill()))
 				{
@@ -266,6 +271,11 @@ public class PlayState extends GameState
 		player.setPhase(activePhase); // Swaps value representing current phase in Player
 		display.setPhase(activePhase); // Swaps value representing current phase in Display
 		swapCooldown = maxSwapCooldown; // Trigger cooldown for profession swap
+		
+		if(activePhase.id() == Phase.ICE)
+		{
+			player.canDoubleJump(true);
+		}
 	}
 	
 	public Entity getPlayer()
