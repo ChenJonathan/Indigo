@@ -4,10 +4,11 @@ import java.awt.Graphics;
 import java.awt.geom.Line2D;
 
 import indigo.Entity.Entity;
+import indigo.Stage.Stage;
 
 public abstract class Melee
 {
-	// TODO Don't hit enemies multiple times
+	protected Stage stage;
 	protected Entity user;
 	
 	protected int damage;
@@ -15,6 +16,7 @@ public abstract class Melee
 	
 	public Melee(Entity user, int dmg)
 	{
+		stage = user.getStage();
 		this.user = user;
 		damage = dmg;
 		attackTime = -1;

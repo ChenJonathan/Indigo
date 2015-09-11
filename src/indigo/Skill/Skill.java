@@ -13,16 +13,23 @@ public abstract class Skill
 	
 	protected Player player;
 	protected int id; // Initialize in each skill constructor
+	protected int position;
 	
 	protected int castTime;
+
+	public static final int EMPTY = 0;
+	public static final int GEYSER = 1;
+	public static final int TORRENT = 2;
+	public static final int VORTEX = 3;
 	
-	public Skill(Phase phase)
+	public Skill(Phase phase, int position)
 	{
 		playState = phase.getPlayState();
 		input = phase.getInput();
 		this.phase = phase;
 		player = phase.getPlayer();
 		
+		this.position = position;
 		castTime = -1;
 	}
 	
@@ -36,6 +43,11 @@ public abstract class Skill
 	public void endCast()
 	{
 		castTime = -1;
-		phase.endCast(id); // Resets skill icon
+		phase.endCast(position); // Resets skill icon
+	}
+	
+	public int id()
+	{
+		return id;
 	}
 }

@@ -5,7 +5,6 @@ import indigo.Landscape.Wall;
 import indigo.Manager.Content;
 import indigo.Melee.IceSword;
 import indigo.Phase.Phase;
-import indigo.Projectile.Mortar;
 import indigo.Projectile.WaterProjectile;
 import indigo.Stage.Stage;
 
@@ -15,8 +14,6 @@ import java.awt.geom.Rectangle2D;
 
 public class Player extends Entity
 {
-	public boolean cheat; // TODO Revert all
-	
 	private int mana, maxMana;
 	private int stamina;
 	private boolean crouching;
@@ -27,8 +24,6 @@ public class Player extends Entity
 	
 	// Phase related mechanics
 	private Phase phase;
-	private int mistX;
-	private int mistY;
 	private boolean canDoubleJump;
 	
 	// Values corresponding to each animation
@@ -110,19 +105,16 @@ public class Player extends Entity
 				canAttack(true);
 				canMove(true);
 				
-				mistX = 0;
-				mistY = 0;
+				setVelX(0);
+				setVelY(0);
 				
 				phase.resetAttackTimer();
 			}
 			else
 			{
 				// Mist functionality goes here
-				for(int count = 0; count < 30; count++) //
+				for(int count = 0; count < 30; count++)
 				{
-					setX(getX() + mistX);
-					setY(getY() + mistY);
-					
 					for(Wall wall: stage.getWalls())
 					{
 						if(wall.blocksEntities())
@@ -283,24 +275,11 @@ public class Player extends Entity
 		// Water phase attack
 		if(phase.id() == Phase.WATER)
 		{
-			if(cheat)
-			{
-				double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
-				double velX = Mortar.SPEED * (stage.getMouseX() - getX()) / scale;
-				double velY = Mortar.SPEED * (stage.getMouseY() - getY()) / scale;
-				
-				stage.getProjectiles().add(new Mortar(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY, Mortar.DAMAGE));
-			}
-			else
-			{
-				double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
-				double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
-				double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
-				
-				stage.getProjectiles().add(new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY, WaterProjectile.DAMAGE));
-			}
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
 			
-			
+			stage.getProjectiles().add(new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY, WaterProjectile.DAMAGE));
 		}
 		// Ice phase attack
 		else
@@ -417,14 +396,14 @@ public class Player extends Entity
 		}
 	}
 	
-	public void shift()
+	public void shift(int x, int y) // Parameters represent player direction
 	{
 		if(phase.id() == Phase.WATER)
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 			
-			setVelX(0);
-			setVelY(0);
+			setVelX(x * 125);
+			setVelY(y * 125);
 			
 			flying = true;
 			dodging = true;
@@ -534,12 +513,6 @@ public class Player extends Entity
 	{
 		super.setGround(ground);
 		canDoubleJump = true;
-	}
-	
-	public void setMistDirection(int x, int y)
-	{
-		mistX = x;
-		mistY = y;
 	}
 	
 	public boolean canDoubleJump()
