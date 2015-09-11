@@ -17,7 +17,6 @@ import indigo.Stage.Beach;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 // Handles inputs (skill use) and sends the info to the HUD, Stage, and Phase objects
@@ -139,16 +138,6 @@ public class PlayState extends GameState
 				player.right();
 			}
 		}
-		
-		boolean noShiftCost = false;
-		
-		/**
-		 * Test for jumping down from platforms
-		 */
-		if(player.isCrouching() && input.keyDown(InputManager.SPACE)){
-			player.crouch(false);
-			noShiftCost = true;
-		}
 		if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
 		{
 			int x = 0;
@@ -172,12 +161,9 @@ public class PlayState extends GameState
 			}
 			
 			// Parameters represent player direction
-			int oldStamina = player.getStamina();
 			player.shift(x, y);
-			if(noShiftCost){
-				player.setStamina(oldStamina);
-			}
 		}
+		
 		// Combat
 		if(input.mouseLeftPress() || input.mouseRightPress())
 		{
