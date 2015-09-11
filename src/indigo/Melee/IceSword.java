@@ -11,8 +11,13 @@ public class IceSword extends Melee
 {
 	private ArrayList<Entity> entitiesHit = new ArrayList<Entity>();
 	
+<<<<<<< HEAD
 	private final int length =  100; // 80
 	private final int radialOffset = 10;
+=======
+	private final int length = 100;
+	private final int radialOffset = 20;
+>>>>>>> 329c0855e395fbba681c522caec7c5352a7def78
 	private final int yOffset = -20;
 	
 	public static final int DAMAGE = 50;
@@ -41,8 +46,12 @@ public class IceSword extends Melee
 			swordAngle = Math.toRadians(determineSwordAngle(stage.getMouseX(), stage.getMouseY()));
 			initialSwordAngle = Math.toDegrees(swordAngle);
 		}
-			
-		beginSwordX = (int)(user.getX() + radialOffset);
+		
+		if(user.isFacingRight()){
+			beginSwordX = (int)(user.getX() + radialOffset);
+		}else{
+			beginSwordX = (int)(user.getX() - radialOffset);
+		}
 		beginSwordY = (int)(user.getY() + yOffset);
 		
 		if(slashMode)
