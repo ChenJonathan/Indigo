@@ -28,7 +28,7 @@ public class StageSelectState extends GameState
 	
 	public void handleInput()
 	{
-		if(input.mouseRelease() && input.mouseX() >= 113 && input.mouseX() <= 365 && input.mouseY() >= 116 && input.mouseY() <= 293)
+		if(input.mouseLeftRelease() && input.mouseX() >= 113 && input.mouseX() <= 365 && input.mouseY() >= 116 && input.mouseY() <= 293)
 		{
 			data.setStage(PlayState.BEACH);
 			gsm.setState(GameStateManager.PLAY);

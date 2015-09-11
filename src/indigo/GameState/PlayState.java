@@ -165,7 +165,7 @@ public class PlayState extends GameState
 		}
 		
 		// Combat
-		if(input.mousePress())
+		if(input.mouseLeftPress() || input.mouseRightPress())
 		{
 			if(activePhase.skillSelected())
 			{
@@ -181,13 +181,35 @@ public class PlayState extends GameState
 				if(activePhase.canNormalAttack())
 				{
 					player.attack();
+					if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
+					{
+						if(input.mouseLeftDown())
+						{
+							player.setSlashMode(false);
+						}
+						else
+						{
+							player.setSlashMode(true);
+						}
+					}
 				}
 			}
 		}
-		else if(input.mouseDown() && activePhase.canNormalAttack())
+		else if((input.mouseLeftDown() || input.mouseRightDown()) && activePhase.canNormalAttack())
 		{
 			// Automatic attacking
 			player.attack();
+			if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
+			{
+				if(input.mouseLeftDown())
+				{
+					player.setSlashMode(false);
+				}
+				else
+				{
+					player.setSlashMode(true);
+				}
+			}
 		}
 		if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
 		{

@@ -18,7 +18,7 @@ public class Geyser extends Skill
 	{
 		super.update();
 		
-		if(player.getMana() >= 2 && (input.mouseDown() || castTime < 10))
+		if(player.getMana() >= 2 && (input.mouseLeftDown() || castTime < 10))
 		{
 			if(castTime == 0)
 			{

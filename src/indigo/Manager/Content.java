@@ -51,7 +51,7 @@ public class Content
 	public static BufferedImage[] PLAYER_IDLE_RIGHT = loadArray("/sprites/player_idle_right.png", 80, 120, 2);
 	public static BufferedImage[] PLAYER_JUMP_LEFT = loadArray("/sprites/player_jump_left.png", 80, 120, 1);
 	public static BufferedImage[] PLAYER_JUMP_RIGHT = loadArray("/sprites/player_jump_right.png", 80, 120, 1);
-	public static BufferedImage[] PLAYER_MIST = loadArray("/sprites/player_mist.png", 80, 120, 3);
+	public static BufferedImage[] PLAYER_MIST = loadArray("/sprites/player_mist.png", 80, 120, 4);
 	public static BufferedImage[] PLAYER_MOVE_LEFT = loadArray("/sprites/player_move_left.png", 80, 120, 5);
 	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player_move_right.png", 80, 120, 5);
 	public static BufferedImage[] SMALL_BOT_DEATH = loadArray("/sprites/small_bot_death.png", 60, 60, 7);

@@ -118,7 +118,7 @@ public class MenuState extends GameState
 		// Instruction button functionality goes here
 		if(instructions)
 		{
-			if (input.mouseRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
+			if (input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
 			{
 				instructions = false;
 			}
@@ -126,7 +126,7 @@ public class MenuState extends GameState
 		// Credits button functionality goes here
 		else if(credits)
 		{
-			if (input.mouseRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
+			if (input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
 			{
 				credits = false;
 			}
@@ -138,11 +138,11 @@ public class MenuState extends GameState
 			{
 				buttonState[PLAY] = HOVER;
 				
-				if(input.mouseDown())
+				if(input.mouseLeftDown())
 				{
 					buttonState[PLAY] = CLICKED;
 				}
-				if(input.mouseRelease())
+				if(input.mouseLeftRelease())
 				{
 					gsm.setState(GameStateManager.SELECT);
 				}
@@ -155,11 +155,11 @@ public class MenuState extends GameState
 			{
 				buttonState[HELP] = HOVER;
 				
-				if(input.mouseDown())
+				if(input.mouseLeftDown())
 				{
 					buttonState[HELP] = CLICKED;
 				}
-				if(input.mouseRelease())
+				if(input.mouseLeftRelease())
 				{
 					instructions = true;
 				}
@@ -172,11 +172,11 @@ public class MenuState extends GameState
 			{
 				buttonState[OPTIONS] = HOVER;
 				
-				if(input.mouseDown())
+				if(input.mouseLeftDown())
 				{
 					buttonState[OPTIONS] = CLICKED;
 				}
-				if(input.mouseRelease())
+				if(input.mouseLeftRelease())
 				{
 					gsm.setOptions(true);
 				}
@@ -189,11 +189,11 @@ public class MenuState extends GameState
 			{
 				buttonState[CREDITS] = HOVER;
 				
-				if(input.mouseDown())
+				if(input.mouseLeftDown())
 				{
 					buttonState[CREDITS] = CLICKED;
 				}
-				if(input.mouseRelease())
+				if(input.mouseLeftRelease())
 				{
 					credits = true;
 				}
@@ -206,11 +206,11 @@ public class MenuState extends GameState
 			{
 				buttonState[EXIT] = HOVER;
 				
-				if(input.mouseDown())
+				if(input.mouseLeftDown())
 				{
 					buttonState[EXIT] = CLICKED;
 				}
-				if(input.mouseRelease())
+				if(input.mouseLeftRelease())
 				{
 					System.exit(0);
 				}

@@ -1,7 +1,6 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
-import indigo.Landscape.Wall;
 import indigo.Manager.Content;
 import indigo.Melee.IceSword;
 import indigo.Phase.Phase;
@@ -109,61 +108,6 @@ public class Player extends Entity
 				setVelY(0);
 				
 				phase.resetAttackTimer();
-			}
-			else
-			{
-				// Mist functionality goes here
-				for(int count = 0; count < 30; count++)
-				{
-					for(Wall wall: stage.getWalls())
-					{
-						if(wall.blocksEntities())
-						{
-							if(!wall.isHorizontal())
-							{
-								// Leftward collision into wall
-								if(isRightOfLine(wall.getLine()))
-								{
-									while(intersects(wall.getLine()))
-									{
-										setX(getX() + Stage.PUSH_AMOUNT);
-										setVelX(Math.max(getVelX(), 0));
-									}
-								}
-								// Rightward collision into wall
-								else
-								{
-									while(intersects(wall.getLine()))
-									{
-										setX(getX() - Stage.PUSH_AMOUNT);
-										setVelX(Math.min(getVelX(), 0));
-									}
-								}
-							}
-							else
-							{
-								// Downward collision into wall
-								if(isAboveLine(wall.getLine()))
-								{
-									while(intersects(wall.getLine()))
-									{
-										setY(getY() - Stage.PUSH_AMOUNT);
-										setVelY(Math.min(getVelY(), 0));
-									}
-								}
-								// Upward collision into wall
-								else
-								{
-									while(intersects(wall.getLine()))
-									{
-										setY(getY() + Stage.PUSH_AMOUNT);
-										setVelY(Math.max(getVelY(), 0));
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 		
@@ -402,8 +346,8 @@ public class Player extends Entity
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 			
-			setVelX(x * 125);
-			setVelY(y * 125);
+			setVelX(x * 100);
+			setVelY(y * 100);
 			
 			flying = true;
 			dodging = true;
@@ -437,7 +381,7 @@ public class Player extends Entity
 		{
 			healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
 			
-			// If damaged, the initial delay is 5 times as long
+			// If damaged, the initial delay is longer
 			if(health < getHealth())
 			{
 				healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
@@ -464,7 +408,7 @@ public class Player extends Entity
 			// Reset delay for next mana regeneration
 			manaRegenTime = stage.getTime() + MANA_REGEN_DELAY;
 			
-			// If damaged, the initial delay is 5 times as long
+			// If damaged, the initial delay is longer
 			if(mana < getMana())
 			{
 				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;
@@ -490,7 +434,7 @@ public class Player extends Entity
 		{
 			staminaRegenTime = stage.getTime() + STAMINA_REGEN_DELAY;
 			
-			// If damaged, the initial delay is 5 times as long
+			// If damaged, the initial delay is longer
 			if(stamina < getStamina())
 			{
 				staminaRegenTime = stage.getTime() + STAMINA_REGEN_LONG_DELAY;
@@ -513,6 +457,11 @@ public class Player extends Entity
 	{
 		super.setGround(ground);
 		canDoubleJump = true;
+	}
+	
+	public void setSlashMode(boolean slash)
+	{
+		((IceSword)weapon).setSlashMode(slash);
 	}
 	
 	public boolean canDoubleJump()

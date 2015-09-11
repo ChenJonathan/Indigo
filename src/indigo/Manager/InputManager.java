@@ -7,12 +7,13 @@ public class InputManager
 	
 	private boolean keyState[] = new boolean[NUM_KEYS];
 	private boolean prevKeyState[] = new boolean[NUM_KEYS];
-	private boolean mouseState = false;
-	private boolean prevMouseState = false;
+	private boolean mouseLeftState = false;
+	private boolean prevMouseLeftState = false;
+	private boolean mouseRightState = false;
+	private boolean prevMouseRightState = false;
 	
 	private int mouseX = 0;
 	private int mouseY = 0;
-	private boolean rightClick = false;
 	
 	public static final int K1 = 0;
 	public static final int K2 = 1;
@@ -28,8 +29,18 @@ public class InputManager
 	public static final int SHIFT = 11;
 	public static final int ESCAPE = 12;
 	
-	public InputManager()
-	{}
+	public InputManager() { }
+	
+	// Previous mouse position is tracked to help check for changes in mouse state
+	public void update()
+	{
+		prevMouseLeftState = mouseLeftState;
+		prevMouseRightState = mouseRightState;
+		for(int count = 0; count < NUM_KEYS; count++) 
+		{
+			prevKeyState[count] = keyState[count];
+		}
+	}
 	
 	// Changes boolean array based on which keys are pressed
 	public void keySet(int key, boolean state)
@@ -50,9 +61,15 @@ public class InputManager
 	}
 	
 	// Changes boolean based on whether mouse is pressed
-	public void mouseSet(boolean state)
+	public void mouseLeftSet(boolean state)
 	{
-		mouseState = state;
+		mouseLeftState = state;
+	}
+	
+	// Changes boolean based on whether mouse is pressed
+	public void mouseRightSet(boolean state)
+	{
+		mouseRightState = state;
 	}
 	
 	// Changes int values representing mouse position
@@ -62,36 +79,40 @@ public class InputManager
 		mouseY = y;
 	}
 	
-	public void rightClickSet(boolean rC){
-		rightClick = rC;
-	}
-	
-	// Previous mouse position is tracked to help check for changes in mouse state
-	public void update()
-	{
-		prevMouseState = mouseState;
-		for(int i = 0; i < NUM_KEYS; i++) 
-		{
-			prevKeyState[i] = keyState[i];
-		}
-	}
-	
 	// Checks if the mouse is currently pressed
-	public boolean mouseDown()
+	public boolean mouseLeftDown()
 	{
-		return mouseState;
+		return mouseLeftState;
 	}
 	
 	// Checks if mouse has been recently pressed
-	public boolean mousePress()
+	public boolean mouseLeftPress()
 	{
-		return mouseState && !prevMouseState;
+		return mouseLeftState && !prevMouseLeftState;
 	}
 	
 	// Checks if mouse has been recently released
-	public boolean mouseRelease()
+	public boolean mouseLeftRelease()
 	{
-		return !mouseState && prevMouseState;
+		return !mouseLeftState && prevMouseLeftState;
+	}
+	
+	// Checks if the mouse is currently pressed
+	public boolean mouseRightDown()
+	{
+		return mouseRightState;
+	}
+	
+	// Checks if mouse has been recently pressed
+	public boolean mouseRightPress()
+	{
+		return mouseRightState && !prevMouseRightState;
+	}
+	
+	// Checks if mouse has been recently released
+	public boolean mouseRightRelease()
+	{
+		return !mouseRightState && prevMouseRightState;
 	}
 	
 	// Returns x position of mouse
@@ -105,11 +126,6 @@ public class InputManager
 	{
 		return mouseY;
 	}
-	
-	public boolean rightClick(){
-		return rightClick;
-	}
-		
 	
 	// Checks if key is pressed
 	public boolean keyDown(int i)
