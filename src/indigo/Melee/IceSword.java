@@ -41,10 +41,17 @@ public class IceSword extends Melee
 			swordAngle = Math.toRadians(determineSwordAngle(stage.getMouseX(), stage.getMouseY()));
 			initialSwordAngle = Math.toDegrees(swordAngle);
 		}
+		else if(attackTime == 15) // TODO Animation.hasPlayedOnce()
+		{
+			user.removeWeapon();
+		}
 		
-		if(user.isFacingRight()){
+		if(user.isFacingRight())
+		{
 			beginSwordX = (int)(user.getX() + radialOffset);
-		}else{
+		}
+		else
+		{
 			beginSwordX = (int)(user.getX() - radialOffset);
 		}
 		beginSwordY = (int)(user.getY() + yOffset);
@@ -59,11 +66,6 @@ public class IceSword extends Melee
 		{
 			endSwordX = (int)(beginSwordX + (length * Math.cos(swordAngle)));
 			endSwordY = (int)(beginSwordY + (length * Math.sin(swordAngle)));
-		}
-		
-		if(attackTime == 15) // TODO Animation.hasPlayedOnce()
-		{
-			user.removeWeapon();
 		}
 	}
 	

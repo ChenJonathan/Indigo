@@ -111,18 +111,18 @@ public class Player extends Entity
 			}
 		}
 		
+		// Set direction
+		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation
+		{
+			setDirection(stage.getMouseX() > this.getX());
+		}
+		
 		super.update();
 		
 		// Update weapon
 		if(hasWeapon())
 		{
 			weapon.update();
-		}
-		
-		// Set direction
-		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation
-		{
-			setDirection(stage.getMouseX() > this.getX());
 		}
 		
 		// Default animations
