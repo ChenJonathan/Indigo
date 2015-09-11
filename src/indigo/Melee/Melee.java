@@ -8,16 +8,15 @@ import indigo.Stage.Stage;
 
 public abstract class Melee
 {
-	// TODO Don't hit enemies multiple times
-	protected Entity user;
-	
 	protected Stage stage;
+	protected Entity user;
 	
 	protected int damage;
 	protected int attackTime;
 	
 	public Melee(Entity user, int dmg)
 	{
+		stage = user.getStage();
 		this.user = user;
 		stage = user.getStage();
 		damage = dmg;

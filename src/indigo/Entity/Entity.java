@@ -87,9 +87,9 @@ public abstract class Entity
 		prevX = x;
 		prevY = y;
 		
-		// Applying friction; ground entities gradually slow down
 		if(!flying)
 		{
+			// Applying friction; ground entities gradually slow down
 			if(velX < 0)
 			{
 				velX = Math.min(velX + Stage.FRICTION, 0);
@@ -97,13 +97,13 @@ public abstract class Entity
 			else if(velX > 0)
 			{
 				velX = Math.max(velX - Stage.FRICTION, 0);
-				
 			}
-		}
-		// Applying gravity
-		if(!flying && ground == null)
-		{
-			velY += Stage.GRAVITY;
+			
+			// Applying gravity
+			if(ground == null)
+			{
+				velY += Stage.GRAVITY;
+			}
 		}
 		
 		// Prevents x or y velocity from being too extreme (glitching through walls)

@@ -2,17 +2,13 @@ package indigo.Phase;
 
 import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
+import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
 
 public class Water extends Phase
 {
 	public int attackDelay = 6; // Delay between attacks when not crouched // TODO Revert after demonstration
 	private final int attackDelayFocused = 3; // Delay between attacks when crouched
-	
-	public static final int GEYSER = 0;
-	public static final int MIST = 1;
-	public static final int TORRENT = 2;
-	public static final int VORTEX = 3;
 	
 	public Water(PlayState playState)
 	{
@@ -21,8 +17,11 @@ public class Water extends Phase
 		
 		maxCooldowns = new int[] {0, 0, 0, 0};
 		
-		skills[GEYSER] = new Geyser(this);
-		// TODO Add other skills to skills array
+		skills[0] = new Geyser(this, 0);
+		skills[1] = new EmptySkill(this, 1);
+		skills[2] = new EmptySkill(this, 2);
+		skills[3] = new EmptySkill(this, 3);
+		// TODO Implement locked skills
 	}
 	
 	public boolean canNormalAttack()

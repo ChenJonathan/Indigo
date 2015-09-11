@@ -24,6 +24,8 @@ public abstract class Phase
 
 	protected Skill[] skills; // Initialize in subclass constructors
 	
+	public static final int NO_SKILL_SELECTED = -1;
+	
 	public static final int IDLE = 0;
 	public static final int AIM = 1;
 	public static final int CAST = 2;
@@ -37,7 +39,7 @@ public abstract class Phase
 		input = playState.getInput();
 		player = (Player)playState.getPlayer();
 		
-		selectedSkill = -1;
+		selectedSkill = NO_SKILL_SELECTED;
 		skillStates = new int[Data.NUM_SKILLS];
 		cooldowns = new int[Data.NUM_SKILLS];
 		
@@ -68,7 +70,7 @@ public abstract class Phase
 	public void cast()
 	{
 		skillStates[selectedSkill] = CAST;
-		selectedSkill = -1;
+		selectedSkill = NO_SKILL_SELECTED;
 	}
 	
 	public void endCast(int skill)
@@ -94,13 +96,17 @@ public abstract class Phase
 	// Returns if a skill can be selected
 	public boolean canSelect(int skill)
 	{
+		if(skills[skill].id() == Skill.EMPTY)
+		{
+			return false;
+		}
 		return skillStates[skill] == IDLE && cooldowns[skill] == 0;
 	}
 	
 	// Returns if a skill is selected
 	public boolean skillSelected()
 	{
-		return selectedSkill != -1;
+		return selectedSkill != NO_SKILL_SELECTED;
 	}
 	
 	// Returns the selected skill; -1 if none
@@ -123,7 +129,7 @@ public abstract class Phase
 	public void deselectSkill()
 	{
 		skillStates[selectedSkill] = IDLE;
-		selectedSkill = -1;
+		selectedSkill = NO_SKILL_SELECTED;
 	}
 	
 	public int getSkillState(int skill)
@@ -137,7 +143,7 @@ public abstract class Phase
 		{
 			skillStates[count] = 0;
 		}
-		selectedSkill = -1;
+		selectedSkill = NO_SKILL_SELECTED;
 	}
 	
 	public int getCooldown(int skill)
@@ -147,13 +153,16 @@ public abstract class Phase
 	
 	public boolean canSwap()
 	{
-		// Makes sure no skills are selected or casting
-		int skillStateSum = 0;
+		// Makes sure no skills are casting
+		boolean casting = false;
 		for(int count = 0; count < Data.NUM_SKILLS; count++)
 		{
-			skillStateSum += skillStates[count];
+			if(skillStates[count] == CAST)
+			{
+				casting = true;
+			}
 		}
-		return player.canAttack() && skillStateSum == 0;
+		return player.canAttack() && !casting;
 	}
 	
 	public PlayState getPlayState()

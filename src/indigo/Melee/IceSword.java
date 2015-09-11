@@ -11,9 +11,9 @@ public class IceSword extends Melee
 {
 	private ArrayList<Entity> entitiesHit = new ArrayList<Entity>();
 	
-	public final int length = 80;
-	public final int radialOffset = 10;
-	public final int yOffset = -20;
+	private final int length = 80;
+	private final int radialOffset = 10;
+	private final int yOffset = -20;
 	
 	public static final int DAMAGE = 50;
 	
