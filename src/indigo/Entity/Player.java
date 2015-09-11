@@ -379,7 +379,7 @@ public class Player extends Entity
 		// Reset delay for next health regeneration
 		if(health < getMaxHealth())
 		{
-			healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
+			healthRegenTime = Math.max(healthRegenTime, stage.getTime() + HEALTH_REGEN_DELAY);
 			
 			// If damaged, the initial delay is longer
 			if(health < getHealth())
@@ -406,7 +406,7 @@ public class Player extends Entity
 		if(mana < getMaxMana())
 		{
 			// Reset delay for next mana regeneration
-			manaRegenTime = stage.getTime() + MANA_REGEN_DELAY;
+			manaRegenTime = Math.max(manaRegenTime, stage.getTime() + MANA_REGEN_DELAY);
 			
 			// If damaged, the initial delay is longer
 			if(mana < getMana())
@@ -432,7 +432,7 @@ public class Player extends Entity
 		// Reset delay for next stamina regeneration
 		if(stamina < BASE_STAMINA)
 		{
-			staminaRegenTime = stage.getTime() + STAMINA_REGEN_DELAY;
+			staminaRegenTime = Math.max(staminaRegenTime, stage.getTime() + STAMINA_REGEN_DELAY);
 			
 			// If damaged, the initial delay is longer
 			if(stamina < getStamina())
