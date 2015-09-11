@@ -145,23 +145,23 @@ public class PlayState extends GameState
 			
 			if(input.keyDown(InputManager.W))
 			{
-				y -= 5;
+				y -= 1;
 			}
 			if(input.keyDown(InputManager.S))
 			{
-				y += 5;
+				y += 1;
 			}
 			if(input.keyDown(InputManager.A))
 			{
-				x -= 5;
+				x -= 1;
 			}
 			if(input.keyDown(InputManager.D))
 			{
-				x += 5;
+				x += 1;
 			}
 			
-			player.setMistDirection(x, y);
-			player.shift();
+			// Parameters represent player direction
+			player.shift(x, y);
 		}
 		
 		// Combat
@@ -170,8 +170,7 @@ public class PlayState extends GameState
 			if(activePhase.skillSelected())
 			{
 				// Cast skill
-				if(activePhase.getSkillState(activePhase.selectedSkill()) == Phase.AIM 
-						&& activePhase.canCast(activePhase.selectedSkill()))
+				if(activePhase.canCast(activePhase.selectedSkill()))
 				{
 					activePhase.cast();
 				}
@@ -220,7 +219,7 @@ public class PlayState extends GameState
 		if(input.keyPress(InputManager.ESCAPE))
 		{
 			// If a skill is selected, deselect it
-			if(activePhase.skillSelected() && activePhase.getSkillState(activePhase.selectedSkill()) == Phase.AIM)
+			if(activePhase.skillSelected())
 			{
 				activePhase.deselectSkill();
 			}
@@ -231,21 +230,9 @@ public class PlayState extends GameState
 		}
 		else if(input.keyPress(InputManager.E))
 		{
-			if(((Water)activePhase).attackDelay == 1)
+			if(activePhase.id() == Phase.WATER)
 			{
-				if(player.cheat)
-				{
-					((Water)activePhase).attackDelay = 8;
-					player.cheat = false;
-				}
-				else
-				{
-					player.cheat = true;
-				}
-			}
-			else
-			{
-				((Water)activePhase).attackDelay = 1;
+				((Water)activePhase).attackDelay = 6 / ((Water)activePhase).attackDelay;
 			}
 			
 			// gsm.setTalents(true);

@@ -1,7 +1,6 @@
 package indigo.Skill;
 
 import indigo.Phase.Phase;
-import indigo.Phase.Water;
 import indigo.Projectile.GeyserParticle;
 import indigo.Projectile.GeyserBase;
 
@@ -9,10 +8,10 @@ public class Geyser extends Skill
 {
 	private GeyserBase geyser;
 	
-	public Geyser(Phase phase)
+	public Geyser(Phase phase, int position)
 	{
-		super(phase);
-		id = Water.GEYSER;
+		super(phase, position);
+		id = Skill.GEYSER;
 	}
 	
 	public void update()

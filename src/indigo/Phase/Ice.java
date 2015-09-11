@@ -1,6 +1,7 @@
 package indigo.Phase;
 
 import indigo.GameState.PlayState;
+import indigo.Skill.EmptySkill;
 
 public class Ice extends Phase
 {
@@ -18,7 +19,11 @@ public class Ice extends Phase
 		
 		maxCooldowns = new int[] {0, 300, 300, 1800};
 		
-		// TODO Add skills to skills array
+		skills[0] = new EmptySkill(this, 0);
+		skills[1] = new EmptySkill(this, 1);
+		skills[2] = new EmptySkill(this, 2);
+		skills[3] = new EmptySkill(this, 3);
+		// TODO Implement locked skills
 	}
 	
 	public boolean canNormalAttack()
