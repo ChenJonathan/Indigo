@@ -21,8 +21,8 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener
 {
-	public static final int WIDTH = 1920;
-	public static final int HEIGHT = WIDTH / 16 * 9;
+	public static final int WIDTH = 1366;//1920;
+	public static final int HEIGHT = 768;//WIDTH / 16 * 9;
 	public static final int CURSOR_WIDTH = 32;
 	public static final int CURSOR_HEIGHT = 32;
 	
@@ -163,6 +163,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public void mousePressed(MouseEvent e)
 	{
 		input.mouseSet(true);
+		if(e.getButton() == MouseEvent.BUTTON3){
+			input.rightClickSet(true);
+		}else{
+			input.rightClickSet(false);
+		}
 	}
 	
 	// Detects mouse release

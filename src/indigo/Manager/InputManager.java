@@ -12,6 +12,7 @@ public class InputManager
 	
 	private int mouseX = 0;
 	private int mouseY = 0;
+	private boolean rightClick = false;
 	
 	public static final int K1 = 0;
 	public static final int K2 = 1;
@@ -61,6 +62,10 @@ public class InputManager
 		mouseY = y;
 	}
 	
+	public void rightClickSet(boolean rC){
+		rightClick = rC;
+	}
+	
 	// Previous mouse position is tracked to help check for changes in mouse state
 	public void update()
 	{
@@ -99,6 +104,10 @@ public class InputManager
 	public int mouseY()
 	{
 		return mouseY;
+	}
+	
+	public boolean rightClick(){
+		return rightClick;
 	}
 		
 	

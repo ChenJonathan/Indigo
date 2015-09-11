@@ -392,6 +392,10 @@ public abstract class Stage
 		return playState.getInput().mouseY() + camY;
 	}
 	
+	public boolean rightClickPressed(){
+		return playState.getInput().rightClick();
+	}
+	
 	// Sets camera boundaries when initializing the class
 	public void setOffsets()
 	{
