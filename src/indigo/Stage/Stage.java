@@ -47,8 +47,8 @@ public abstract class Stage
 	
 	public static final double GRAVITY = 3;
 	public static final double FRICTION = 3;
-	public static final double TERMINAL_VELOCITY = 100; // Warning - Glitchable
-	public static final double SKY_LIMIT = 0;
+	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
+	public static final double SKY_LIMIT = -1000;
 	
 	public Stage(PlayState playState)
 	{
@@ -100,16 +100,9 @@ public abstract class Stage
 							{
 								ent.getWeapon().collide(otherEnt);
 							}
-							if(otherEnt.getHealth() == 0) // Change to !isActive() call when player death animation is done
+							if(otherEnt.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
 							{
-								if(otherEnt.equals(player))
-								{
-									data.setKiller(ent.getName());
-								}
-								else if(ent.isMarked())
-								{
-									// TODO Gain experienced - Add experience variable to Entity class
-								}
+								trackDeath(ent.getName(), otherEnt);
 							}
 						}
 					}
@@ -144,14 +137,7 @@ public abstract class Stage
 						if(ent.intersects(wall.getLine()))
 						{
 							ent.die();
-							if(ent.equals(player))
-							{
-								data.setKiller(wall.getName());
-							}
-							else if(ent.isMarked())
-							{
-								// TODO Gain experienced - Add experience variable to Entity class
-							}
+							trackDeath(wall.getName(), ent);
 						}
 					}
 					if(wall.blocksEntities())
@@ -237,14 +223,7 @@ public abstract class Stage
 						proj.collide(ent);
 						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
 						{
-							if(ent.equals(player))
-							{
-								data.setKiller(proj.getName());
-							}
-							else if(ent.isMarked())
-							{
-								// TODO Gain experienced - Add experience variable to Entity class
-							}
+							trackDeath(proj.getName(), ent);
 						}
 					}
 				}
@@ -254,7 +233,6 @@ public abstract class Stage
 			{
 				if(count == 0)
 				{
-					data.setVictory(false);
 					playState.endGame();
 				}
 				entities.remove(entities.get(count));
@@ -343,6 +321,19 @@ public abstract class Stage
 				projectiles.remove(proj);
 				count--;
 			}
+		}
+	}
+	
+	public void trackDeath(String killer, Entity killed)
+	{
+		if(killed.equals(player))
+		{
+			data.setKiller(killer);
+			data.setVictory(false);
+		}
+		else if(killed.isMarked())
+		{
+			// TODO Gain experienced - Add experience variable to Entity class
 		}
 	}
 	

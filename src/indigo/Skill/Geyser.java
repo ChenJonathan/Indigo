@@ -28,7 +28,7 @@ public class Geyser extends Skill
 			}
 			
 			playState.getProjectiles().add(0, new GeyserParticle(player, geyser.getX(), playState.getMapY() - GeyserParticle.HEIGHT / 2 + GeyserParticle.SPEED, 0, -GeyserParticle.SPEED, GeyserParticle.DAMAGE));
-			player.setMana(player.getMana() - 1);
+			player.setMana(player.getMana() - 0);
 		}
 		else
 		{

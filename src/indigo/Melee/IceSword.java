@@ -100,20 +100,7 @@ public class IceSword extends Melee
 	private double determineSwordAngle(double mouseX, double mouseY)
 	{
 		double Angle = 0.0;
-		// Angle = Math.toDegrees(Math.atan2(mouseY - user.getY(), mouseX - user.getX()));
-		if(!slashMode)
-		{
-			Angle = Math.toDegrees(Math.atan2(mouseY - user.getY(), mouseX - user.getX()));
-		}
-		else if(user.getX() > mouseX)
-		{
-			Angle = Math.toDegrees(Math.atan2(-3, -1));
-		}
-		else
-		{
-			Angle = Math.toDegrees(Math.atan2(-3, 1));
-		}
-		// Temporary
+		Angle = Math.toDegrees(Math.atan2(mouseY - user.getY(), mouseX - user.getX()));
 		return Angle;
 	}
 	

@@ -49,6 +49,8 @@ public class GeyserParticle extends Projectile
 		{
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
+			ent.setVelY(ent.getVelY() - ent.getMovability());
+			ent.removeGround();
 		}
 	}
 	

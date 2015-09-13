@@ -24,7 +24,7 @@ public class WaterProjectile extends Projectile
 		width = WIDTH;
 		height = HEIGHT;
 		solid = true;
-		flying = false;
+		flying = true;
 		
 		setAnimation(DEFAULT, Content.WATER_BALL, -1);
 	}
