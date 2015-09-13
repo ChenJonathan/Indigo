@@ -2,9 +2,9 @@ package indigo.Entity;
 
 import indigo.Landscape.Land;
 import indigo.Manager.Animation;
-import indigo.Melee.Melee;
 import indigo.Projectile.Projectile;
 import indigo.Stage.Stage;
+import indigo.Weapon.Weapon;
 
 import java.awt.Graphics;
 import java.awt.Shape;
@@ -40,7 +40,7 @@ public abstract class Entity
 	protected boolean blocking; // Prevents (or halves) damage
 	
 	protected Land ground; // Ground that the entity is standing on (null if in air)
-	protected Melee weapon; // Melee weapon (null if none)
+	protected Weapon weapon; // Melee weapon (null if none)
 	
 	private boolean canAttack;
 	private boolean canMove;
@@ -359,7 +359,7 @@ public abstract class Entity
 		return weapon != null;
 	}
 	
-	public Melee getWeapon()
+	public Weapon getWeapon()
 	{
 		return weapon;
 	}

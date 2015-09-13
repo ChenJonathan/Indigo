@@ -1,4 +1,4 @@
-package indigo.Melee;
+package indigo.Weapon;
 
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
@@ -6,7 +6,7 @@ import java.awt.geom.Line2D;
 import indigo.Entity.Entity;
 import indigo.Stage.Stage;
 
-public abstract class Melee
+public abstract class Weapon
 {
 	protected Stage stage;
 	protected Entity user;
@@ -14,7 +14,7 @@ public abstract class Melee
 	protected int damage;
 	protected int attackTime;
 	
-	public Melee(Entity user, int dmg)
+	public Weapon(Entity user, int dmg)
 	{
 		stage = user.getStage();
 		this.user = user;

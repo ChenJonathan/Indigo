@@ -1,4 +1,4 @@
-package indigo.Melee;
+package indigo.Weapon;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import indigo.Entity.Entity;
 
-public class IceSword extends Melee
+public class IceSword extends Weapon
 {
 	private ArrayList<Entity> entitiesHit = new ArrayList<Entity>();
 	

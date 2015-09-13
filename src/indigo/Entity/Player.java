@@ -2,10 +2,10 @@ package indigo.Entity;
 
 import indigo.Landscape.Land;
 import indigo.Manager.Content;
-import indigo.Melee.IceSword;
 import indigo.Phase.Phase;
 import indigo.Projectile.WaterProjectile;
 import indigo.Stage.Stage;
+import indigo.Weapon.IceSword;
 
 import java.awt.Graphics;
 import java.awt.Shape;
