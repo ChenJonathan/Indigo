@@ -19,8 +19,12 @@ public abstract class Skill
 
 	public static final int EMPTY = 0;
 	public static final int GEYSER = 1;
-	public static final int TORRENT = 2;
-	public static final int VORTEX = 3;
+	public static final int PULSE = 2;
+	public static final int CHANNEL = 3;
+	public static final int WHIRLWIND = 4;
+	public static final int CHAINS = 5;
+	public static final int ARMOR = 6;
+	
 	
 	public Skill(Phase phase, int position)
 	{

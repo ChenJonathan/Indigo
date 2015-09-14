@@ -1,14 +1,16 @@
 package indigo.Phase;
 
+import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
 import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
+import indigo.Skill.Skill;
 
 public class Water extends Phase
 {
-	public int attackDelay = 6; // Delay between attacks when not crouched // TODO Revert after demonstration
-	private final int attackDelayFocused = 3; // Delay between attacks when crouched
+	public int attackDelay = 6; // Delay between attacks when not crouched // TODO Revert cheat mode
+	private int attackDelayFocused = 3; // Delay between attacks when crouched
 	
 	public Water(PlayState playState)
 	{
@@ -42,8 +44,28 @@ public class Water extends Phase
 	
 	public boolean canShift()
 	{
-		// Makes sure a direction is selected // TODO Don't hard code
+		// Makes sure a direction is selected
 		boolean directionSelected = input.keyDown(InputManager.W) || input.keyDown(InputManager.S) || input.keyDown(InputManager.A) || input.keyDown(InputManager.D);
-		return player.canAttack() && player.canMove() && player.getStamina() >= 0.1 && directionSelected;
+		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST && directionSelected;
+	}
+	
+	public void unlockSkill()
+	{
+		if(skills[0].id() == Skill.EMPTY)
+		{
+			skills[0] = new Geyser(this, 0);
+		}
+		else if(skills[1].id() == Skill.EMPTY) // TODO Add in other skills
+		{
+			skills[1] = new Geyser(this, 1);
+		}
+		else if(skills[2].id() == Skill.EMPTY) // TODO Add in other skills
+		{
+			skills[2] = new Geyser(this, 2);
+		}
+		else if(skills[3].id() == Skill.EMPTY) // TODO Add in other skills
+		{
+			skills[3] = new Geyser(this, 3);
+		}
 	}
 }

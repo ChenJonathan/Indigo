@@ -6,6 +6,7 @@ public class Data
 {
 	private int level;
 	private int experience;
+	private int maxExperience;
 	
 	private int[] talents;
 	
@@ -26,6 +27,7 @@ public class Data
 	{
 		level = 1;
 		experience = 0;
+		maxExperience = 100;
 		talents = new int[NUM_PHASES * NUM_TALENTS];
 		
 		unlockedStages = 0;
@@ -63,7 +65,19 @@ public class Data
 	// Sets experience
 	public void setExperience(int experience)
 	{
-		this.experience = experience;
+		this.experience = Math.max(experience, 0);
+	}
+	
+	// Returns experience
+	public int getMaxExperience()
+	{
+		return maxExperience;
+	}
+	
+	// Sets experience
+	public void setMaxExperience(int maxExperience)
+	{
+		this.maxExperience = maxExperience;
 	}
 	
 	// Returns a talent

@@ -58,14 +58,11 @@ public abstract class Phase
 		
 		lowerCooldowns();
 	}
-
+	
 	public boolean canCast(int skill)
 	{
 		return selectedSkill() == skill && skills[skill].canCast();
 	}
-	
-	public abstract boolean canNormalAttack();
-	public abstract boolean canShift();
 	
 	public void cast()
 	{
@@ -151,6 +148,9 @@ public abstract class Phase
 		return cooldowns[skill];
 	}
 	
+	public abstract boolean canNormalAttack();
+	public abstract boolean canShift();
+	
 	public boolean canSwap()
 	{
 		// Makes sure no skills are casting
@@ -164,6 +164,8 @@ public abstract class Phase
 		}
 		return player.canAttack() && !casting;
 	}
+	
+	public abstract void unlockSkill();
 	
 	public PlayState getPlayState()
 	{

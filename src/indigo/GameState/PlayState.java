@@ -34,7 +34,7 @@ public class PlayState extends GameState
 	private int time;
 	
 	private Phase activePhase; // Current phase: Water or Ice
-	private Phase[] phases; // Array containing the two Phase objects
+	private Phase inactivePhase;
 	
 	private int swapCooldown; // Cooldown for switching classes
 	
@@ -64,10 +64,8 @@ public class PlayState extends GameState
 		player = (Player)stage.getPlayer();
 		
 		// Initialize phases
-		phases = new Phase[Data.NUM_PHASES];
-		phases[Phase.WATER] = new Water(this);
-		phases[Phase.ICE] = new Ice(this);
-		activePhase = phases[Phase.WATER];
+		activePhase = new Water(this);
+		inactivePhase = new Ice(this);
 		player.setPhase(activePhase);
 		
 		// Initialize display
@@ -90,7 +88,7 @@ public class PlayState extends GameState
 			swapCooldown--;
 		}
 		activePhase.update(); // Update current phase (includes cooldown decrement)
-		phases[1 - activePhase.id()].lowerCooldowns(); // Only decrement cooldowns for non-active phase
+		inactivePhase.lowerCooldowns(); // Only decrement cooldowns for non-active phase
 		
 		stage.update();
 		display.update();
@@ -266,17 +264,38 @@ public class PlayState extends GameState
 		return time;
 	}
 	
-	public Phase[] getPhases()
+	public void addExperience(int experience)
 	{
-		return phases;
+		data.setExperience(data.getExperience() + experience);
+		if(data.getExperience() > data.getMaxExperience())
+		{
+			data.setLevel(data.getLevel() + 1);
+			data.setExperience(data.getExperience() - data.getMaxExperience());
+			data.setMaxExperience((int)Math.pow(2, data.getLevel() - 1) * 100);
+			levelUp();
+		}
+	}
+	
+	public void levelUp()
+	{
+		if(data.getLevel() % 5 == 0)
+		{
+			activePhase.unlockSkill();
+			inactivePhase.unlockSkill();
+		}
+		// TODO Finish
 	}
 	
 	// Switches professions
-	// TODO Consider placing in Phase
 	public void swapPhases()
 	{
 		activePhase.resetSkillStates(); // Deselects any selected skills
-		activePhase = phases[1 - activePhase.id()]; // Swaps value representing current phase
+		
+		// Swaps current phase
+		Phase temp = activePhase;
+		activePhase = inactivePhase;
+		inactivePhase = temp;
+		
 		player.setPhase(activePhase); // Swaps value representing current phase in Player
 		display.setPhase(activePhase); // Swaps value representing current phase in Display
 		swapCooldown = maxSwapCooldown; // Trigger cooldown for profession swap
