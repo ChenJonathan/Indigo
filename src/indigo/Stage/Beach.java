@@ -5,7 +5,6 @@ import indigo.Entity.Player;
 import indigo.Entity.SmallBot;
 import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
-import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
@@ -14,7 +13,6 @@ import indigo.Manager.Content;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.util.Random;
 
 public class Beach extends Stage

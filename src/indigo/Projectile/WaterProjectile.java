@@ -10,6 +10,8 @@ import java.awt.geom.Ellipse2D;
 
 public class WaterProjectile extends Projectile
 {
+	private int timer;
+	
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 	
@@ -26,6 +28,8 @@ public class WaterProjectile extends Projectile
 		solid = true;
 		flying = true;
 		
+		timer = 30;
+		
 		setAnimation(DEFAULT, Content.WATER_BALL, -1);
 	}
 	
@@ -33,7 +37,13 @@ public class WaterProjectile extends Projectile
 	{
 		if(currentAnimation != DEATH)
 		{
+			if(timer == 0)
+			{
+				dead = true;
+			}
+			
 			super.update();
+			timer--;
 		}
 		else
 		{
@@ -57,9 +67,15 @@ public class WaterProjectile extends Projectile
 	
 	public void collide(Entity ent)
 	{
-		ent.mark();
-		ent.setHealth(ent.getHealth() - damage);
-		die();
+		if(!ent.isDodging())
+		{
+			if(!(ent.isBlocking(isFacingRight())))
+			{
+				ent.mark();
+				ent.setHealth(ent.getHealth() - damage);
+			}
+			die();
+		}
 	}
 	
 	public void collide(Wall wall)

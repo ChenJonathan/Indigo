@@ -13,7 +13,7 @@ public class Mortar extends Projectile
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 	
-	public static final int DAMAGE = 8;
+	public static final int DAMAGE = 10;
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 60;
@@ -69,13 +69,16 @@ public class Mortar extends Projectile
 	
 	public void collide(Entity ent)
 	{
-		if(currentAnimation == DEATH && animation.getFrame() > 2 && animation.getFrame() < 7 && !ent.isDodging())
+		if(currentAnimation == DEATH && animation.getFrame() < 6 && !ent.isDodging())
 		{
-			ent.setHealth(ent.getHealth() - damage / 4);
+			ent.setHealth(ent.getHealth() - damage / 5);
 		}
 		else if(currentAnimation != DEATH && !ent.isDodging())
 		{
-			ent.setHealth(ent.getHealth() - damage);
+			if(!(ent.isBlocking(isFacingRight())))
+			{
+				ent.setHealth(ent.getHealth() - damage);
+			}
 			die();
 		}
 	}

@@ -217,7 +217,7 @@ public abstract class Projectile
 		this.velY = velY;
 	}
 	
-	public boolean getDirection()
+	public boolean isFacingRight()
 	{
 		return facingRight;
 	}

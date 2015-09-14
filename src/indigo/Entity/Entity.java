@@ -399,9 +399,9 @@ public abstract class Entity
 		return flying;
 	}
 	
-	public boolean isBlocking()
+	public boolean isBlocking(boolean projDirection)
 	{
-		return blocking;
+		return blocking && facingRight != projDirection;
 	}
 	
 	public boolean isDodging()
