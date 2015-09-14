@@ -1,5 +1,6 @@
 package indigo.Entity;
 
+import indigo.Landscape.Land;
 import indigo.Manager.Content;
 import indigo.Projectile.Mortar;
 import indigo.Stage.Stage;
@@ -28,7 +29,7 @@ public class Turret extends Entity
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
 		
-		movability = 0;
+		movability = 2;
 		flying = false;
 		friendly = false;
 		
@@ -187,6 +188,18 @@ public class Turret extends Entity
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH;
+	}
+	
+	public void setGround(Land ground)
+	{
+		super.setGround(ground);
+		canAttack(true);
+	}
+	
+	public void removeGround()
+	{
+		super.removeGround();
+		canAttack(false);
 	}
 	
 	public void die()

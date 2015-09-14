@@ -127,8 +127,7 @@ public abstract class Entity
 		x += velX;
 		y += velY;
 		
-		// If the entity is grounded, take the y position corresponding to the ground
-		// Important for slanted surfaces
+		// If the entity is grounded, take the y position corresponding to the ground - Important for slanted surfaces
 		if(ground != null)
 		{
 			y = ground.getSurface(x) - getHeight() / 2;
@@ -337,6 +336,7 @@ public abstract class Entity
 	
 	public void setGround(Land ground)
 	{
+		velY = 0;
 		this.ground = ground;
 	}
 	

@@ -12,7 +12,7 @@ public class GeyserParticle extends Projectile
 {
 	private final int DEFAULT = 0;
 	
-	public static final int DAMAGE = 4;
+	public static final int DAMAGE = 0; //4
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 40;
@@ -49,8 +49,16 @@ public class GeyserParticle extends Projectile
 		{
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
-			ent.setVelY(ent.getVelY() - ent.getMovability());
-			ent.removeGround();
+			
+			if(ent.isFlying())
+			{
+				ent.setY(ent.getY() - ent.getMovability() * 3 / 4); // Arbitrary scale value
+			}
+			else
+			{
+				ent.setVelY(ent.getVelY() - ent.getMovability() / 10); // Arbitrary scale value
+				ent.removeGround();
+			}
 		}
 	}
 	

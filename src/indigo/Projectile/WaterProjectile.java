@@ -18,7 +18,8 @@ public class WaterProjectile extends Projectile
 	public final static int DAMAGE = 10;
 	public final static int WIDTH = 50;
 	public final static int HEIGHT = 50;
-	public final static double SPEED = 60;
+	public final static double SPEED = 70;
+	public final static int DURATION = 20;
 	
 	public WaterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
@@ -28,7 +29,7 @@ public class WaterProjectile extends Projectile
 		solid = true;
 		flying = true;
 		
-		timer = 30;
+		timer = DURATION;
 		
 		setAnimation(DEFAULT, Content.WATER_BALL, -1);
 	}

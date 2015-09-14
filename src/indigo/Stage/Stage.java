@@ -63,183 +63,6 @@ public abstract class Stage
 	
 	public void update()
 	{
-		for(int count = 0; count < entities.size(); count++)
-		{
-			Entity ent = entities.get(count);
-			ent.update();
-			
-			// Collision loops
-			if(ent.isActive())
-			{
-				// Entity-entity: Makes sure entities don't overlap
-				for(int entCount = entities.indexOf(ent) + 1; entCount < entities.size(); entCount++)
-				{
-					Entity otherEnt = entities.get(entCount);
-					
-					if((otherEnt).isActive())
-					{
-						if(ent.intersects(otherEnt))
-						{
-							// May be subject to change depending on how the interaction works out
-							if(ent.getX() < otherEnt.getX())
-							{
-								ent.setX(ent.getX() - ent.getMovability());
-								otherEnt.setX(otherEnt.getX() + otherEnt.getMovability());
-							}
-							else
-							{
-								ent.setX(ent.getX() + ent.getMovability());
-								otherEnt.setX(otherEnt.getX() - otherEnt.getMovability());
-							}
-						}
-						
-						// Entity-melee: Melee weapon interactions
-						if(ent.hasWeapon())
-						{
-							if(otherEnt.intersects(ent.getWeapon().getHitbox()))
-							{
-								ent.getWeapon().collide(otherEnt);
-							}
-							if(otherEnt.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
-							{
-								trackDeath(ent.getName(), otherEnt);
-							}
-						}
-					}
-				}
-				
-				Land ground = null;
-
-				// Entity-platform: Landing on platforms
-				if(ent.getVelY() >= 0 && !ent.isFlying())
-				{
-					for (Platform plat: platforms)
-					{
-						Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
-						
-						if(feetTravel.intersectsLine(plat.getLine()))
-						{
-							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
-						}
-						if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())) && ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX())
-						{
-							ent.setVelY(0);
-							ground = plat;
-						}
-					}
-				}
-				
-				// Entity-wall: Colliding with and landing on walls
-				for(Wall wall: walls)
-				{
-					if(wall.killsEntities())
-					{
-						if(ent.intersects(wall.getLine()))
-						{
-							ent.die();
-							trackDeath(wall.getName(), ent);
-						}
-					}
-					if(wall.blocksEntities())
-					{
-						if(!wall.isHorizontal())
-						{
-							// Leftward collision into wall
-							if(ent.isRightOfLine(wall.getLine()))
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setX(ent.getX() + PUSH_AMOUNT);
-									ent.setVelX(Math.max(ent.getVelX(), 0));
-								}
-							}
-							// Rightward collision into wall
-							else
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setX(ent.getX() - PUSH_AMOUNT);
-									ent.setVelX(Math.min(ent.getVelX(), 0));
-								}
-							}
-						}
-						else
-						{
-							// Downward collision into wall
-							if(ent.isAboveLine(wall.getLine()))
-							{
-								if(ent.isFlying())
-								{
-									while(ent.intersects(wall.getLine()))
-									{
-										ent.setY(ent.getY() - PUSH_AMOUNT);
-										ent.setVelY(Math.min(ent.getVelY(), 0));
-									}
-								}
-								else
-								{
-									Line2D.Double line = new Line2D.Double(ent.getX(), ent.getY() - ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
-									
-									if(line.intersectsLine(wall.getLine()))
-									{
-										ent.setY(wall.getSurface(ent.getX()) - ent.getHeight() / 2);
-									}
-									if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(wall.getSurface(ent.getX())) && ent.getX() > wall.getMinX() && ent.getX() < wall.getMaxX())
-									{
-										ent.setVelY(Math.min(ent.getVelY(), 0));
-										ground = wall;
-									}
-								}
-							}
-							// Upward collision into wall
-							else
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setY(ent.getY() + PUSH_AMOUNT);
-									ent.setVelY(Math.max(ent.getVelY(), 0));
-								}
-							}
-						}
-					}
-				}
-
-				if(ground != null)
-				{
-					ent.setGround(ground);
-				}
-				else
-				{
-					ent.removeGround();
-				}
-				
-				// Entity-projectile: Taking damage and tracking kills
-				for(int projCount = 0; projCount < projectiles.size(); projCount++)
-				{
-					Projectile proj = projectiles.get(projCount);
-					// Consider setting projectile location to intersection
-					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
-					{
-						proj.collide(ent);
-						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
-						{
-							trackDeath(proj.getName(), ent);
-						}
-					}
-				}
-			}
-			
-			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() > getMapY())
-			{
-				if(count == 0)
-				{
-					playState.endGame();
-				}
-				entities.remove(entities.get(count));
-				count--;
-			}
-		}
-		
 		for(int count = 0; count < projectiles.size(); count++)
 		{
 			Projectile proj = projectiles.get(count);
@@ -319,6 +142,181 @@ public abstract class Stage
 			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() > getMapY())
 			{
 				projectiles.remove(proj);
+				count--;
+			}
+		}
+		
+		for(int count = 0; count < entities.size(); count++)
+		{
+			Entity ent = entities.get(count);
+			ent.update();
+			
+			// Collision loops
+			if(ent.isActive())
+			{
+				// Entity-entity: Makes sure entities don't overlap
+				for(int entCount = entities.indexOf(ent) + 1; entCount < entities.size(); entCount++)
+				{
+					Entity otherEnt = entities.get(entCount);
+					
+					if((otherEnt).isActive())
+					{
+						if(ent.intersects(otherEnt))
+						{
+							// May be subject to change depending on how the interaction works out
+							if(ent.getX() < otherEnt.getX())
+							{
+								ent.setX(ent.getX() - ent.getMovability());
+								otherEnt.setX(otherEnt.getX() + otherEnt.getMovability());
+							}
+							else
+							{
+								ent.setX(ent.getX() + ent.getMovability());
+								otherEnt.setX(otherEnt.getX() - otherEnt.getMovability());
+							}
+						}
+						
+						// Entity-melee: Melee weapon interactions
+						if(ent.hasWeapon())
+						{
+							if(otherEnt.intersects(ent.getWeapon().getHitbox()))
+							{
+								ent.getWeapon().collide(otherEnt);
+							}
+							if(otherEnt.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+							{
+								trackDeath(ent.getName(), otherEnt);
+							}
+						}
+					}
+				}
+				
+				Land ground = null;
+
+				// Entity-platform: Landing on platforms
+				if(ent.getVelY() >= 0 && !ent.isFlying())
+				{
+					for (Platform plat: platforms)
+					{
+						Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
+						
+						if(feetTravel.intersectsLine(plat.getLine()))
+						{
+							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+						}
+						if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())) && ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX())
+						{
+							ground = plat;
+						}
+					}
+				}
+				
+				// Entity-wall: Colliding with and landing on walls
+				for(Wall wall: walls)
+				{
+					if(wall.killsEntities())
+					{
+						if(ent.intersects(wall.getLine()))
+						{
+							ent.die();
+							trackDeath(wall.getName(), ent);
+						}
+					}
+					if(wall.blocksEntities())
+					{
+						if(!wall.isHorizontal())
+						{
+							// Leftward collision into wall
+							if(ent.isRightOfLine(wall.getLine()))
+							{
+								while(ent.intersects(wall.getLine()))
+								{
+									ent.setX(ent.getX() + PUSH_AMOUNT);
+									ent.setVelX(Math.max(ent.getVelX(), 0));
+								}
+							}
+							// Rightward collision into wall
+							else
+							{
+								while(ent.intersects(wall.getLine()))
+								{
+									ent.setX(ent.getX() - PUSH_AMOUNT);
+									ent.setVelX(Math.min(ent.getVelX(), 0));
+								}
+							}
+						}
+						else
+						{
+							// Downward collision into wall
+							if(ent.isAboveLine(wall.getLine()))
+							{
+								if(ent.isFlying())
+								{
+									while(ent.intersects(wall.getLine()))
+									{
+										ent.setY(ent.getY() - PUSH_AMOUNT);
+										ent.setVelY(Math.min(ent.getVelY(), 0));
+									}
+								}
+								else
+								{
+									Line2D.Double line = new Line2D.Double(ent.getX(), ent.getY() - ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
+									
+									if(line.intersectsLine(wall.getLine()))
+									{
+										ent.setY(wall.getSurface(ent.getX()) - ent.getHeight() / 2);
+									}
+									if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(wall.getSurface(ent.getX())) && ent.getX() > wall.getMinX() && ent.getX() < wall.getMaxX())
+									{
+										ground = wall;
+									}
+								}
+							}
+							// Upward collision into wall
+							else
+							{
+								while(ent.intersects(wall.getLine()))
+								{
+									ent.setY(ent.getY() + PUSH_AMOUNT);
+									ent.setVelY(Math.max(ent.getVelY(), 0));
+								}
+							}
+						}
+					}
+				}
+
+				if(ground != null)
+				{
+					ent.setGround(ground);
+				}
+				else
+				{
+					ent.removeGround();
+				}
+				
+				// Entity-projectile: Taking damage and tracking kills
+				for(int projCount = 0; projCount < projectiles.size(); projCount++)
+				{
+					Projectile proj = projectiles.get(projCount);
+					// Consider setting projectile location to intersection
+					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
+					{
+						proj.collide(ent);
+						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+						{
+							trackDeath(proj.getName(), ent);
+						}
+					}
+				}
+			}
+			
+			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT || ent.getY() > getMapY())
+			{
+				if(count == 0)
+				{
+					playState.endGame();
+				}
+				entities.remove(entities.get(count));
 				count--;
 			}
 		}
