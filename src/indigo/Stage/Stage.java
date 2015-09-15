@@ -139,7 +139,7 @@ public abstract class Stage
 				}
 			}
 
-			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() > getMapY())
+			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY())
 			{
 				projectiles.remove(proj);
 				count--;

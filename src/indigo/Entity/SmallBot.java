@@ -110,7 +110,17 @@ public class SmallBot extends Entity
 	{
 		do
 		{
-			double rand = Math.random();
+			double rand = 0;
+			if(getY() <= 0)
+			{
+				// If above the map, only downwards movement is allowed
+				rand = Math.random() / 2 + 0.5;
+			}
+			else
+			{
+				rand = Math.random();
+			}
+			
 			if(rand >= 0.25 || rand > 0.75) // If facing left
 			{
 				setDirection(false);
@@ -124,7 +134,7 @@ public class SmallBot extends Entity
 			setVelX(Math.cos(2 * rand * Math.PI) * MOVE_SPEED);
 			setVelY(Math.sin(2 * rand * Math.PI) * MOVE_SPEED);
 		}
-		while(getX() + 30 * getVelX() > stage.getMapX() || getX() + 30 * getVelX() < 0 || getY() + 30 * getVelY() > stage.getMapY() || getY() + 30 * getVelY() < 0);
+		while(getX() + 30 * getVelX() > stage.getMapX() || getX() + 30 * getVelX() < 0 || getY() + 30 * getVelY() > stage.getMapY() || getY() + 30 * getVelY() < Stage.SKY_LIMIT);
 		// Repeat the loop if this movement would carry the entity outside of map boundaries
 	}
 	

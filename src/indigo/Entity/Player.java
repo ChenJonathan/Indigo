@@ -112,7 +112,7 @@ public class Player extends Entity
 		}
 		
 		// Set direction
-		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation
+		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation and change hasWeapon() call to weapon animation check
 		{
 			setDirection(stage.getMouseX() > this.getX());
 		}
@@ -123,6 +123,19 @@ public class Player extends Entity
 		if(hasWeapon())
 		{
 			weapon.update();
+		}
+		
+		// Crouching stuff
+		if(isCrouching())
+		{
+			if(stamina > CROUCH_STAMINA_COST)
+			{
+				setStamina(stamina - CROUCH_STAMINA_COST);
+			}
+			else
+			{
+				crouch();
+			}
 		}
 		
 		// Default animations
@@ -301,36 +314,26 @@ public class Player extends Entity
 		removeGround();
 	}
 	
-	// Called every update
-	public void crouch(boolean crouching)
+	public boolean canCrouch()
 	{
-		if(crouching && canMove() && isGrounded() && stamina >= CROUCH_STAMINA_COST)
+		return !isCrouching() && canMove() && isGrounded() && stamina >= CROUCH_STAMINA_REQUIREMENT;
+	}
+	
+	// Toggles crouch status
+	public void crouch()
+	{
+		if(!isCrouching())
 		{
-			// When the player initially crouches
-			if(!isCrouching() && stamina >= CROUCH_STAMINA_REQUIREMENT)
-			{
-				this.crouching = true;
-				blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
-			}
+			crouching = true;
+			blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
 			
-			if(isCrouching())
+			if(!isFacingRight())
 			{
-				setStamina(stamina - CROUCH_STAMINA_COST);
-				
-				// TODO Change weapon animation
-				if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
-				{
-					setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
-				}
-				else if(isFacingRight() && currentAnimation != CROUCH_RIGHT)
-				{
-					setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
-				}
+				setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
 			}
 			else
 			{
-				this.crouching = false;
-				this.blocking = false;
+				setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
 			}
 		}
 		else

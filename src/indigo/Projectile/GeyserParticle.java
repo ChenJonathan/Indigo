@@ -52,7 +52,7 @@ public class GeyserParticle extends Projectile
 			
 			if(ent.isFlying())
 			{
-				ent.setY(ent.getY() - ent.getMovability() * 3 / 4); // Arbitrary scale value
+				ent.setY(ent.getY() - ent.getMovability());
 			}
 			else
 			{
