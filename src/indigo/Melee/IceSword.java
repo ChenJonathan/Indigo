@@ -12,7 +12,7 @@ public class IceSword extends Melee
 	private ArrayList<Entity> entitiesHit = new ArrayList<Entity>();
 	
 	private final int length = 100; // 80
-	private final int radialOffset = 10;
+	private final int radialOffset = 20;
 	private final int yOffset = -20;
 	
 	public static final int DAMAGE = 50;
@@ -47,15 +47,8 @@ public class IceSword extends Melee
 			user.removeWeapon();
 		}
 		
-		if(user.isFacingRight())
-		{
-			beginSwordX = (int)(user.getX() + radialOffset);
-		}
-		else
-		{
-			beginSwordX = (int)(user.getX() - radialOffset);
-		}
-		beginSwordY = (int)(user.getY() + yOffset);
+		beginSwordX = (int)(user.getX() + (radialOffset * Math.cos(swordAngle)));
+		beginSwordY = (int)(user.getY() + yOffset + (radialOffset * Math.sin(swordAngle)));
 		
 		if(slashMode)
 		{
@@ -124,19 +117,19 @@ public class IceSword extends Melee
 		double angleOffset = 0.0;
 		if(user.isFacingRight())
 		{
-			angleOffset = Math.toRadians(-((initialSwordAngle * 2.0) / ATTACK_DURATION));
+			angleOffset = Math.toRadians(-((initialSwordAngle * 2.0) / (ATTACK_DURATION - 1)));
 			swordSlashAngle += angleOffset;
 		}
 		else
 		{
 			if(initialSwordAngle < -90)
 			{
-				angleOffset = Math.toRadians(-(((90 + (initialSwordAngle % 90)) * 2.0) / ATTACK_DURATION));
+				angleOffset = Math.toRadians(-(((90 + (initialSwordAngle % 90)) * 2.0) / (ATTACK_DURATION - 1)));
 				swordSlashAngle += angleOffset;
 			}
 			else
 			{
-				angleOffset = Math.toRadians(-(((90 - (initialSwordAngle % 90)) * 2.0) / ATTACK_DURATION));
+				angleOffset = Math.toRadians(-(((90 - (initialSwordAngle % 90)) * 2.0) / (ATTACK_DURATION - 1)));
 				swordSlashAngle -= angleOffset;
 			}
 		}
