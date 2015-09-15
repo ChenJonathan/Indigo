@@ -27,7 +27,7 @@ public abstract class Phase
 	public static final int NO_SKILL_SELECTED = -1;
 	
 	public static final int IDLE = 0;
-	public static final int AIM = 1;
+	public static final int SELECT = 1;
 	public static final int CAST = 2;
 	
 	public static final int WATER = 0;
@@ -120,7 +120,7 @@ public abstract class Phase
 		}
 		
 		selectedSkill = skill;
-		skillStates[skill] = AIM;
+		skillStates[skill] = SELECT;
 	}
 	
 	public void deselectSkill()

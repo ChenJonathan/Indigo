@@ -134,7 +134,7 @@ public class Player extends Entity
 			}
 			else
 			{
-				crouch();
+				uncrouch();
 			}
 		}
 		
@@ -319,28 +319,25 @@ public class Player extends Entity
 		return !isCrouching() && canMove() && isGrounded() && stamina >= CROUCH_STAMINA_REQUIREMENT;
 	}
 	
-	// Toggles crouch status
 	public void crouch()
 	{
-		if(!isCrouching())
+		crouching = true;
+		blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
+		
+		if(!isFacingRight())
 		{
-			crouching = true;
-			blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
-			
-			if(!isFacingRight())
-			{
-				setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
-			}
-			else
-			{
-				setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
-			}
+			setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
 		}
 		else
 		{
-			this.crouching = false;
-			this.blocking = false;
+			setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
 		}
+	}
+	
+	public void uncrouch()
+	{
+		this.crouching = false;
+		this.blocking = false;
 	}
 	
 	public void shift(int x, int y) // Parameters represent player direction

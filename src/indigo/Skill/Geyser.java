@@ -46,7 +46,6 @@ public class Geyser extends Skill
 	public void endCast()
 	{
 		super.endCast();
-		
 		player.canAttack(true);
 	}
 }

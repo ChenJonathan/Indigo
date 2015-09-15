@@ -63,89 +63,6 @@ public abstract class Stage
 	
 	public void update()
 	{
-		for(int count = 0; count < projectiles.size(); count++)
-		{
-			Projectile proj = projectiles.get(count);
-			proj.update();
-			
-			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
-			for (Wall wall: walls)
-			{
-				if(proj.isActive())
-				{
-					// TODO Proximity check
-					if(wall.killsNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						proj.die();
-					}
-					else if(wall.killsSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						proj.die();
-					}
-					if(wall.blocksNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						double xInt = 0;
-						double yInt = 0;
-						
-						// Calculate intersection point
-						if(proj.getPrevX() != proj.getX())
-						{
-							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-							double projYInt = -proj.getX() * slope + proj.getY();
-							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-							yInt = xInt * slope + projYInt;
-						}
-						else
-						{
-							xInt = proj.getX();
-							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
-						}
-						
-						proj.setX(xInt);
-						proj.setY(yInt);
-						if(proj.isActive())
-						{
-							proj.collide(wall);
-						}
-					}
-					else if(wall.blocksSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						double xInt = 0;
-						double yInt = 0;
-						
-						// Calculate intersection point
-						if(proj.getPrevX() != proj.getX())
-						{
-							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-							double projYInt = -proj.getX() * slope + proj.getY();
-							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-							yInt = xInt * slope + projYInt;
-						}
-						else
-						{
-							xInt = proj.getX();
-							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
-						}
-						
-						proj.setX(xInt);
-						proj.setY(yInt);
-						if(proj.isActive())
-						{
-							proj.collide(wall);
-						}
-					}
-				}
-			}
-
-			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY())
-			{
-				projectiles.remove(proj);
-				count--;
-			}
-		}
-		
 		for(int count = 0; count < entities.size(); count++)
 		{
 			Entity ent = entities.get(count);
@@ -187,6 +104,21 @@ public abstract class Stage
 							{
 								trackDeath(ent.getName(), otherEnt);
 							}
+						}
+					}
+				}
+				
+				// Entity-projectile: Taking damage and tracking kills
+				for(int projCount = 0; projCount < projectiles.size(); projCount++)
+				{
+					Projectile proj = projectiles.get(projCount);
+					// Consider setting projectile location to intersection
+					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
+					{
+						proj.collide(ent);
+						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+						{
+							trackDeath(proj.getName(), ent);
 						}
 					}
 				}
@@ -293,21 +225,6 @@ public abstract class Stage
 				{
 					ent.removeGround();
 				}
-				
-				// Entity-projectile: Taking damage and tracking kills
-				for(int projCount = 0; projCount < projectiles.size(); projCount++)
-				{
-					Projectile proj = projectiles.get(projCount);
-					// Consider setting projectile location to intersection
-					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
-					{
-						proj.collide(ent);
-						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
-						{
-							trackDeath(proj.getName(), ent);
-						}
-					}
-				}
 			}
 			
 			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT || ent.getY() > getMapY())
@@ -317,6 +234,89 @@ public abstract class Stage
 					playState.endGame();
 				}
 				entities.remove(entities.get(count));
+				count--;
+			}
+		}
+		
+		for(int count = 0; count < projectiles.size(); count++)
+		{
+			Projectile proj = projectiles.get(count);
+			proj.update();
+			
+			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
+			for (Wall wall: walls)
+			{
+				if(proj.isActive())
+				{
+					// TODO Proximity check
+					if(wall.killsNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						proj.die();
+					}
+					else if(wall.killsSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						proj.die();
+					}
+					if(wall.blocksNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						double xInt = 0;
+						double yInt = 0;
+						
+						// Calculate intersection point
+						if(proj.getPrevX() != proj.getX())
+						{
+							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
+							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
+							double projYInt = -proj.getX() * slope + proj.getY();
+							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
+							yInt = xInt * slope + projYInt;
+						}
+						else
+						{
+							xInt = proj.getX();
+							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+						}
+						
+						proj.setX(xInt);
+						proj.setY(yInt);
+						if(proj.isActive())
+						{
+							proj.collide(wall);
+						}
+					}
+					else if(wall.blocksSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
+					{
+						double xInt = 0;
+						double yInt = 0;
+						
+						// Calculate intersection point
+						if(proj.getPrevX() != proj.getX())
+						{
+							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
+							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
+							double projYInt = -proj.getX() * slope + proj.getY();
+							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
+							yInt = xInt * slope + projYInt;
+						}
+						else
+						{
+							xInt = proj.getX();
+							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+						}
+						
+						proj.setX(xInt);
+						proj.setY(yInt);
+						if(proj.isActive())
+						{
+							proj.collide(wall);
+						}
+					}
+				}
+			}
+
+			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY())
+			{
+				projectiles.remove(proj);
 				count--;
 			}
 		}
