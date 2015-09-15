@@ -69,8 +69,6 @@ public class Player extends Entity
 	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
 	
-	// X is center, Y is at feet level
-	// FIX - Use roll animation checks, not dodge checks (switch statement for animation?)
 	public Player(Stage stage, double x, double y, int health, int mana)
 	{
 		super(stage, x, y, health);
