@@ -3,6 +3,7 @@ package indigo.Phase;
 import indigo.GameState.PlayState;
 import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
+import indigo.Skill.IceArmor;
 import indigo.Skill.Skill;
 
 public class Ice extends Phase
@@ -18,7 +19,7 @@ public class Ice extends Phase
 		
 		skills[0] = new EmptySkill(this, 0);
 		skills[1] = new EmptySkill(this, 1);
-		skills[2] = new EmptySkill(this, 2);
+		skills[2] = new IceArmor(this, 2);
 		skills[3] = new EmptySkill(this, 3);
 		// TODO Implement locked skills
 	}

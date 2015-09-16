@@ -24,6 +24,7 @@ public class Player extends Entity
 	// Phase related mechanics
 	private Phase phase;
 	private boolean canDoubleJump;
+	private boolean iceArmor;
 	
 	// Values corresponding to each animation
 	private final int GROUND_LEFT = 0;
@@ -84,6 +85,9 @@ public class Player extends Entity
 
 		movability = 5;
 		friendly = true;
+		
+		canDoubleJump = false;
+		iceArmor = false;
 		
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
 	}
@@ -373,21 +377,38 @@ public class Player extends Entity
 	}
 	
 	public void setHealth(int health)
-	{
-		// Reset delay for next health regeneration
-		if(health < getMaxHealth())
-		{
-			healthRegenTime = Math.max(healthRegenTime, stage.getTime() + HEALTH_REGEN_DELAY);
-			
-			// If damaged, the initial delay is longer
-			if(health < getHealth())
-			{
-				healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
-			}
-		}
-		
-		super.setHealth(health);
-	}
+    {
+        // Reset delay for next health regeneration
+        if(health < getMaxHealth())
+        {
+            healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
+
+            // If damaged, the initial delay is longer
+            if(health < getHealth())
+            {
+                healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
+            }
+        }
+        
+        // Deducts mana instead of IceArmor skill is active
+        if(iceArmor && getMana() > 0)
+        {
+        	if(getMana() > (getHealth() - health))
+        	{
+                setMana(getMana() - (getHealth() - health));
+        	}
+        	else
+        	{
+        		super.setHealth(health + getMana());
+                setMana(0);
+        	}
+        }
+        else
+        {
+            super.setHealth(health);
+        }
+    }
+
 	
 	public int getMaxMana()
 	{
@@ -470,6 +491,16 @@ public class Player extends Entity
 	public void canDoubleJump(boolean canDoubleJump)
 	{
 		this.canDoubleJump = canDoubleJump;
+	}
+	
+	public boolean getIceArmor()
+	{
+		return iceArmor;
+	}
+	
+	public void setIceArmor(boolean active)
+	{
+		iceArmor = active;
 	}
 	
 	public boolean isCrouching()

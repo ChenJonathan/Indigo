@@ -82,6 +82,11 @@ public abstract class Phase
 		attackStartTime = playState.getTime();
 	}
 	
+	public void setAttackTimer(int time) // TODO Append to the start / end of each skillcast
+	{
+		attackStartTime = playState.getTime() + time;
+	}
+	
 	public void lowerCooldowns()
 	{
 		for(int count = 0; count < cooldowns.length; count++)
