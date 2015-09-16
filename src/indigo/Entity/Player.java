@@ -400,7 +400,7 @@ public class Player extends Entity
         	else
         	{
         		super.setHealth(health + getMana());
-                setMana(0);
+        		setMana(0);
         	}
         }
         else

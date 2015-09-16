@@ -21,7 +21,7 @@ public class IceArmor extends Skill
         	player.setIceArmor(true);
         	phase.resetAttackTimer();
         }
-        else if(castTime == 600 || player.getMana() == 0 || input.keyPress(InputManager.K3))
+        else if(player.getMana() == 0 || input.keyPress(InputManager.K3))
         {
             endCast();
         }
