@@ -61,7 +61,7 @@ public abstract class Phase
 	
 	public boolean canCast(int skill)
 	{
-		return selectedSkill() == skill && skills[skill].canCast();
+		return (selectedSkill() == skill || skills[skill].isCastOnSelect()) && skills[skill].canCast();
 	}
 	
 	public void cast()
@@ -102,6 +102,10 @@ public abstract class Phase
 		{
 			return false;
 		}
+		else if(skills[skill].isCastOnSelect())
+		{
+			return skillStates[skill] == IDLE && cooldowns[skill] == 0 && canCast(skill);
+		}
 		return skillStates[skill] == IDLE && cooldowns[skill] == 0;
 	}
 	
@@ -126,6 +130,11 @@ public abstract class Phase
 		
 		selectedSkill = skill;
 		skillStates[skill] = SELECT;
+		
+		if(skills[skill].isCastOnSelect())
+		{
+			cast();
+		}
 	}
 	
 	public void deselectSkill()

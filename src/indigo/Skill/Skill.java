@@ -16,6 +16,7 @@ public abstract class Skill
 	protected int position;
 	
 	protected int castTime;
+	protected boolean castOnSelect;
 
 	public static final int EMPTY = 0;
 	public static final int GEYSER = 1;
@@ -35,6 +36,7 @@ public abstract class Skill
 		
 		this.position = position;
 		castTime = -1;
+		castOnSelect = false;
 	}
 	
 	public void update()
@@ -53,5 +55,10 @@ public abstract class Skill
 	public int id()
 	{
 		return id;
+	}
+	
+	public boolean isCastOnSelect()
+	{
+		return castOnSelect;
 	}
 }

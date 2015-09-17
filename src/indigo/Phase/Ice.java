@@ -15,7 +15,7 @@ public class Ice extends Phase
 		super(playState);
 		id = Phase.ICE;
 		
-		maxCooldowns = new int[] {0, 300, 300, 1800};
+		maxCooldowns = new int[] {0, 0, 0, 1800};
 		
 		skills[0] = new EmptySkill(this, 0);
 		skills[1] = new EmptySkill(this, 1);

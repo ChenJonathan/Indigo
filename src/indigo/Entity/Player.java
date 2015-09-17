@@ -378,19 +378,7 @@ public class Player extends Entity
 	
 	public void setHealth(int health)
     {
-        // Reset delay for next health regeneration
-        if(health < getMaxHealth())
-        {
-            healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
-
-            // If damaged, the initial delay is longer
-            if(health < getHealth())
-            {
-                healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
-            }
-        }
-        
-        // Deducts mana instead of IceArmor skill is active
+        // Deducts mana instead of health if IceArmor skill is active
         if(iceArmor && getMana() > 0)
         {
         	if(getMana() > (getHealth() - health))
@@ -399,12 +387,25 @@ public class Player extends Entity
         	}
         	else
         	{
-        		super.setHealth(health + getMana());
+        		int damageBlocked = getMana();
         		setMana(0);
+        		setHealth(health + damageBlocked);
         	}
         }
         else
         {
+        	// Reset delay for next health regeneration
+            if(health < getMaxHealth())
+            {
+                healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
+
+                // If damaged, the initial delay is longer
+                if(health < getHealth())
+                {
+                    healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
+                }
+            }
+        	
             super.setHealth(health);
         }
     }

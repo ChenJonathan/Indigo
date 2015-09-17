@@ -38,7 +38,7 @@ public class PlayState extends GameState
 	
 	private int swapCooldown; // Cooldown for switching classes
 	
-	private int maxSwapCooldown = 0;
+	private int maxSwapCooldown = 0; // TODO Set
 	
 	// Values corresponding to each stage
 	public static final int BEACH = 0;
@@ -163,7 +163,7 @@ public class PlayState extends GameState
 		}
 		
 		// Combat
-		if(input.mouseLeftPress() || input.mouseRightPress())
+		if(input.mousePress())
 		{
 			if(activePhase.skillSelected())
 			{
@@ -193,7 +193,7 @@ public class PlayState extends GameState
 				}
 			}
 		}
-		else if((input.mouseLeftDown() || input.mouseRightDown()) && activePhase.canNormalAttack())
+		else if(input.mouseDown() && activePhase.canNormalAttack())
 		{
 			// Automatic attacking
 			player.attack();

@@ -10,6 +10,7 @@ public class IceArmor extends Skill
     {
         super(phase, position);
         id = Skill.ICE_ARMOR;
+        castOnSelect = true;
     }
     
     public void update()

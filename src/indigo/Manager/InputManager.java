@@ -79,40 +79,52 @@ public class InputManager
 		mouseY = y;
 	}
 	
-	// Checks if the mouse is currently pressed
+	// Checks if the left mouse button is currently pressed
 	public boolean mouseLeftDown()
 	{
 		return mouseLeftState;
 	}
 	
-	// Checks if mouse has been recently pressed
+	// Checks if the left mouse button has been recently pressed
 	public boolean mouseLeftPress()
 	{
 		return mouseLeftState && !prevMouseLeftState;
 	}
 	
-	// Checks if mouse has been recently released
+	// Checks if the left mouse button has been recently released
 	public boolean mouseLeftRelease()
 	{
 		return !mouseLeftState && prevMouseLeftState;
 	}
 	
-	// Checks if the mouse is currently pressed
+	// Checks if the right mouse button is currently pressed
 	public boolean mouseRightDown()
 	{
 		return mouseRightState;
 	}
 	
-	// Checks if mouse has been recently pressed
+	// Checks if the right mouse button has been recently pressed
 	public boolean mouseRightPress()
 	{
 		return mouseRightState && !prevMouseRightState;
 	}
 	
-	// Checks if mouse has been recently released
+	// Checks if the right mouse button has been recently released
 	public boolean mouseRightRelease()
 	{
 		return !mouseRightState && prevMouseRightState;
+	}
+	
+	// Checks if either mouse button is currently pressed
+	public boolean mouseDown()
+	{
+		return mouseLeftDown() || mouseRightDown();
+	}
+	
+	// Checks if either mouse button has been recently pressed
+	public boolean mousePress()
+	{
+		return mouseLeftPress() || mouseRightPress();
 	}
 	
 	// Returns x position of mouse

@@ -18,7 +18,7 @@ public class Geyser extends Skill
 	{
 		super.update();
 		
-		if(player.getMana() >= 2 && (input.mouseLeftDown() || castTime < 10))
+		if(player.getMana() >= 2 && (input.mouseDown() || castTime < 10))
 		{
 			if(castTime == 0)
 			{
@@ -28,7 +28,7 @@ public class Geyser extends Skill
 			}
 			
 			playState.getProjectiles().add(0, new GeyserParticle(player, geyser.getX(), playState.getMapY() - GeyserParticle.HEIGHT / 2 + GeyserParticle.SPEED, 0, -GeyserParticle.SPEED, GeyserParticle.DAMAGE));
-			player.setMana(player.getMana() - 0);
+			player.setMana(player.getMana() - 2);
 		}
 		else
 		{

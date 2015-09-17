@@ -10,9 +10,10 @@ import java.awt.geom.Rectangle2D;
 
 public class GeyserParticle extends Projectile
 {
+	// Animation
 	private final int DEFAULT = 0;
 	
-	public static final int DAMAGE = 0; //4
+	public static final int DAMAGE = 2;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 40;
@@ -45,7 +46,7 @@ public class GeyserParticle extends Projectile
 	
 	public void collide(Entity ent)
 	{
-		if(stage.getTime() % 2 == 0 && !ent.isDodging())
+		if(!ent.isDodging())
 		{
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
