@@ -17,14 +17,16 @@ public class Player extends Entity
 	private int stamina;
 	private boolean crouching;
 	
-	private int healthRegenTime; // Last time when health was regenerated
-	private int manaRegenTime; // Last time when mana was regenerated
-	private int staminaRegenTime; // Last time when stamina was regenerated
+	private int jumpTime;
 	
 	// Phase related mechanics
 	private Phase phase;
 	private boolean canDoubleJump;
 	private boolean iceArmor;
+	
+	private int healthRegenTime; // Last time when health was regenerated
+	private int manaRegenTime; // Last time when mana was regenerated
+	private int staminaRegenTime; // Last time when stamina was regenerated
 	
 	// Values corresponding to each animation
 	private final int GROUND_LEFT = 0;
@@ -37,11 +39,14 @@ public class Player extends Entity
 	private final int CROUCH_RIGHT = 7;
 	private final int MIST = 8;
 	
+	// Movement constants
 	private final double ACCELERATION = 5;
 	private final double REDUCED_ACCELERATION = 4; // Lower acceleration in air or when moving backwards
 	private final double MOVE_SPEED = 24;
-	private final double REDUCED_MOVE_SPEED = 18; // Lower maximum movement speed when moving backwards
-	private final double JUMP_SPEED = 40;
+	private final double REDUCED_MOVE_SPEED = 20; // Lower maximum movement speed when moving backwards
+	private final double INITIAL_JUMP_SPEED = 25;
+	private final double JUMP_INCREMENT = 5;
+	private final int JUMP_TIME = 5;
 	
 	public static final int PLAYER_WIDTH = 60;
 	public static final int PLAYER_HEIGHT = 120;
@@ -82,10 +87,11 @@ public class Player extends Entity
 		stamina = BASE_STAMINA;
 		
 		healthRegenTime = manaRegenTime = staminaRegenTime = -50; // Prevents initial regeneration check
-
+		
 		movability = 5;
 		friendly = true;
 		
+		jumpTime = 0;
 		canDoubleJump = false;
 		iceArmor = false;
 		
@@ -120,6 +126,11 @@ public class Player extends Entity
 		}
 		
 		super.update();
+		
+		if(jumpTime > 0)
+		{
+			jumpTime--;
+		}
 		
 		// Update weapon
 		if(hasWeapon())
@@ -310,10 +321,26 @@ public class Player extends Entity
 		}
 	}
 	
+	public boolean canJump()
+	{
+		return isGrounded();
+	}
+	
 	public void jump()
 	{
-		setVelY(-JUMP_SPEED);
+		setVelY(-INITIAL_JUMP_SPEED);
 		removeGround();
+		jumpTime = JUMP_TIME;
+	}
+	
+	public boolean canJumpMore()
+	{
+		return jumpTime > 0;
+	}
+	
+	public void jumpMore()
+	{
+		setVelY(getVelY() - JUMP_INCREMENT);
 	}
 	
 	public boolean canCrouch()

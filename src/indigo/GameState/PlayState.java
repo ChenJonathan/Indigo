@@ -110,7 +110,7 @@ public class PlayState extends GameState
 		// Movement
 		if(player.canMove())
 		{
-			if(input.keyDown(InputManager.W) && player.isGrounded())
+			if(input.keyDown(InputManager.W) && player.canJump())
 			{
 				player.jump();
 			}
@@ -118,6 +118,10 @@ public class PlayState extends GameState
 			{
 				player.canDoubleJump(false);
 				player.jump();
+			}
+			else if(input.keyDown(InputManager.W) && player.canJumpMore())
+			{
+				player.jumpMore();
 			}
 			if(input.keyDown(InputManager.S) && player.canCrouch())
 			{
