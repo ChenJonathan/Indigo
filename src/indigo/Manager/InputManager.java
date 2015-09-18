@@ -1,6 +1,9 @@
 package indigo.Manager;
 import java.awt.event.KeyEvent;
-// Change to non-static class
+
+/**
+ * Handles all of the keyboard and mouse input for the application.
+ */
 public class InputManager
 {
 	public static final int NUM_KEYS = 13;
@@ -28,10 +31,16 @@ public class InputManager
 	public static final int SPACE = 10;
 	public static final int SHIFT = 11;
 	public static final int ESCAPE = 12;
-	
+
+    /**
+     * Default constructor.
+     */
 	public InputManager() { }
-	
-	// Previous mouse position is tracked to help check for changes in mouse state
+
+    /**
+     * Updates mouse and key states.  Previous mouse position is tracked to help
+     * check for changes in mouse state.
+     */
 	public void update()
 	{
 		prevMouseLeftState = mouseLeftState;
@@ -41,8 +50,12 @@ public class InputManager
 			prevKeyState[count] = keyState[count];
 		}
 	}
-	
-	// Changes boolean array based on which keys are pressed
+
+    /**
+     * Changes boolean array based on which keys are pressed.
+     * @param key The key in question.
+     * @param state Whether the key is pressed.
+     */
 	public void keySet(int key, boolean state)
 	{
 		if(key == KeyEvent.VK_1) keyState[K1] = state;
@@ -59,99 +72,141 @@ public class InputManager
 		else if(key == KeyEvent.VK_SHIFT) keyState[SHIFT] = state;
 		else if(key == KeyEvent.VK_ESCAPE) keyState[ESCAPE] = state;
 	}
-	
-	// Changes boolean based on whether mouse is pressed
+
+    /**
+     * Tracks whether mouse-left is pressed.
+     * @param state Whether mouse-left is pressed.
+     */
 	public void mouseLeftSet(boolean state)
 	{
 		mouseLeftState = state;
 	}
-	
-	// Changes boolean based on whether mouse is pressed
+
+    /**
+     * Tracks whether mouse-right is pressed.
+     * @param state Whether mouse-right is pressed.
+     */
 	public void mouseRightSet(boolean state)
 	{
 		mouseRightState = state;
 	}
-	
-	// Changes int values representing mouse position
+
+    /**
+     * Tracks mouse position.
+     * @param x The current x-value of the mouse.
+     * @param y The current y-value of the mouse.
+     */
 	public void mouseSet(int x, int y)
 	{
 		mouseX = x;
 		mouseY = y;
 	}
-	
-	// Checks if the left mouse button is currently pressed
+
+    /**
+     * @return Whether the left mouse button is currently pressed.
+     */
 	public boolean mouseLeftDown()
 	{
 		return mouseLeftState;
 	}
-	
-	// Checks if the left mouse button has been recently pressed
+
+    /**
+     * @return Whether the left mouse button has been recently pressed.
+     */
 	public boolean mouseLeftPress()
 	{
 		return mouseLeftState && !prevMouseLeftState;
 	}
-	
-	// Checks if the left mouse button has been recently released
+
+    /**
+     * @return Whether the left mouse button has been recently released.
+     */
 	public boolean mouseLeftRelease()
 	{
 		return !mouseLeftState && prevMouseLeftState;
 	}
-	
-	// Checks if the right mouse button is currently pressed
+
+    /**
+     * @return Whether the right mouse button is currently pressed.
+     */
 	public boolean mouseRightDown()
 	{
 		return mouseRightState;
 	}
-	
-	// Checks if the right mouse button has been recently pressed
+
+    /**
+     * @return Whether the right mouse button has been recently pressed.
+     */
 	public boolean mouseRightPress()
 	{
 		return mouseRightState && !prevMouseRightState;
 	}
-	
-	// Checks if the right mouse button has been recently released
+
+    /**
+     * @return Whether the right mouse button has been recently released.
+     */
 	public boolean mouseRightRelease()
 	{
 		return !mouseRightState && prevMouseRightState;
 	}
-	
-	// Checks if either mouse button is currently pressed
+
+    /**
+     * @return Whether either mouse button is currently pressed.
+     */
 	public boolean mouseDown()
 	{
 		return mouseLeftDown() || mouseRightDown();
 	}
-	
-	// Checks if either mouse button has been recently pressed
+
+    /**
+     * @return Whether either mouse button has been recently pressed.
+     */
 	public boolean mousePress()
 	{
 		return mouseLeftPress() || mouseRightPress();
 	}
-	
-	// Returns x position of mouse
+
+    /**
+     * @return The x-position of the mouse.
+     */
 	public int mouseX()
 	{
 		return mouseX;
 	}
-	
-	// Returns y position of mouse
+
+    /**
+     * @return The y-position of the mouse.
+     */
 	public int mouseY()
 	{
 		return mouseY;
 	}
-	
-	// Checks if key is pressed
+
+    /**
+     * Checks if key is pressed.
+     * @param i The id of the key in question.
+     * @return Whether that key is pressed.
+     */
 	public boolean keyDown(int i)
 	{
 		return keyState[i];
 	}
-	
-	// Checks if a key was pressed recently
+
+    /**
+     * Checks if a key was pressed recently.
+     * @param i The id of the key in question.
+     * @return Whether that key was pressed recently.
+     */
 	public boolean keyPress(int i)
 	{
 		return keyState[i] && !prevKeyState[i];
 	}
-	
-	// Checks if a key was pressed recently
+
+    /**
+     * Checks if a key was released recently.
+     * @param i The id of the key in question.
+     * @return Whether that key was released recently.
+     */
 	public boolean keyRelease(int i)
 	{
 		return !keyState[i] && prevKeyState[i];

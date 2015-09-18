@@ -13,8 +13,10 @@ import indigo.Main.Game;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-// Manages the state of the game
-// Game state determines what is currently being updated and rendered
+/**
+ * Manages the state of the game.  Game state determines what is currently being
+ * updated and rendered.
+ */
 public class GameStateManager
 {
 	private Game game;
@@ -37,7 +39,11 @@ public class GameStateManager
 	public static final int SELECT = 1;
 	public static final int PLAY = 2;
 	public static final int CLEAR = 3;
-	
+
+    /**
+     * Sets up the GameManager with the current game instance.
+     * @param game The current game session.
+     */
 	public GameStateManager(Game game)
 	{
 		this.game = game;
@@ -57,8 +63,11 @@ public class GameStateManager
 		gameStates = new GameState[NUM_STATES];
 		setState(MENU);
 	}
-	
-	// Changes the game state and removes the previous state
+
+    /**
+     * Changes the game state and removes the previous state.
+     * @param state The new game state.
+     */
 	public void setState(int state)
 	{
 		gameStates[currentState] = null;
@@ -80,27 +89,38 @@ public class GameStateManager
 			gameStates[state] = new ClearStageState(this);
 		}
 	}
-	
-	// Pauses the game
+
+    /**
+     * Pauses and unpauses the game.
+     * @param paused Whether the game is paused.
+     */
 	public void setPaused(boolean paused)
 	{
 		this.paused = paused;
 	}
-	
-	// Shows options and stops updates
+
+    /**
+     * Shows options and stops updates.
+     * @param options Whether the options screen is to be shown.
+     */
 	public void setOptions(boolean options)
 	{
 		this.options = options;
 	}
-	
-	// Shows talents and stops updates
+
+    /**
+     * Shows talents and stops updates.
+     * @param talents Whether the talents screen is to be shown.
+     */
 	public void setTalents(boolean talents)
 	{
 		this.talents = talents;
 	}
-	
-	// Game updates are delegated to current game state
-	// Priority is given to "temporary" game states
+
+    /**
+     * Delegates game updates to current game state.  Priority is given to
+     * "temporary" game states.
+     */
 	public void update()
 	{
 		if(talents)
@@ -120,9 +140,12 @@ public class GameStateManager
 			gameStates[currentState].update();
 		}
 	}
-	
-	// Visual display is based on current game state
-	// Priority is given to "temporary" game states
+
+    /**
+     * Renders the current game state.  Priority is given to "temporary" game
+     * states.
+     * @param g The graphics to be rendered.
+     */
 	public void render(Graphics2D g)
 	{
 		if(talents)
@@ -142,25 +165,38 @@ public class GameStateManager
 			gameStates[currentState].render(g);
 		}
 	}
-	
-	// Relays Data object to GameState objects
+
+    /**
+     * Relays Data object to GameState objects.
+     * @return The data to be relayed.
+     */
 	public Data getData()
 	{
 		return data;
 	}
-	
-	// Relays InputManager object to GameState objects
+
+    /**
+     * Relays InputManager object to GameState objects.
+     * @return The input to be relayed.
+     */
 	public InputManager getInputManager()
 	{
 		return input;
 	}
-	
-	// Relays SoundManager object to GameState objects
+
+    /**
+     * Relays SoundManager object to GameState objects.
+     * @return The sound to be relayed.
+     */
 	public SoundManager getSoundManager()
 	{
 		return sound;
 	}
-	
+
+    /**
+     * Sets the cursor to a new image.
+     * @param image The new cursor image.
+     */
 	public void setCursor(BufferedImage image)
 	{
 		game.setCursor(image);

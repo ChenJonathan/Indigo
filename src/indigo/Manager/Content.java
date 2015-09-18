@@ -1,6 +1,10 @@
 package indigo.Manager;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+/**
+ * Handles data files (i.e. images):  their paths, usage, and general info.
+ */
 public class Content
 {
 	// Cursor
@@ -61,7 +65,14 @@ public class Content
 	
 	// Stages
 	public static BufferedImage STAGE_BEACH = load("/stages/beach.png", 6400, 1200);
-	
+
+    /**
+     * Loads an image.
+     * @param s The path to the file.
+     * @param w The width of the image.
+     * @param h The height of the image.
+     * @return The loaded image.
+     */
 	private static BufferedImage load(String s, int w, int h)
 	{
 		BufferedImage img;
@@ -79,7 +90,15 @@ public class Content
 		}
 		return null;
 	}
-	
+
+    /**
+     * Loads an array of images used together.
+     * @param s The path to the file.
+     * @param w The width of the images.
+     * @param h The height of the images.
+     * @param frames The number of frames in the array.
+     * @return The array of loaded images.
+     */
 	private static BufferedImage[] loadArray(String s, int w, int h, int frames)
 	{
 		BufferedImage[] img = new BufferedImage[frames];
