@@ -80,16 +80,39 @@ public abstract class Stage
 					{
 						if(ent.intersects(otherEnt))
 						{
-							// May be subject to change depending on how the interaction works out
+							// Entities are pushed horizontally when colliding with each other
 							if(ent.getX() < otherEnt.getX())
 							{
-								ent.setX(ent.getX() - ent.getMovability());
-								otherEnt.setX(otherEnt.getX() + otherEnt.getMovability());
+								ent.setVelX(ent.getVelX() - ent.getMovability());
+								otherEnt.setVelX(otherEnt.getVelX() + otherEnt.getMovability());
 							}
 							else
 							{
-								ent.setX(ent.getX() + ent.getMovability());
-								otherEnt.setX(otherEnt.getX() - otherEnt.getMovability());
+								ent.setVelX(ent.getVelX() + ent.getMovability());
+								otherEnt.setVelX(otherEnt.getVelX() - otherEnt.getMovability());
+							}
+							// Flying entities are also pushed vertically
+							if(ent.isFlying())
+							{
+								if(ent.getY() < otherEnt.getY())
+								{
+									ent.setVelY(ent.getVelY() - ent.getMovability());
+								}
+								else
+								{
+									ent.setVelY(ent.getVelY() + ent.getMovability());
+								}
+							}
+							if(otherEnt.isFlying())
+							{
+								if(ent.getY() < otherEnt.getY())
+								{
+									otherEnt.setVelY(otherEnt.getVelY() + otherEnt.getMovability());
+								}
+								else
+								{
+									otherEnt.setVelY(otherEnt.getVelY() - otherEnt.getMovability());
+								}
 							}
 						}
 						
@@ -104,21 +127,6 @@ public abstract class Stage
 							{
 								trackDeath(ent.getName(), otherEnt);
 							}
-						}
-					}
-				}
-				
-				// Entity-projectile: Taking damage and tracking kills
-				for(int projCount = 0; projCount < projectiles.size(); projCount++)
-				{
-					Projectile proj = projectiles.get(projCount);
-					// Consider setting projectile location to intersection
-					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
-					{
-						proj.collide(ent);
-						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
-						{
-							trackDeath(proj.getName(), ent);
 						}
 					}
 				}
@@ -224,6 +232,21 @@ public abstract class Stage
 				else
 				{
 					ent.removeGround();
+				}
+				
+				// Entity-projectile: Taking damage and tracking kills
+				for(int projCount = 0; projCount < projectiles.size(); projCount++)
+				{
+					Projectile proj = projectiles.get(projCount);
+					// Consider setting projectile location to intersection
+					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
+					{
+						proj.collide(ent);
+						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+						{
+							trackDeath(proj.getName(), ent);
+						}
+					}
 				}
 			}
 			

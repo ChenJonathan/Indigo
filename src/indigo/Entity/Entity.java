@@ -50,7 +50,6 @@ public abstract class Entity
 	protected boolean marked;
 	protected boolean dead;
 	
-	// Consider making Grounded and Flying subclasses
 	// Subclasses - Initialize name, width, height, solid, flying, moveable, move speed, jump speed
 	public Entity(Stage stage, double x, double y, int health)
 	{
@@ -87,9 +86,40 @@ public abstract class Entity
 		prevX = x;
 		prevY = y;
 		
-		if(!flying)
+		// Friction and gravity
+		if(flying)
 		{
-			// Applying friction; ground entities gradually slow down
+			double vel = Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+			
+			// Flying entities gradually slow down
+			if(vel > Stage.FRICTION)
+			{
+				if(velX < 0)
+				{
+					velX = velX + Stage.FRICTION * -velX / vel;
+				}
+				else if(velX > 0)
+				{
+					velX = velX - Stage.FRICTION * velX / vel;
+				}
+				if(velY < 0)
+				{
+					velY = velY + Stage.FRICTION * -velY / vel;
+				}
+				else if(velY > 0)
+				{
+					velY = velY - Stage.FRICTION * velY / vel;
+				}
+			}
+			else
+			{
+				velX = 0;
+				velY = 0;
+			}
+		}
+		else
+		{
+			// Ground entities slow down horizontally
 			if(velX < 0)
 			{
 				velX = Math.min(velX + Stage.FRICTION, 0);
@@ -99,7 +129,7 @@ public abstract class Entity
 				velX = Math.max(velX - Stage.FRICTION, 0);
 			}
 			
-			// Applying gravity
+			// Applying gravity to ground entities
 			if(ground == null)
 			{
 				velY += Stage.GRAVITY;

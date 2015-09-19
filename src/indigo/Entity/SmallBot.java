@@ -15,7 +15,7 @@ public class SmallBot extends Entity
 	
 	private int timer; // When timer hits zero, move and reset timer
 	
-	private final int MOVE_SPEED = 5;
+	private final int MOVE_SPEED = 40;
 	private final int MAX_RANGE = 1000;
 	
 	public static final double SMALLBOT_WIDTH = 60;
@@ -59,8 +59,6 @@ public class SmallBot extends Entity
 		
 		if(timer == 0)
 		{
-			setVelX(0);
-			setVelY(0);
 			timer = DEFAULT_TIMER;
 			
 			if(Math.random() < 0.5)
@@ -108,12 +106,15 @@ public class SmallBot extends Entity
 	
 	public void move()
 	{
+		boolean outOfBounds = false;
+		
 		do
 		{
 			double rand = 0;
 			if(getY() <= 0)
 			{
 				// If above the map, only downwards movement is allowed
+				outOfBounds = true;
 				rand = Math.random() / 2 + 0.5;
 			}
 			else
@@ -134,7 +135,7 @@ public class SmallBot extends Entity
 			setVelX(Math.cos(2 * rand * Math.PI) * MOVE_SPEED);
 			setVelY(Math.sin(2 * rand * Math.PI) * MOVE_SPEED);
 		}
-		while(getX() + 30 * getVelX() > stage.getMapX() || getX() + 30 * getVelX() < 0 || getY() + 30 * getVelY() > stage.getMapY() || getY() + 30 * getVelY() < Stage.SKY_LIMIT);
+		while(getX() + 30 * getVelX() > stage.getMapX() || getX() + 30 * getVelX() < 0 || getY() + 30 * getVelY() > stage.getMapY() || (getY() + 30 * getVelY() < 0 && !outOfBounds));
 		// Repeat the loop if this movement would carry the entity outside of map boundaries
 	}
 	
