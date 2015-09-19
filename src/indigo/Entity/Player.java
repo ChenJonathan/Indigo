@@ -40,16 +40,13 @@ public class Player extends Entity
 	private final int MIST = 8;
 
 	// Movement constants
-	private final double ACCELERATION = 5;
-	private final double REDUCED_ACCELERATION = 4; // Lower acceleration in air
-													// or when moving backwards
-	private final double MOVE_SPEED = 24;
-	private final double REDUCED_MOVE_SPEED = 20; // Lower maximum movement
-													// speed when moving
-													// backwards
+	private final double ACCELERATION = 4;
+	private final double REDUCED_ACCELERATION = 3; // Lower acceleration in air or when moving backwards
+	private final double MOVE_SPEED = 20;
+	private final double REDUCED_MOVE_SPEED = 15; // Lower maximum movement speed when moving backwards
 	private final double INITIAL_JUMP_SPEED = 25;
 	private final double JUMP_INCREMENT = 5;
-	private final int JUMP_TIME = 5;
+	private final int JUMP_TIME = 4;
 
 	public static final int PLAYER_WIDTH = 60;
 	public static final int PLAYER_HEIGHT = 120;
@@ -62,7 +59,7 @@ public class Player extends Entity
 	// crouching
 	public static final int CROUCH_STAMINA_COST = 1;
 	public static final int CROUCH_STAMINA_REQUIREMENT = 25;
-	public static final int SHIFT_STAMINA_COST = 10;
+	public static final int SHIFT_STAMINA_COST = 25;
 
 	// Amount regenerated
 	public static final int HEALTH_REGEN = 1;
@@ -91,17 +88,17 @@ public class Player extends Entity
 		maxMana = this.mana = mana;
 		stamina = BASE_STAMINA;
 
-		healthRegenTime = manaRegenTime = staminaRegenTime = -50; // Prevents
-																	// initial
-																	// regeneration
-																	// check
+		healthRegenTime = manaRegenTime = staminaRegenTime = -1;
 
 		movability = 5;
-		friendly = true;
+		flying = false;
+		frictionless = false;
 
 		jumpTime = 0;
 		canDoubleJump = false;
 		iceArmor = false;
+		
+		friendly = true;
 
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
 	}
@@ -114,8 +111,9 @@ public class Player extends Entity
 			// TODO Check death and end method if player is dying
 			if(animation.hasPlayedOnce())
 			{
-				dodging = false;
 				flying = false;
+				frictionless = false;
+				dodging = false;
 
 				canAttack(true);
 				canMove(true);
@@ -128,11 +126,7 @@ public class Player extends Entity
 		}
 
 		// Set direction
-		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation
-														// and change
-														// hasWeapon() call to
-														// weapon animation
-														// check
+		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation and change hasWeapon() call to weapon animation check
 		{
 			setDirection(stage.getMouseX() > this.getX());
 		}
@@ -409,6 +403,7 @@ public class Player extends Entity
 			setVelY(y * 100);
 
 			flying = true;
+			frictionless = true;
 			dodging = true;
 
 			canAttack(false);

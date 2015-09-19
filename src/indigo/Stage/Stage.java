@@ -46,7 +46,7 @@ public abstract class Stage
 	public static final double PUSH_AMOUNT = 0.5;
 	
 	public static final double GRAVITY = 3;
-	public static final double FRICTION = 3;
+	public static final double FRICTION = 2;
 	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
 	public static final double SKY_LIMIT = -1000;
 	

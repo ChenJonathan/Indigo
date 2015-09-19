@@ -31,6 +31,8 @@ public class Turret extends Entity
 		
 		movability = 5;
 		flying = false;
+		frictionless = false;
+		
 		friendly = false;
 		
 		angle = Math.PI / 2;

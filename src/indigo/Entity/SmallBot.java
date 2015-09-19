@@ -15,7 +15,7 @@ public class SmallBot extends Entity
 	
 	private int timer; // When timer hits zero, move and reset timer
 	
-	private final int MOVE_SPEED = 40;
+	private final int MOVE_SPEED = 30;
 	private final int MAX_RANGE = 1000;
 	
 	public static final double SMALLBOT_WIDTH = 60;
@@ -33,6 +33,8 @@ public class SmallBot extends Entity
 		
 		movability = 5;
 		flying = true;
+		frictionless = false;
+		
 		friendly = false;
 		
 		timer = DEFAULT_TIMER;
