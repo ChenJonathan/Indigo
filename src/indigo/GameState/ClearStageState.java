@@ -7,20 +7,29 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-// Shown after each level
-// Can display a variety of information based on the stage - retrieve information from Data
+/**
+ * The state present when the player has ended a state.  Shown after each level.
+ * Can display a variety of information based on the stage; retrieves
+ * information from Data.
+ */
 public class ClearStageState extends GameState 
 {
+    /**
+     * Sets up the clear stage state.
+     * @param gsm The game state manager.
+     */
 	public ClearStageState(GameStateManager gsm)
 	{
 		super(gsm);
 	}
-	
+
+    @Override
 	public void update()
 	{
 		handleInput();
 	}
-	
+
+    @Override
 	public void render(Graphics2D g)
 	{
 		String message = "";
@@ -40,7 +49,8 @@ public class ClearStageState extends GameState
 		g.drawString("Time elapsed: " + Math.round(data.getClearTime() / 30.0) + " s", 150, 350);
 		// TODO Draw background and other things
 	}
-	
+
+    @Override
 	public void handleInput()
 	{
 		// Change to whatever

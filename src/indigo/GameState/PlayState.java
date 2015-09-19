@@ -19,7 +19,10 @@ import indigo.Stage.Stage;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-// Handles inputs (skill use) and sends the info to the HUD, Stage, and Phase objects
+/**
+ * The state where the player is actively playing the game.  Handles inputs
+ * (skill use) and sends the info to the HUD, Stage, and Phase objects.
+ */
 public class PlayState extends GameState 
 {
 	public Stage stage;
@@ -42,7 +45,12 @@ public class PlayState extends GameState
 	
 	// Values corresponding to each stage
 	public static final int BEACH = 0;
-	
+
+    /**
+     * Sets up the play state and initializes stage, stage objects, phases,
+     * display, and timer.
+     * @param gsm The game state manager.
+     */
 	public PlayState(GameStateManager gsm)
 	{
 		super(gsm);
@@ -75,7 +83,8 @@ public class PlayState extends GameState
 		// Initialize timer
 		time = -1;
 	}
-	
+
+    @Override
 	public void update()
 	{
 		handleInput();
@@ -93,7 +102,8 @@ public class PlayState extends GameState
 		stage.update();
 		display.update();
 	}
-	
+
+    @Override
 	public void render(Graphics2D g)
 	{
 		stage.updateCam(g);
@@ -103,8 +113,11 @@ public class PlayState extends GameState
 		display.render(g);
 	}
 
-	// Relays skillcasting information to both stage and HUD
-	// Also checks for pause, class switch, etc
+    /**
+     * Handles all of the player input during play.  Relays skillcasting
+     * information to both stage and HUD.  Also checks for pause, class switch,
+     * etc.
+     */
 	public void handleInput()
 	{
 		// Movement
@@ -262,12 +275,19 @@ public class PlayState extends GameState
 			// gsm.setTalents(true);
 		}
 	}
-	
+
+    /**
+     * @return The current game time.
+     */
 	public int getTime()
 	{
 		return time;
 	}
-	
+
+    /**
+     * Adds experience to the player's total.
+     * @param experience The amount of experience to be added.
+     */
 	public void addExperience(int experience)
 	{
 		data.setExperience(data.getExperience() + experience);
@@ -279,7 +299,10 @@ public class PlayState extends GameState
 			levelUp();
 		}
 	}
-	
+
+    /**
+     * Levels up the player.
+     */
 	public void levelUp()
 	{
 		if(data.getLevel() % 5 == 0)
@@ -289,8 +312,10 @@ public class PlayState extends GameState
 		}
 		// TODO Finish
 	}
-	
-	// Switches professions
+
+    /**
+     * Swaps out the player's active phase with the player's inactive phase.
+     */
 	public void swapPhases()
 	{
 		activePhase.resetSkillStates(); // Deselects any selected skills
@@ -309,63 +334,99 @@ public class PlayState extends GameState
 			player.canDoubleJump(true);
 		}
 	}
-	
+
+    /**
+     * @return The player entity.
+     */
 	public Entity getPlayer()
 	{
 		return entities.get(0);
 	}
-	
+
+    /**
+     * @return A list of the entities in play.
+     */
 	public ArrayList<Entity> getEntities()
 	{
 		return entities;
 	}
-	
+
+    /**
+     * @return A list of the projectiles in play.
+     */
 	public ArrayList<Projectile> getProjectiles()
 	{
 		return projectiles;
 	}
-	
+
+    /**
+     * @return A list of the platforms in play.
+     */
 	public ArrayList<Platform> getPlatforms()
 	{
 		return platforms;
 	}
-	
+
+    /**
+     * @return A list of the walls in play.
+     */
 	public ArrayList<Wall> getWalls()
 	{
 		return walls;
 	}
-	
+
+    /**
+     * @return The greatest x-value of the stage displayed.
+     */
 	public double getMapX()
 	{
 		return stage.getMapX();
 	}
-	
+
+    /**
+     * @return The greatest y-value of the stage displayed.
+     */
 	public double getMapY()
 	{
 		return stage.getMapY();
 	}
-	
+
+    /**
+     * @return The current x-value of the mouse.
+     */
 	public double getMouseX()
 	{
 		return stage.getMouseX();
 	}
-	
+
+    /**
+     * @return The current y-value of the mouse.
+     */
 	public double getMouseY()
 	{
 		return stage.getMouseY();
 	}
-	
+
+    /**
+     * Ends the current game and transitions to ClearStateState.
+     */
 	public void endGame()
 	{
 		data.setClearTime(time);
 		gsm.setState(GameStateManager.CLEAR);
 	}
-	
+
+    /**
+     * @return The current game data.
+     */
 	public Data getData()
 	{
 		return data;
 	}
-	
+
+    /**
+     * @return The current input data.
+     */
 	public InputManager getInput()
 	{
 		return input;
