@@ -23,6 +23,7 @@ public class Player extends Entity
 	private Phase phase;
 	private boolean canDoubleJump;
 	private boolean iceArmor;
+	private boolean iceChains;
 
 	private int healthRegenTime; // Last time when health was regenerated
 	private int manaRegenTime; // Last time when mana was regenerated
@@ -555,6 +556,16 @@ public class Player extends Entity
 	public void setIceArmor(boolean active)
 	{
 		iceArmor = active;
+	}
+	
+	public boolean getIceChains()
+	{
+		return iceChains;
+	}
+	
+	public void setIceChains(boolean active)
+	{
+		iceChains = active;
 	}
 
 	public boolean isCrouching()

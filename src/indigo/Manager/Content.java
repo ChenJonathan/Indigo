@@ -47,6 +47,7 @@ public class Content
 	public static BufferedImage[] MORTAR = loadArray("/projectiles/mortar.png", 50, 50, 1);
 	public static BufferedImage[] WATER_BALL_DEATH = loadArray("/projectiles/water_ball_death.png", 100, 100, 2);
 	public static BufferedImage[] WATER_BALL = loadArray("/projectiles/water_ball.png", 100, 100, 1);
+	public static BufferedImage[] ICECHAIN = loadArray("/projectiles/icechain.png", 100, 100, 1);
 	
 	// Sprites
 	public static BufferedImage[] PLAYER_CROUCH_LEFT = loadArray("/sprites/player_crouch_left.png", 80, 120, 1);
