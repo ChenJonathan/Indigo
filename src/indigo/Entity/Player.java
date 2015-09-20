@@ -44,8 +44,8 @@ public class Player extends Entity
 	private final double ACCELERATION = 4;
 	private final double REDUCED_ACCELERATION = 3; // Lower acceleration in air or when moving backwards
 	private final double MOVE_SPEED = 20;
-	private final double REDUCED_MOVE_SPEED = 15; // Lower maximum movement speed when moving backwards
-	private final double INITIAL_JUMP_SPEED = 25;
+	private final double REDUCED_MOVE_SPEED = 16; // Lower maximum movement speed when moving backwards
+	private final double INITIAL_JUMP_SPEED = 24;
 	private final double JUMP_INCREMENT = 5;
 	private final int JUMP_TIME = 4;
 

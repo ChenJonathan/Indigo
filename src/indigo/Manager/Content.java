@@ -54,8 +54,8 @@ public class Content
 	public static BufferedImage[] PLAYER_CROUCH_RIGHT = loadArray("/sprites/player_crouch_right.png", 64, 111, 1);
 	public static BufferedImage[] PLAYER_IDLE_LEFT = loadArray("/sprites/player_idle_left.png", 64, 111, 6);
 	public static BufferedImage[] PLAYER_IDLE_RIGHT = loadArray("/sprites/player_idle_right.png", 64, 111, 6);
-	public static BufferedImage[] PLAYER_JUMP_LEFT = loadArray("/sprites/player_jump_left.png", 80, 120, 1);
-	public static BufferedImage[] PLAYER_JUMP_RIGHT = loadArray("/sprites/player_jump_right.png", 80, 120, 1);
+	public static BufferedImage[] PLAYER_JUMP_LEFT = loadArray("/sprites/player_jump_left.png", 64, 111, 1);
+	public static BufferedImage[] PLAYER_JUMP_RIGHT = loadArray("/sprites/player_jump_right.png", 64, 111, 1);
 	public static BufferedImage[] PLAYER_MIST = loadArray("/sprites/player_mist.png", 80, 120, 4);
 	public static BufferedImage[] PLAYER_MOVE_LEFT = loadArray("/sprites/player_move_left.png", 64, 111, 8);
 	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player_move_right.png", 64, 111, 8);
