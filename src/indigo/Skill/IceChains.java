@@ -28,8 +28,6 @@ public class IceChains extends Skill
 				player.setMana(player.getMana() - 1);
 				playState.getProjectiles().add(hook);
 			}
-		   
-		
 		}
         else
         {

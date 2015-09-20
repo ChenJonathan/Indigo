@@ -406,8 +406,8 @@ public class Player extends Entity
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 
-			setVelX(x * 100);
-			setVelY(y * 100);
+			setVelX(x * 65);
+			setVelY(y * 65);
 
 			flying = true;
 			frictionless = true;
@@ -545,6 +545,11 @@ public class Player extends Entity
 		canDoubleJump = true;
 	}
 
+	public boolean isCrouching()
+	{
+		return crouching;
+	}
+
 	public void setSlashMode(boolean slash)
 	{
 		((IceSword)weapon).setSlashMode(slash);
@@ -578,10 +583,5 @@ public class Player extends Entity
 	public void setIceChains(boolean active)
 	{
 		iceChains = active;
-	}
-
-	public boolean isCrouching()
-	{
-		return crouching;
 	}
 }
