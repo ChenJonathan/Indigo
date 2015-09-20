@@ -1,6 +1,10 @@
 package indigo.Manager;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+/**
+ * Handles data files (i.e. images):  their paths, usage, and general info.
+ */
 public class Content
 {
 	// Cursor
@@ -43,17 +47,18 @@ public class Content
 	public static BufferedImage[] MORTAR = loadArray("/projectiles/mortar.png", 50, 50, 1);
 	public static BufferedImage[] WATER_BALL_DEATH = loadArray("/projectiles/water_ball_death.png", 100, 100, 2);
 	public static BufferedImage[] WATER_BALL = loadArray("/projectiles/water_ball.png", 100, 100, 1);
+	//public static BufferedImage[] ICECHAIN = loadArray("/projectiles/icechain.png", 100, 100, 1);
 	
 	// Sprites
-	public static BufferedImage[] PLAYER_CROUCH_LEFT = loadArray("/sprites/player_crouch_left.png", 80, 120, 1);
-	public static BufferedImage[] PLAYER_CROUCH_RIGHT = loadArray("/sprites/player_crouch_right.png", 80, 120, 1);
-	public static BufferedImage[] PLAYER_IDLE_LEFT = loadArray("/sprites/player_idle_left.png", 80, 120, 2);
-	public static BufferedImage[] PLAYER_IDLE_RIGHT = loadArray("/sprites/player_idle_right.png", 80, 120, 2);
-	public static BufferedImage[] PLAYER_JUMP_LEFT = loadArray("/sprites/player_jump_left.png", 80, 120, 1);
-	public static BufferedImage[] PLAYER_JUMP_RIGHT = loadArray("/sprites/player_jump_right.png", 80, 120, 1);
+	public static BufferedImage[] PLAYER_CROUCH_LEFT = loadArray("/sprites/player_crouch_left.png", 64, 111, 1);
+	public static BufferedImage[] PLAYER_CROUCH_RIGHT = loadArray("/sprites/player_crouch_right.png", 64, 111, 1);
+	public static BufferedImage[] PLAYER_IDLE_LEFT = loadArray("/sprites/player_idle_left.png", 64, 111, 6);
+	public static BufferedImage[] PLAYER_IDLE_RIGHT = loadArray("/sprites/player_idle_right.png", 64, 111, 6);
+	public static BufferedImage[] PLAYER_JUMP_LEFT = loadArray("/sprites/player_jump_left.png", 64, 111, 1);
+	public static BufferedImage[] PLAYER_JUMP_RIGHT = loadArray("/sprites/player_jump_right.png", 64, 111, 1);
 	public static BufferedImage[] PLAYER_MIST = loadArray("/sprites/player_mist.png", 80, 120, 4);
-	public static BufferedImage[] PLAYER_MOVE_LEFT = loadArray("/sprites/player_move_left.png", 80, 120, 5);
-	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player_move_right.png", 80, 120, 5);
+	public static BufferedImage[] PLAYER_MOVE_LEFT = loadArray("/sprites/player_move_left.png", 64, 111, 8);
+	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player_move_right.png", 64, 111, 8);
 	public static BufferedImage[] SMALL_BOT_DEATH = loadArray("/sprites/small_bot_death.png", 60, 60, 7);
 	public static BufferedImage[] SMALL_BOT_IDLE = loadArray("/sprites/small_bot_idle.png", 60, 60, 1);
 	public static BufferedImage[] TURRET_DEATH = loadArray("/sprites/turret_death.png", 100, 130, 31);
@@ -61,7 +66,14 @@ public class Content
 	
 	// Stages
 	public static BufferedImage STAGE_BEACH = load("/stages/beach.png", 6400, 1200);
-	
+
+    /**
+     * Loads an image.
+     * @param s The path to the file.
+     * @param w The width of the image.
+     * @param h The height of the image.
+     * @return The loaded image.
+     */
 	private static BufferedImage load(String s, int w, int h)
 	{
 		BufferedImage img;
@@ -79,7 +91,15 @@ public class Content
 		}
 		return null;
 	}
-	
+
+    /**
+     * Loads an array of images used together.
+     * @param s The path to the file.
+     * @param w The width of the images.
+     * @param h The height of the images.
+     * @param frames The number of frames in the array.
+     * @return The array of loaded images.
+     */
 	private static BufferedImage[] loadArray(String s, int w, int h, int frames)
 	{
 		BufferedImage[] img = new BufferedImage[frames];

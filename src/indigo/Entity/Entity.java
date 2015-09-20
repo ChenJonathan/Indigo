@@ -27,7 +27,7 @@ public abstract class Entity
 	private Line2D.Double travel; // Line formed by previous and current positions; used for collision checking
 	
 	protected double width, height;
-	protected double movability; // How much an entity moves when pushed by another entity
+	protected double pushability; // How much an entity moves when pushed by another entity
 	
 	private int health, maxHealth;
 	
@@ -45,13 +45,14 @@ public abstract class Entity
 	private boolean canAttack;
 	private boolean canMove;
 	
-	protected boolean friendly;
 	protected boolean flying;
+	protected boolean frictionless;
+
+	protected boolean friendly;
 	protected boolean marked;
 	protected boolean dead;
 	
-	// Consider making Grounded and Flying subclasses
-	// Subclasses - Initialize name, width, height, solid, flying, moveable, move speed, jump speed
+	// Subclasses - Initialize name, width, height, solid, flying, frictionless, pushability, move speed, jump speed
 	public Entity(Stage stage, double x, double y, int health)
 	{
 		this.stage = stage;
@@ -84,28 +85,6 @@ public abstract class Entity
 	// Standard position updating stuff: gravity, friction, etc
 	public void update()
 	{
-		prevX = x;
-		prevY = y;
-		
-		if(!flying)
-		{
-			// Applying friction; ground entities gradually slow down
-			if(velX < 0)
-			{
-				velX = Math.min(velX + Stage.FRICTION, 0);
-			}
-			else if(velX > 0)
-			{
-				velX = Math.max(velX - Stage.FRICTION, 0);
-			}
-			
-			// Applying gravity
-			if(ground == null)
-			{
-				velY += Stage.GRAVITY;
-			}
-		}
-		
 		// Prevents x or y velocity from being too extreme (glitching through walls)
 		if(velX < -Stage.TERMINAL_VELOCITY)
 		{
@@ -124,8 +103,67 @@ public abstract class Entity
 			velY = Stage.TERMINAL_VELOCITY;
 		}
 		
+		prevX = x;
+		prevY = y;
+		
 		x += velX;
 		y += velY;
+		
+		// Friction and gravity
+		if(flying)
+		{
+			if(!frictionless)
+			{
+				double vel = Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+				
+				// Flying entities gradually slow down
+				if(vel > Stage.FRICTION)
+				{
+					if(velX < 0)
+					{
+						velX = velX + Stage.FRICTION * -velX / vel;
+					}
+					else if(velX > 0)
+					{
+						velX = velX - Stage.FRICTION * velX / vel;
+					}
+					if(velY < 0)
+					{
+						velY = velY + Stage.FRICTION * -velY / vel;
+					}
+					else if(velY > 0)
+					{
+						velY = velY - Stage.FRICTION * velY / vel;
+					}
+				}
+				else
+				{
+					velX = 0;
+					velY = 0;
+				}
+			}
+		}
+		else
+		{
+			if(!frictionless)
+			{
+				// Ground entities slow down horizontally
+				if(velX < 0)
+				{
+					velX = Math.min(velX + Stage.FRICTION, 0);
+				}
+				else if(velX > 0)
+				{
+					velX = Math.max(velX - Stage.FRICTION, 0);
+				}
+			}
+			
+			// Applying gravity to ground entities
+			if(ground == null)
+			{
+				velY += Stage.GRAVITY;
+			}
+		}
 		
 		// If the entity is grounded, take the y position corresponding to the ground - Important for slanted surfaces
 		if(ground != null)
@@ -290,9 +328,9 @@ public abstract class Entity
 		return height;
 	}
 	
-	public double getMovability()
+	public double getPushability()
 	{
-		return movability;
+		return pushability;
 	}
 	
 	public int getMaxHealth()

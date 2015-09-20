@@ -29,8 +29,10 @@ public class Turret extends Entity
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
 		
-		movability = 2;
+		pushability = 5;
 		flying = false;
+		frictionless = false;
+		
 		friendly = false;
 		
 		angle = Math.PI / 2;

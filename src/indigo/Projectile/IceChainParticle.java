@@ -1,24 +1,24 @@
 package indigo.Projectile;
 
-import indigo.Entity.Entity;
-import indigo.Landscape.Wall;
-import indigo.Manager.Content;
-
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-public class GeyserParticle extends Projectile
+import indigo.Entity.Entity;
+import indigo.Landscape.Wall;
+import indigo.Manager.Content;
+
+public class IceChainParticle extends Projectile
 {
 	// Animation
 	private final int DEFAULT = 0;
 	
-	public static final int DAMAGE = 2;
-	public static final int WIDTH = 80;
-	public static final int HEIGHT = 50;
+	public static final int DAMAGE = 0;
+	public static final int WIDTH = 100;
+	public static final int HEIGHT = 100;
 	public static final double SPEED = 40;
 	
-	public GeyserParticle(Entity entity, double x, double y, double velX, double velY, int dmg)
+	public IceChainParticle(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
 		width = WIDTH;
@@ -26,12 +26,7 @@ public class GeyserParticle extends Projectile
 		solid = false;
 		flying = true;
 		
-		setAnimation(DEFAULT, Content.GEYSER, -1);
-	}
-	
-	public void update()
-	{
-		super.update();
+		setAnimation(DEFAULT, Content.WATER_BALL, -1);
 	}
 	
 	public void render(Graphics2D g) 
@@ -46,25 +41,19 @@ public class GeyserParticle extends Projectile
 	
 	public void collide(Entity ent)
 	{
-		if(!ent.isDodging())
-		{
-			ent.mark();
-			ent.setHealth(ent.getHealth() - damage);
-			
-			ent.setVelY(ent.getVelY() - ent.getPushability() / 6); // Arbitrary scale value
-			ent.removeGround();
-		}
+		
+	}
+	public void collide(Wall wall)
+	{
+		
 	}
 	
-	// Not used
-	public void collide(Wall wall) { }
-
-	// Not used
 	public boolean isActive()
 	{
 		return true;
 	}
-	
-	// Not used
-	public void die() { }
+	public void die()
+	{
+		
+	}
 }

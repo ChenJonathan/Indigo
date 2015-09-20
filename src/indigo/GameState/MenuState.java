@@ -5,6 +5,9 @@ import indigo.Manager.GameStateManager;
 
 import java.awt.Graphics2D;
 
+/**
+ * The state where the main menu is displayed.  Present at game startup.
+ */
 public class MenuState extends GameState 
 {
 	private boolean instructions; // Whether the instructions are open or not
@@ -21,7 +24,11 @@ public class MenuState extends GameState
 	public final int OPTIONS = 2;
 	public final int CREDITS = 3;
 	public final int EXIT = 4;
-	
+
+    /**
+     * Sets up the menu and initializes the button states.
+     * @param gsm The game state manager.
+     */
 	public MenuState(GameStateManager gsm)
 	{
 		super(gsm);
@@ -36,12 +43,19 @@ public class MenuState extends GameState
 			buttonState[i] = NORMAL;
 		}
 	}
-	
+
+    @Override
 	public void update()
 	{
 		handleInput();
 	}
-	
+
+    /**
+     * Displays the background and buttons.  Also handles the visual response
+     * to button events.
+     * @param g The graphics to be rendered.
+     */
+    @Override
 	public void render(Graphics2D g)
 	{
 		if(instructions)
@@ -112,7 +126,11 @@ public class MenuState extends GameState
 			}
 		}
 	}
-	
+
+    /**
+     * Handles mouse interactions with the menu buttons.
+     */
+    @Override
 	public void handleInput()
 	{
 		// Instruction button functionality goes here
