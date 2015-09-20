@@ -6,6 +6,7 @@ import indigo.Projectile.IceChainParticle;
 
 public class IceChains extends Skill
 {
+	public IceChainParticle hook;
 	
 	public IceChains(Phase phase, int position)
 	{
@@ -18,18 +19,23 @@ public class IceChains extends Skill
     {
         super.update();
         
-        if (player.getMana() >= 0)
+        if (player.getMana() >= 1 && (input.keyPress(InputManager.K4) || castTime < 10))
         {
-	        if(castTime == 0)
-	        {
-	        	player.setIceChains(true);
-	        }
-	        player.setMana(player.getMana() - 0);
-
-        }
+			if(castTime == 0)
+			{
+				player.setIceChains(true);
+				hook = new IceChainParticle(player, playState.getMouseX(), playState.getMouseY(), 5, -5, 0);
+				player.setMana(player.getMana() - 1);
+				playState.getProjectiles().add(hook);
+			}
+		   
+		
+		}
         else
         {
-        	
+			playState.getProjectiles().remove(hook);
+			hook = null;
+			endCast();
         }
     }
     
