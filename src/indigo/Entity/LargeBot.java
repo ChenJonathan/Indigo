@@ -29,7 +29,7 @@ public class LargeBot extends Entity
 		width = LARGEBOT_WIDTH;
 		height = LARGEBOT_HEIGHT;
 
-		movability = 5;
+		pushability = 5;
 		flying = false;
 		frictionless = false;
 		
