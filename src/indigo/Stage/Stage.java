@@ -83,35 +83,35 @@ public abstract class Stage
 							// Entities are pushed horizontally when colliding with each other
 							if(ent.getX() < otherEnt.getX())
 							{
-								ent.setVelX(ent.getVelX() - ent.getMovability());
-								otherEnt.setVelX(otherEnt.getVelX() + otherEnt.getMovability());
+								ent.setVelX(ent.getVelX() - ent.getPushability());
+								otherEnt.setVelX(otherEnt.getVelX() + otherEnt.getPushability());
 							}
 							else
 							{
-								ent.setVelX(ent.getVelX() + ent.getMovability());
-								otherEnt.setVelX(otherEnt.getVelX() - otherEnt.getMovability());
+								ent.setVelX(ent.getVelX() + ent.getPushability());
+								otherEnt.setVelX(otherEnt.getVelX() - otherEnt.getPushability());
 							}
 							// Flying entities are also pushed vertically
 							if(ent.isFlying())
 							{
 								if(ent.getY() < otherEnt.getY())
 								{
-									ent.setVelY(ent.getVelY() - ent.getMovability());
+									ent.setVelY(ent.getVelY() - ent.getPushability());
 								}
 								else
 								{
-									ent.setVelY(ent.getVelY() + ent.getMovability());
+									ent.setVelY(ent.getVelY() + ent.getPushability());
 								}
 							}
 							if(otherEnt.isFlying())
 							{
 								if(ent.getY() < otherEnt.getY())
 								{
-									otherEnt.setVelY(otherEnt.getVelY() + otherEnt.getMovability());
+									otherEnt.setVelY(otherEnt.getVelY() + otherEnt.getPushability());
 								}
 								else
 								{
-									otherEnt.setVelY(otherEnt.getVelY() - otherEnt.getMovability());
+									otherEnt.setVelY(otherEnt.getVelY() - otherEnt.getPushability());
 								}
 							}
 						}

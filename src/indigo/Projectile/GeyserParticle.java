@@ -51,7 +51,7 @@ public class GeyserParticle extends Projectile
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
 			
-			ent.setVelY(ent.getVelY() - ent.getMovability() / 2); // Arbitrary scale value
+			ent.setVelY(ent.getVelY() - ent.getPushability() / 6); // Arbitrary scale value
 			ent.removeGround();
 		}
 	}

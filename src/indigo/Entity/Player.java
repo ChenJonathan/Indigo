@@ -44,20 +44,19 @@ public class Player extends Entity
 	private final double ACCELERATION = 4;
 	private final double REDUCED_ACCELERATION = 3; // Lower acceleration in air or when moving backwards
 	private final double MOVE_SPEED = 20;
-	private final double REDUCED_MOVE_SPEED = 15; // Lower maximum movement speed when moving backwards
-	private final double INITIAL_JUMP_SPEED = 25;
+	private final double REDUCED_MOVE_SPEED = 16; // Lower maximum movement speed when moving backwards
+	private final double INITIAL_JUMP_SPEED = 24;
 	private final double JUMP_INCREMENT = 5;
 	private final int JUMP_TIME = 4;
 
-	public static final int PLAYER_WIDTH = 60;
-	public static final int PLAYER_HEIGHT = 120;
+	public static final int PLAYER_WIDTH = 64;
+	public static final int PLAYER_HEIGHT = 111;
 
 	public static final int BASE_HEALTH = 200;
 	public static final int BASE_MANA = 150;
 	public static final int BASE_STAMINA = 100;
 
-	// Stamina costs - Crouch stamina is the minimum stamina required to start
-	// crouching
+	// Stamina costs - Crouch stamina is the minimum stamina required to start crouching
 	public static final int CROUCH_STAMINA_COST = 1;
 	public static final int CROUCH_STAMINA_REQUIREMENT = 25;
 	public static final int SHIFT_STAMINA_COST = 25;
@@ -91,7 +90,7 @@ public class Player extends Entity
 
 		healthRegenTime = manaRegenTime = staminaRegenTime = -1;
 
-		movability = 5;
+		pushability = 5;
 		flying = false;
 		frictionless = false;
 
@@ -127,13 +126,14 @@ public class Player extends Entity
 		}
 
 		// Set direction
-		if(currentAnimation != MIST && !hasWeapon()) // TODO Add death animation and change hasWeapon() call to weapon animation check
+		if(!hasWeapon()) // TODO Add death animation and change hasWeapon() call to weapon animation check
 		{
 			setDirection(stage.getMouseX() > this.getX());
 		}
 
 		super.update();
-
+		
+		// Variable jump height counter
 		if(jumpTime > 0)
 		{
 			jumpTime--;
@@ -145,12 +145,12 @@ public class Player extends Entity
 			weapon.update();
 		}
 
-		// Crouching stuff
+		// Crouching stamina drain
 		if(isCrouching())
 		{
 			if(stamina > CROUCH_STAMINA_COST)
 			{
-				setStamina(stamina - CROUCH_STAMINA_COST);
+				//setStamina(stamina - CROUCH_STAMINA_COST);
 			}
 			else
 			{
@@ -159,9 +159,20 @@ public class Player extends Entity
 		}
 
 		// Default animations
-		if(!dodging && !crouching && !blocking && !flying)
+		if(!dodging)
 		{
-			if(ground == null)
+			if(isCrouching())
+			{
+				if(isFacingRight() && currentAnimation != CROUCH_RIGHT)
+				{
+					setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
+				}
+				else if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
+				{
+					setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
+				}
+			}
+			else if(ground == null)
 			{
 				if(isFacingRight() && currentAnimation != JUMP_RIGHT)
 				{
@@ -187,7 +198,7 @@ public class Player extends Entity
 			{
 				if(currentAnimation != MOVE_RIGHT)
 				{
-					setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT, 3);
+					setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT, 2);
 				}
 
 				if(getVelX() < 0)
@@ -203,7 +214,7 @@ public class Player extends Entity
 			{
 				if(currentAnimation != MOVE_LEFT)
 				{
-					setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT, 3);
+					setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT, 2);
 				}
 
 				if(getVelX() > 0)
@@ -321,10 +332,8 @@ public class Player extends Entity
 			}
 			else if(!isFacingRight() && getVelX() < REDUCED_MOVE_SPEED)
 			{
-				// Slower acceleration and maximum move speed when moving
-				// backwards
-				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION,
-						REDUCED_MOVE_SPEED));
+				// Slower acceleration and maximum move speed when moving backwards
+				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION, REDUCED_MOVE_SPEED));
 			}
 		}
 		else
@@ -336,10 +345,8 @@ public class Player extends Entity
 			}
 			else if(!isFacingRight() && getVelX() < REDUCED_MOVE_SPEED)
 			{
-				// Slower acceleration and maximum move speed when moving
-				// backwards in air
-				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION,
-						REDUCED_MOVE_SPEED));
+				// Slower acceleration and maximum move speed when moving backwards in air
+				setVelX(Math.min(getVelX() + REDUCED_ACCELERATION, REDUCED_MOVE_SPEED));
 			}
 		}
 	}
@@ -368,24 +375,13 @@ public class Player extends Entity
 
 	public boolean canCrouch()
 	{
-		return !isCrouching() && canMove() && isGrounded()
-				&& stamina >= CROUCH_STAMINA_REQUIREMENT;
+		return !isCrouching() && isGrounded() && canMove() && stamina >= CROUCH_STAMINA_REQUIREMENT;
 	}
 
 	public void crouch()
 	{
 		crouching = true;
-		blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking
-												// to true
-
-		if(!isFacingRight())
-		{
-			setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
-		}
-		else
-		{
-			setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
-		}
+		blocking = (phase.id() == Phase.ICE); // If in Ice phase, set blocking to true
 	}
 
 	public void uncrouch()

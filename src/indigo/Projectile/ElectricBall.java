@@ -53,7 +53,7 @@ public class ElectricBall extends Projectile
 	{
 		setAnimation(SPARK, Content.ELECTRIC_SPARK, 1);
 		
-		if(!ent.isDodging())
+		if(!ent.isDodging() && !ent.isBlocking(isFacingRight()))
 		{
 			ent.setHealth(ent.getHealth() - damage);
 		}

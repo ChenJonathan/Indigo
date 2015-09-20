@@ -27,7 +27,7 @@ public abstract class Entity
 	private Line2D.Double travel; // Line formed by previous and current positions; used for collision checking
 	
 	protected double width, height;
-	protected double movability; // How much an entity moves when pushed by another entity
+	protected double pushability; // How much an entity moves when pushed by another entity
 	
 	private int health, maxHealth;
 	
@@ -52,7 +52,7 @@ public abstract class Entity
 	protected boolean marked;
 	protected boolean dead;
 	
-	// Subclasses - Initialize name, width, height, solid, flying, frictionless, movability, move speed, jump speed
+	// Subclasses - Initialize name, width, height, solid, flying, frictionless, pushability, move speed, jump speed
 	public Entity(Stage stage, double x, double y, int health)
 	{
 		this.stage = stage;
@@ -328,9 +328,9 @@ public abstract class Entity
 		return height;
 	}
 	
-	public double getMovability()
+	public double getPushability()
 	{
-		return movability;
+		return pushability;
 	}
 	
 	public int getMaxHealth()
