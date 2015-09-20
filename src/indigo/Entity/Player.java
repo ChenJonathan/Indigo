@@ -23,6 +23,7 @@ public class Player extends Entity
 	private Phase phase;
 	private boolean canDoubleJump;
 	private boolean iceArmor;
+	private boolean iceChains;
 
 	private int healthRegenTime; // Last time when health was regenerated
 	private int manaRegenTime; // Last time when mana was regenerated
@@ -55,8 +56,7 @@ public class Player extends Entity
 	public static final int BASE_MANA = 150;
 	public static final int BASE_STAMINA = 100;
 
-	// Stamina costs - Crouch stamina is the minimum stamina required to start
-	// crouching
+	// Stamina costs - Crouch stamina is the minimum stamina required to start crouching
 	public static final int CROUCH_STAMINA_COST = 1;
 	public static final int CROUCH_STAMINA_REQUIREMENT = 25;
 	public static final int SHIFT_STAMINA_COST = 25;
@@ -552,6 +552,16 @@ public class Player extends Entity
 	public void setIceArmor(boolean active)
 	{
 		iceArmor = active;
+	}
+	
+	public boolean getIceChains()
+	{
+		return iceChains;
+	}
+	
+	public void setIceChains(boolean active)
+	{
+		iceChains = active;
 	}
 
 	public boolean isCrouching()
