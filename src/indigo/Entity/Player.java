@@ -39,6 +39,8 @@ public class Player extends Entity
 	private final int CROUCH_LEFT = 6;
 	private final int CROUCH_RIGHT = 7;
 	private final int MIST = 8;
+	private final int DEATH_LEFT = 9;
+	private final int DEATH_RIGHT = 10;
 
 	// Movement constants
 	private final double ACCELERATION = 4;
@@ -49,7 +51,7 @@ public class Player extends Entity
 	private final double JUMP_INCREMENT = 5;
 	private final int JUMP_TIME = 4;
 
-	public static final int PLAYER_WIDTH = 64;
+	public static final int PLAYER_WIDTH = 68;
 	public static final int PLAYER_HEIGHT = 111;
 
 	public static final int BASE_HEALTH = 200;
@@ -108,7 +110,6 @@ public class Player extends Entity
 		// Animation related activities
 		if(currentAnimation == MIST)
 		{
-			// TODO Check death and end method if player is dying
 			if(animation.hasPlayedOnce())
 			{
 				flying = false;
@@ -124,9 +125,18 @@ public class Player extends Entity
 				phase.resetAttackTimer();
 			}
 		}
+		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
+		{
+			animation.update();
+			if(animation.hasPlayedOnce())
+			{
+				dead = true;
+			}
+			return;
+		}
 
 		// Set direction
-		if(!hasWeapon()) // TODO Add death animation and change hasWeapon() call to weapon animation check
+		if(!hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT) // TODO Change hasWeapon() call to weapon animation check
 		{
 			setDirection(stage.getMouseX() > this.getX());
 		}
@@ -416,13 +426,19 @@ public class Player extends Entity
 
 	public boolean isActive()
 	{
-		return currentAnimation != 999; // TODO Create dying animation
+		return currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT;
 	}
 
 	public void die()
 	{
-		// Set animation
-		dead = true; // Temporary
+		if(isFacingRight())
+		{
+			setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
+		}
+		else
+		{
+			setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
+		}
 	}
 
 	public void setHealth(int health)

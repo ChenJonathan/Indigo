@@ -123,7 +123,7 @@ public abstract class Stage
 							{
 								ent.getWeapon().collide(otherEnt);
 							}
-							if(otherEnt.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+							if(!otherEnt.isActive())
 							{
 								trackDeath(ent.getName(), otherEnt);
 							}
@@ -242,7 +242,7 @@ public abstract class Stage
 					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
 					{
 						proj.collide(ent);
-						if(ent.getHealth() == 0) // TODO Change to !isActive() call when player death animation is done
+						if(!ent.isActive())
 						{
 							trackDeath(proj.getName(), ent);
 						}
