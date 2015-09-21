@@ -47,12 +47,12 @@ public class GeyserParticle extends Projectile
 
 	public void collide(Entity ent)
 	{
-		if(!ent.isDodging())
+		if(!ent.isDodging() && ent.getY() >= getY() + getVelY() && ent.getY() < getY() - getVelY())
 		{
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
 
-			ent.setVelY(ent.getVelY() - ent.getPushability() / 6); // Arbitrary scale value
+			ent.setVelY(ent.getVelY() - ent.getPushability() / 3); // Arbitrary scale value
 			ent.removeGround();
 		}
 	}

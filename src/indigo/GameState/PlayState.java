@@ -221,11 +221,11 @@ public class PlayState extends GameState
 				{
 					if(input.mouseLeftDown())
 					{
-						player.setSlashMode(false);
+						player.setSlashMode(true);
 					}
 					else
 					{
-						player.setSlashMode(true);
+						player.setSlashMode(false);
 					}
 				}
 			}

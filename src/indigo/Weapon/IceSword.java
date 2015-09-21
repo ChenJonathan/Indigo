@@ -234,7 +234,7 @@ public class IceSword extends Weapon
 	{
 		double mouseAngle = 0.0;
 		mouseAngle = Math.atan2((user.getY() - yCoord), (user.getX() - xCoord)) + Math.PI;
-		System.out.println(mouseAngle);
+		// System.out.println(mouseAngle);
 		mouseAngle = mouseAngle % 360.0;
 		return mouseAngle;
 	}
