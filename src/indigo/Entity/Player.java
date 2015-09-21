@@ -405,8 +405,8 @@ public class Player extends Entity
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 
-			setVelX(x * 65);
-			setVelY(y * 65);
+			setVelX(x * 80);
+			setVelY(y * 80);
 
 			flying = true;
 			frictionless = true;
