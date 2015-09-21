@@ -120,135 +120,138 @@ public class PlayState extends GameState
      */
 	public void handleInput()
 	{
-		// Movement
-		if(player.canMove())
+		if(player.isActive())
 		{
-			if(input.keyDown(InputManager.W) && player.canJump())
+			// Movement
+			if(player.canMove())
 			{
-				player.jump();
-			}
-			else if(input.keyPress(InputManager.W) && player.canDoubleJump())
-			{
-				player.canDoubleJump(false);
-				player.jump();
-			}
-			else if(input.keyDown(InputManager.W) && player.canJumpMore())
-			{
-				player.jumpMore();
-			}
-			if(input.keyDown(InputManager.S) && player.canCrouch())
-			{
-				player.crouch();
-			}
-			else if(input.keyRelease(InputManager.S))
-			{
-				player.uncrouch();
-			}
-			if(input.keyDown(InputManager.A) && !player.isCrouching())
-			{
-				player.left();
-			}
-			if(input.keyDown(InputManager.D) && !player.isCrouching())
-			{
-				player.right();
-			}
-		}
-		if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
-		{
-			int x = 0;
-			int y = 0;
-			
-			if(input.keyDown(InputManager.W))
-			{
-				y -= 1;
-			}
-			if(input.keyDown(InputManager.S))
-			{
-				y += 1;
-			}
-			if(input.keyDown(InputManager.A))
-			{
-				x -= 1;
-			}
-			if(input.keyDown(InputManager.D))
-			{
-				x += 1;
-			}
-			
-			// Parameters represent player direction
-			player.shift(x, y);
-		}
-		
-		// Combat
-		if(input.mousePress())
-		{
-			if(activePhase.skillSelected())
-			{
-				// Cast skill
-				if(activePhase.canCast(activePhase.selectedSkill()))
+				if(input.keyDown(InputManager.W) && player.canJump())
 				{
-					activePhase.cast();
+					player.jump();
+				}
+				else if(input.keyPress(InputManager.W) && player.canDoubleJump())
+				{
+					player.canDoubleJump(false);
+					player.jump();
+				}
+				else if(input.keyDown(InputManager.W) && player.canJumpMore())
+				{
+					player.jumpMore();
+				}
+				if(input.keyDown(InputManager.S) && player.canCrouch())
+				{
+					player.crouch();
+				}
+				else if(input.keyRelease(InputManager.S))
+				{
+					player.uncrouch();
+				}
+				if(input.keyDown(InputManager.A) && !player.isCrouching())
+				{
+					player.left();
+				}
+				if(input.keyDown(InputManager.D) && !player.isCrouching())
+				{
+					player.right();
 				}
 			}
-			else
+			if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
 			{
-				// Manual attacking
-				if(activePhase.canNormalAttack())
+				int x = 0;
+				int y = 0;
+				
+				if(input.keyDown(InputManager.W))
 				{
-					player.attack();
-					if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
+					y -= 1;
+				}
+				if(input.keyDown(InputManager.S))
+				{
+					y += 1;
+				}
+				if(input.keyDown(InputManager.A))
+				{
+					x -= 1;
+				}
+				if(input.keyDown(InputManager.D))
+				{
+					x += 1;
+				}
+				
+				// Parameters represent player direction
+				player.shift(x, y);
+			}
+			
+			// Combat
+			if(input.mousePress())
+			{
+				if(activePhase.skillSelected())
+				{
+					// Cast skill
+					if(activePhase.canCast(activePhase.selectedSkill()))
 					{
-						if(input.mouseLeftDown())
+						activePhase.cast();
+					}
+				}
+				else
+				{
+					// Manual attacking
+					if(activePhase.canNormalAttack())
+					{
+						player.attack();
+						if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
 						{
-							player.setSlashMode(false);
-						}
-						else
-						{
-							player.setSlashMode(true);
+							if(input.mouseLeftDown())
+							{
+								player.setSlashMode(true);
+							}
+							else
+							{
+								player.setSlashMode(false);
+							}
 						}
 					}
 				}
 			}
-		}
-		else if(input.mouseDown() && activePhase.canNormalAttack())
-		{
-			// Automatic attacking
-			player.attack();
-			if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
+			else if(input.mouseDown() && activePhase.canNormalAttack())
 			{
-				if(input.mouseLeftDown())
+				// Automatic attacking
+				player.attack();
+				if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
 				{
-					player.setSlashMode(false);
+					if(input.mouseLeftDown())
+					{
+						player.setSlashMode(false);
+					}
+					else
+					{
+						player.setSlashMode(true);
+					}
 				}
-				else
+			}
+			if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
+			{
+				// Phase swapping
+				swapPhases();
+			}
+			else
+			{
+				// Skill selection - If a skill is already selected, it is automatically deselected
+				if(input.keyPress(InputManager.K1) && activePhase.canSelect(0))
 				{
-					player.setSlashMode(true);
+					activePhase.selectSkill(0);
 				}
-			}
-		}
-		if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
-		{
-			// Phase swapping
-			swapPhases();
-		}
-		else
-		{
-			// Skill selection - If a skill is already selected, it is automatically deselected
-			if(input.keyPress(InputManager.K1) && activePhase.canSelect(0))
-			{
-				activePhase.selectSkill(0);
-			}
-			else if(input.keyPress(InputManager.K2) && activePhase.canSelect(1))
-			{
-				activePhase.selectSkill(1);
-			}
-			else if(input.keyPress(InputManager.K3) && activePhase.canSelect(2))
-			{
-				activePhase.selectSkill(2);
-			}
-			else if(input.keyPress(InputManager.K4) && activePhase.canSelect(3))
-			{
-				activePhase.selectSkill(3);
+				else if(input.keyPress(InputManager.K2) && activePhase.canSelect(1))
+				{
+					activePhase.selectSkill(1);
+				}
+				else if(input.keyPress(InputManager.K3) && activePhase.canSelect(2))
+				{
+					activePhase.selectSkill(2);
+				}
+				else if(input.keyPress(InputManager.K4) && activePhase.canSelect(3))
+				{
+					activePhase.selectSkill(3);
+				}
 			}
 		}
 		

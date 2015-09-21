@@ -163,12 +163,12 @@ public abstract class Entity
 			{
 				velY += Stage.GRAVITY;
 			}
-		}
-		
-		// If the entity is grounded, take the y position corresponding to the ground - Important for slanted surfaces
-		if(ground != null)
-		{
-			y = ground.getSurface(x) - getHeight() / 2;
+			// If the entity is grounded, take the y position corresponding to the ground - Important for slanted surfaces
+			else
+			{
+				y = ground.getSurface(x) - getHeight() / 2;
+				velY = 0;
+			}
 		}
 		
 		updateTravelLine();

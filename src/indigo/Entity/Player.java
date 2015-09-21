@@ -440,6 +440,11 @@ public class Player extends Entity
 		{
 			setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
 		}
+		
+		if(phase.skillSelected())
+		{
+			phase.deselectSkill();
+		}
 	}
 
 	public void setHealth(int health)

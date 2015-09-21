@@ -5,6 +5,7 @@ import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
 import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
+import indigo.Skill.Pulse;
 import indigo.Skill.Skill;
 
 public class Water extends Phase
@@ -20,7 +21,7 @@ public class Water extends Phase
 		maxCooldowns = new int[] {0, 0, 0, 0};
 		
 		skills[0] = new Geyser(this, 0);
-		skills[1] = new EmptySkill(this, 1);
+		skills[1] = new Pulse(this, 1);
 		skills[2] = new EmptySkill(this, 2);
 		skills[3] = new EmptySkill(this, 3);
 		// TODO Implement locked skills
@@ -46,7 +47,7 @@ public class Water extends Phase
 	{
 		// Makes sure a direction is selected
 		boolean directionSelected = input.keyDown(InputManager.W) || input.keyDown(InputManager.S) || input.keyDown(InputManager.A) || input.keyDown(InputManager.D);
-		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST && player.isActive() && directionSelected;
+		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST && directionSelected;
 	}
 	
 	public void unlockSkill()

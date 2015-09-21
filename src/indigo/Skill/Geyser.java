@@ -32,8 +32,6 @@ public class Geyser extends Skill
 		}
 		else
 		{
-			playState.getProjectiles().remove(geyser);
-			geyser = null;
 			endCast();
 		}
 	}
@@ -45,7 +43,10 @@ public class Geyser extends Skill
 	
 	public void endCast()
 	{
-		super.endCast();
+		playState.getProjectiles().remove(geyser);
+		geyser = null;
 		player.canAttack(true);
+		
+		super.endCast();
 	}
 }

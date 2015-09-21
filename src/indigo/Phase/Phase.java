@@ -52,7 +52,14 @@ public abstract class Phase
 		{
 			if(skillStates[count] == CAST)
 			{
-				skills[count].update();
+				if(!player.isActive())
+				{
+					skills[count].endCast();
+				}
+				else
+				{
+					skills[count].update();
+				}
 			}
 		}
 		
