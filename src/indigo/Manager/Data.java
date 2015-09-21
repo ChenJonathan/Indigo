@@ -1,17 +1,17 @@
 package indigo.Manager;
 
 /**
- * Stores general persisting information (player statistics, map statistics,
- * etc).  Consider doing unlock stage calculation purely in StageSelectState.
+ * Stores general persisting information (player statistics, map statistics, etc). Consider doing unlock stage
+ * calculation purely in StageSelectState.
  */
 public class Data
 {
 	private int level;
 	private int experience;
 	private int maxExperience;
-	
+
 	private int[] talents;
-	
+
 	private int currentStage;
 	private int unlockedStages;
 	private int stagesToUnlock;
@@ -24,25 +24,25 @@ public class Data
 	public static final int NUM_SKILLS = 4;
 	public static final int NUM_TALENTS = 5;
 
-    /**
-     * Initializes data.
-     */
+	/**
+	 * Initializes data.
+	 */
 	public Data()
 	{
 		level = 1;
 		experience = 0;
 		maxExperience = 100;
 		talents = new int[NUM_PHASES * NUM_TALENTS];
-		
+
 		unlockedStages = 0;
 		stagesToUnlock = 1;
-		
+
 		killer = "";
 	}
 
-    /**
-     * Resets data between levels.
-     */
+	/**
+	 * Resets data between levels.
+	 */
 	public void resetLevelData()
 	{
 		clearTime = 0;
@@ -50,142 +50,141 @@ public class Data
 		victory = false;
 	}
 
-    /**
-     * @return The player's current level.
-     */
+	/**
+	 * @return The player's current level.
+	 */
 	public int getLevel()
 	{
 		return level;
 	}
 
-    /**
-     * @param level The player's new level.
-     */
+	/**
+	 * @param level The player's new level.
+	 */
 	public void setLevel(int level)
 	{
 		this.level = level;
 	}
 
-    /**
-     * @return The player's current experience.
-     */
+	/**
+	 * @return The player's current experience.
+	 */
 	public int getExperience()
 	{
 		return experience;
 	}
 
-    /**
-     * @param experience The player's new experience.
-     */
+	/**
+	 * @param experience The player's new experience.
+	 */
 	public void setExperience(int experience)
 	{
 		this.experience = Math.max(experience, 0);
 	}
 
-    /**
-     * @return The player's current maximum experience.
-     */
+	/**
+	 * @return The player's current maximum experience.
+	 */
 	public int getMaxExperience()
 	{
 		return maxExperience;
 	}
 
-    /**
-     * @param maxExperience The player's new maximum experience.
-     */
+	/**
+	 * @param maxExperience The player's new maximum experience.
+	 */
 	public void setMaxExperience(int maxExperience)
 	{
 		this.maxExperience = maxExperience;
 	}
 
-    /**
-     * @param talent The id of the talent in question.
-     * @return The state of that talent.
-     */
+	/**
+	 * @param talent The id of the talent in question.
+	 * @return The state of that talent.
+	 */
 	public int getTalent(int talent)
 	{
 		return talents[talent];
 	}
 
-    /**
-     * @param talent The id of the talent in question.
-     * @param state -1: down,
-     *               0: locked,
-     *               1: up.
-     */
+	/**
+	 * @param talent The id of the talent in question.
+	 * @param state -1: down, 0: locked, 1: up.
+	 */
 	public void setTalent(int talent, int state)
 	{
 		talents[talent] = state;
 	}
 
-    /**
-     * @return The current stage.
-     */
+	/**
+	 * @return The current stage.
+	 */
 	public int getStage()
 	{
 		return currentStage;
 	}
 
-    /**
-     * @param stage The new stage.
-     */
+	/**
+	 * @param stage The new stage.
+	 */
 	public void setStage(int stage)
 	{
 		currentStage = stage;
 	}
 
-    /**
-     * @return The current number of unlocked stages.
-     */
+	/**
+	 * @return The current number of unlocked stages.
+	 */
 	public int getUnlockedStages()
 	{
 		return unlockedStages;
 	}
 
-    /**
-     * @param unlockedStages The new number of unlocked stages.
-     */
+	/**
+	 * @param unlockedStages The new number of unlocked stages.
+	 */
 	public void setUnlockedStages(int unlockedStages)
 	{
 		this.unlockedStages = unlockedStages;
 	}
 
-    /**
-     * @return The current number of stages to be unlocked.
-     */
+	/**
+	 * @return The current number of stages to be unlocked.
+	 */
 	public int getStagesToUnlock()
 	{
 		return stagesToUnlock;
 	}
 
-    /**
-     * @param stagesToUnlock The new number of stages to be unlocked.
-     */
+	/**
+	 * @param stagesToUnlock The new number of stages to be unlocked.
+	 */
 	public void setStagesToUnlock(int stagesToUnlock)
 	{
 		this.stagesToUnlock = stagesToUnlock;
 	}
 
-    /**
-     * @return The current stage clear time.
-     */
+	/**
+	 * @return The current stage clear time.
+	 */
 	public int getClearTime()
 	{
 		return clearTime;
 	}
 
-    /**
-     * @param time The new stage clear time.
-     */
+	/**
+	 * @param time The new stage clear time.
+	 */
 	public void setClearTime(int time)
 	{
 		clearTime = time;
 	}
 
-    /**
-     * Returns a message identifying the player's killer.
-     * @return The message.
-     */
+	/**
+	 * Returns a message identifying the player's killer.
+	 * 
+	 * @return The message.
+	 */
 	public String getDeathMessage()
 	{
 		if(killer.equals(""))
@@ -195,25 +194,25 @@ public class Data
 		return "You were killed by " + killer;
 	}
 
-    /**
-     * @param name The name of the player's killer.
-     */
+	/**
+	 * @param name The name of the player's killer.
+	 */
 	public void setKiller(String name)
 	{
 		killer = name;
 	}
 
-    /**
-     * @return Whether the last finished stage was a win or a loss.
-     */
+	/**
+	 * @return Whether the last finished stage was a win or a loss.
+	 */
 	public boolean getVictory()
 	{
 		return victory;
 	}
 
-    /**
-     * @param victory Whether last stage was a win or a loss.
-     */
+	/**
+	 * @param victory Whether last stage was a win or a loss.
+	 */
 	public void setVictory(boolean victory)
 	{
 		this.victory = victory;

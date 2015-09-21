@@ -11,16 +11,16 @@ import java.awt.geom.Ellipse2D;
 public class WaterProjectile extends Projectile
 {
 	private int timer;
-	
+
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
-	
+
 	public static final int DAMAGE = 10;
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 70;
 	public static final int DURATION = 20;
-	
+
 	public WaterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
@@ -28,12 +28,12 @@ public class WaterProjectile extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = true;
-		
+
 		timer = DURATION;
-		
+
 		setAnimation(DEFAULT, Content.WATER_BALL, -1);
 	}
-	
+
 	public void update()
 	{
 		if(currentAnimation != DEATH)
@@ -42,7 +42,7 @@ public class WaterProjectile extends Projectile
 			{
 				dead = true;
 			}
-			
+
 			super.update();
 			timer--;
 		}
@@ -55,17 +55,17 @@ public class WaterProjectile extends Projectile
 			}
 		}
 	}
-	
-	public void render(Graphics2D g) 
+
+	public void render(Graphics2D g)
 	{
 		g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 	}
-	
+
 	public Shape getHitbox()
 	{
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
-	
+
 	public void collide(Entity ent)
 	{
 		if(!ent.isDodging())
@@ -78,17 +78,17 @@ public class WaterProjectile extends Projectile
 			die();
 		}
 	}
-	
+
 	public void collide(Wall wall)
 	{
 		die();
 	}
-	
+
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH;
 	}
-	
+
 	public void die()
 	{
 		if(currentAnimation != DEATH)

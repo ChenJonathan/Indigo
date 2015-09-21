@@ -6,56 +6,57 @@ import indigo.Manager.GameStateManager;
 import java.awt.Graphics2D;
 
 /**
- * The state where the main menu is displayed.  Present at game startup.
+ * The state where the main menu is displayed. Present at game startup.
  */
-public class MenuState extends GameState 
+public class MenuState extends GameState
 {
 	private boolean instructions; // Whether the instructions are open or not
 	private boolean credits; // Whether the credits are open or not
-	
+
 	int[] buttonState;
-	
+
 	public final int NORMAL = 0;
 	public final int HOVER = 1;
 	public final int CLICKED = 2;
-	
+
 	public final int PLAY = 0;
 	public final int HELP = 1;
 	public final int OPTIONS = 2;
 	public final int CREDITS = 3;
 	public final int EXIT = 4;
 
-    /**
-     * Sets up the menu and initializes the button states.
-     * @param gsm The game state manager.
-     */
+	/**
+	 * Sets up the menu and initializes the button states.
+	 * 
+	 * @param gsm The game state manager.
+	 */
 	public MenuState(GameStateManager gsm)
 	{
 		super(gsm);
 		instructions = false;
 		credits = false;
-		
+
 		gsm.setCursor(Content.CURSOR);
-		
+
 		buttonState = new int[5];
-		for (int i = 0; i < buttonState.length; i++)
+		for(int i = 0; i < buttonState.length; i++)
 		{
 			buttonState[i] = NORMAL;
 		}
 	}
 
-    @Override
+	@Override
 	public void update()
 	{
 		handleInput();
 	}
 
-    /**
-     * Displays the background and buttons.  Also handles the visual response
-     * to button events.
-     * @param g The graphics to be rendered.
-     */
-    @Override
+	/**
+	 * Displays the background and buttons. Also handles the visual response to button events.
+	 * 
+	 * @param g The graphics to be rendered.
+	 */
+	@Override
 	public void render(Graphics2D g)
 	{
 		if(instructions)
@@ -127,16 +128,17 @@ public class MenuState extends GameState
 		}
 	}
 
-    /**
-     * Handles mouse interactions with the menu buttons.
-     */
-    @Override
+	/**
+	 * Handles mouse interactions with the menu buttons.
+	 */
+	@Override
 	public void handleInput()
 	{
 		// Instruction button functionality goes here
 		if(instructions)
 		{
-			if (input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
+			if(input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800
+					&& input.mouseY() <= 860)
 			{
 				instructions = false;
 			}
@@ -144,7 +146,8 @@ public class MenuState extends GameState
 		// Credits button functionality goes here
 		else if(credits)
 		{
-			if (input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800 && input.mouseY() <= 860)
+			if(input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800
+					&& input.mouseY() <= 860)
 			{
 				credits = false;
 			}
@@ -152,10 +155,10 @@ public class MenuState extends GameState
 		// Main menu button functionality goes here
 		else
 		{
-			if (input.mouseX() >= 1235 && input.mouseX() <= 1385 && input.mouseY() >= 285 && input.mouseY() <= 385)
+			if(input.mouseX() >= 1235 && input.mouseX() <= 1385 && input.mouseY() >= 285 && input.mouseY() <= 385)
 			{
 				buttonState[PLAY] = HOVER;
-				
+
 				if(input.mouseLeftDown())
 				{
 					buttonState[PLAY] = CLICKED;
@@ -169,10 +172,10 @@ public class MenuState extends GameState
 			{
 				buttonState[PLAY] = NORMAL;
 			}
-			if (input.mouseX() >= 1235 && input.mouseX() <= 1395 && input.mouseY() >= 385 && input.mouseY() <= 485)
+			if(input.mouseX() >= 1235 && input.mouseX() <= 1395 && input.mouseY() >= 385 && input.mouseY() <= 485)
 			{
 				buttonState[HELP] = HOVER;
-				
+
 				if(input.mouseLeftDown())
 				{
 					buttonState[HELP] = CLICKED;
@@ -186,10 +189,10 @@ public class MenuState extends GameState
 			{
 				buttonState[HELP] = NORMAL;
 			}
-			if (input.mouseX() >= 1235 && input.mouseX() <= 1515 && input.mouseY() >= 485 && input.mouseY() <= 585)
+			if(input.mouseX() >= 1235 && input.mouseX() <= 1515 && input.mouseY() >= 485 && input.mouseY() <= 585)
 			{
 				buttonState[OPTIONS] = HOVER;
-				
+
 				if(input.mouseLeftDown())
 				{
 					buttonState[OPTIONS] = CLICKED;
@@ -203,10 +206,10 @@ public class MenuState extends GameState
 			{
 				buttonState[OPTIONS] = NORMAL;
 			}
-			if (input.mouseX() >= 1235 && input.mouseX() <= 1485 && input.mouseY() >= 585 && input.mouseY() <= 685)
+			if(input.mouseX() >= 1235 && input.mouseX() <= 1485 && input.mouseY() >= 585 && input.mouseY() <= 685)
 			{
 				buttonState[CREDITS] = HOVER;
-				
+
 				if(input.mouseLeftDown())
 				{
 					buttonState[CREDITS] = CLICKED;
@@ -220,10 +223,10 @@ public class MenuState extends GameState
 			{
 				buttonState[CREDITS] = NORMAL;
 			}
-			if (input.mouseX() >= 1235 && input.mouseX() <= 1365 && input.mouseY() >= 685 && input.mouseY() <= 785)
+			if(input.mouseX() >= 1235 && input.mouseX() <= 1365 && input.mouseY() >= 685 && input.mouseY() <= 785)
 			{
 				buttonState[EXIT] = HOVER;
-				
+
 				if(input.mouseLeftDown())
 				{
 					buttonState[EXIT] = CLICKED;

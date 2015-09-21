@@ -83,15 +83,13 @@ public class SmallBot extends Entity
 
 	public void render(Graphics g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2),
-				(int)(getY() - getHeight() / 2), (int)getWidth(),
-				(int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+				(int)getWidth(), (int)getHeight(), null);
 	}
 
 	public Shape getHitbox()
 	{
-		return new Ellipse2D.Double(getX() - getWidth() / 2, getY()
-				- getHeight() / 2, getWidth(), getHeight());
+		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
 	public void attack()
@@ -104,14 +102,11 @@ public class SmallBot extends Entity
 			return;
 		}
 		// Splits the direction of the projectile into x and y components
-		double velX = ElectricBall.SPEED
-				* (stage.getEntities().get(0).getX() - getX()) / scale;
-		double velY = ElectricBall.SPEED
-				* (stage.getEntities().get(0).getY() - getY()) / scale;
+		double velX = ElectricBall.SPEED * (stage.getEntities().get(0).getX() - getX()) / scale;
+		double velY = ElectricBall.SPEED * (stage.getEntities().get(0).getY() - getY()) / scale;
 
 		stage.getProjectiles().add(
-				new ElectricBall(this, getX() + velX / 2, getY() + velY / 2,
-						velX, velY, ElectricBall.DAMAGE));
+				new ElectricBall(this, getX() + velX / 2, getY() + velY / 2, velX, velY, ElectricBall.DAMAGE));
 	}
 
 	public void move()
@@ -146,12 +141,9 @@ public class SmallBot extends Entity
 			setVelX(Math.cos(2 * rand * Math.PI) * MOVE_SPEED);
 			setVelY(Math.sin(2 * rand * Math.PI) * MOVE_SPEED);
 		}
-		while(getX() + 30 * getVelX() > stage.getMapX()
-				|| getX() + 30 * getVelX() < 0
-				|| getY() + 30 * getVelY() > stage.getMapY()
-				|| (getY() + 30 * getVelY() < 0 && !outOfBounds));
-		// Repeat the loop if this movement would carry the entity outside of
-		// map boundaries
+		while(getX() + 30 * getVelX() > stage.getMapX() || getX() + 30 * getVelX() < 0
+				|| getY() + 30 * getVelY() > stage.getMapY() || (getY() + 30 * getVelY() < 0 && !outOfBounds));
+		// Repeat the loop if this movement would carry the entity outside of map boundaries
 	}
 
 	public boolean isActive()

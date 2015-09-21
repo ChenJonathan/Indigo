@@ -14,32 +14,32 @@ public class Turret extends Entity
 {
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
-	
+
 	private double angle;
-	
+
 	public static final double TURRET_WIDTH = 100;
 	public static final double TURRET_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;
-	
-	public Turret(Stage stage, double x, double y, int health) 
+
+	public Turret(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
 		name = "a turret";
-		
+
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
-		
+
 		pushability = 5;
 		flying = false;
 		frictionless = false;
-		
+
 		friendly = false;
-		
+
 		angle = Math.PI / 2;
-		
+
 		setAnimation(DEFAULT, Content.TURRET_IDLE, -1);
 	}
-	
+
 	public void update()
 	{
 		if(currentAnimation == DEATH)
@@ -49,17 +49,17 @@ public class Turret extends Entity
 			{
 				dead = true;
 			}
-			
+
 			return;
 		}
-		
+
 		super.update();
-		
+
 		if(canAttack() && inRange())
 		{
 			double optimalAngle = getOptimalAngle();
 			double deltaAngle = optimalAngle - angle;
-			
+
 			if(Math.abs(deltaAngle) <= Math.PI / 18)
 			{
 				angle = optimalAngle;
@@ -90,32 +90,34 @@ public class Turret extends Entity
 			}
 		}
 	}
-	
-	public void render(Graphics g) 
+
+	public void render(Graphics g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)(getWidth()), (int)(getHeight()), null);
-		
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+				(int)(getWidth()), (int)(getHeight()), null);
+
 		// Draws a simple line representing the turret arm // TODO Temporary
 		g.setColor(Color.RED);
 		g.drawLine((int)getX(), (int)getY(), (int)(getX() + 50 * Math.cos(angle)), (int)(getY() - 50 * Math.sin(angle)));
 	}
-	
+
 	public void attack()
 	{
-		if(stage.getTime() % 50 == 0) // TODO Change to be more similar to player firing
+		if(stage.getTime() % 50 == 0) // TODO Change to be more similar to
+										// player firing
 		{
 			double velX = Mortar.SPEED * Math.cos(angle);
 			double velY = Mortar.SPEED * -Math.sin(angle);
 			stage.getProjectiles().add(new Mortar(this, getX(), getY(), velX, velY, Mortar.DAMAGE));
 		}
 	}
-	
+
 	// Checks if player is in range
 	public boolean inRange()
 	{
 		double deltaX = stage.getPlayer().getX() - getX();
 		double deltaY = -(stage.getPlayer().getY() - getY());
-		
+
 		if(deltaX == 0)
 		{
 			// True if maximum vertical height of projectile fired straight up is greater than or equal to deltaY
@@ -123,17 +125,18 @@ public class Turret extends Entity
 		}
 		else
 		{
-			return Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY * (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2)) >= 0;
+			return Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY
+					* (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2)) >= 0;
 		}
 	}
-	
+
 	// Calculates the firing angle necessary to hit the player
 	public double getOptimalAngle()
 	{
 		double optimalAngle;
 		double deltaX = stage.getPlayer().getX() - getX();
 		double deltaY = -(stage.getPlayer().getY() - getY());
-		
+
 		if(deltaX == 0)
 		{
 			if(deltaY > 0)
@@ -147,9 +150,13 @@ public class Turret extends Entity
 		}
 		else
 		{
-			double a1 = Math.atan((Math.pow(Mortar.SPEED, 2) + Math.sqrt(Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY * (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2)))) / (Stage.GRAVITY * deltaX));
-			double a2 = Math.atan((Math.pow(Mortar.SPEED, 2) - Math.sqrt(Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY * (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2)))) / (Stage.GRAVITY * deltaX));
-			
+			double a1 = Math.atan((Math.pow(Mortar.SPEED, 2) + Math.sqrt(Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY
+					* (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2))))
+					/ (Stage.GRAVITY * deltaX));
+			double a2 = Math.atan((Math.pow(Mortar.SPEED, 2) - Math.sqrt(Math.pow(Mortar.SPEED, 4) - Stage.GRAVITY
+					* (Stage.GRAVITY * deltaX * deltaX + 2 * deltaY * Math.pow(Mortar.SPEED, 2))))
+					/ (Stage.GRAVITY * deltaX));
+
 			if(deltaX < 0)
 			{
 				a1 += Math.PI;
@@ -176,34 +183,34 @@ public class Turret extends Entity
 		}
 		return optimalAngle;
 	}
-	
+
 	public double getAngle()
 	{
 		return angle;
 	}
-	
-	public Shape getHitbox() 
+
+	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth()/2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
-	
+
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH;
 	}
-	
+
 	public void setGround(Land ground)
 	{
 		super.setGround(ground);
 		canAttack(true);
 	}
-	
+
 	public void removeGround()
 	{
 		super.removeGround();
 		canAttack(false);
 	}
-	
+
 	public void die()
 	{
 		if(currentAnimation != DEATH)

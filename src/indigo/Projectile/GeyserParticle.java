@@ -12,12 +12,12 @@ public class GeyserParticle extends Projectile
 {
 	// Animation
 	private final int DEFAULT = 0;
-	
+
 	public static final int DAMAGE = 2;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 40;
-	
+
 	public GeyserParticle(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
@@ -25,46 +25,51 @@ public class GeyserParticle extends Projectile
 		height = HEIGHT;
 		solid = false;
 		flying = true;
-		
+
 		setAnimation(DEFAULT, Content.GEYSER, -1);
 	}
-	
+
 	public void update()
 	{
 		super.update();
 	}
-	
-	public void render(Graphics2D g) 
+
+	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+				(int)getWidth(), (int)getHeight(), null);
 	}
-	
+
 	public Shape getHitbox()
 	{
 		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
-	
+
 	public void collide(Entity ent)
 	{
 		if(!ent.isDodging())
 		{
 			ent.mark();
 			ent.setHealth(ent.getHealth() - damage);
-			
+
 			ent.setVelY(ent.getVelY() - ent.getPushability() / 6); // Arbitrary scale value
 			ent.removeGround();
 		}
 	}
-	
+
 	// Not used
-	public void collide(Wall wall) { }
+	public void collide(Wall wall)
+	{
+	}
 
 	// Not used
 	public boolean isActive()
 	{
 		return true;
 	}
-	
+
 	// Not used
-	public void die() { }
+	public void die()
+	{
+	}
 }

@@ -18,33 +18,33 @@ import java.util.Random;
 public class Beach extends Stage
 {
 	private Random generator = new Random();
-	
+
 	private final int maxEnemies = 8;
 	private final int enemiesToKill = 25;
 	private int enemiesKilled = 0;
-	
+
 	private final double startingX = 150;
 	private final double startingY = 900;
-	
+
 	private Turret turretCenter;
 	private Turret turretFlag;
-	
+
 	public Beach(PlayState playState)
 	{
 		super(playState);
-		
+
 		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA);
 		entities.add(0, player);
-		
+
 		mapX = 6400;
 		mapY = 1200;
 		setOffsets();
-		
+
 		// Boundaries
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
 		walls.add(new Wall(mapX, SKY_LIMIT, mapX, mapY));
 		walls.add(new SkyBounds(0, SKY_LIMIT, mapX, SKY_LIMIT));
-		
+
 		// Spike pits
 		walls.add(new Wall(2116, 960, 2116, 1180));
 		walls.add(new SpikePit(2116, 1180, 2353, 1180));
@@ -52,10 +52,10 @@ public class Beach extends Stage
 		walls.add(new Wall(5651, 960, 5651, 1180));
 		walls.add(new SpikePit(5651, 1180, 5888, 1180));
 		walls.add(new Wall(5888, 1180, 5888, 960));
-		
+
 		// Bottom level
 		walls.add(new Wall(0, 960, 2116, 960));
-		walls.add(new Wall(3100, 960, 3100, 1139)); // Swapped with below
+		walls.add(new Wall(3100, 960, 3100, 1139)); // Swapped with below // TODO Temporary fix
 		walls.add(new Wall(2353, 960, 3100, 960)); // Swapped with above
 		walls.add(new Wall(3100, 1139, 4220, 1139));
 		walls.add(new Wall(4220, 1139, 4220, 1000));
@@ -63,22 +63,23 @@ public class Beach extends Stage
 		walls.add(new Wall(3843, 1000, 3924, 960));
 		walls.add(new Wall(3924, 960, 5651, 960));
 		walls.add(new Wall(5888, 960, 6400, 960));
-		
+
 		// Platforms
 		platforms.add(new Platform(3218, 960, 3735, 960));
 		platforms.add(new Platform(1169, 850, 1420, 850));
 		platforms.add(new Platform(1398, 736, 1649, 736));
 		platforms.add(new Platform(1736, 842, 1980, 842));
-		platforms.add(new Platform(3349, 732, 3600, 732));;
+		platforms.add(new Platform(3349, 732, 3600, 732));
+		;
 		platforms.add(new Platform(6318, 355, 6400, 355));
-		
+
 		// Wood structure
 		walls.add(new Wall(4025, 960, 4357, 693));
 		walls.add(new Wall(4357, 693, 4753, 693));
 		walls.add(new Wall(4753, 693, 5280, 960));
 		platforms.add(new Platform(4753, 693, 5137, 467));
 		platforms.add(new Platform(4848, 467, 5246, 467));
-		
+
 		// Clouds
 		platforms.add(new Platform(1727, 618, 2190, 618));
 		platforms.add(new Platform(2247, 515, 2704, 515));
@@ -86,11 +87,11 @@ public class Beach extends Stage
 		platforms.add(new Platform(3388, 341, 3850, 341));
 		platforms.add(new Platform(5334, 571, 5793, 571));
 	}
-	
+
 	public void update()
 	{
 		super.update();
-		
+
 		if(enemiesKilled >= enemiesToKill)
 		{
 			data.setVictory(true);
@@ -111,14 +112,15 @@ public class Beach extends Stage
 			else
 			{
 				int r = generator.nextInt(200);
-				if (r == 0)
+				if(r == 0)
 				{
-					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350, SmallBot.BASE_HEALTH));
+					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
+							SmallBot.BASE_HEALTH));
 				}
 			}
 		}
 	}
-	
+
 	public void trackDeath(String killer, Entity killed)
 	{
 		if(killed.equals(player))
@@ -133,12 +135,12 @@ public class Beach extends Stage
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
 	}
-	
+
 	public void render(Graphics2D g)
 	{
 		g.drawImage(Content.STAGE_BEACH, 0, 0, 6400, 1200, null);
-		
-		for(Entity ent: entities)
+
+		for(Entity ent : entities)
 		{
 			// Don't render if in pipe
 			if(!(ent.getX() > 3834 && ent.getX() < 4122 && ent.getY() > 995 && ent.getY() < 1140))
@@ -146,7 +148,7 @@ public class Beach extends Stage
 				ent.render(g);
 			}
 		}
-		for(Projectile proj: projectiles)
+		for(Projectile proj : projectiles)
 		{
 			// Don't render if in pipe
 			if(!(proj.isSolid() && proj.getX() > 3834 && proj.getX() < 4122 && proj.getY() > 995 && proj.getY() < 1140))

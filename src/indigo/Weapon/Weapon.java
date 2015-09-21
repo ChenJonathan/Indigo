@@ -10,10 +10,10 @@ public abstract class Weapon
 {
 	protected Stage stage;
 	protected Entity user;
-	
+
 	protected int damage;
 	protected int attackTime;
-	
+
 	public Weapon(Entity user, int dmg)
 	{
 		stage = user.getStage();
@@ -22,15 +22,15 @@ public abstract class Weapon
 		damage = dmg;
 		attackTime = -1;
 	}
-	
+
 	public void update()
 	{
 		attackTime++;
 	}
-	
+
 	public abstract void render(Graphics g);
-	
+
 	public abstract void collide(Entity ent);
-	
+
 	public abstract Line2D.Double getHitbox();
 }

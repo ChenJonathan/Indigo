@@ -26,8 +26,7 @@ public class Ice extends Phase
 
 	public boolean canNormalAttack()
 	{
-		if(player.canAttack()
-				&& (playState.getTime() - attackStartTime >= attackDelay))
+		if(player.canAttack() && (playState.getTime() - attackStartTime >= attackDelay))
 		{
 			return true;
 		}

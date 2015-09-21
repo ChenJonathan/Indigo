@@ -12,12 +12,12 @@ public class Mortar extends Projectile
 {
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
-	
+
 	public static final int DAMAGE = 10;
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 60;
-	
+
 	public Mortar(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
@@ -25,10 +25,10 @@ public class Mortar extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = false;
-		
+
 		setAnimation(DEFAULT, Content.MORTAR, -1);
 	}
-	
+
 	public void update()
 	{
 		if(currentAnimation == DEATH)
@@ -44,8 +44,8 @@ public class Mortar extends Projectile
 			super.update();
 		}
 	}
-	
-	public void render(Graphics2D g) 
+
+	public void render(Graphics2D g)
 	{
 		if(currentAnimation == DEATH)
 		{
@@ -56,17 +56,17 @@ public class Mortar extends Projectile
 			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 		}
 	}
-	
+
 	public Shape getHitbox()
 	{
 		if(currentAnimation == DEATH)
 		{
-			// Tweak these values 
+			// Tweak these values
 			return new Ellipse2D.Double(getX() - getWidth(), getY() - getHeight(), getWidth() * 2, getHeight() * 2);
 		}
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
-	
+
 	public void collide(Entity ent)
 	{
 		if(currentAnimation == DEATH && animation.getFrame() < 6 && !ent.isDodging())
@@ -82,7 +82,7 @@ public class Mortar extends Projectile
 			die();
 		}
 	}
-	
+
 	public void collide(Wall wall)
 	{
 		die();
@@ -93,7 +93,7 @@ public class Mortar extends Projectile
 	{
 		return true;
 	}
-	
+
 	public void die()
 	{
 		if(currentAnimation != DEATH)

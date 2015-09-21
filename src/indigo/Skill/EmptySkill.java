@@ -9,10 +9,9 @@ public class EmptySkill extends Skill
 		super(phase, position);
 		id = Skill.EMPTY;
 	}
-	
+
 	public boolean canCast()
 	{
 		return false;
 	}
-
 }

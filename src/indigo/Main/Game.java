@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 /**
- * Sets up the application as a game.  Mostly does scary swing stuff.
+ * Sets up the application as a game. Mostly does scary swing stuff.
  */
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener
@@ -28,15 +28,15 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int CURSOR_WIDTH = 32;
 	public static final int CURSOR_HEIGHT = 32;
-	
+
 	public final int FPS = 30;
 	private final int TARGET_TIME = 1000 / FPS;
 	private Thread thread;
 	private boolean running = false;
-	
+
 	private BufferedImage image;
 	private Graphics2D g;
-	
+
 	private GameStateManager gsm;
 	private InputManager input;
 
@@ -48,7 +48,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		requestFocus();
-		
+
 		running = true;
 		image = new BufferedImage(WIDTH, HEIGHT, 1);
 		g = (Graphics2D)image.getGraphics();
@@ -56,10 +56,10 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		gsm = new GameStateManager(this);
 	}
 
-    /**
-     * Called when Game object is added to a container.
-     */
-    @Override
+	/**
+	 * Called when Game object is added to a container.
+	 */
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -73,31 +73,31 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-    /**
-     * Main game loop that aims for 30 FPS.
-     */
-    @Override
+	/**
+	 * Main game loop that aims for 30 FPS.
+	 */
+	@Override
 	public void run()
 	{
 		long elapsedTotal = 0; // For counter
 		long ticks = 0; // For counter
 		long skips = 0; // For counter
-		
+
 		long start;
 		long elapsed;
 		long wait;
-		
+
 		while(running)
 		{
 			start = System.currentTimeMillis();
-			
+
 			update();
 			render();
 			draw();
-			
+
 			elapsed = System.currentTimeMillis() - start;
 			elapsedTotal += elapsed;
-			
+
 			wait = TARGET_TIME - elapsed;
 			while(wait < 0)
 			{
@@ -105,7 +105,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 				skips++;
 				System.out.println("* Frameskip " + skips + " *");
 			}
-			
+
 			try
 			{
 				Thread.sleep(wait);
@@ -114,7 +114,7 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 			{
 				e.printStackTrace();
 			}
-			
+
 			ticks++; // For counter
 			if(ticks % FPS == 0) // For counter
 			{
@@ -124,26 +124,26 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-    /**
-     * Updates based on current game state and checks for inputs.
-     */
+	/**
+	 * Updates based on current game state and checks for inputs.
+	 */
 	private void update()
 	{
 		gsm.update();
 		input.update();
 	}
 
-    /**
-     * Draws based on current game state.
-     */
+	/**
+	 * Draws based on current game state.
+	 */
 	private void render()
 	{
 		gsm.render(g);
 	}
 
-    /**
-     * Buffer strategy.
-     */
+	/**
+	 * Buffer strategy.
+	 */
 	private void draw()
 	{
 		Graphics g2 = getGraphics();
@@ -151,55 +151,64 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		g2.dispose();
 	}
 
-    /**
-     * Not used.
-     * @param key The key pressed.
-     */
-    @Override
+	/**
+	 * Not used.
+	 * 
+	 * @param key The key pressed.
+	 */
+	@Override
 	public void keyTyped(KeyEvent key)
 	{
 	}
 
-    /**
-     * Detects key press.
-     * @param key The key being pressed.
-     */
-    @Override
-	public void keyPressed(KeyEvent key) {
-        input.keySet(key.getKeyCode(), true);
+	/**
+	 * Detects key press.
+	 * 
+	 * @param key The key being pressed.
+	 */
+	@Override
+	public void keyPressed(KeyEvent key)
+	{
+		input.keySet(key.getKeyCode(), true);
 	}
 
-    /**
-     * Detects key release.
-     * @param key The key being released.
-     */
-    @Override
+	/**
+	 * Detects key release.
+	 * 
+	 * @param key The key being released.
+	 */
+	@Override
 	public void keyReleased(KeyEvent key)
 	{
 		input.keySet(key.getKeyCode(), false);
 	}
 
-    /**
-     * Not used.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mouseEntered(MouseEvent e)
-	{}
+	{
+	}
 
-    /**
-     * Not used.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mouseExited(MouseEvent e)
-	{}
+	{
+	}
 
-    /**
-     * Detects mouse click.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Detects mouse click.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if(e.getButton() == MouseEvent.BUTTON3)
@@ -212,11 +221,12 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-    /**
-     * Detects mouse release.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Detects mouse release.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if(e.getButton() == MouseEvent.BUTTON3)
@@ -229,37 +239,43 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		}
 	}
 
-    /**
-     * Not used.
-     * @param e The current mouse action.
-     */
-    @Override
-	public void mouseClicked(MouseEvent e) { }
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+	}
 
-    /**
-     * Handles the mouse being dragged.  Interpreted same as moving.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Handles the mouse being dragged. Interpreted same as moving.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mouseDragged(MouseEvent e)
 	{
 		input.mouseSet(e.getX(), e.getY());
 	}
 
-    /**
-     * Handles the mouse being moved.  Interpreted same as dragging.
-     * @param e The current mouse action.
-     */
-    @Override
+	/**
+	 * Handles the mouse being moved. Interpreted same as dragging.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		input.mouseSet(e.getX(), e.getY());
 	}
 
-    /**
-     * Creates the custom cursor to be used.
-     * @param image The image for the cursor.
-     */
+	/**
+	 * Creates the custom cursor to be used.
+	 * 
+	 * @param image The image for the cursor.
+	 */
 	public void setCursor(BufferedImage image)
 	{
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -267,10 +283,11 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		setCursor(c);
 	}
 
-    /**
-     * Handles the input.
-     * @return The input.
-     */
+	/**
+	 * Handles the input.
+	 * 
+	 * @return The input.
+	 */
 	public InputManager getInput()
 	{
 		return input;
