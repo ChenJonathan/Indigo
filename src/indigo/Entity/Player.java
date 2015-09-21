@@ -73,8 +73,7 @@ public class Player extends Entity
 	public static final int MANA_REGEN_DELAY = 30;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
-	// Time until next regeneration after corresponding value is lowered
-	// (through damage, skillcasting, or blocking)
+	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
 	public static final int HEALTH_REGEN_LONG_DELAY = 150;
 	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
@@ -160,7 +159,7 @@ public class Player extends Entity
 		{
 			if(stamina > CROUCH_STAMINA_COST)
 			{
-				//setStamina(stamina - CROUCH_STAMINA_COST);
+				setStamina(stamina - CROUCH_STAMINA_COST);
 			}
 			else
 			{
@@ -197,11 +196,11 @@ public class Player extends Entity
 			{
 				if(isFacingRight() && currentAnimation != GROUND_RIGHT)
 				{
-					setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
+					setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 3);
 				}
 				else if(!isFacingRight() && currentAnimation != GROUND_LEFT)
 				{
-					setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 15);
+					setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 3);
 				}
 			}
 			else if(isFacingRight())
@@ -415,6 +414,8 @@ public class Player extends Entity
 
 			canAttack(false);
 			canMove(false);
+			
+			uncrouch();
 
 			setStamina(stamina - SHIFT_STAMINA_COST);
 		}

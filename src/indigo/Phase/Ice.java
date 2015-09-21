@@ -9,35 +9,36 @@ import indigo.Skill.Skill;
 public class Ice extends Phase
 {
 	public int attackDelay = 30;
-	
+
 	public Ice(PlayState playState)
 	{
 		super(playState);
 		id = Phase.ICE;
-		
-		maxCooldowns = new int[] {0, 0, 0, 1800};
-		
+
+		maxCooldowns = new int[] { 0, 0, 0, 1800 };
+
 		skills[0] = new EmptySkill(this, 0);
 		skills[1] = new EmptySkill(this, 1);
 		skills[2] = new IceArmor(this, 2);
 		skills[3] = new EmptySkill(this, 3);
 		// TODO Implement locked skills
 	}
-	
+
 	public boolean canNormalAttack()
 	{
-		if(player.canAttack() && (playState.getTime() - attackStartTime >= attackDelay))
+		if(player.canAttack()
+				&& (playState.getTime() - attackStartTime >= attackDelay))
 		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean canShift()
 	{
-		return true; // TODO Finish
+		return true; // TODO Finish + isActive() call
 	}
-	
+
 	public void unlockSkill()
 	{
 		if(skills[0].id() == Skill.EMPTY) // TODO Add in other skills

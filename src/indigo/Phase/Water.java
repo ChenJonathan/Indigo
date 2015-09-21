@@ -46,7 +46,7 @@ public class Water extends Phase
 	{
 		// Makes sure a direction is selected
 		boolean directionSelected = input.keyDown(InputManager.W) || input.keyDown(InputManager.S) || input.keyDown(InputManager.A) || input.keyDown(InputManager.D);
-		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST && directionSelected;
+		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST && player.isActive() && directionSelected;
 	}
 	
 	public void unlockSkill()
