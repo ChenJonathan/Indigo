@@ -49,6 +49,8 @@ public abstract class Projectile
 		prevY = y - velY;
 		travel = new Line2D.Double(prevX, prevY, x, y);
 
+		facingRight = (velX > 0);
+
 		if(velX < -Stage.TERMINAL_VELOCITY)
 		{
 			velX = -Stage.TERMINAL_VELOCITY;
@@ -60,10 +62,16 @@ public abstract class Projectile
 
 		damage = dmg;
 
-		animation = new Animation();
+		if(creator != null)
+		{
+			friendly = creator.isFriendly();
+		}
+		else
+		{
+			friendly = false;
+		}
 
-		facingRight = (velX > 0);
-		friendly = entity.isFriendly();
+		animation = new Animation();
 	}
 
 	protected void setAnimation(int count, BufferedImage[] images, int delay)

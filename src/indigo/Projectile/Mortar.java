@@ -71,7 +71,10 @@ public class Mortar extends Projectile
 	{
 		if(currentAnimation == DEATH && animation.getFrame() < 6 && !ent.isDodging())
 		{
-			ent.setHealth(ent.getHealth() - damage / 5);
+			if(!ent.isBlocking(ent.getX() > getX()))
+			{
+				ent.setHealth(ent.getHealth() - damage / 5);
+			}
 		}
 		else if(currentAnimation != DEATH && !ent.isDodging())
 		{

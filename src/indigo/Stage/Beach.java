@@ -10,9 +10,7 @@ import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
 import indigo.Manager.Content;
-import indigo.Projectile.ElectricBall;
 import indigo.Projectile.HealthPickup;
-import indigo.Projectile.ManaPickup;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
@@ -31,6 +29,8 @@ public class Beach extends Stage
 
 	private Turret turretCenter;
 	private Turret turretFlag;
+
+	private HealthPickup pickup;
 
 	public Beach(PlayState playState)
 	{
@@ -73,7 +73,6 @@ public class Beach extends Stage
 		platforms.add(new Platform(1398, 736, 1649, 736));
 		platforms.add(new Platform(1736, 842, 1980, 842));
 		platforms.add(new Platform(3349, 732, 3600, 732));
-		;
 		platforms.add(new Platform(6318, 355, 6400, 355));
 
 		// Wood structure
@@ -120,6 +119,12 @@ public class Beach extends Stage
 					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
 							SmallBot.BASE_HEALTH));
 				}
+			}
+
+			if((pickup == null || pickup.isDead()) && playState.getTime() % 300 == 0)
+			{
+				pickup = new HealthPickup(player, 2000, 920, 0, 0, HealthPickup.HEALTH);
+				projectiles.add(pickup);
 			}
 		}
 	}

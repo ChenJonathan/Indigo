@@ -58,8 +58,11 @@ public class ManaPickup extends Projectile
 
 	public void collide(Entity ent)
 	{
-		((Player)ent).setMana(((Player)ent).getMana() + 50); // TODO Reconsider this
-		die();
+		if(((Player)ent).getMana() < ((Player)ent).getMaxMana())
+		{
+			((Player)ent).setMana(((Player)ent).getMana() + 50); // TODO Reconsider this
+			die();
+		}
 
 	}
 

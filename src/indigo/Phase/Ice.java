@@ -9,7 +9,7 @@ import indigo.Weapon.IceSword;
 
 public class Ice extends Phase
 {
-	public int attackDelay = 30;
+	public int attackDelay = 20;
 
 	public Ice(PlayState playState)
 	{

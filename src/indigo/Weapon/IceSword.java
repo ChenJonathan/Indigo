@@ -182,6 +182,7 @@ public class IceSword extends Weapon
 		{
 			attacking = false;
 			attackTime = -1;
+			entitiesHit.clear();
 		}
 
 		/**

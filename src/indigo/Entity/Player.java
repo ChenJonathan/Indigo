@@ -368,7 +368,13 @@ public class Player extends Entity
 	public void jump()
 	{
 		setVelY(-INITIAL_JUMP_SPEED);
+		
 		removeGround();
+		if(isCrouching())
+		{
+			uncrouch();
+		}
+		
 		jumpTime = JUMP_TIME;
 	}
 
@@ -414,8 +420,11 @@ public class Player extends Entity
 
 			canAttack(false);
 			canMove(false);
-
-			uncrouch();
+			
+			if(isCrouching())
+			{
+				uncrouch();
+			}
 
 			setStamina(stamina - SHIFT_STAMINA_COST);
 		}
