@@ -10,6 +10,9 @@ import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
 import indigo.Manager.Content;
+import indigo.Projectile.ElectricBall;
+import indigo.Projectile.HealthPickup;
+import indigo.Projectile.ManaPickup;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
