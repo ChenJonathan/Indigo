@@ -101,6 +101,8 @@ public class Player extends Entity
 
 		friendly = true;
 
+		weapon = new IceSword(this, IceSword.DAMAGE);
+
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
 	}
 
@@ -269,7 +271,7 @@ public class Player extends Entity
 		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void attack()
+	public void attackMain()
 	{
 		// Water phase attack
 		if(phase.id() == Phase.WATER)
@@ -285,8 +287,29 @@ public class Player extends Entity
 		// Ice phase attack
 		else
 		{
-			weapon = new IceSword(this, IceSword.DAMAGE);
-			// TODO Melee attack
+			((IceSword)weapon).slash();
+		}
+
+		phase.resetAttackTimer();
+	}
+
+	public void attackAlt()
+	{
+		// Water phase attack
+		if(phase.id() == Phase.WATER)
+		{
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
+
+			stage.getProjectiles().add(
+					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY,
+							WaterProjectile.DAMAGE));
+		}
+		// Ice phase attack
+		else
+		{
+			((IceSword)weapon).stab();
 		}
 
 		phase.resetAttackTimer();
@@ -533,6 +556,7 @@ public class Player extends Entity
 	public void setPhase(Phase phase)
 	{
 		this.phase = phase;
+		// TODO Swap weapons
 	}
 
 	public void setGround(Land ground)
@@ -545,10 +569,10 @@ public class Player extends Entity
 	{
 		return crouching;
 	}
-
-	public void setSlashMode(boolean slash)
+	
+	public boolean hasWeapon()
 	{
-		((IceSword)weapon).setSlashMode(slash);
+		return super.hasWeapon() && weapon.getHitbox() != null;
 	}
 
 	public boolean canDoubleJump()

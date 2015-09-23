@@ -193,40 +193,29 @@ public class PlayState extends GameState
 						activePhase.cast();
 					}
 				}
-				else
+				else if(activePhase.canNormalAttack())
 				{
 					// Manual attacking
-					if(activePhase.canNormalAttack())
+					if(input.mouseLeftPress())
 					{
-						player.attack();
-						if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
-						{
-							if(input.mouseLeftDown())
-							{
-								player.setSlashMode(true);
-							}
-							else
-							{
-								player.setSlashMode(false);
-							}
-						}
+						player.attackMain();
+					}
+					else
+					{
+						player.attackAlt();
 					}
 				}
 			}
 			else if(input.mouseDown() && activePhase.canNormalAttack())
 			{
 				// Automatic attacking
-				player.attack();
-				if(activePhase.id() == Phase.ICE) // TODO Remove check when permanent weapons are implemented
+				if(input.mouseLeftDown())
 				{
-					if(input.mouseLeftDown())
-					{
-						player.setSlashMode(true);
-					}
-					else
-					{
-						player.setSlashMode(false);
-					}
+					player.attackMain();
+				}
+				else
+				{
+					player.attackAlt();
 				}
 			}
 			if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
