@@ -256,6 +256,7 @@ public class Player extends Entity
 	}
 
 	public void attackMain()
+
 	{
 		// Water phase attack
 		if(phase.id() == Phase.WATER)

@@ -148,7 +148,9 @@ public class IceSword extends Weapon
 
 	public static final int DAMAGE = 50;
 	public static final int ATTACK_DURATION = 8;
-
+	
+	private boolean attacking = false; // TODO Replace with animation check
+	
 	private double swordAngle;
 	private double angleOffset = 0.0;
 	private boolean slashMode = false;
@@ -166,7 +168,10 @@ public class IceSword extends Weapon
 
 	public void update()
 	{
-		super.update();
+		if(attacking)
+		{
+			attackTime++;
+		}
 
 		if(attackTime == 0)
 		{
@@ -175,7 +180,8 @@ public class IceSword extends Weapon
 		}
 		else if(attackTime == ATTACK_DURATION) // TODO Animation.hasPlayedOnce()
 		{
-			user.removeWeapon();
+			attacking = false;
+			attackTime = -1;
 		}
 
 		/**
@@ -220,7 +226,23 @@ public class IceSword extends Weapon
 
 	public Line2D.Double getHitbox()
 	{
-		return new Line2D.Double(beginSwordX, beginSwordY, endSwordX, endSwordY);
+		if(attacking)
+		{
+			return new Line2D.Double(beginSwordX, beginSwordY, endSwordX, endSwordY);
+		}
+		return null;
+	}
+	
+	public void slash()
+	{
+		attacking = true;
+		slashMode = true;
+	}
+	
+	public void stab()
+	{
+		attacking = true;
+		slashMode = false;
 	}
 
 	/**
@@ -238,9 +260,9 @@ public class IceSword extends Weapon
 		mouseAngle = mouseAngle % 360.0;
 		return mouseAngle;
 	}
-
-	public void setSlashMode(boolean sM)
+	
+	public boolean isAttacking()
 	{
-		slashMode = sM;
+		return attacking;
 	}
 }

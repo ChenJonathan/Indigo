@@ -23,10 +23,7 @@ public abstract class Weapon
 		attackTime = -1;
 	}
 
-	public void update()
-	{
-		attackTime++;
-	}
+	public abstract void update();
 
 	public abstract void render(Graphics g);
 

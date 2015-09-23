@@ -5,6 +5,7 @@ import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
 import indigo.Skill.IceArmor;
 import indigo.Skill.Skill;
+import indigo.Weapon.IceSword;
 
 public class Ice extends Phase
 {
@@ -26,7 +27,7 @@ public class Ice extends Phase
 
 	public boolean canNormalAttack()
 	{
-		if(player.canAttack() && (playState.getTime() - attackStartTime >= attackDelay))
+		if(player.canAttack() && !((IceSword)player.getWeapon()).isAttacking() && (playState.getTime() - attackStartTime >= attackDelay))
 		{
 			return true;
 		}
