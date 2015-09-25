@@ -8,28 +8,28 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 /**
- * The state present when the player has ended a state.  Shown after each level.
- * Can display a variety of information based on the stage; retrieves
- * information from Data.
+ * The state present when the player has ended a state. Shown after each level. Can display a variety of information
+ * based on the stage; retrieves information from Data.
  */
-public class ClearStageState extends GameState 
+public class ClearStageState extends GameState
 {
-    /**
-     * Sets up the clear stage state.
-     * @param gsm The game state manager.
-     */
+	/**
+	 * Sets up the clear stage state.
+	 * 
+	 * @param gsm The game state manager.
+	 */
 	public ClearStageState(GameStateManager gsm)
 	{
 		super(gsm);
 	}
 
-    @Override
+	@Override
 	public void update()
 	{
 		handleInput();
 	}
 
-    @Override
+	@Override
 	public void render(Graphics2D g)
 	{
 		String message = "";
@@ -50,7 +50,7 @@ public class ClearStageState extends GameState
 		// TODO Draw background and other things
 	}
 
-    @Override
+	@Override
 	public void handleInput()
 	{
 		// Change to whatever
@@ -59,6 +59,7 @@ public class ClearStageState extends GameState
 			gsm.setState(GameStateManager.MENU);
 			// Play sound
 		}
-		// TODO If the Data.victory is true and stage number is equal to Data.unlockedStages, increase Data.stagesToUnlock by one
+		// TODO If the Data.victory is true and stage number is equal to Data.unlockedStages, increase
+		// Data.stagesToUnlock by one
 	}
 }

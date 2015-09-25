@@ -28,12 +28,10 @@ public class Geyser extends Skill
 			}
 			
 			playState.getProjectiles().add(0, new GeyserParticle(player, geyser.getX(), playState.getMapY() - GeyserParticle.HEIGHT / 2 + GeyserParticle.SPEED, 0, -GeyserParticle.SPEED, GeyserParticle.DAMAGE));
-			player.setMana(player.getMana() - 2);
+			player.setMana(player.getMana() - 1); // TODO Revert
 		}
 		else
 		{
-			playState.getProjectiles().remove(geyser);
-			geyser = null;
 			endCast();
 		}
 	}
@@ -45,7 +43,10 @@ public class Geyser extends Skill
 	
 	public void endCast()
 	{
-		super.endCast();
+		playState.getProjectiles().remove(geyser);
+		geyser = null;
 		player.canAttack(true);
+		
+		super.endCast();
 	}
 }

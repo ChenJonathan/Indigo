@@ -5,12 +5,13 @@ import javax.swing.JFrame;
 /**
  * Main class to run the application; sets up swing stuff to make the game run.
  */
-public class Main {
-
-    /**
-     * The main method.
-     * @param args Currently unused.
-     */
+public class Main
+{
+	/**
+	 * The main method.
+	 * 
+	 * @param args Currently unused.
+	 */
 	public static void main(String[] args)
 	{
 		JFrame window = new JFrame("Indigo");

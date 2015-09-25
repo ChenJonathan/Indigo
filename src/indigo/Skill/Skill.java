@@ -10,11 +10,11 @@ public abstract class Skill
 	protected PlayState playState;
 	protected InputManager input;
 	protected Phase phase;
-	
+
 	protected Player player;
 	protected int id; // Initialize in each skill constructor
 	protected int position;
-	
+
 	protected int castTime;
 	protected boolean castOnSelect;
 
@@ -25,38 +25,37 @@ public abstract class Skill
 	public static final int WHIRLWIND = 4;
 	public static final int CHAINS = 5;
 	public static final int ICE_ARMOR = 6;
-	
-	
+
 	public Skill(Phase phase, int position)
 	{
 		playState = phase.getPlayState();
 		input = phase.getInput();
 		this.phase = phase;
 		player = phase.getPlayer();
-		
+
 		this.position = position;
 		castTime = -1;
 		castOnSelect = false;
 	}
-	
+
 	public void update()
 	{
 		castTime++;
 	}
-	
+
 	public abstract boolean canCast();
-	
+
 	public void endCast()
 	{
 		castTime = -1;
 		phase.endCast(position); // Resets skill icon
 	}
-	
+
 	public int id()
 	{
 		return id;
 	}
-	
+
 	public boolean isCastOnSelect()
 	{
 		return castOnSelect;

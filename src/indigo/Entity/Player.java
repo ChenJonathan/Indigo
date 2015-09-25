@@ -14,7 +14,7 @@ import java.awt.geom.Rectangle2D;
 public class Player extends Entity
 {
 	private int mana, maxMana;
-	private int stamina;
+	private int stamina, maxStamina;
 	private boolean crouching;
 
 	private int jumpTime;
@@ -64,8 +64,8 @@ public class Player extends Entity
 	public static final int SHIFT_STAMINA_COST = 25;
 
 	// Amount regenerated
-	public static final int HEALTH_REGEN = 1;
-	public static final int MANA_REGEN = 3;
+	public static final int HEALTH_REGEN = 5;
+	public static final int MANA_REGEN = 5;
 	public static final int STAMINA_REGEN = 1;
 
 	// Time between each regeneration
@@ -73,13 +73,12 @@ public class Player extends Entity
 	public static final int MANA_REGEN_DELAY = 30;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
-	// Time until next regeneration after corresponding value is lowered
-	// (through damage, skillcasting, or blocking)
+	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
 	public static final int HEALTH_REGEN_LONG_DELAY = 150;
 	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
 
-	public Player(Stage stage, double x, double y, int health, int mana)
+	public Player(Stage stage, double x, double y, int health, int mana, int stamina)
 	{
 		super(stage, x, y, health);
 		name = "yourself";
@@ -88,7 +87,7 @@ public class Player extends Entity
 		height = PLAYER_HEIGHT;
 
 		maxMana = this.mana = mana;
-		stamina = BASE_STAMINA;
+		maxStamina = this.stamina = stamina;
 
 		healthRegenTime = manaRegenTime = staminaRegenTime = -1;
 
@@ -99,8 +98,10 @@ public class Player extends Entity
 		jumpTime = 0;
 		canDoubleJump = false;
 		iceArmor = false;
-		
+
 		friendly = true;
+
+		weapon = new IceSword(this, IceSword.DAMAGE);
 
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
 	}
@@ -136,13 +137,14 @@ public class Player extends Entity
 		}
 
 		// Set direction
-		if(!hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT) // TODO Change hasWeapon() call to weapon animation check
+		if(!hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
 		{
+			// TODO Change hasWeapon() call to weapon animation check
 			setDirection(stage.getMouseX() > this.getX());
 		}
 
 		super.update();
-		
+
 		// Variable jump height counter
 		if(jumpTime > 0)
 		{
@@ -160,7 +162,7 @@ public class Player extends Entity
 		{
 			if(stamina > CROUCH_STAMINA_COST)
 			{
-				//setStamina(stamina - CROUCH_STAMINA_COST);
+				setStamina(stamina - CROUCH_STAMINA_COST);
 			}
 			else
 			{
@@ -197,11 +199,11 @@ public class Player extends Entity
 			{
 				if(isFacingRight() && currentAnimation != GROUND_RIGHT)
 				{
-					setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
+					setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 3);
 				}
 				else if(!isFacingRight() && currentAnimation != GROUND_LEFT)
 				{
-					setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 15);
+					setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 3);
 				}
 			}
 			else if(isFacingRight())
@@ -239,13 +241,13 @@ public class Player extends Entity
 		}
 
 		// Regeneration
-		if(stage.getTime() == healthRegenTime)
-		{
-			setHealth(getHealth() + HEALTH_REGEN);
-		}
-		if(stage.getTime() == manaRegenTime)
-		{
-			setMana(getMana() + MANA_REGEN);
+		if(stage.getTime() == healthRegenTime)		
+		{		
+			setHealth(getHealth() + HEALTH_REGEN);		
+		}		
+		if(stage.getTime() == manaRegenTime)		
+		{		
+			setMana(getMana() + MANA_REGEN);		
 		}
 		if(stage.getTime() == staminaRegenTime)
 		{
@@ -255,9 +257,8 @@ public class Player extends Entity
 
 	public void render(Graphics g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2),
-				(int)(getY() - getHeight() / 2), (int)getWidth(),
-				(int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+				(int)getWidth(), (int)getHeight(), null);
 
 		if(hasWeapon())
 		{
@@ -267,31 +268,49 @@ public class Player extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY()
-				- getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void attack()
+	public void attackMain()
+
 	{
 		// Water phase attack
 		if(phase.id() == Phase.WATER)
 		{
-			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2)
-					+ Math.pow(stage.getMouseX() - getX(), 2));
-			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX())
-					/ scale;
-			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY())
-					/ scale;
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
 
 			stage.getProjectiles().add(
-					new WaterProjectile(this, getX() + velX * 0.25, getY()
-							+ velY * 0.4, velX, velY, WaterProjectile.DAMAGE));
+					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.5, velX, velY,
+							WaterProjectile.DAMAGE));
 		}
 		// Ice phase attack
 		else
 		{
-			weapon = new IceSword(this, IceSword.DAMAGE);
-			// TODO Melee attack
+			((IceSword)weapon).slash();
+		}
+
+		phase.resetAttackTimer();
+	}
+
+	public void attackAlt()
+	{
+		// Water phase attack
+		if(phase.id() == Phase.WATER)
+		{
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
+
+			stage.getProjectiles().add(
+					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY,
+							WaterProjectile.DAMAGE));
+		}
+		// Ice phase attack
+		else
+		{
+			((IceSword)weapon).stab();
 		}
 
 		phase.resetAttackTimer();
@@ -308,10 +327,8 @@ public class Player extends Entity
 			}
 			else if(isFacingRight() && getVelX() > -REDUCED_MOVE_SPEED)
 			{
-				// Slower acceleration and maximum move speed when moving
-				// backwards
-				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION,
-						-REDUCED_MOVE_SPEED));
+				// Slower acceleration and maximum move speed when moving backwards
+				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION, -REDUCED_MOVE_SPEED));
 			}
 		}
 		else
@@ -323,10 +340,8 @@ public class Player extends Entity
 			}
 			else if(isFacingRight() && getVelX() > -REDUCED_MOVE_SPEED)
 			{
-				// Slower acceleration and maximum move speed when moving
-				// backwards in air
-				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION,
-						-REDUCED_MOVE_SPEED));
+				// Slower acceleration and maximum move speed when moving backwards in air
+				setVelX(Math.max(getVelX() - REDUCED_ACCELERATION, -REDUCED_MOVE_SPEED));
 			}
 		}
 	}
@@ -369,7 +384,13 @@ public class Player extends Entity
 	public void jump()
 	{
 		setVelY(-INITIAL_JUMP_SPEED);
+
 		removeGround();
+		if(isCrouching())
+		{
+			uncrouch();
+		}
+
 		jumpTime = JUMP_TIME;
 	}
 
@@ -406,8 +427,8 @@ public class Player extends Entity
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 
-			setVelX(x * 65);
-			setVelY(y * 65);
+			setVelX(x * 80);
+			setVelY(y * 80);
 
 			flying = true;
 			frictionless = true;
@@ -415,6 +436,11 @@ public class Player extends Entity
 
 			canAttack(false);
 			canMove(false);
+
+			if(isCrouching())
+			{
+				uncrouch();
+			}
 
 			setStamina(stamina - SHIFT_STAMINA_COST);
 		}
@@ -431,6 +457,9 @@ public class Player extends Entity
 
 	public void die()
 	{
+		uncrouch();
+		removeWeapon();
+		
 		if(isFacingRight())
 		{
 			setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
@@ -438,6 +467,11 @@ public class Player extends Entity
 		else
 		{
 			setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
+		}
+
+		if(phase.skillSelected())
+		{
+			phase.deselectSkill();
 		}
 	}
 
@@ -459,18 +493,18 @@ public class Player extends Entity
 		}
 		else
 		{
-			// Reset delay for next health regeneration
-			if(health < getMaxHealth())
-			{
-				healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
-
-				// If damaged, the initial delay is longer
-				if(health < getHealth())
-				{
-					healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
-				}
+			// Reset delay for next health regeneration		
+			if(health < getMaxHealth())		
+			{		
+				healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;		
+			
+				// If damaged, the initial delay is longer		
+				if(health < getHealth())		
+				{		
+					healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;		
+				}		
 			}
-
+			
 			super.setHealth(health);
 		}
 	}
@@ -487,24 +521,28 @@ public class Player extends Entity
 
 	public void setMana(int mana)
 	{
-		if(mana < getMaxMana())
-		{
-			// Reset delay for next mana regeneration
-			manaRegenTime = Math.max(manaRegenTime, stage.getTime()
-					+ MANA_REGEN_DELAY);
-
-			// If damaged, the initial delay is longer
-			if(mana < getMana())
-			{
-				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;
-			}
+		if(mana < getMaxMana())		
+		{		
+			// Reset delay for next mana regeneration		
+			manaRegenTime = Math.max(manaRegenTime, stage.getTime() + MANA_REGEN_DELAY);		
+		
+			// If damaged, the initial delay is longer		
+			if(mana < getMana())		
+			{		
+				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;		
+			}		
 		}
-
+		
 		this.mana = mana;
 		if(this.mana > maxMana)
 		{
 			this.mana = maxMana;
 		}
+	}
+	
+	public int getMaxStamina()
+	{
+		return maxStamina;
 	}
 
 	public int getStamina()
@@ -515,10 +553,9 @@ public class Player extends Entity
 	public void setStamina(int stamina)
 	{
 		// Reset delay for next stamina regeneration
-		if(stamina < BASE_STAMINA)
+		if(stamina < getMaxStamina())
 		{
-			staminaRegenTime = Math.max(staminaRegenTime, stage.getTime()
-					+ STAMINA_REGEN_DELAY);
+			staminaRegenTime = Math.max(staminaRegenTime, stage.getTime() + STAMINA_REGEN_DELAY);
 
 			// If damaged, the initial delay is longer
 			if(stamina < getStamina())
@@ -537,6 +574,7 @@ public class Player extends Entity
 	public void setPhase(Phase phase)
 	{
 		this.phase = phase;
+		// TODO Swap weapons
 	}
 
 	public void setGround(Land ground)
@@ -548,11 +586,6 @@ public class Player extends Entity
 	public boolean isCrouching()
 	{
 		return crouching;
-	}
-
-	public void setSlashMode(boolean slash)
-	{
-		((IceSword)weapon).setSlashMode(slash);
 	}
 
 	public boolean canDoubleJump()
@@ -574,12 +607,12 @@ public class Player extends Entity
 	{
 		iceArmor = active;
 	}
-	
+
 	public boolean getIceChains()
 	{
 		return iceChains;
 	}
-	
+
 	public void setIceChains(boolean active)
 	{
 		iceChains = active;

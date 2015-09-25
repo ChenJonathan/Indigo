@@ -1,3 +1,12 @@
+/cursor/
+/hud/
 /indigo/
+<<<<<<< HEAD
 /projectiles/
 /sprites/
+=======
+/menus/
+/projectiles/
+/sprites/
+/stages/
+>>>>>>> 9013d19a612a2e010f6cb3f5741a8886f8ebbc83

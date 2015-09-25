@@ -8,26 +8,27 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 /**
- * The state where the game is paused.  Accessible during play.
+ * The state where the game is paused. Accessible during play.
  */
-public class PauseState extends GameState 
+public class PauseState extends GameState
 {
-    /**
-     * Sets up the paused game state.
-     * @param gsm The game state manager.
-     */
+	/**
+	 * Sets up the paused game state.
+	 * 
+	 * @param gsm The game state manager.
+	 */
 	public PauseState(GameStateManager gsm)
 	{
 		super(gsm);
 	}
 
-    @Override
+	@Override
 	public void update()
 	{
 		handleInput();
 	}
 
-    @Override
+	@Override
 	public void render(Graphics2D g)
 	{
 		g.setColor(Color.WHITE);
@@ -35,7 +36,7 @@ public class PauseState extends GameState
 		g.drawString("GAME PAUSED", 150, 300);
 	}
 
-    @Override
+	@Override
 	public void handleInput()
 	{
 		if(input.keyPress(InputManager.ESCAPE))
@@ -43,8 +44,7 @@ public class PauseState extends GameState
 			gsm.setPaused(false);
 		}
 		/*
-		 * Detect clicking resume, options, and quit
-		 * gsm.setState(GameStateManager.MENU);
+		 * Detect clicking resume, options, and quit gsm.setState(GameStateManager.MENU);
 		 */
 	}
 }
