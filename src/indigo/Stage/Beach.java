@@ -36,7 +36,7 @@ public class Beach extends Stage
 	{
 		super(playState);
 
-		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA);
+		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
 		mapX = 6400;

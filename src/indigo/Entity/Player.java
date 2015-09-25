@@ -14,7 +14,7 @@ import java.awt.geom.Rectangle2D;
 public class Player extends Entity
 {
 	private int mana, maxMana;
-	private int stamina;
+	private int stamina, maxStamina;
 	private boolean crouching;
 
 	private int jumpTime;
@@ -25,6 +25,8 @@ public class Player extends Entity
 	private boolean iceArmor;
 	private boolean iceChains;
 
+	private int healthRegenTime; // Last time when health was regenerated
+	private int manaRegenTime; // Last time when mana was regenerated
 	private int staminaRegenTime; // Last time when stamina was regenerated
 
 	// Values corresponding to each animation
@@ -62,15 +64,21 @@ public class Player extends Entity
 	public static final int SHIFT_STAMINA_COST = 25;
 
 	// Amount regenerated
+	public static final int HEALTH_REGEN = 5;
+	public static final int MANA_REGEN = 5;
 	public static final int STAMINA_REGEN = 1;
 
 	// Time between each regeneration
+	public static final int HEALTH_REGEN_DELAY = 30;
+	public static final int MANA_REGEN_DELAY = 30;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
 	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
+	public static final int HEALTH_REGEN_LONG_DELAY = 150;
+	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
 
-	public Player(Stage stage, double x, double y, int health, int mana)
+	public Player(Stage stage, double x, double y, int health, int mana, int stamina)
 	{
 		super(stage, x, y, health);
 		name = "yourself";
@@ -79,9 +87,9 @@ public class Player extends Entity
 		height = PLAYER_HEIGHT;
 
 		maxMana = this.mana = mana;
-		stamina = BASE_STAMINA;
+		maxStamina = this.stamina = stamina;
 
-		staminaRegenTime = -1;
+		healthRegenTime = manaRegenTime = staminaRegenTime = -1;
 
 		pushability = 5;
 		flying = false;
@@ -233,6 +241,14 @@ public class Player extends Entity
 		}
 
 		// Regeneration
+		if(stage.getTime() == healthRegenTime)		
+		{		
+			setHealth(getHealth() + HEALTH_REGEN);		
+		}		
+		if(stage.getTime() == manaRegenTime)		
+		{		
+			setMana(getMana() + MANA_REGEN);		
+		}
 		if(stage.getTime() == staminaRegenTime)
 		{
 			setStamina(getStamina() + STAMINA_REGEN);
@@ -441,6 +457,9 @@ public class Player extends Entity
 
 	public void die()
 	{
+		uncrouch();
+		removeWeapon();
+		
 		if(isFacingRight())
 		{
 			setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
@@ -474,6 +493,18 @@ public class Player extends Entity
 		}
 		else
 		{
+			// Reset delay for next health regeneration		
+			if(health < getMaxHealth())		
+			{		
+				healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;		
+			
+				// If damaged, the initial delay is longer		
+				if(health < getHealth())		
+				{		
+					healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;		
+				}		
+			}
+			
 			super.setHealth(health);
 		}
 	}
@@ -490,11 +521,28 @@ public class Player extends Entity
 
 	public void setMana(int mana)
 	{
+		if(mana < getMaxMana())		
+		{		
+			// Reset delay for next mana regeneration		
+			manaRegenTime = Math.max(manaRegenTime, stage.getTime() + MANA_REGEN_DELAY);		
+		
+			// If damaged, the initial delay is longer		
+			if(mana < getMana())		
+			{		
+				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;		
+			}		
+		}
+		
 		this.mana = mana;
 		if(this.mana > maxMana)
 		{
 			this.mana = maxMana;
 		}
+	}
+	
+	public int getMaxStamina()
+	{
+		return maxStamina;
 	}
 
 	public int getStamina()
@@ -505,7 +553,7 @@ public class Player extends Entity
 	public void setStamina(int stamina)
 	{
 		// Reset delay for next stamina regeneration
-		if(stamina < BASE_STAMINA)
+		if(stamina < getMaxStamina())
 		{
 			staminaRegenTime = Math.max(staminaRegenTime, stage.getTime() + STAMINA_REGEN_DELAY);
 
@@ -538,11 +586,6 @@ public class Player extends Entity
 	public boolean isCrouching()
 	{
 		return crouching;
-	}
-
-	public boolean hasWeapon()
-	{
-		return super.hasWeapon() && weapon.getHitbox() != null;
 	}
 
 	public boolean canDoubleJump()

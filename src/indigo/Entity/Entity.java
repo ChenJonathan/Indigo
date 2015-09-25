@@ -398,7 +398,7 @@ public abstract class Entity
 
 	public boolean hasWeapon()
 	{
-		return weapon != null;
+		return weapon != null && weapon.getHitbox() != null;
 	}
 
 	public Weapon getWeapon()

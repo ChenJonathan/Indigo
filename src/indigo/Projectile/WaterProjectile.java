@@ -101,7 +101,7 @@ public class WaterProjectile extends Projectile
 
 	public void collide(Wall wall)
 	{
-		// TODO Make more logical
+		// TODO Consider making this more logical
 		double slopeAngle = Math.atan(-1 / wall.getSlope());
 		if(Math.abs(slopeAngle) < 0.0001)
 		{
