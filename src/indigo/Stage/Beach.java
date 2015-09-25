@@ -129,21 +129,6 @@ public class Beach extends Stage
 		}
 	}
 
-	public void trackDeath(String killer, Entity killed)
-	{
-		if(killed.equals(player))
-		{
-			data.setKiller(killer);
-			data.setVictory(false);
-		}
-		else if(killed.isMarked())
-		{
-			enemiesKilled++;
-			System.out.println("Enemies killed: " + enemiesKilled);
-			// TODO Gain experienced - Add experience variable to Entity class
-		}
-	}
-
 	public void render(Graphics2D g)
 	{
 		g.drawImage(Content.STAGE_BEACH, 0, 0, 6400, 1200, null);
@@ -163,6 +148,21 @@ public class Beach extends Stage
 			{
 				proj.render(g);
 			}
+		}
+	}
+
+	public void trackDeath(String killer, Entity killed)
+	{
+		if(killed.equals(player))
+		{
+			data.setKiller(killer);
+			data.setVictory(false);
+		}
+		else if(killed.isMarked())
+		{
+			enemiesKilled++;
+			System.out.println("Enemies killed: " + enemiesKilled);
+			// TODO Gain experienced - Add experience variable to Entity class
 		}
 	}
 }

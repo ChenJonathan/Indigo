@@ -26,7 +26,7 @@ public class IceChainParticle extends Projectile
 		solid = false;
 		flying = true;
 
-		setAnimation(DEFAULT, Content.WATER_BALL, -1);
+		setAnimation(DEFAULT, Content.WATER_PROJECTILE, -1);
 	}
 
 	public void render(Graphics2D g)

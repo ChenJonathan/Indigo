@@ -46,8 +46,9 @@ public class Content
 	public static BufferedImage[] GEYSER = loadArray("/projectiles/geyser_particle.png", 80, 50, 1);
 	public static BufferedImage[] MORTAR_DEATH = loadArray("/projectiles/mortar_death.png", 100, 100, 9);
 	public static BufferedImage[] MORTAR = loadArray("/projectiles/mortar.png", 50, 50, 1);
-	public static BufferedImage[] WATER_BALL_DEATH = loadArray("/projectiles/water_ball_death.png", 100, 100, 2);
-	public static BufferedImage[] WATER_BALL = loadArray("/projectiles/water_ball.png", 100, 100, 1);
+	public static BufferedImage[] WATER_PROJECTILE_DEATH = loadArray("/projectiles/water_projectile_death.png", 80, 73, 2);
+	public static BufferedImage[] WATER_PROJECTILE_DEATH_WALL = loadArray("/projectiles/water_projectile_death_wall.png", 80, 73, 2);
+	public static BufferedImage[] WATER_PROJECTILE = loadArray("/projectiles/water_projectile.png", 80, 73, 2);
 	public static BufferedImage[] MANA_PICKUP = loadArray("/projectiles/mana_pickup.png", 100, 100, 1);
 	public static BufferedImage[] HEALTH_PICKUP = loadArray("/projectiles/health_pickup.png", 100, 100, 1);
 	// public static BufferedImage[] ICECHAIN = loadArray("/projectiles/icechain.png", 100, 100, 1);

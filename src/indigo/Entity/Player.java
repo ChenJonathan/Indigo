@@ -266,7 +266,7 @@ public class Player extends Entity
 			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
 
 			stage.getProjectiles().add(
-					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY,
+					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.5, velX, velY,
 							WaterProjectile.DAMAGE));
 		}
 		// Ice phase attack
@@ -368,13 +368,13 @@ public class Player extends Entity
 	public void jump()
 	{
 		setVelY(-INITIAL_JUMP_SPEED);
-		
+
 		removeGround();
 		if(isCrouching())
 		{
 			uncrouch();
 		}
-		
+
 		jumpTime = JUMP_TIME;
 	}
 
@@ -420,7 +420,7 @@ public class Player extends Entity
 
 			canAttack(false);
 			canMove(false);
-			
+
 			if(isCrouching())
 			{
 				uncrouch();
@@ -539,7 +539,7 @@ public class Player extends Entity
 	{
 		return crouching;
 	}
-	
+
 	public boolean hasWeapon()
 	{
 		return super.hasWeapon() && weapon.getHitbox() != null;

@@ -14,6 +14,6 @@ public class SpikePit extends Wall
 
 		killsEntities = true;
 		killsNonsolidProjectiles = false;
-		killsSolidProjectiles = true;
+		killsSolidProjectiles = false;
 	}
 }
