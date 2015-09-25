@@ -68,6 +68,8 @@ public class ElectricBall extends Projectile
 		return true;
 	}
 	
-	// Not used
-	public void die() { }
+	public void die() 
+	{
+		dead = true;
+	}
 }
