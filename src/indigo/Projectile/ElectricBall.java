@@ -69,4 +69,9 @@ public class ElectricBall extends Projectile
 	{
 		return true;
 	}
+	
+	public void die() 
+	{
+		dead = true;
+	}
 }
