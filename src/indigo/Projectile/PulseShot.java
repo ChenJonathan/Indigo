@@ -19,7 +19,8 @@ public class PulseShot extends Projectile
 	public static final int DAMAGE = 20; // Will scale by distance
 	public final static int WIDTH = 2000;
 	public final static int HEIGHT = 2000;
-	public final static double PUSHBACK = 100; //TODO: Change WIDTH, HEIGHT, and PUSHBACK to suit the Pulse Shot, keeping hitbox size in mind
+	public final static double PUSHBACK = 100; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
+												// Shot, keeping hitbox size in mind
 	public final static int DURATION = 5;
 
 	public PulseShot(Entity entity, double x, double y, double velX, double velY, int dmg)
@@ -42,10 +43,10 @@ public class PulseShot extends Projectile
 
 		if(timer == 0)
 		{
-			dead = true;
+			die();
 		}
-		
-		//kill projectiles - projectile.die()
+
+		// Kill projectiles - projectile.die()
 		for(int count = 0; count < stage.getProjectiles().size(); count++)
 		{
 			if(intersects(stage.getProjectiles().get(count)))
@@ -54,7 +55,8 @@ public class PulseShot extends Projectile
 			}
 		}
 	}
-	
+
+
 	public boolean intersects(Projectile proj)
 	{
 		Area entArea = new Area(getHitbox());
@@ -73,13 +75,13 @@ public class PulseShot extends Projectile
 		//TODO: If necessary, change to be that of the pulse shot
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
-	
-	public void collide(Entity ent) //pushes enemies
+
+	public void collide(Entity ent) // Pushes enemies
 	{
-		if(!stage.getPlayer().isGrounded() || ent.getY() < getY() + stage.getPlayer().getHeight() / 2)
+		if(!stage.getPlayer().isGrounded() || (ent.getY() < getY() + stage.getPlayer().getHeight() / 2))
 		{
-			setAnimation(SPARK, Content.ELECTRIC_SPARK, 1); //TODO: Change to pulse animations
-			
+			setAnimation(SPARK, Content.ELECTRIC_SPARK, -1); // TODO: Change to pulse animations
+
 			ent.removeGround();
 			//Push enemy away, further when closer
 			double scale = Math.sqrt(Math.pow(ent.getY() - getY(), 2)
@@ -90,7 +92,8 @@ public class PulseShot extends Projectile
 			double velY = PUSHBACK * iDP * (ent.getY() - getY())
 					/ scale;
 			
-			if(scale < WIDTH*0.02 || scale < HEIGHT*0.02) // TODO: Change for when get circular hitbox.
+
+			if(scale < getWidth() * 0.02 || scale < getHeight() * 0.02) // TODO: Change for when get circular hitbox.
 			{
 				//Directly apply knockback to avoid divide by zero error
 				velX = PUSHBACK * (ent.getX() - getX())
@@ -98,15 +101,15 @@ public class PulseShot extends Projectile
 				velY = PUSHBACK * (ent.getY() - getY())
 						/ scale;
 			}
-			
-			ent.setVelX(velX); //velocity is set rather than added on
+
+			ent.setVelX(velX); // velocity is set rather than added on
 			ent.setVelY(velY);
-			
+
 			if(!ent.isDodging()) // damaged, won't hurt if is dodging, scale by distance
-			{ 
-				ent.setHealth((int)(ent.getHealth()-(DAMAGE*iDP)));
+			{
+				ent.setHealth((int)(ent.getHealth() - (DAMAGE * iDP)));
 			}
-			
+
 			ent.mark();
 		}
 	}
@@ -120,10 +123,5 @@ public class PulseShot extends Projectile
 	public boolean isActive()
 	{
 		return true;
-	}
-
-	// Not used
-	public void die()
-	{
 	}
 }

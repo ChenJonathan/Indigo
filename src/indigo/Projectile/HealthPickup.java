@@ -104,8 +104,9 @@ public class HealthPickup extends Projectile
 		return true;
 	}
 
+	// TODO Death animation
 	public void die()
 	{
-		dead = true; // TODO Death animation
+		super.die();
 	}
 }

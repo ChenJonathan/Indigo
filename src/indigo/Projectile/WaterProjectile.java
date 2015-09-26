@@ -20,7 +20,7 @@ public class WaterProjectile extends Projectile
 	public static final int DAMAGE = 10;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 73;
-	public static final double SPEED = 70;
+	public static final double SPEED = 60;
 	public static final int DURATION = 20;
 
 	public WaterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)

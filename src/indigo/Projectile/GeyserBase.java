@@ -83,9 +83,4 @@ public class GeyserBase extends Projectile
 	{
 		return false;
 	}
-
-	// Not used
-	public void die()
-	{
-	}
 }

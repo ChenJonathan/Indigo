@@ -378,7 +378,7 @@ public class Player extends Entity
 
 	public boolean canJump()
 	{
-		return isGrounded();
+		return isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
 	}
 
 	public void jump()

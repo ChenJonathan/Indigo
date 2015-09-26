@@ -67,9 +67,4 @@ public class GeyserParticle extends Projectile
 	{
 		return true;
 	}
-
-	// Not used
-	public void die()
-	{
-	}
 }

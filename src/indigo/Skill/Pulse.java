@@ -7,7 +7,7 @@ public class Pulse extends Skill
 {
 	private int manaCost = 1; //TODO:Change for game balancing
 	private boolean isGrounded;
-
+	
 	public Pulse(Phase phase, int position)
 	{
 		super(phase, position);
@@ -18,7 +18,6 @@ public class Pulse extends Skill
 	{
 		super.update();
 		
-		isGrounded = player.isGrounded();
 		player.canMove(false);
 		player.canAttack(false);
 		player.setMana(player.getMana() - manaCost);

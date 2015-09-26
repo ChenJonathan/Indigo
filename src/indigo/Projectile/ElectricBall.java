@@ -59,9 +59,9 @@ public class ElectricBall extends Projectile
 		}
 	}
 
-	// Not used
 	public void collide(Wall wall)
 	{
+		die();
 	}
 
 	// Not used
