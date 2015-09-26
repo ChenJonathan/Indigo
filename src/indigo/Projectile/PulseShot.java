@@ -14,25 +14,14 @@ public class PulseShot extends Projectile
 	private int timer;
 
 	private final int DEFAULT = 0;
-<<<<<<< HEAD
 	private final int SPARK = 1; //TODO: Remove, only for electric ball test image
 	
-	public static final int DAMAGE = 50; // Will scale by distance
+	public static final int DAMAGE = 20; // Will scale by distance
 	public final static int WIDTH = 2000;
 	public final static int HEIGHT = 2000;
 	public final static double PUSHBACK = 100; //TODO: Change WIDTH, HEIGHT, and PUSHBACK to suit the Pulse Shot, keeping hitbox size in mind
 	public final static int DURATION = 5;
-	
-=======
-	private final int SPARK = 1; // TODO: Remove, only for electric ball test image
 
-	public static final int DAMAGE = 0;
-	public final static int WIDTH = 50;
-	public final static int HEIGHT = 50;
-	public final static double SPEED = 25; // TODO: Change WIDTH, HEIGHT, and SPEED to suit the Pulse Shot
-	public final static int DURATION = 100;
-
->>>>>>> 9013d19a612a2e010f6cb3f5741a8886f8ebbc83
 	public PulseShot(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
@@ -72,24 +61,15 @@ public class PulseShot extends Projectile
 		entArea.intersect(new Area(proj.getHitbox()));
 		return !entArea.isEmpty();
 	}
-<<<<<<< HEAD
 	
 	public void render(Graphics2D g) 
 	{
 		//TODO: If necessary, change to be that of the pulse shot
-		//g.drawImage(animation.getImage(), (int) getX() - WIDTH / 2, (int) getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
-=======
-
-	public void render(Graphics2D g)
-	{
-		// TODO: If necessary, change to be that of the pulse shot
-		g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
->>>>>>> 9013d19a612a2e010f6cb3f5741a8886f8ebbc83
+		g.drawImage(animation.getImage(), (int) getX() - WIDTH / 2, (int) getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 	}
 
 	public Shape getHitbox()
 	{
-<<<<<<< HEAD
 		//TODO: If necessary, change to be that of the pulse shot
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
@@ -105,17 +85,17 @@ public class PulseShot extends Projectile
 			double scale = Math.sqrt(Math.pow(ent.getY() - getY(), 2)
 					+ Math.pow(ent.getX() - getX(), 2));
 			double iDP = 1-(scale/WIDTH); //Inverse distance percentage; TODO: Change WIDTH to Radius here when animation is drawn
-			double velX = PUSHBACK * iDP * (stage.getMouseX() - getX())
+			double velX = PUSHBACK * iDP * (ent.getX() - getX())
 					/ scale;
-			double velY = PUSHBACK * iDP * (stage.getMouseY() - getY())
+			double velY = PUSHBACK * iDP * (ent.getY() - getY())
 					/ scale;
 			
 			if(scale < WIDTH*0.02 || scale < HEIGHT*0.02) // TODO: Change for when get circular hitbox.
 			{
 				//Directly apply knockback to avoid divide by zero error
-				velX = PUSHBACK * (stage.getMouseX() - getX())
+				velX = PUSHBACK * (ent.getX() - getX())
 						/ scale;
-				velY = PUSHBACK * (stage.getMouseY() - getY())
+				velY = PUSHBACK * (ent.getY() - getY())
 						/ scale;
 			}
 			
@@ -128,28 +108,6 @@ public class PulseShot extends Projectile
 			}
 			
 			ent.mark();
-			// Check for divide by zero when scaling and pushing away
-=======
-		// TODO: If necessary, change to be that of the pulse shot
-		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
-	}
-
-	public void collide(Entity ent)
-	{
-		setAnimation(SPARK, Content.ELECTRIC_SPARK, 1); // TODO: Change to pulse animations
-
-		if(!ent.isDodging())
-		{
-			// Adds 1.2 times projectile's velocity to entity velocity, does no damage
-			ent.setVelX(ent.getVelX() + this.getVelX() * 1.2);
-			ent.setVelY(ent.getVelY() + this.getVelY() * 1.2);
-
-			// pulse shooting someone into a pit can give you exp
-			ent.mark();
-
-			// Do I have to worry about ground?
-			ent.removeGround();
->>>>>>> 9013d19a612a2e010f6cb3f5741a8886f8ebbc83
 		}
 	}
 
