@@ -53,7 +53,6 @@ public class SmallBot extends Entity
 				// Mark entity as dead if dying animation has finished playing
 				dead = true;
 			}
-
 			return;
 		}
 

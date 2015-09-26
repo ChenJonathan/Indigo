@@ -54,7 +54,6 @@ public class Turret extends Entity
 			{
 				dead = true;
 			}
-
 			return;
 		}
 

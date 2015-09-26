@@ -119,7 +119,13 @@ public abstract class Projectile
 
 	public abstract boolean isActive(); // Able to collide with entities
 
-	public abstract void die(); // Set velocities to zero, change animation, make non-solid
+	// Override if death animation exists
+	public void die()
+	{
+		velX = 0;
+		velY = 0;
+		dead = true;
+	}
 
 	// Used for projectile-wall collision - Checks if the projectile passed through the wall completely
 	public boolean intersects(Line2D.Double line)

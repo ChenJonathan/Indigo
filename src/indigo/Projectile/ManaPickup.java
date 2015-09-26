@@ -73,13 +73,4 @@ public class ManaPickup extends Projectile
 	{
 		return true;
 	}
-
-	public void die()
-	{
-
-		dead = true;
-		setVelX(0);
-		setVelY(0);
-
-	}
 }

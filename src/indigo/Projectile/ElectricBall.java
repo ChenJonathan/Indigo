@@ -59,26 +59,14 @@ public class ElectricBall extends Projectile
 		}
 	}
 
-	// Not used
 	public void collide(Wall wall)
 	{
+		die();
 	}
 
 	// Not used
 	public boolean isActive()
 	{
 		return true;
-	}
-<<<<<<< HEAD
-	
-	public void die() 
-	{
-		dead = true;
-=======
-
-	// Not used
-	public void die()
-	{
->>>>>>> 9013d19a612a2e010f6cb3f5741a8886f8ebbc83
 	}
 }
