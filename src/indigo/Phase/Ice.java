@@ -4,6 +4,7 @@ import indigo.GameState.PlayState;
 import indigo.Skill.EmptySkill;
 import indigo.Skill.Geyser;
 import indigo.Skill.IceArmor;
+import indigo.Skill.IceChains;
 import indigo.Skill.Skill;
 import indigo.Weapon.IceSword;
 
@@ -19,7 +20,7 @@ public class Ice extends Phase
 		maxCooldowns = new int[] { 0, 0, 0, 1800 };
 
 		skills[0] = new EmptySkill(this, 0);
-		skills[1] = new EmptySkill(this, 1);
+		skills[1] = new IceChains(this, 1);
 		skills[2] = new IceArmor(this, 2);
 		skills[3] = new EmptySkill(this, 3);
 		// TODO Implement locked skills
