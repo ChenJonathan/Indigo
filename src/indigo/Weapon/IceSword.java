@@ -142,7 +142,7 @@ public class IceSword extends Weapon
 {
 	private ArrayList<Entity> entitiesHit = new ArrayList<Entity>();
 
-	private final int length = 100;
+	private final int length = 120;
 	private final int radialOffset = 20;
 	private final int yOffset = -20;
 

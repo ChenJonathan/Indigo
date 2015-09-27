@@ -15,6 +15,10 @@ public class Content
 	public static BufferedImage INDICATOR = load("/hud/indicator.png", 100, 100);
 	public static BufferedImage PLAYER_HUD = load("/hud/player_hud.png", 350, 100);
 	public static BufferedImage POINTER = load("/hud/pointer.png", 100, 7);
+	
+	// Items
+	public static BufferedImage[] HEALTH_PICKUP = loadArray("/items/health_pickup.png", 100, 100, 1);
+	public static BufferedImage[] MANA_PICKUP = loadArray("/items/mana_pickup.png", 100, 100, 1);
 
 	// Menus
 	public static BufferedImage BACK_BUTTON = load("/menus/back_button.png", 200, 60);
@@ -49,8 +53,6 @@ public class Content
 	public static BufferedImage[] WATER_PROJECTILE_DEATH = loadArray("/projectiles/water_projectile_death.png", 80, 73, 2);
 	public static BufferedImage[] WATER_PROJECTILE_DEATH_WALL = loadArray("/projectiles/water_projectile_death_wall.png", 80, 73, 2);
 	public static BufferedImage[] WATER_PROJECTILE = loadArray("/projectiles/water_projectile.png", 80, 73, 2);
-	public static BufferedImage[] MANA_PICKUP = loadArray("/projectiles/mana_pickup.png", 100, 100, 1);
-	public static BufferedImage[] HEALTH_PICKUP = loadArray("/projectiles/health_pickup.png", 100, 100, 1);
 	// public static BufferedImage[] ICECHAIN = loadArray("/projectiles/icechain.png", 100, 100, 1);
 
 	// Sprites
@@ -65,8 +67,8 @@ public class Content
 	public static BufferedImage[] PLAYER_MIST = loadArray("/sprites/player_mist.png", 68, 111, 5);
 	public static BufferedImage[] PLAYER_MOVE_LEFT = loadArray("/sprites/player_move_left.png", 68, 111, 8);
 	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player_move_right.png", 68, 111, 8);
-	public static BufferedImage[] SMALL_BOT_DEATH = loadArray("/sprites/small_bot_death.png", 60, 60, 7);
-	public static BufferedImage[] SMALL_BOT_IDLE = loadArray("/sprites/small_bot_idle.png", 60, 60, 1);
+	public static BufferedImage[] SMALL_BOT_DEATH = loadArray("/sprites/bot_death.png", 60, 60, 6);
+	public static BufferedImage[] SMALL_BOT_IDLE = loadArray("/sprites/bot_idle.png", 60, 60, 4);
 	public static BufferedImage[] TURRET_DEATH = loadArray("/sprites/turret_death.png", 100, 130, 31);
 	public static BufferedImage[] TURRET_IDLE = loadArray("/sprites/turret_idle.png", 100, 130, 1);
 

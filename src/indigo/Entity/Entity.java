@@ -1,5 +1,6 @@
 package indigo.Entity;
 
+import indigo.Item.Item;
 import indigo.Landscape.Land;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
@@ -184,6 +185,14 @@ public abstract class Entity
 	public abstract boolean isActive(); // Returns whether the entity is dying or not
 
 	public abstract void die(); // Triggers death animation
+	
+	// Used for entity-item collision
+	public boolean intersects(Item item)
+	{
+		Area entArea = new Area(getHitbox());
+		entArea.intersect(new Area(item.getHitbox()));
+		return !entArea.isEmpty();
+	}
 
 	// Used for entity-entity collision
 	public boolean intersects(Entity ent)
@@ -276,11 +285,11 @@ public abstract class Entity
 		this.velX = velX;
 		if(velX < -Stage.TERMINAL_VELOCITY)
 		{
-			velX = -Stage.TERMINAL_VELOCITY;
+			this.velX = -Stage.TERMINAL_VELOCITY;
 		}
 		else if(velX > Stage.TERMINAL_VELOCITY)
 		{
-			velX = Stage.TERMINAL_VELOCITY;
+			this.velX = Stage.TERMINAL_VELOCITY;
 		}
 	}
 
@@ -294,11 +303,11 @@ public abstract class Entity
 		this.velY = velY;
 		if(velY < -Stage.TERMINAL_VELOCITY)
 		{
-			velY = -Stage.TERMINAL_VELOCITY;
+			this.velY = -Stage.TERMINAL_VELOCITY;
 		}
 		else if(velY > Stage.TERMINAL_VELOCITY)
 		{
-			velY = Stage.TERMINAL_VELOCITY;
+			this.velY = Stage.TERMINAL_VELOCITY;
 		}
 	}
 

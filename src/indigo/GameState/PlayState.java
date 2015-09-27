@@ -3,6 +3,7 @@ package indigo.GameState;
 import indigo.Display.HUD;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
+import indigo.Item.Item;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.Content;
@@ -30,6 +31,7 @@ public class PlayState extends GameState
 	public HUD display;
 
 	private ArrayList<Entity> entities;
+	private ArrayList<Item> items;
 	private ArrayList<Projectile> projectiles;
 	private ArrayList<Platform> platforms;
 	private ArrayList<Wall> walls;
@@ -68,6 +70,7 @@ public class PlayState extends GameState
 
 		// Initialize stage objects
 		entities = stage.getEntities();
+		items = stage.getItems();
 		projectiles = stage.getProjectiles();
 		platforms = stage.getPlatforms();
 		walls = stage.getWalls();
@@ -343,6 +346,14 @@ public class PlayState extends GameState
 	public ArrayList<Entity> getEntities()
 	{
 		return entities;
+	}
+	
+	/**
+	 * @return A list of the items in play.
+	 */
+	public ArrayList<Item> getItems()
+	{
+		return items;
 	}
 
 	/**

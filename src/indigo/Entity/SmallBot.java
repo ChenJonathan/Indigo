@@ -39,7 +39,7 @@ public class SmallBot extends Entity
 
 		timer = DEFAULT_TIMER;
 
-		setAnimation(DEFAULT, Content.SMALL_BOT_IDLE, -1);
+		setAnimation(DEFAULT, Content.SMALL_BOT_IDLE, 3);
 	}
 
 	public void update()
@@ -152,6 +152,6 @@ public class SmallBot extends Entity
 
 	public void die()
 	{
-		setAnimation(DEATH, Content.SMALL_BOT_DEATH, 5);
+		setAnimation(DEATH, Content.SMALL_BOT_DEATH, 4);
 	}
 }
