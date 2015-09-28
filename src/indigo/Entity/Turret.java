@@ -49,7 +49,7 @@ public class Turret extends Entity
 	{
 		if(currentAnimation == DEATH)
 		{
-			animation.update();
+			super.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;

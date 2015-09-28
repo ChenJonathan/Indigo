@@ -46,8 +46,7 @@ public class SmallBot extends Entity
 	{
 		if(currentAnimation == DEATH)
 		{
-			// Run dying animation and don't do anything else
-			animation.update();
+			super.update();
 			if(animation.hasPlayedOnce())
 			{
 				// Mark entity as dead if dying animation has finished playing
@@ -152,6 +151,8 @@ public class SmallBot extends Entity
 
 	public void die()
 	{
+		flying = false;
+		setVelX(0);
 		setAnimation(DEATH, Content.SMALL_BOT_DEATH, 4);
 	}
 }

@@ -89,6 +89,15 @@ public class Beach extends Stage
 		platforms.add(new Platform(2816, 413, 3272, 413));
 		platforms.add(new Platform(3388, 341, 3850, 341));
 		platforms.add(new Platform(5334, 571, 5793, 571));
+		
+		turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
+		entities.add(turretCenter);
+		
+		turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
+		entities.add(turretFlag);
+		
+		pickup = new HealthPickup(this, 2000, 920);
+		items.add(pickup);
 	}
 
 	public void update()
@@ -102,27 +111,26 @@ public class Beach extends Stage
 		}
 		else if(entities.size() - 1 < maxEnemies)
 		{
-			if((turretCenter == null || turretCenter.isDead()) && playState.getTime() % 300 == 0)
+			if((!entities.contains(turretCenter) || turretCenter.isDead()) && playState.getTime() % 300 == 0)
 			{
 				turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 				entities.add(turretCenter);
 			}
-			else if((turretFlag == null || turretFlag.isDead()) && playState.getTime() % 300 == 0)
+			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && playState.getTime() % 300 == 0)
 			{
 				turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 				entities.add(turretFlag);
 			}
 			else
 			{
-				int r = generator.nextInt(200);
-				if(r == 0)
+				if(generator.nextInt(200) == 0)
 				{
 					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
 							SmallBot.BASE_HEALTH));
 				}
 			}
 
-			if((pickup == null || pickup.isDead()) && playState.getTime() % 300 == 0)
+			if((!items.contains(pickup) || pickup.isDead()) && playState.getTime() % 300 == 0)
 			{
 				pickup = new HealthPickup(this, 2000, 920);
 				items.add(pickup);

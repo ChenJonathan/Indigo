@@ -128,7 +128,7 @@ public class Player extends Entity
 		}
 		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
 		{
-			animation.update();
+			super.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;

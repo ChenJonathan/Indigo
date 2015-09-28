@@ -154,114 +154,6 @@ public abstract class Stage
 					}
 				}
 
-				Land ground = null;
-
-				// Entity-platform: Landing on platforms
-				if(ent.getVelY() >= 0 && !ent.isFlying())
-				{
-					for(Platform plat : platforms)
-					{
-						Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight()
-								/ 2, ent.getX(), ent.getY() + ent.getHeight() / 2);
-
-						if(feetTravel.intersectsLine(plat.getLine()))
-						{
-							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
-						}
-						if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX()))
-								&& ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX())
-						{
-							ground = plat;
-						}
-					}
-				}
-
-				// Entity-wall: Colliding with and landing on walls
-				for(Wall wall : walls)
-				{
-					if(wall.killsEntities())
-					{
-						if(ent.intersects(wall.getLine()))
-						{
-							ent.die();
-							trackDeath(wall.getName(), ent);
-						}
-					}
-					if(wall.blocksEntities())
-					{
-						if(!wall.isHorizontal())
-						{
-							// Leftward collision into wall
-							if(ent.isRightOfLine(wall.getLine()))
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setX(ent.getX() + PUSH_AMOUNT);
-									ent.setVelX(Math.max(ent.getVelX(), 0));
-								}
-							}
-							// Rightward collision into wall
-							else
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setX(ent.getX() - PUSH_AMOUNT);
-									ent.setVelX(Math.min(ent.getVelX(), 0));
-								}
-							}
-						}
-						else
-						{
-							// Downward collision into wall
-							if(ent.isAboveLine(wall.getLine()))
-							{
-								if(ent.isFlying())
-								{
-									while(ent.intersects(wall.getLine()))
-									{
-										ent.setY(ent.getY() - PUSH_AMOUNT);
-										ent.setVelY(Math.min(ent.getVelY(), 0));
-									}
-								}
-								else
-								{
-									Line2D.Double line = new Line2D.Double(ent.getX(),
-											ent.getY() - ent.getHeight() / 2, ent.getX(), ent.getY() + ent.getHeight()
-													/ 2);
-
-									if(line.intersectsLine(wall.getLine()))
-									{
-										ent.setY(wall.getSurface(ent.getX()) - ent.getHeight() / 2);
-									}
-									if(Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(wall.getSurface(ent
-											.getX())) && ent.getX() > wall.getMinX() && ent.getX() < wall.getMaxX())
-									{
-										ground = wall;
-									}
-								}
-							}
-							// Upward collision into wall
-							else
-							{
-								while(ent.intersects(wall.getLine()))
-								{
-									ent.setY(ent.getY() + PUSH_AMOUNT);
-									ent.setVelY(Math.max(ent.getVelY(), 0));
-								}
-							}
-						}
-					}
-				}
-
-				if(ground != null)
-				{
-					ent.setGround(ground);
-				}
-				else
-				{
-					ent.removeGround();
-				}
-
 				// Entity-projectile: Taking damage and tracking kills
 				for(int projCount = 0; projCount < projectiles.size(); projCount++)
 				{
@@ -276,6 +168,112 @@ public abstract class Stage
 						}
 					}
 				}
+			}
+
+			Land ground = null;
+
+			Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2,
+					ent.getX(), ent.getY() + ent.getHeight() / 2);
+
+			// Entity-platform: Landing on platforms
+			if(!ent.isFlying())
+			{
+				for(Platform plat : platforms)
+				{
+					if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAboveLine(plat.getLine()))
+					{
+						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+					}
+					if(ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX()
+							&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())))
+					{
+						ground = plat;
+					}
+				}
+			}
+
+			// Entity-wall: Colliding with and landing on walls
+			for(Wall wall : walls)
+			{
+				if(wall.killsEntities())
+				{
+					if(ent.intersects(wall.getLine()))
+					{
+						ent.die();
+						trackDeath(wall.getName(), ent);
+					}
+				}
+				if(wall.blocksEntities())
+				{
+					if(!wall.isHorizontal())
+					{
+						// Leftward collision into wall
+						if(ent.isRightOfLine(wall.getLine()))
+						{
+							while(ent.intersects(wall.getLine()))
+							{
+								ent.setX(ent.getX() + PUSH_AMOUNT);
+								ent.setVelX(Math.max(ent.getVelX(), 0));
+							}
+						}
+						// Rightward collision into wall
+						else
+						{
+							while(ent.intersects(wall.getLine()))
+							{
+								ent.setX(ent.getX() - PUSH_AMOUNT);
+								ent.setVelX(Math.min(ent.getVelX(), 0));
+							}
+						}
+					}
+					else
+					{
+						// Downward collision into wall
+						if(ent.isAboveLine(wall.getLine()))
+						{
+							if(ent.isFlying())
+							{
+								while(ent.intersects(wall.getLine()))
+								{
+									ent.setY(ent.getY() - PUSH_AMOUNT);
+									ent.setVelY(Math.min(ent.getVelY(), 0));
+								}
+							}
+							else
+							{
+								if(feetTravel.intersectsLine(wall.getLine()))
+								{
+									ent.setY(wall.getSurface(ent.getX()) - ent.getHeight() / 2);
+								}
+								if(ent.getX() > wall.getMinX()
+										&& ent.getX() < wall.getMaxX()
+										&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(wall
+												.getSurface(ent.getX())))
+								{
+									ground = wall;
+								}
+							}
+						}
+						// Upward collision into wall
+						else
+						{
+							while(ent.intersects(wall.getLine()))
+							{
+								ent.setY(ent.getY() + PUSH_AMOUNT);
+								ent.setVelY(Math.max(ent.getVelY(), 0));
+							}
+						}
+					}
+				}
+			}
+
+			if(ground != null)
+			{
+				ent.setGround(ground);
+			}
+			else
+			{
+				ent.removeGround();
 			}
 
 			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT
@@ -385,6 +383,7 @@ public abstract class Stage
 		else if(killed.isMarked())
 		{
 			// TODO Gain experienced - Add experience variable to Entity class
+			// Consider doing after death animation
 		}
 	}
 

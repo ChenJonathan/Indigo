@@ -185,7 +185,7 @@ public abstract class Entity
 	public abstract boolean isActive(); // Returns whether the entity is dying or not
 
 	public abstract void die(); // Triggers death animation
-	
+
 	// Used for entity-item collision
 	public boolean intersects(Item item)
 	{
@@ -237,6 +237,16 @@ public abstract class Entity
 		// Formula to calculate if a point is located above the line
 		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
 				- (getPrevY() - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
+		return value * deltaX > 0;
+	}
+
+	// Used for entity-platform collision - Utilizes previous entity feet position
+	public boolean feetIsAboveLine(Line2D.Double line)
+	{
+		double deltaX = line.getP2().getX() - line.getP1().getX();
+		// Formula to calculate if a point is located above the line
+		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
+				- (getPrevY() + getHeight() / 2 - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
 		return value * deltaX > 0;
 	}
 
