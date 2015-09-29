@@ -5,12 +5,13 @@ import indigo.Entity.Player;
 import indigo.Entity.SmallBot;
 import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
+import indigo.Item.HealthPickup;
+import indigo.Item.Item;
 import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
 import indigo.Manager.Content;
-import indigo.Projectile.HealthPickup;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
@@ -49,26 +50,26 @@ public class Beach extends Stage
 		walls.add(new SkyBounds(0, SKY_LIMIT, mapX, SKY_LIMIT));
 
 		// Spike pits
-		walls.add(new Wall(2116, 960, 2116, 1180));
+		walls.add(new Wall(2116, 961, 2116, 1180));
 		walls.add(new SpikePit(2116, 1180, 2353, 1180));
-		walls.add(new Wall(2353, 1180, 2353, 960));
-		walls.add(new Wall(5651, 960, 5651, 1180));
+		walls.add(new Wall(2353, 1180, 2353, 961));
+		walls.add(new Wall(5651, 961, 5651, 1180));
 		walls.add(new SpikePit(5651, 1180, 5888, 1180));
-		walls.add(new Wall(5888, 1180, 5888, 960));
+		walls.add(new Wall(5888, 1180, 5888, 961));
 
 		// Bottom level
-		walls.add(new Wall(0, 960, 2116, 960));
-		walls.add(new Wall(3100, 960, 3100, 1139)); // Swapped with below // TODO Temporary fix
-		walls.add(new Wall(2353, 960, 3100, 960)); // Swapped with above
+		walls.add(new Wall(0, 961, 2116, 961));
+		walls.add(new Wall(3100, 961, 3100, 1139)); // Swapped with below // TODO Temporary fix
+		walls.add(new Wall(2353, 961, 3100, 961)); // Swapped with above
 		walls.add(new Wall(3100, 1139, 4220, 1139));
 		walls.add(new Wall(4220, 1139, 4220, 1000));
 		walls.add(new Wall(3843, 1000, 4220, 1000));
-		walls.add(new Wall(3843, 1000, 3924, 960));
-		walls.add(new Wall(3924, 960, 5651, 960));
-		walls.add(new Wall(5888, 960, 6400, 960));
+		walls.add(new Wall(3843, 1000, 3924, 961));
+		walls.add(new Wall(3924, 961, 5651, 961));
+		walls.add(new Wall(5888, 961, 6400, 961));
 
 		// Platforms
-		platforms.add(new Platform(3218, 960, 3735, 960));
+		platforms.add(new Platform(3218, 961, 3735, 961));
 		platforms.add(new Platform(1169, 850, 1420, 850));
 		platforms.add(new Platform(1398, 736, 1649, 736));
 		platforms.add(new Platform(1736, 842, 1980, 842));
@@ -76,9 +77,9 @@ public class Beach extends Stage
 		platforms.add(new Platform(6318, 355, 6400, 355));
 
 		// Wood structure
-		walls.add(new Wall(4025, 960, 4357, 693));
+		walls.add(new Wall(4025, 961, 4357, 693));
 		walls.add(new Wall(4357, 693, 4753, 693));
-		walls.add(new Wall(4753, 693, 5280, 960));
+		walls.add(new Wall(4753, 693, 5280, 961));
 		platforms.add(new Platform(4753, 693, 5137, 467));
 		platforms.add(new Platform(4848, 467, 5246, 467));
 
@@ -88,6 +89,15 @@ public class Beach extends Stage
 		platforms.add(new Platform(2816, 413, 3272, 413));
 		platforms.add(new Platform(3388, 341, 3850, 341));
 		platforms.add(new Platform(5334, 571, 5793, 571));
+		
+		turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
+		entities.add(turretCenter);
+		
+		turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
+		entities.add(turretFlag);
+		
+		pickup = new HealthPickup(this, 2000, 920);
+		items.add(pickup);
 	}
 
 	public void update()
@@ -101,30 +111,29 @@ public class Beach extends Stage
 		}
 		else if(entities.size() - 1 < maxEnemies)
 		{
-			if((turretCenter == null || turretCenter.isDead()) && playState.getTime() % 300 == 0)
+			if((!entities.contains(turretCenter) || turretCenter.isDead()) && playState.getTime() % 300 == 0)
 			{
 				turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 				entities.add(turretCenter);
 			}
-			else if((turretFlag == null || turretFlag.isDead()) && playState.getTime() % 300 == 0)
+			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && playState.getTime() % 300 == 0)
 			{
 				turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 				entities.add(turretFlag);
 			}
 			else
 			{
-				int r = generator.nextInt(200);
-				if(r == 0)
+				if(generator.nextInt(200) == 0)
 				{
 					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
 							SmallBot.BASE_HEALTH));
 				}
 			}
 
-			if((pickup == null || pickup.isDead()) && playState.getTime() % 300 == 0)
+			if((!items.contains(pickup) || pickup.isDead()) && playState.getTime() % 300 == 0)
 			{
-				pickup = new HealthPickup(player, 2000, 920, 0, 0, HealthPickup.HEALTH);
-				projectiles.add(pickup);
+				pickup = new HealthPickup(this, 2000, 920);
+				items.add(pickup);
 			}
 		}
 	}
@@ -133,14 +142,6 @@ public class Beach extends Stage
 	{
 		g.drawImage(Content.STAGE_BEACH, 0, 0, 6400, 1200, null);
 
-		for(Entity ent : entities)
-		{
-			// Don't render if in pipe
-			if(!(ent.getX() > 3834 && ent.getX() < 4122 && ent.getY() > 995 && ent.getY() < 1140))
-			{
-				ent.render(g);
-			}
-		}
 		for(Projectile proj : projectiles)
 		{
 			// Don't render if in pipe
@@ -149,6 +150,19 @@ public class Beach extends Stage
 				proj.render(g);
 			}
 		}
+		for(Item item : items)
+		{
+			item.render(g);
+		}
+		for(Entity ent : entities)
+		{
+			// Don't render if in pipe
+			if(!(ent.getX() > 3834 && ent.getX() < 4122 && ent.getY() > 995 && ent.getY() < 1140))
+			{
+				ent.render(g);
+			}
+		}
+		player.render(g); // TODO Don't render player twice
 	}
 
 	public void trackDeath(String killer, Entity killed)

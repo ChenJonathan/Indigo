@@ -25,6 +25,9 @@ public class GeyserBase extends Projectile
 		height = HEIGHT;
 		solid = false;
 		flying = true;
+		
+		setX(Math.max(getX(), getWidth() / 2));
+		setX(Math.min(getX(), stage.getMapX() - getWidth() / 2));
 
 		setAnimation(DEFAULT, Content.GEYSER_BASE, -1);
 	}
