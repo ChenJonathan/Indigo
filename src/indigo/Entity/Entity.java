@@ -319,6 +319,11 @@ public abstract class Entity
 		{
 			this.velY = Stage.TERMINAL_VELOCITY;
 		}
+		
+		if(velY < 0)
+		{
+			removeGround();
+		}
 	}
 
 	public double getPrevX()

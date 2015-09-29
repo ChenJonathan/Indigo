@@ -184,7 +184,7 @@ public abstract class Stage
 					{
 						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
 					}
-					if(ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX()
+					if(ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX() && ent.getVelY() >= 0
 							&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())))
 					{
 						ground = plat;

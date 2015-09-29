@@ -22,7 +22,7 @@ public class Water extends Phase
 
 		skills[0] = new Geyser(this, 0);
 		skills[1] = new Pulse(this, 1);
-		skills[2] = new EmptySkill(this, 2);
+		skills[2] = new EmptySkill(this, 2); 
 		skills[3] = new EmptySkill(this, 3);
 		// TODO Implement locked skills
 	}

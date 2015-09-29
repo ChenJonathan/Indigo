@@ -162,6 +162,7 @@ public class Beach extends Stage
 				ent.render(g);
 			}
 		}
+		player.render(g); // TODO Don't render player twice
 	}
 
 	public void trackDeath(String killer, Entity killed)

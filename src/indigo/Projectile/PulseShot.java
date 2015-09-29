@@ -81,7 +81,6 @@ public class PulseShot extends Projectile
 		{
 			setAnimation(SPARK, Content.ELECTRIC_SPARK, -1); // TODO: Change to pulse animations
 
-			ent.removeGround();
 			// Push enemy away, further when closer
 			double scale = Math.sqrt(Math.pow(ent.getY() - getY(), 2) + Math.pow(ent.getX() - getX(), 2));
 			double iDP = 1 - (scale / WIDTH); // Inverse distance percentage; TODO: Change WIDTH to Radius here when
