@@ -1,11 +1,15 @@
 package indigo.Manager;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Handles all of the keyboard and mouse input for the application.
  */
-public class InputManager
+public class InputManager implements KeyListener, MouseListener, MouseMotionListener
 {
 	public static final int NUM_KEYS = 13;
 
@@ -39,7 +43,7 @@ public class InputManager
 	public InputManager()
 	{
 	}
-
+	
 	/**
 	 * Updates mouse and key states. Previous mouse position is tracked to help check for changes in mouse state.
 	 */
@@ -87,6 +91,151 @@ public class InputManager
 			keyState[SHIFT] = state;
 		else if(key == KeyEvent.VK_ESCAPE)
 			keyState[ESCAPE] = state;
+	}
+	
+	/**
+	 * Not used.
+	 * 
+	 * @param key The key pressed.
+	 */
+	@Override
+	public void keyTyped(KeyEvent key){}
+
+	/**
+	 * Detects key press.
+	 * 
+	 * @param key The key being pressed.
+	 */
+	@Override
+	public void keyPressed(KeyEvent key)
+	{
+		this.keySet(key.getKeyCode(), true);
+	}
+
+	/**
+	 * Detects key release.
+	 * 
+	 * @param key The key being released.
+	 */
+	@Override
+	public void keyReleased(KeyEvent key)
+	{
+		this.keySet(key.getKeyCode(), false);
+	}
+	
+	/**
+	 * Checks if key is pressed.
+	 * 
+	 * @param i The id of the key in question.
+	 * @return Whether that key is pressed.
+	 */
+	public boolean keyDown(int i)
+	{
+		return keyState[i];
+	}
+
+	/**
+	 * Checks if a key was pressed recently.
+	 * 
+	 * @param i The id of the key in question.
+	 * @return Whether that key was pressed recently.
+	 */
+	public boolean keyPress(int i)
+	{
+		return keyState[i] && !prevKeyState[i];
+	}
+
+	/**
+	 * Checks if a key was released recently.
+	 * 
+	 * @param i The id of the key in question.
+	 * @return Whether that key was released recently.
+	 */
+	public boolean keyRelease(int i)
+	{
+		return !keyState[i] && prevKeyState[i];
+	}
+	
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseEntered(MouseEvent e){}
+
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseExited(MouseEvent e){}
+
+	/**
+	 * Detects mouse click.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		if(e.getButton() == MouseEvent.BUTTON3)
+		{
+			this.mouseRightSet(true);
+		}
+		else
+		{
+			this.mouseLeftSet(true);
+		}
+	}
+
+	/**
+	 * Detects mouse release.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		if(e.getButton() == MouseEvent.BUTTON3)
+		{
+			this.mouseRightSet(false);
+		}
+		else
+		{
+			this.mouseLeftSet(false);
+		}
+	}
+
+	/**
+	 * Not used.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseClicked(MouseEvent e){}
+
+	/**
+	 * Handles the mouse being dragged. Interpreted same as moving.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseDragged(MouseEvent e)
+	{
+		this.mouseSet(e.getX(), e.getY());
+	}
+
+	/**
+	 * Handles the mouse being moved. Interpreted same as dragging.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		this.mouseSet(e.getX(), e.getY());
 	}
 
 	/**
@@ -199,38 +348,5 @@ public class InputManager
 	public int mouseY()
 	{
 		return mouseY;
-	}
-
-	/**
-	 * Checks if key is pressed.
-	 * 
-	 * @param i The id of the key in question.
-	 * @return Whether that key is pressed.
-	 */
-	public boolean keyDown(int i)
-	{
-		return keyState[i];
-	}
-
-	/**
-	 * Checks if a key was pressed recently.
-	 * 
-	 * @param i The id of the key in question.
-	 * @return Whether that key was pressed recently.
-	 */
-	public boolean keyPress(int i)
-	{
-		return keyState[i] && !prevKeyState[i];
-	}
-
-	/**
-	 * Checks if a key was released recently.
-	 * 
-	 * @param i The id of the key in question.
-	 * @return Whether that key was released recently.
-	 */
-	public boolean keyRelease(int i)
-	{
-		return !keyState[i] && prevKeyState[i];
 	}
 }

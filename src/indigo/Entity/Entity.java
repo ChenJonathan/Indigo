@@ -53,18 +53,18 @@ public abstract class Entity
 	protected boolean dead;
 
 	// Subclasses - Initialize name, width, height, solid, flying, frictionless, pushability, move speed, jump speed
-	public Entity(Stage stage, double x, double y, int health)
+	public Entity(Stage eStage, double eX, double eY, int eHealth)
 	{
-		this.stage = stage;
+		this.stage = eStage;
 		name = "";
 
 		velX = velY = 0;
 
-		this.x = prevX = x;
-		this.y = prevY = y;
-		travel = new Line2D.Double(prevX, prevY, x, y); // Line formed by previous and current position
+		this.x = prevX = eX;
+		this.y = prevY = eY;
+		travel = new Line2D.Double(prevX, prevY, eX, eY); // Line formed by previous and current position
 
-		maxHealth = this.health = health;
+		maxHealth = this.health = eHealth;
 
 		canAttack = true;
 		canMove = true;
@@ -249,9 +249,9 @@ public abstract class Entity
 		return x;
 	}
 
-	public void setX(double x)
+	public void setX(double newX)
 	{
-		this.x = x;
+		this.x = newX;
 		updateTravelLine();
 	}
 
@@ -260,9 +260,9 @@ public abstract class Entity
 		return y;
 	}
 
-	public void setY(double y)
+	public void setY(double newY)
 	{
-		this.y = y;
+		this.y = newY;
 		updateTravelLine();
 	}
 
@@ -271,16 +271,16 @@ public abstract class Entity
 		return velX;
 	}
 
-	public void setVelX(double velX)
+	public void setVelX(double vlX)
 	{
-		this.velX = velX;
-		if(velX < -Stage.TERMINAL_VELOCITY)
+		this.velX = vlX;
+		if(vlX < -Stage.TERMINAL_VELOCITY)
 		{
-			velX = -Stage.TERMINAL_VELOCITY;
+			this.velX = -Stage.TERMINAL_VELOCITY;
 		}
-		else if(velX > Stage.TERMINAL_VELOCITY)
+		else if(vlX > Stage.TERMINAL_VELOCITY)
 		{
-			velX = Stage.TERMINAL_VELOCITY;
+			this.velX = Stage.TERMINAL_VELOCITY;
 		}
 	}
 
@@ -289,16 +289,16 @@ public abstract class Entity
 		return velY;
 	}
 
-	public void setVelY(double velY)
+	public void setVelY(double vlY)
 	{
-		this.velY = velY;
-		if(velY < -Stage.TERMINAL_VELOCITY)
+		this.velY = vlY;
+		if(vlY < -Stage.TERMINAL_VELOCITY)
 		{
-			velY = -Stage.TERMINAL_VELOCITY;
+			this.velY = -Stage.TERMINAL_VELOCITY;
 		}
-		else if(velY > Stage.TERMINAL_VELOCITY)
+		else if(vlY > Stage.TERMINAL_VELOCITY)
 		{
-			velY = Stage.TERMINAL_VELOCITY;
+			this.velY = Stage.TERMINAL_VELOCITY;
 		}
 	}
 
@@ -347,14 +347,14 @@ public abstract class Entity
 		return health;
 	}
 
-	public void setHealth(int health)
+	public void setHealth(int hlth)
 	{
-		this.health = health;
+		this.health = hlth;
 		if(this.health > maxHealth)
 		{
 			this.health = maxHealth;
 		}
-		else if(health <= 0)
+		else if(hlth <= 0)
 		{
 			this.health = 0;
 			die();
@@ -376,10 +376,10 @@ public abstract class Entity
 		return ground != null;
 	}
 
-	public void setGround(Land ground)
+	public void setGround(Land grnd)
 	{
 		velY = 0;
-		this.ground = ground;
+		this.ground = grnd;
 	}
 
 	public void removeGround()
@@ -416,9 +416,9 @@ public abstract class Entity
 		return canAttack;
 	}
 
-	public void canAttack(boolean canAttack)
+	public void canAttack(boolean cnAttack)
 	{
-		this.canAttack = canAttack;
+		this.canAttack = cnAttack;
 	}
 
 	public boolean canMove()
@@ -426,9 +426,9 @@ public abstract class Entity
 		return canMove;
 	}
 
-	public void canMove(boolean canMove)
+	public void canMove(boolean cnMove)
 	{
-		this.canMove = canMove;
+		this.canMove = cnMove;
 	}
 
 	public boolean isFriendly()
