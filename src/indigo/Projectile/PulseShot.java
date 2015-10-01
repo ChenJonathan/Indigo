@@ -49,7 +49,7 @@ public class PulseShot extends Projectile
 		// Kill projectiles - projectile.die()
 		for(int count = 0; count < stage.getProjectiles().size(); count++)
 		{
-			if(intersects(stage.getProjectiles().get(count)))
+			if(intersects(stage.getProjectiles().get(count)) && !(stage.getProjectiles().get(count).getX() == this.getX() && stage.getProjectiles().get(count).getY() == this.getY()))
 			{
 				stage.getProjectiles().get(count).die();
 			}
@@ -95,8 +95,8 @@ public class PulseShot extends Projectile
 				velY = PUSHBACK * (ent.getY() - getY()) / scale;
 			}
 
-			ent.setVelX(velX); // velocity is set rather than added on
-			ent.setVelY(velY);
+			ent.setVelX(velX + ent.getVelX()); // velocity is added on rather than set
+			ent.setVelY(velY + ent.getVelY());
 
 			if(!ent.isDodging()) // damaged, won't hurt if is dodging, scale by distance
 			{
@@ -116,5 +116,11 @@ public class PulseShot extends Projectile
 	public boolean isActive()
 	{
 		return true;
+	}
+	
+	@Override
+	public String getName()
+	{
+		return "pulse";
 	}
 }

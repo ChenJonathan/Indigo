@@ -17,7 +17,6 @@ public class Pulse extends Skill
 	public void update()
 	{
 		super.update();
-		
 		player.canMove(false);
 		player.canAttack(false);
 		player.setMana(player.getMana() - manaCost);
