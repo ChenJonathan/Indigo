@@ -1,5 +1,6 @@
 package indigo.Entity;
 
+import indigo.Item.Item;
 import indigo.Landscape.Land;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
@@ -185,6 +186,14 @@ public abstract class Entity
 
 	public abstract void die(); // Triggers death animation
 
+	// Used for entity-item collision
+	public boolean intersects(Item item)
+	{
+		Area entArea = new Area(getHitbox());
+		entArea.intersect(new Area(item.getHitbox()));
+		return !entArea.isEmpty();
+	}
+
 	// Used for entity-entity collision
 	public boolean intersects(Entity ent)
 	{
@@ -228,6 +237,16 @@ public abstract class Entity
 		// Formula to calculate if a point is located above the line
 		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
 				- (getPrevY() - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
+		return value * deltaX > 0;
+	}
+
+	// Used for entity-platform collision - Utilizes previous entity feet position
+	public boolean feetIsAboveLine(Line2D.Double line)
+	{
+		double deltaX = line.getP2().getX() - line.getP1().getX();
+		// Formula to calculate if a point is located above the line
+		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
+				- (getPrevY() + getHeight() / 2 - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
 		return value * deltaX > 0;
 	}
 
@@ -276,11 +295,11 @@ public abstract class Entity
 		this.velX = velX;
 		if(velX < -Stage.TERMINAL_VELOCITY)
 		{
-			velX = -Stage.TERMINAL_VELOCITY;
+			this.velX = -Stage.TERMINAL_VELOCITY;
 		}
 		else if(velX > Stage.TERMINAL_VELOCITY)
 		{
-			velX = Stage.TERMINAL_VELOCITY;
+			this.velX = Stage.TERMINAL_VELOCITY;
 		}
 	}
 
@@ -294,11 +313,16 @@ public abstract class Entity
 		this.velY = velY;
 		if(velY < -Stage.TERMINAL_VELOCITY)
 		{
-			velY = -Stage.TERMINAL_VELOCITY;
+			this.velY = -Stage.TERMINAL_VELOCITY;
 		}
 		else if(velY > Stage.TERMINAL_VELOCITY)
 		{
-			velY = Stage.TERMINAL_VELOCITY;
+			this.velY = Stage.TERMINAL_VELOCITY;
+		}
+		
+		if(velY < 0)
+		{
+			removeGround();
 		}
 	}
 

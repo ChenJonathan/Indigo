@@ -9,11 +9,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -22,7 +17,7 @@ import javax.swing.*;
  * Sets up the application as a game. Mostly does scary swing stuff.
  */
 @SuppressWarnings("serial")
-public class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener
+public class Game extends JPanel implements Runnable
 {
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = WIDTH / 16 * 9;
@@ -65,9 +60,9 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		super.addNotify();
 		if(thread == null)
 		{
-			addKeyListener(this);
-			addMouseListener(this);
-			addMouseMotionListener(this);
+			addKeyListener(input);
+			addMouseListener(input);
+			addMouseMotionListener(input);
 			thread = new Thread(this);
 			thread.start();
 		}
@@ -149,126 +144,6 @@ public class Game extends JPanel implements Runnable, KeyListener, MouseListener
 		Graphics g2 = getGraphics();
 		g2.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
 		g2.dispose();
-	}
-
-	/**
-	 * Not used.
-	 * 
-	 * @param key The key pressed.
-	 */
-	@Override
-	public void keyTyped(KeyEvent key)
-	{
-	}
-
-	/**
-	 * Detects key press.
-	 * 
-	 * @param key The key being pressed.
-	 */
-	@Override
-	public void keyPressed(KeyEvent key)
-	{
-		input.keySet(key.getKeyCode(), true);
-	}
-
-	/**
-	 * Detects key release.
-	 * 
-	 * @param key The key being released.
-	 */
-	@Override
-	public void keyReleased(KeyEvent key)
-	{
-		input.keySet(key.getKeyCode(), false);
-	}
-
-	/**
-	 * Not used.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-	}
-
-	/**
-	 * Not used.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-	}
-
-	/**
-	 * Detects mouse click.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		if(e.getButton() == MouseEvent.BUTTON3)
-		{
-			input.mouseRightSet(true);
-		}
-		else
-		{
-			input.mouseLeftSet(true);
-		}
-	}
-
-	/**
-	 * Detects mouse release.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		if(e.getButton() == MouseEvent.BUTTON3)
-		{
-			input.mouseRightSet(false);
-		}
-		else
-		{
-			input.mouseLeftSet(false);
-		}
-	}
-
-	/**
-	 * Not used.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-	}
-
-	/**
-	 * Handles the mouse being dragged. Interpreted same as moving.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseDragged(MouseEvent e)
-	{
-		input.mouseSet(e.getX(), e.getY());
-	}
-
-	/**
-	 * Handles the mouse being moved. Interpreted same as dragging.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseMoved(MouseEvent e)
-	{
-		input.mouseSet(e.getX(), e.getY());
 	}
 
 	/**

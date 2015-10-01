@@ -37,7 +37,7 @@ public class Ice extends Phase
 
 	public boolean canShift()
 	{
-		return true; // TODO Finish + isActive() call
+		return true; // TODO Finish
 	}
 
 	public void unlockSkill()

@@ -128,7 +128,7 @@ public class Player extends Entity
 		}
 		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
 		{
-			animation.update();
+			super.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;
@@ -177,40 +177,89 @@ public class Player extends Entity
 			{
 				if(isFacingRight() && currentAnimation != CROUCH_RIGHT)
 				{
-					setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
+					if(iceArmor)
+					{
+						setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT_ARMOR, -1);
+					}
+					else
+					{
+						setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
+					}
 				}
 				else if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
 				{
-					setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
+					if(iceArmor)
+					{
+						setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT_ARMOR, -1);
+					}
+					else
+					{
+						setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
+					}
 				}
 			}
 			else if(ground == null)
 			{
 				if(isFacingRight() && currentAnimation != JUMP_RIGHT)
 				{
-					setAnimation(JUMP_RIGHT, Content.PLAYER_JUMP_RIGHT, -1);
+					if(iceArmor)
+					{
+						setAnimation(JUMP_RIGHT, Content.PLAYER_JUMP_RIGHT_ARMOR, -1);
+					}
+					else
+					{
+						setAnimation(JUMP_RIGHT, Content.PLAYER_JUMP_RIGHT, -1);
+					}
 				}
 				else if(!isFacingRight() && currentAnimation != JUMP_LEFT)
 				{
-					setAnimation(JUMP_LEFT, Content.PLAYER_JUMP_LEFT, -1);
+					if(iceArmor)
+					{
+						setAnimation(JUMP_LEFT, Content.PLAYER_JUMP_LEFT_ARMOR, -1);
+					}
+					else
+					{
+						setAnimation(JUMP_LEFT, Content.PLAYER_JUMP_LEFT, -1);
+					}
 				}
 			}
 			else if(getVelX() == 0)
 			{
 				if(isFacingRight() && currentAnimation != GROUND_RIGHT)
 				{
-					setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 3);
+					if(iceArmor)
+					{
+						setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT_ARMOR, 3);
+					}
+					else
+					{
+						setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 3);
+					}
 				}
 				else if(!isFacingRight() && currentAnimation != GROUND_LEFT)
 				{
-					setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 3);
+					if(iceArmor)
+					{
+						setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT_ARMOR, 3);
+					}
+					else
+					{
+						setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 3);
+					}
 				}
 			}
 			else if(isFacingRight())
 			{
 				if(currentAnimation != MOVE_RIGHT)
 				{
-					setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT, 2);
+					if(iceArmor)
+					{
+						setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT_ARMOR, 2);
+					}
+					else
+					{
+						setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT, 2);
+					}
 				}
 
 				if(getVelX() < 0)
@@ -226,7 +275,14 @@ public class Player extends Entity
 			{
 				if(currentAnimation != MOVE_LEFT)
 				{
-					setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT, 2);
+					if(iceArmor)
+					{
+						setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT_ARMOR, 2);
+					}
+					else
+					{
+						setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT, 2);
+					}
 				}
 
 				if(getVelX() > 0)
@@ -268,7 +324,14 @@ public class Player extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		if(isCrouching())
+		{
+			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2 + 25, getWidth(), getHeight() - 25);
+		}
+		else
+		{
+			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		}
 	}
 
 	public void attackMain()
@@ -378,14 +441,13 @@ public class Player extends Entity
 
 	public boolean canJump()
 	{
-		return isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
+		return canMove() && isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
 	}
 
 	public void jump()
 	{
 		setVelY(-INITIAL_JUMP_SPEED);
 
-		removeGround();
 		if(isCrouching())
 		{
 			uncrouch();
@@ -396,7 +458,7 @@ public class Player extends Entity
 
 	public boolean canJumpMore()
 	{
-		return jumpTime > 0;
+		return canMove() && jumpTime > 0;
 	}
 
 	public void jumpMore()
@@ -406,7 +468,7 @@ public class Player extends Entity
 
 	public boolean canCrouch()
 	{
-		return !isCrouching() && isGrounded() && canMove() && stamina >= CROUCH_STAMINA_REQUIREMENT;
+		return canMove() && !isCrouching() && isGrounded() && stamina >= CROUCH_STAMINA_REQUIREMENT;
 	}
 
 	public void crouch()
@@ -437,11 +499,6 @@ public class Player extends Entity
 			canAttack(false);
 			canMove(false);
 
-			if(isCrouching())
-			{
-				uncrouch();
-			}
-
 			setStamina(stamina - SHIFT_STAMINA_COST);
 		}
 		else
@@ -462,11 +519,25 @@ public class Player extends Entity
 		
 		if(isFacingRight())
 		{
-			setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
+			if(iceArmor)
+			{
+				setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT_ARMOR, 2);
+			}
+			else
+			{
+				setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
+			}
 		}
 		else
 		{
-			setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
+			if(iceArmor)
+			{
+				setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT_ARMOR, 2);
+			}
+			else
+			{
+				setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
+			}
 		}
 
 		if(phase.skillSelected())
@@ -582,6 +653,15 @@ public class Player extends Entity
 		super.setGround(ground);
 		canDoubleJump = true;
 	}
+	
+	public void canMove(boolean canMove)
+	{
+		super.canMove(canMove);
+		if(!canMove)
+		{
+			uncrouch();
+		}
+	}
 
 	public boolean isCrouching()
 	{
@@ -590,7 +670,7 @@ public class Player extends Entity
 
 	public boolean canDoubleJump()
 	{
-		return phase.id() == Phase.ICE && canDoubleJump;
+		return canMove() && phase.id() == Phase.ICE && canDoubleJump;
 	}
 
 	public void canDoubleJump(boolean canDoubleJump)
@@ -606,6 +686,7 @@ public class Player extends Entity
 	public void setIceArmor(boolean active)
 	{
 		iceArmor = active;
+		currentAnimation = -1; // Forces animation reset
 	}
 
 	public boolean getIceChains()

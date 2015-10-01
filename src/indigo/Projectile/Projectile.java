@@ -223,6 +223,14 @@ public abstract class Projectile
 	public void setVelX(double velX)
 	{
 		this.velX = velX;
+		if(velX < -Stage.TERMINAL_VELOCITY)
+		{
+			this.velX = -Stage.TERMINAL_VELOCITY;
+		}
+		else if(velX > Stage.TERMINAL_VELOCITY)
+		{
+			this.velX = Stage.TERMINAL_VELOCITY;
+		}
 	}
 
 	public double getVelY()
@@ -233,6 +241,14 @@ public abstract class Projectile
 	public void setVelY(double velY)
 	{
 		this.velY = velY;
+		if(velY < -Stage.TERMINAL_VELOCITY)
+		{
+			this.velY = -Stage.TERMINAL_VELOCITY;
+		}
+		else if(velY > Stage.TERMINAL_VELOCITY)
+		{
+			this.velY = Stage.TERMINAL_VELOCITY;
+		}
 	}
 
 	public boolean isFacingRight()
