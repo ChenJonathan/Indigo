@@ -23,7 +23,7 @@ public class IceSword extends Weapon
 	private double swordAngle;
 	private double angleOffset = 0.0;
 	private boolean slashMode = false;
-	private final double slashAngle = 45.0;
+	private final double slashAngle = 90.0;
 
 	private int beginSwordX = 0;
 	private int beginSwordY = 0;
@@ -127,7 +127,6 @@ public class IceSword extends Weapon
 		mouseAngle = -Math.atan2((yCoord - user.getY()), (xCoord - user.getX()));
 		mouseAngle = (mouseAngle < 0 ? mouseAngle + 2 * Math.PI : mouseAngle);
 		mouseAngle = mouseAngle % (2 * Math.PI);
-		System.out.println(Math.toDegrees(mouseAngle));
 		return mouseAngle;
 	}
 	

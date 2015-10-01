@@ -127,37 +127,34 @@ public class PlayState extends GameState
 		if(player.isActive())
 		{
 			// Movement
-			if(player.canMove())
+			if(input.keyDown(InputManager.W) && player.canJump())
 			{
-				if(input.keyDown(InputManager.W) && player.canJump())
-				{
-					player.jump();
-				}
-				else if(input.keyPress(InputManager.W) && player.canDoubleJump())
-				{
-					player.canDoubleJump(false);
-					player.jump();
-				}
-				else if(input.keyDown(InputManager.W) && player.canJumpMore())
-				{
-					player.jumpMore();
-				}
-				if(input.keyDown(InputManager.S) && player.canCrouch())
-				{
-					player.crouch();
-				}
-				else if(input.keyRelease(InputManager.S))
-				{
-					player.uncrouch();
-				}
-				if(input.keyDown(InputManager.A) && !player.isCrouching())
-				{
-					player.left();
-				}
-				if(input.keyDown(InputManager.D) && !player.isCrouching())
-				{
-					player.right();
-				}
+				player.jump();
+			}
+			else if(input.keyPress(InputManager.W) && player.canDoubleJump())
+			{
+				player.canDoubleJump(false);
+				player.jump();
+			}
+			else if(input.keyDown(InputManager.W) && player.canJumpMore())
+			{
+				player.jumpMore();
+			}
+			if(input.keyDown(InputManager.S) && player.canCrouch())
+			{
+				player.crouch();
+			}
+			else if(input.keyRelease(InputManager.S))
+			{
+				player.uncrouch();
+			}
+			if(input.keyDown(InputManager.A) && player.canMove() && !player.isCrouching())
+			{
+				player.left();
+			}
+			if(input.keyDown(InputManager.D) && player.canMove() && !player.isCrouching())
+			{
+				player.right();
 			}
 			if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
 			{

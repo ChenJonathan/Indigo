@@ -324,7 +324,14 @@ public class Player extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		if(isCrouching())
+		{
+			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2 + 25, getWidth(), getHeight() - 25);
+		}
+		else
+		{
+			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		}
 	}
 
 	public void attackMain()
@@ -434,7 +441,7 @@ public class Player extends Entity
 
 	public boolean canJump()
 	{
-		return isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
+		return canMove() && isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
 	}
 
 	public void jump()
@@ -451,7 +458,7 @@ public class Player extends Entity
 
 	public boolean canJumpMore()
 	{
-		return jumpTime > 0;
+		return canMove() && jumpTime > 0;
 	}
 
 	public void jumpMore()
@@ -461,7 +468,7 @@ public class Player extends Entity
 
 	public boolean canCrouch()
 	{
-		return !isCrouching() && isGrounded() && canMove() && stamina >= CROUCH_STAMINA_REQUIREMENT;
+		return canMove() && !isCrouching() && isGrounded() && stamina >= CROUCH_STAMINA_REQUIREMENT;
 	}
 
 	public void crouch()
@@ -491,11 +498,6 @@ public class Player extends Entity
 
 			canAttack(false);
 			canMove(false);
-
-			if(isCrouching())
-			{
-				uncrouch();
-			}
 
 			setStamina(stamina - SHIFT_STAMINA_COST);
 		}
@@ -651,6 +653,15 @@ public class Player extends Entity
 		super.setGround(ground);
 		canDoubleJump = true;
 	}
+	
+	public void canMove(boolean canMove)
+	{
+		super.canMove(canMove);
+		if(!canMove)
+		{
+			uncrouch();
+		}
+	}
 
 	public boolean isCrouching()
 	{
@@ -659,7 +670,7 @@ public class Player extends Entity
 
 	public boolean canDoubleJump()
 	{
-		return phase.id() == Phase.ICE && canDoubleJump;
+		return canMove() && phase.id() == Phase.ICE && canDoubleJump;
 	}
 
 	public void canDoubleJump(boolean canDoubleJump)
