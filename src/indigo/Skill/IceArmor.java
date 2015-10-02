@@ -8,7 +8,7 @@ public class IceArmor extends Skill
 	public IceArmor(Phase phase, int position)
 	{
 		super(phase, position);
-		id = Skill.ICE_ARMOR;
+		id = Skill.ARMOR;
 		castOnSelect = true;
 	}
 
@@ -29,7 +29,7 @@ public class IceArmor extends Skill
 
 	public boolean canCast()
 	{
-		return(player.getMana() > 0 && player.canAttack());
+		return player.getMana() > 0 && player.canAttack();
 	}
 
 	public void endCast()
