@@ -433,8 +433,10 @@ public abstract class Stage
 	}
 
 	// Sets camera boundaries when initializing the class
-	public void setOffsets()
+	public void setOffsets(int mapX, int mapY)
 	{
+		this.mapX = mapX;
+		this.mapY = mapY;
 		maxOffsetX = mapX - Game.WIDTH;
 		maxOffsetY = mapY - Game.HEIGHT;
 		minOffsetX = 0;

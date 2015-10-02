@@ -110,15 +110,19 @@ public class IceChainHook extends Projectile
 				dead = true;
 
 				// Set entity next to player if the hook reaches the player
-				if(getX() > stage.getPlayer().getX())
+				if(attached != null)
 				{
-					attached.setX(stage.getPlayer().getX() + 30);
+					if(getX() > stage.getPlayer().getX())
+					{
+						attached.setX(stage.getPlayer().getX() + 30);
+					}
+					else
+					{
+						attached.setX(stage.getPlayer().getX() - 30);
+					}
+					attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight()
+							/ 2);
 				}
-				else
-				{
-					attached.setX(stage.getPlayer().getX() - 30);
-				}
-				attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight() / 2);
 
 				return;
 			}
@@ -136,6 +140,8 @@ public class IceChainHook extends Projectile
 
 			attached.setVelX(0);
 			attached.setVelY(0);
+			
+			attached.removeGround();
 
 			// Checks if the attached entity is colliding with any walls
 			for(Wall wall : stage.getWalls())

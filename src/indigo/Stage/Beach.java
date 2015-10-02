@@ -40,9 +40,7 @@ public class Beach extends Stage
 		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		mapX = 6400;
-		mapY = 1200;
-		setOffsets();
+		setOffsets(6400, 1200);
 
 		// Boundaries
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
