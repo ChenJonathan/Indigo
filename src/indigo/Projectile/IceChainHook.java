@@ -27,7 +27,7 @@ public class IceChainHook extends Projectile
 	public static final int HEIGHT = 100;
 	public static final double SPEED = 70;
 	public static final int EXTEND_DURATION = 20; // Time before hook is recalled
-	public static final int RETURN_DURATION = 20; // Time for hook to return
+	public static final int RETURN_DURATION = 30; // Time for hook to return
 
 	public IceChainHook(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
@@ -75,6 +75,7 @@ public class IceChainHook extends Projectile
 		}
 		else
 		{
+			// Sets velocity so that the hook travels towards the player
 			double dx = 0;
 			double dy = stage.getPlayer().getY() - getY();
 
@@ -127,7 +128,7 @@ public class IceChainHook extends Projectile
 						stage.trackDeath(wall.getName(), attached);
 					}
 				}
-				if(wall.blocksEntities())
+				else if(wall.blocksEntities())
 				{
 					if(!wall.isHorizontal())
 					{
@@ -222,13 +223,20 @@ public class IceChainHook extends Projectile
 
 	public void collide(Wall wall)
 	{
-		reverse();
+		if(!reverse)
+		{
+			reverse();
+		}
 	}
 	
 	public void reverse()
 	{
 		reverse = true;
+		solid = false;
 		timer = 0;
+		
+		setVelX(0);
+		setVelY(0);
 	}
 
 	public boolean isActive()

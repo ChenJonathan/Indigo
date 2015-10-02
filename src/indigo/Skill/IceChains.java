@@ -29,6 +29,7 @@ public class IceChains extends Skill
 			playState.getProjectiles().add(hook);
 			
 			player.setMana(player.getMana() - 1);
+			player.canAttack(false);
 			player.canTurn(false);
 			phase.resetAttackTimer();
 		}
@@ -47,6 +48,7 @@ public class IceChains extends Skill
 	public void endCast()
 	{
 		super.endCast();
+		player.canAttack(true);
 		player.canTurn(true);
 	}
 }

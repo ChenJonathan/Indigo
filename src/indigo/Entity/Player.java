@@ -6,8 +6,9 @@ import indigo.Phase.Phase;
 import indigo.Projectile.WaterProjectile;
 import indigo.Stage.Stage;
 import indigo.Weapon.IceSword;
+import indigo.Weapon.Staff;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
@@ -100,7 +101,7 @@ public class Player extends Entity
 
 		friendly = true;
 
-		weapon = new IceSword(this, IceSword.DAMAGE);
+		weapon = new Staff(this, Staff.DAMAGE);
 
 		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
 	}
@@ -136,23 +137,23 @@ public class Player extends Entity
 		}
 
 		// Set direction
-		if(canTurn() && !hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
+		if(canTurn() && !hasWeaponHitbox() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
 		{
 			setDirection(stage.getMouseX() > this.getX());
 		}
 
 		super.update();
 
-		// Variable jump height counter
-		if(jumpTime > 0)
-		{
-			jumpTime--;
-		}
-
 		// Update weapon
 		if(hasWeapon())
 		{
 			weapon.update();
+		}
+
+		// Variable jump height counter
+		if(jumpTime > 0)
+		{
+			jumpTime--;
 		}
 
 		// Crouching stamina drain
@@ -295,13 +296,13 @@ public class Player extends Entity
 		}
 
 		// Regeneration
-		if(stage.getTime() == healthRegenTime)		
-		{		
-			setHealth(getHealth() + HEALTH_REGEN);		
-		}		
-		if(stage.getTime() == manaRegenTime)		
-		{		
-			setMana(getMana() + MANA_REGEN);		
+		if(stage.getTime() == healthRegenTime)
+		{
+			setHealth(getHealth() + HEALTH_REGEN);
+		}
+		if(stage.getTime() == manaRegenTime)
+		{
+			setMana(getMana() + MANA_REGEN);
 		}
 		if(stage.getTime() == staminaRegenTime)
 		{
@@ -309,22 +310,109 @@ public class Player extends Entity
 		}
 	}
 
-	public void render(Graphics g)
+	public void render(Graphics2D g)
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 
-		if(hasWeapon())
+		if(hasWeapon() && currentAnimation != MIST)
 		{
 			weapon.render(g);
 		}
+	}
+
+	public double getWeaponXOffset()
+	{
+		double xOffset = 0;
+		if(isFacingRight())
+		{
+			xOffset -= 30;
+		}
+		else
+		{
+			xOffset -= 70;
+		}
+		return xOffset;
+	}
+
+	public double getWeaponYOffset()
+	{
+		double yOffset = 0;
+		if(isCrouching())
+		{
+			yOffset -= 24;
+		}
+		else if(!isGrounded())
+		{
+			yOffset -= 54;
+		}
+		else
+		{
+			yOffset -= 54;
+			if(currentAnimation == GROUND_LEFT || currentAnimation == GROUND_RIGHT)
+			{
+				switch(animation.getFrame())
+				{
+					case 0:
+						break;
+					case 1:
+						yOffset += 1;
+						break;
+					case 2:
+						yOffset += 2;
+						break;
+					case 3:
+						yOffset += 4;
+						break;
+					case 4:
+						yOffset += 6;
+						break;
+					case 5:
+						yOffset += 2;
+						break;
+					default:
+						break;
+				}
+			}
+			else if(currentAnimation == MOVE_LEFT || currentAnimation == MOVE_RIGHT)
+			{
+				switch(animation.getFrame())
+				{
+					case 0:
+						break;
+					case 1:
+						yOffset += 2;
+						break;
+					case 2:
+						break;
+					case 3:
+						yOffset -= 2;
+						break;
+					case 4:
+						yOffset -= 1;
+						break;
+					case 5:
+						yOffset += 2;
+						break;
+					case 6:
+						break;
+					case 7:
+						yOffset -= 1;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		return yOffset;
 	}
 
 	public Shape getHitbox()
 	{
 		if(isCrouching())
 		{
-			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2 + 25, getWidth(), getHeight() - 25);
+			return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2 + 25, getWidth(),
+					getHeight() - 25);
 		}
 		else
 		{
@@ -333,22 +421,32 @@ public class Player extends Entity
 	}
 
 	public void attackMain()
-
 	{
-		// Water phase attack
 		if(phase.id() == Phase.WATER)
 		{
-			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
-			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
-			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
+			// Water phase attack
+			double staffX = getX();
+			double staffY = getY() - 25;
+			if(isFacingRight())
+			{
+				staffX += 65;
+			}
+			else
+			{
+				staffX -= 65;
+			}
 
-			stage.getProjectiles().add(
-					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.5, velX, velY,
-							WaterProjectile.DAMAGE));
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - staffX) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - staffY) / scale;
+
+			stage.getProjectiles().add(new WaterProjectile(this, staffX, staffY, velX, velY, WaterProjectile.DAMAGE));
+
+			((Staff)weapon).attack();
 		}
-		// Ice phase attack
 		else
 		{
+			// Ice phase attack
 			((IceSword)weapon).slash();
 		}
 
@@ -357,20 +455,31 @@ public class Player extends Entity
 
 	public void attackAlt()
 	{
-		// Water phase attack
 		if(phase.id() == Phase.WATER)
 		{
-			double scale = Math.sqrt(Math.pow(stage.getMouseY() - getY(), 2) + Math.pow(stage.getMouseX() - getX(), 2));
-			double velX = WaterProjectile.SPEED * (stage.getMouseX() - getX()) / scale;
-			double velY = WaterProjectile.SPEED * (stage.getMouseY() - getY()) / scale;
+			// Water phase attack
+			double staffX = getX();
+			double staffY = getY() - 25;
+			if(isFacingRight())
+			{
+				staffX += 65;
+			}
+			else
+			{
+				staffX -= 65;
+			}
 
-			stage.getProjectiles().add(
-					new WaterProjectile(this, getX() + velX * 0.25, getY() + velY * 0.4, velX, velY,
-							WaterProjectile.DAMAGE));
+			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
+			double velX = WaterProjectile.SPEED * (stage.getMouseX() - staffX) / scale;
+			double velY = WaterProjectile.SPEED * (stage.getMouseY() - staffY) / scale;
+
+			stage.getProjectiles().add(new WaterProjectile(this, staffX, staffY, velX, velY, WaterProjectile.DAMAGE));
+
+			((Staff)weapon).attack();
 		}
-		// Ice phase attack
 		else
 		{
+			// Ice phase attack
 			((IceSword)weapon).stab();
 		}
 
@@ -481,14 +590,14 @@ public class Player extends Entity
 		this.blocking = false;
 	}
 
-	public void shift(int x, int y) // Parameters represent player direction
+	public void shift(double x, double y) // Parameters represent player direction
 	{
 		if(phase.id() == Phase.WATER)
 		{
 			setAnimation(MIST, Content.PLAYER_MIST, 1);
 
-			setVelX(x * 80);
-			setVelY(y * 80);
+			setVelX(x * 90);
+			setVelY(y * 90);
 
 			flying = true;
 			frictionless = true;
@@ -514,7 +623,7 @@ public class Player extends Entity
 	{
 		uncrouch();
 		removeWeapon();
-		
+
 		if(isFacingRight())
 		{
 			if(iceArmor)
@@ -562,18 +671,18 @@ public class Player extends Entity
 		}
 		else
 		{
-			// Reset delay for next health regeneration		
-			if(health < getMaxHealth())		
-			{		
-				healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;		
-			
-				// If damaged, the initial delay is longer		
-				if(health < getHealth())		
-				{		
-					healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;		
-				}		
+			// Reset delay for next health regeneration
+			if(health < getMaxHealth())
+			{
+				healthRegenTime = stage.getTime() + HEALTH_REGEN_DELAY;
+
+				// If damaged, the initial delay is longer
+				if(health < getHealth())
+				{
+					healthRegenTime = stage.getTime() + HEALTH_REGEN_LONG_DELAY;
+				}
 			}
-			
+
 			super.setHealth(health);
 		}
 	}
@@ -590,25 +699,25 @@ public class Player extends Entity
 
 	public void setMana(int mana)
 	{
-		if(mana < getMaxMana())		
-		{		
-			// Reset delay for next mana regeneration		
-			manaRegenTime = Math.max(manaRegenTime, stage.getTime() + MANA_REGEN_DELAY);		
-		
-			// If damaged, the initial delay is longer		
-			if(mana < getMana())		
-			{		
-				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;		
-			}		
+		if(mana < getMaxMana())
+		{
+			// Reset delay for next mana regeneration
+			manaRegenTime = Math.max(manaRegenTime, stage.getTime() + MANA_REGEN_DELAY);
+
+			// If damaged, the initial delay is longer
+			if(mana < getMana())
+			{
+				manaRegenTime = stage.getTime() + MANA_REGEN_LONG_DELAY;
+			}
 		}
-		
+
 		this.mana = mana;
 		if(this.mana > maxMana)
 		{
 			this.mana = maxMana;
 		}
 	}
-	
+
 	public int getMaxStamina()
 	{
 		return maxStamina;
@@ -643,7 +752,15 @@ public class Player extends Entity
 	public void setPhase(Phase phase)
 	{
 		this.phase = phase;
-		// TODO Swap weapons
+
+		if(phase.id() == Phase.WATER)
+		{
+			weapon = new Staff(this, Staff.DAMAGE);
+		}
+		else
+		{
+			weapon = new IceSword(this, IceSword.DAMAGE);
+		}
 	}
 
 	public void setGround(Land ground)
@@ -651,7 +768,7 @@ public class Player extends Entity
 		super.setGround(ground);
 		canDoubleJump = true;
 	}
-	
+
 	public void canMove(boolean canMove)
 	{
 		super.canMove(canMove);

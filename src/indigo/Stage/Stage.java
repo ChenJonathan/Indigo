@@ -140,7 +140,7 @@ public abstract class Stage
 						}
 
 						// Entity-melee: Melee weapon interactions
-						if(ent.hasWeapon())
+						if(ent.hasWeaponHitbox())
 						{
 							if(otherEnt.intersects(ent.getWeapon().getHitbox()))
 							{
@@ -203,7 +203,7 @@ public abstract class Stage
 						trackDeath(wall.getName(), ent);
 					}
 				}
-				if(wall.blocksEntities())
+				else if(wall.blocksEntities())
 				{
 					if(!wall.isHorizontal())
 					{

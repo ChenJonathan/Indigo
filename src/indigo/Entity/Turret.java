@@ -6,7 +6,7 @@ import indigo.Projectile.Mortar;
 import indigo.Stage.Stage;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
@@ -95,7 +95,7 @@ public class Turret extends Entity
 		}
 	}
 
-	public void render(Graphics g)
+	public void render(Graphics2D g)
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)(getWidth()), (int)(getHeight()), null);

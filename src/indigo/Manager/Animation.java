@@ -56,6 +56,14 @@ public class Animation
 	{
 		currentFrame = i;
 	}
+	
+	/**
+	 * @param i The current count.
+	 */
+	public void setCount(int i)
+	{
+		count = i;
+	}
 
 	/**
 	 * @param b Whether to play the animation in reverse.

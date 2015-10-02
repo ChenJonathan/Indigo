@@ -14,21 +14,21 @@ public class IceSword extends Weapon
 	private final int length = 120;
 	private final int radialOffset = 20;
 	private final int yOffset = -20;
-
-	public static final int DAMAGE = 50;
-	public static final int ATTACK_DURATION = 8;
 	
 	private boolean attacking = false; // TODO Replace with animation check
 	
 	private double swordAngle;
 	private double angleOffset = 0.0;
 	private boolean slashMode = false;
-	private final double slashAngle = 90.0;
+	private final double slashAngle = 120.0;
 
 	private int beginSwordX = 0;
 	private int beginSwordY = 0;
 	private int endSwordX = 0;
 	private int endSwordY = 0;
+
+	public static final int DAMAGE = 50;
+	public static final int ATTACK_DURATION = 6;
 
 	public IceSword(Entity user, int dmg)
 	{
@@ -61,11 +61,11 @@ public class IceSword extends Weapon
 		{
 			if((swordAngle > 0 && swordAngle < (Math.PI / 2)) || (swordAngle > Math.PI && swordAngle < (3 * Math.PI) / 2))
 			{
-				angleOffset = (attackTime == 0? slashAngle / 2 : (slashAngle / 2) + -(slashAngle * attackTime) / ATTACK_DURATION);
+				angleOffset = (slashAngle / 2) - (slashAngle * attackTime) / ATTACK_DURATION;
 			}
 			else
 			{
-				angleOffset = (attackTime == 0? -slashAngle / 2 : (slashAngle / 2) + (slashAngle * attackTime) / ATTACK_DURATION);
+				angleOffset = -(slashAngle / 2) + (slashAngle * attackTime) / ATTACK_DURATION;
 			}
 			angleOffset = Math.toRadians(angleOffset);
 		}
@@ -78,9 +78,12 @@ public class IceSword extends Weapon
 
 	public void render(Graphics g)
 	{
-		// Draws a simple line representing the sword // TODO Temporary
-		g.setColor(Color.BLUE);
-		g.drawLine(beginSwordX, beginSwordY, endSwordX, endSwordY);
+		if(attacking)
+		{
+			// Draws a simple line representing the sword // TODO Temporary
+			g.setColor(Color.BLUE);
+			g.drawLine(beginSwordX, beginSwordY, endSwordX, endSwordY);
+		}
 	}
 
 	public void collide(Entity ent)

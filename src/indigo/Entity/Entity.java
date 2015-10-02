@@ -7,7 +7,7 @@ import indigo.Projectile.Projectile;
 import indigo.Stage.Stage;
 import indigo.Weapon.Weapon;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -32,9 +32,6 @@ public abstract class Entity
 
 	private int health, maxHealth;
 
-	protected Animation animation; // Used to render entities
-	protected int currentAnimation; // Current animation frame for the entity
-
 	protected boolean facingRight;
 
 	protected boolean dodging; // Prevents all collision
@@ -53,6 +50,9 @@ public abstract class Entity
 	protected boolean friendly;
 	protected boolean marked;
 	protected boolean dead;
+
+	protected Animation animation; // Used to render entities
+	protected int currentAnimation; // Current animation frame for the entity
 
 	// Subclasses - Initialize name, width, height, solid, flying, frictionless, pushability, move speed, jump speed
 	public Entity(Stage stage, double x, double y, int health)
@@ -178,7 +178,7 @@ public abstract class Entity
 		animation.update();
 	}
 
-	public abstract void render(Graphics g); // Draws the entity
+	public abstract void render(Graphics2D g); // Draws the entity
 
 	public abstract Shape getHitbox(); // Returns hitbox
 
@@ -422,7 +422,12 @@ public abstract class Entity
 
 	public boolean hasWeapon()
 	{
-		return weapon != null && weapon.getHitbox() != null;
+		return weapon != null;
+	}
+	
+	public boolean hasWeaponHitbox()
+	{
+		return hasWeapon() && weapon.getHitbox() != null;
 	}
 
 	public Weapon getWeapon()

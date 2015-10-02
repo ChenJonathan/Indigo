@@ -21,7 +21,7 @@ public class WaterProjectile extends Projectile
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 73;
 	public static final double SPEED = 60;
-	public static final int DURATION = 20;
+	public static final int DURATION = 25;
 
 	public WaterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
@@ -73,7 +73,7 @@ public class WaterProjectile extends Projectile
 			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 					(int)getWidth(), (int)getHeight(), null);
 		}
-		else if(getX() > 0 && getX() < stage.getMapX() && (timer < DURATION - 1 || currentAnimation == DEATH_WALL))
+		else if(getX() > 0 && getX() < stage.getMapX() && (timer < DURATION || currentAnimation == DEATH_WALL))
 		{
 			// Rotation breaks if x is negative
 			g.rotate(angle, getX(), getY());

@@ -158,8 +158,8 @@ public class PlayState extends GameState
 			}
 			if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
 			{
-				int x = 0;
-				int y = 0;
+				double x = 0;
+				double y = 0;
 
 				if(input.keyDown(InputManager.W))
 				{
@@ -176,6 +176,12 @@ public class PlayState extends GameState
 				if(input.keyDown(InputManager.D))
 				{
 					x += 1;
+				}
+				
+				if(x != 0 && y != 0)
+				{
+					x *= Math.sqrt(2) / 2;
+					y *= Math.sqrt(2) / 2;
 				}
 
 				// Parameters represent player direction

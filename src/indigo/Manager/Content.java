@@ -86,6 +86,15 @@ public class Content
 
 	// Stages
 	public static BufferedImage STAGE_BEACH = load("/stages/beach.png", 6400, 1200);
+	
+	// Weapons
+	public static BufferedImage[] STAFF_ATTACK_LEFT = loadArray("/weapon/staff/attack_left.png", 100, 90, 1);
+	public static BufferedImage[] STAFF_ATTACK_RIGHT = loadArray("/weapon/staff/attack_right.png", 100, 90, 1);
+	public static BufferedImage[] STAFF_CAST_LEFT = loadArray("/weapon/staff/cast_left.png", 100, 90, 6);
+	public static BufferedImage[] STAFF_CAST_RIGHT = loadArray("/weapon/staff/cast_right.png", 100, 90, 6);
+	public static BufferedImage[] STAFF_IDLE_LEFT = loadArray("/weapon/staff/idle_left.png", 100, 90, 1);
+	public static BufferedImage[] STAFF_IDLE_RIGHT = loadArray("/weapon/staff/idle_right.png", 100, 90, 1);
+	
 
 	/**
 	 * Loads an image.
