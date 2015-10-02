@@ -111,12 +111,12 @@ public class Beach extends Stage
 		}
 		else if(entities.size() - 1 < maxEnemies)
 		{
-			if((!entities.contains(turretCenter) || turretCenter.isDead()) && playState.getTime() % 300 == 0)
+			if((!entities.contains(turretCenter) || turretCenter.isDead()) && generator.nextInt(200) == 0)
 			{
 				turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 				entities.add(turretCenter);
 			}
-			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && playState.getTime() % 300 == 0)
+			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && generator.nextInt(200) == 0)
 			{
 				turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 				entities.add(turretFlag);
@@ -129,12 +129,12 @@ public class Beach extends Stage
 							FlyingBot.BASE_HEALTH));
 				}
 			}
-
-			if((!items.contains(pickup) || pickup.isDead()) && playState.getTime() % 300 == 0)
-			{
-				pickup = new HealthPickup(this, 2000, 920);
-				items.add(pickup);
-			}
+		}
+		
+		if((!items.contains(pickup) || pickup.isDead()) && generator.nextInt(200) == 0)
+		{
+			pickup = new HealthPickup(this, 2000, 920);
+			items.add(pickup);
 		}
 	}
 
@@ -162,7 +162,12 @@ public class Beach extends Stage
 				ent.render(g);
 			}
 		}
-		player.render(g); // TODO Don't render player twice
+		
+		// Render player on top
+		if(!(player.getX() > 3834 && player.getX() < 4122 && player.getY() > 995 && player.getY() < 1140))
+		{
+			player.render(g); // TODO Don't render player twice
+		}
 	}
 
 	public void trackDeath(String killer, Entity killed)

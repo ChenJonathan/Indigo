@@ -23,8 +23,8 @@ public class IceChainHook extends Projectile
 	private final int DEFAULT = 0;
 
 	public static final int DAMAGE = 0;
-	public static final int WIDTH = 100;
-	public static final int HEIGHT = 100;
+	public static final int WIDTH = 160;
+	public static final int HEIGHT = 73;
 	public static final double SPEED = 70;
 	public static final int EXTEND_DURATION = 20; // Time before hook is recalled
 	public static final int RETURN_DURATION = 30; // Time for hook to return
@@ -49,7 +49,7 @@ public class IceChainHook extends Projectile
 		reverse = false;
 		timer = 0;
 
-		setAnimation(DEFAULT, Content.WATER_PROJECTILE, -1);
+		setAnimation(DEFAULT, Content.ICICLE, -1);
 	}
 
 	public void update()
@@ -57,6 +57,7 @@ public class IceChainHook extends Projectile
 		super.update();
 		timer++;
 
+		// Directional and movement calculations
 		if(!reverse)
 		{
 			if(getVelX() >= 0)
@@ -103,12 +104,31 @@ public class IceChainHook extends Projectile
 				angle = Math.atan(getVelY() / getVelX());
 			}
 
-			if(scale < SPEED || timer == RETURN_DURATION)
+			// If hook reaches player or time is up, remove the hook
+			if(scale < SPEED)
+			{
+				dead = true;
+
+				// Set entity next to player if the hook reaches the player
+				if(getX() > stage.getPlayer().getX())
+				{
+					attached.setX(stage.getPlayer().getX() + 30);
+				}
+				else
+				{
+					attached.setX(stage.getPlayer().getX() - 30);
+				}
+				attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight() / 2);
+
+				return;
+			}
+			else if(timer == RETURN_DURATION)
 			{
 				dead = true;
 			}
 		}
 
+		// Pulling the entity
 		if(attached != null)
 		{
 			attached.setX(getX());
@@ -117,18 +137,15 @@ public class IceChainHook extends Projectile
 			attached.setVelX(0);
 			attached.setVelY(0);
 
-			// Checks if the attached Entity is colliding with any walls
+			// Checks if the attached entity is colliding with any walls
 			for(Wall wall : stage.getWalls())
 			{
-				if(wall.killsEntities())
+				if(wall.killsEntities() && attached.intersects(wall.getLine()))
 				{
-					if(attached.intersects(wall.getLine()))
-					{
-						attached.die();
-						stage.trackDeath(wall.getName(), attached);
-					}
+					attached.die();
+					stage.trackDeath(wall.getName(), attached);
 				}
-				else if(wall.blocksEntities())
+				if(wall.blocksEntities())
 				{
 					if(!wall.isHorizontal())
 					{
@@ -177,17 +194,11 @@ public class IceChainHook extends Projectile
 
 			setX(attached.getX());
 			setY(attached.getY());
-			
-			if(dead)
+
+			// Let go of entity if it dies
+			if(!attached.isActive())
 			{
-				if(getX() > stage.getPlayer().getX())
-				{
-					attached.setX(stage.getPlayer().getX() + 30);
-				}
-				else
-				{
-					attached.setX(stage.getPlayer().getX() - 30);
-				}
+				attached = null;
 			}
 		}
 	}
@@ -218,6 +229,7 @@ public class IceChainHook extends Projectile
 		{
 			reverse();
 			attached = ent;
+			attached.mark();
 		}
 	}
 
@@ -228,13 +240,13 @@ public class IceChainHook extends Projectile
 			reverse();
 		}
 	}
-	
+
 	public void reverse()
 	{
 		reverse = true;
 		solid = false;
 		timer = 0;
-		
+
 		setVelX(0);
 		setVelY(0);
 	}

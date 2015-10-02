@@ -195,15 +195,13 @@ public abstract class Stage
 			// Entity-wall: Colliding with and landing on walls
 			for(Wall wall : walls)
 			{
-				if(wall.killsEntities())
+				if(wall.killsEntities() && ent.isActive()
+						&& (ent.intersects(wall.getLine()) || (ent.isGrounded() && ent.getGround().equals(wall))))
 				{
-					if(ent.intersects(wall.getLine()))
-					{
-						ent.die();
-						trackDeath(wall.getName(), ent);
-					}
+					ent.die();
+					trackDeath(wall.getName(), ent);
 				}
-				else if(wall.blocksEntities())
+				if(wall.blocksEntities())
 				{
 					if(!wall.isHorizontal())
 					{

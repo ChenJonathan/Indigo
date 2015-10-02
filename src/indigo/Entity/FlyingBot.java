@@ -10,16 +10,21 @@ import java.awt.geom.Ellipse2D;
 
 public class FlyingBot extends Entity
 {
-	private final int DEFAULT = 0;
-	private final int DEATH = 1;
+	private double dx;
+	private double dy;
+	private double angle; // Cannon angle
 
 	private int timer; // When timer hits zero, move and reset timer
 
+	private final int DEFAULT = 0;
+	private final int DEATH = 1;
+
 	private final int MOVE_SPEED = 30;
 	private final int MAX_RANGE = 1000;
+	private final double ANGLE_BOUND = Math.PI / 4; // Angle from vertical that the cannon cannot shoot from
 
-	public static final double SMALLBOT_WIDTH = 60;
-	public static final double SMALLBOT_HEIGHT = 60;
+	public static final double FLYING_BOT_WIDTH = 60;
+	public static final double FLYING_BOT_HEIGHT = 60;
 	public static final int BASE_HEALTH = 50;
 	public static final int DEFAULT_TIMER = 30;
 
@@ -28,14 +33,16 @@ public class FlyingBot extends Entity
 		super(stage, x, y, health);
 		name = "a small bot";
 
-		width = SMALLBOT_WIDTH;
-		height = SMALLBOT_HEIGHT;
+		width = FLYING_BOT_WIDTH;
+		height = FLYING_BOT_HEIGHT;
 
 		pushability = 5;
 		flying = true;
 		frictionless = false;
 
 		friendly = false;
+
+		setAngle();
 
 		timer = DEFAULT_TIMER;
 
@@ -49,7 +56,7 @@ public class FlyingBot extends Entity
 			super.update();
 			if(animation.hasPlayedOnce())
 			{
-				// Mark entity as dead if dying animation has finished playing
+				// Mark entity as dead if death animation has finished playing
 				dead = true;
 			}
 			return;
@@ -72,6 +79,8 @@ public class FlyingBot extends Entity
 			timer--;
 		}
 
+		setAngle();
+
 		if(canAttack() && Math.random() < 0.02)
 		{
 			// 2% chance to attack every tick
@@ -83,6 +92,14 @@ public class FlyingBot extends Entity
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
+
+		// Rotation breaks if x is negative
+		if(getX() > 0 && getX() < stage.getMapX() && currentAnimation != DEATH)
+		{
+			g.rotate(angle, getX(), getY());
+			g.drawImage(Content.BOT_CANNON, (int)(getX() + 15), (int)(getY() - 5.5), 18, 11, null);
+			g.rotate(-angle, getX(), getY());
+		}
 	}
 
 	public Shape getHitbox()
@@ -93,18 +110,16 @@ public class FlyingBot extends Entity
 	public void attack()
 	{
 		// Scale is the distance from entity to player
-		double scale = Math.sqrt(Math.pow(stage.getPlayer().getY() - getY(), 2)
-				+ Math.pow(stage.getEntities().get(0).getX() - getX(), 2));
-		if(scale > MAX_RANGE)
+		double scale = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+		if(scale < MAX_RANGE)
 		{
-			return;
-		}
-		// Splits the direction of the projectile into x and y components
-		double velX = ElectricBall.SPEED * (stage.getPlayer().getX() - getX()) / scale;
-		double velY = ElectricBall.SPEED * (stage.getPlayer().getY() - getY()) / scale;
+			// Splits the direction of the projectile into x and y components
+			double velX = ElectricBall.SPEED * dx / scale;
+			double velY = ElectricBall.SPEED * dy / scale;
 
-		stage.getProjectiles().add(
-				new ElectricBall(this, getX() + velX / 2, getY() + velY / 2, velX, velY, ElectricBall.DAMAGE));
+			stage.getProjectiles().add(
+					new ElectricBall(this, getX() + velX / 2, getY() + velY / 2, velX, velY, ElectricBall.DAMAGE));
+		}
 	}
 
 	public void move()
@@ -144,9 +159,62 @@ public class FlyingBot extends Entity
 		while(getX() + 30 * moveX > stage.getMapX() || getX() + 30 * moveX < 0 || getY() + 30 * moveY > stage.getMapY()
 				|| (getY() + 30 * moveY < 0 && !outOfBounds));
 		// Repeat the loop if this movement would carry the entity outside of map boundaries
-		
+
 		setVelX(getVelX() + moveX);
 		setVelY(getVelY() + moveY);
+	}
+
+	public void setAngle()
+	{
+		dx = stage.getPlayer().getX() - getX();
+		dy = stage.getPlayer().getY() - getY();
+
+		// Calculate cannon angle
+		if(dx > 0)
+		{
+			angle = Math.atan(dy / dx);
+		}
+		else if(dx < 0)
+		{
+			if(dy >= 0)
+			{
+				angle = Math.atan(dy / dx) + Math.PI;
+			}
+			else
+			{
+				angle = Math.atan(dy / dx) - Math.PI;
+			}
+		}
+		else
+		{
+			angle = dy / Math.abs(dy) * Math.PI / 2;
+		}
+
+		// Restricting angle
+		if(angle <= Math.PI / 2 && angle > ANGLE_BOUND)
+		{
+			dx = Math.sqrt(2) / 2;
+			dy = Math.sqrt(2) / 2;
+			angle = ANGLE_BOUND;
+		}
+		else if(angle > Math.PI / 2 && angle < Math.PI / 2 + ANGLE_BOUND)
+		{
+			dx = -Math.sqrt(2) / 2;
+			dy = Math.sqrt(2) / 2;
+			angle = Math.PI / 2 + ANGLE_BOUND;
+		}
+		else if(angle > -Math.PI / 2 && angle < -ANGLE_BOUND)
+		{
+			dx = Math.sqrt(2) / 2;
+			dy = -Math.sqrt(2) / 2;
+			angle = -ANGLE_BOUND;
+		}
+		else if(angle <= -Math.PI / 2 && angle > -Math.PI / 2 - ANGLE_BOUND)
+		{
+			dx = -Math.sqrt(2) / 2;
+			dy = -Math.sqrt(2) / 2;
+			angle = -Math.PI / 2 - ANGLE_BOUND;
+		}
 	}
 
 	public boolean isActive()

@@ -399,6 +399,11 @@ public abstract class Entity
 	{
 		return ground != null;
 	}
+	
+	public Land getGround()
+	{
+		return ground;
+	}
 
 	public void setGround(Land ground)
 	{

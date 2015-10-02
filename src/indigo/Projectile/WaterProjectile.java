@@ -77,7 +77,8 @@ public class WaterProjectile extends Projectile
 		{
 			// Rotation breaks if x is negative
 			g.rotate(angle, getX(), getY());
-			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+					(int)getWidth(), (int)getHeight(), null);
 			g.rotate(-angle, getX(), getY());
 		}
 	}

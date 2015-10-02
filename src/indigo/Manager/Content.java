@@ -50,6 +50,7 @@ public class Content
 	public static BufferedImage[] ELECTRIC_SPARK = loadArray("/projectiles/electric_spark.png", 100, 100, 1);
 	public static BufferedImage[] GEYSER_BASE = loadArray("/projectiles/geyser_base.png", 100, 100, 1);
 	public static BufferedImage[] GEYSER = loadArray("/projectiles/geyser_particle.png", 80, 50, 1);
+	public static BufferedImage[] ICICLE = loadArray("/projectiles/icicle/default.png", 160, 73, 1);
 	public static BufferedImage[] MORTAR_DEATH = loadArray("/projectiles/mortar_death.png", 100, 100, 9);
 	public static BufferedImage[] MORTAR = loadArray("/projectiles/mortar.png", 50, 50, 1);
 	public static BufferedImage[] PULSE_WAVE = loadArray("/projectiles/pulse_wave/default.png", 1000, 1000, 1);
@@ -79,6 +80,7 @@ public class Content
 	public static BufferedImage[] PLAYER_MOVE_LEFT_ARMOR = loadArray("/sprites/player/move_left_armor.png", 68, 111, 8);
 	public static BufferedImage[] PLAYER_MOVE_RIGHT = loadArray("/sprites/player/move_right.png", 68, 111, 8);
 	public static BufferedImage[] PLAYER_MOVE_RIGHT_ARMOR = loadArray("/sprites/player/move_right_armor.png", 68, 111, 8);
+	public static BufferedImage BOT_CANNON = load("/sprites/bot/cannon.png", 18, 11);
 	public static BufferedImage[] BOT_DEATH = loadArray("/sprites/bot/death.png", 60, 60, 6);
 	public static BufferedImage[] BOT_IDLE = loadArray("/sprites/bot/idle.png", 60, 60, 4);
 	public static BufferedImage[] TURRET_DEATH = loadArray("/sprites/turret_death.png", 100, 130, 31);
