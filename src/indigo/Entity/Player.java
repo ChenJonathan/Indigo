@@ -23,7 +23,6 @@ public class Player extends Entity
 	private Phase phase;
 	private boolean canDoubleJump;
 	private boolean iceArmor;
-	private boolean iceChains;
 
 	private int healthRegenTime; // Last time when health was regenerated
 	private int manaRegenTime; // Last time when mana was regenerated
@@ -137,9 +136,8 @@ public class Player extends Entity
 		}
 
 		// Set direction
-		if(!hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
+		if(canTurn() && !hasWeapon() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
 		{
-			// TODO Change hasWeapon() call to weapon animation check
 			setDirection(stage.getMouseX() > this.getX());
 		}
 
@@ -687,15 +685,5 @@ public class Player extends Entity
 	{
 		iceArmor = active;
 		currentAnimation = -1; // Forces animation reset
-	}
-
-	public boolean getIceChains()
-	{
-		return iceChains;
-	}
-
-	public void setIceChains(boolean active)
-	{
-		iceChains = active;
 	}
 }

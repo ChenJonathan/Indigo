@@ -2,7 +2,7 @@ package indigo.Stage;
 
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
-import indigo.Entity.SmallBot;
+import indigo.Entity.FlyingBot;
 import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
 import indigo.Item.HealthPickup;
@@ -69,11 +69,11 @@ public class Beach extends Stage
 		walls.add(new Wall(5888, 961, 6400, 961));
 
 		// Platforms
-		platforms.add(new Platform(3218, 961, 3735, 961));
 		platforms.add(new Platform(1169, 850, 1420, 850));
 		platforms.add(new Platform(1398, 736, 1649, 736));
 		platforms.add(new Platform(1736, 842, 1980, 842));
 		platforms.add(new Platform(3349, 732, 3600, 732));
+		platforms.add(new Platform(3218, 961, 3735, 961));
 		platforms.add(new Platform(6318, 355, 6400, 355));
 
 		// Wood structure
@@ -125,8 +125,8 @@ public class Beach extends Stage
 			{
 				if(generator.nextInt(200) == 0)
 				{
-					entities.add(new SmallBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
-							SmallBot.BASE_HEALTH));
+					entities.add(new FlyingBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
+							FlyingBot.BASE_HEALTH));
 				}
 			}
 

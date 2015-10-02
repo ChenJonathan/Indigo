@@ -25,7 +25,7 @@ public class ManaPickup extends Item
 		width = WIDTH;
 		height = HEIGHT;
 
-		setAnimation(DEFAULT, Content.HEALTH_PICKUP, -1);
+		setAnimation(DEFAULT, Content.MANA_PICKUP, -1);
 	}
 
 	public void update()
@@ -97,6 +97,6 @@ public class ManaPickup extends Item
 	// TODO Death animation
 	public void die()
 	{
-		super.die();
+		dead = true;
 	}
 }

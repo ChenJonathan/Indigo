@@ -30,7 +30,7 @@ public class WaterProjectile extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = true;
-		
+
 		if(getVelX() >= 0)
 		{
 			angle = Math.atan(getVelY() / getVelX());
@@ -70,7 +70,8 @@ public class WaterProjectile extends Projectile
 	{
 		if(currentAnimation == DEATH)
 		{
-			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+					(int)getWidth(), (int)getHeight(), null);
 		}
 		else if(getX() > 0 && getX() < stage.getMapX() && (timer < DURATION - 1 || currentAnimation == DEATH_WALL))
 		{
@@ -116,7 +117,7 @@ public class WaterProjectile extends Projectile
 		{
 			angle = Math.PI + slopeAngle;
 		}
-		
+
 		setAnimation(DEATH_WALL, Content.WATER_PROJECTILE_DEATH_WALL, 5);
 		die();
 	}

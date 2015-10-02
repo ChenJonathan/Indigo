@@ -45,6 +45,7 @@ public abstract class Entity
 
 	private boolean canAttack;
 	private boolean canMove;
+	private boolean canTurn;
 
 	protected boolean flying;
 	protected boolean frictionless;
@@ -67,8 +68,7 @@ public abstract class Entity
 
 		maxHealth = this.health = health;
 
-		canAttack = true;
-		canMove = true;
+		canAttack = canMove = canTurn = true;
 
 		marked = false;
 
@@ -453,6 +453,16 @@ public abstract class Entity
 	public void canMove(boolean canMove)
 	{
 		this.canMove = canMove;
+	}
+	
+	public boolean canTurn()
+	{
+		return canTurn;
+	}
+
+	public void canTurn(boolean canTurn)
+	{
+		this.canTurn = canTurn;
 	}
 
 	public boolean isFriendly()

@@ -53,11 +53,7 @@ public abstract class Item
 
 	public abstract boolean isActive(); // Able to activate
 
-	// Override if death animation exists
-	public void die()
-	{
-		dead = true;
-	}
+	public abstract void die();
 
 	public double getX()
 	{

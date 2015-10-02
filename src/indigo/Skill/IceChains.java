@@ -1,13 +1,11 @@
 package indigo.Skill;
 
-import indigo.Manager.InputManager;
 import indigo.Phase.Phase;
-import indigo.Projectile.IceChainParticle;
+import indigo.Projectile.IceChainHook;
 
 public class IceChains extends Skill
 {
-	private double dx,dy;
-	private IceChainParticle hook;
+	private IceChainHook hook;
 
 	public IceChains(Phase phase, int position)
 	{
@@ -20,24 +18,22 @@ public class IceChains extends Skill
 	{
 		super.update();
 
-		if(player.getMana() >= 1  || castTime < 10)
+		if(castTime == 0)
 		{
-			if(castTime == 0)
-			{
-				player.setIceChains(true);
-				dx = playState.getMouseX() - player.getX();
-				dy = playState.getMouseY() - player.getY();
-				
-				hook = new IceChainParticle(player, player.getX(), player.getY(), 
-						dx*IceChainParticle.SPEED, dy*IceChainParticle.SPEED, 0);
-				playState.getProjectiles().add(hook);
-				player.setMana(player.getMana() - 1);
-			}
-			castTime++;
+			double dx = playState.getMouseX() - player.getX();
+			double dy = playState.getMouseY() - player.getY();
+			double scale = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+			hook = new IceChainHook(player, player.getX(), player.getY(), dx / scale * IceChainHook.SPEED, dy
+					/ scale * IceChainHook.SPEED, 0);
+			playState.getProjectiles().add(hook);
+			
+			player.setMana(player.getMana() - 1);
+			player.canTurn(false);
+			phase.resetAttackTimer();
 		}
-		else
+		else if(hook.isDead() || !playState.getProjectiles().contains(hook))
 		{
-			playState.getProjectiles().remove(hook);
 			hook = null;
 			endCast();
 		}
@@ -45,12 +41,12 @@ public class IceChains extends Skill
 
 	public boolean canCast()
 	{
-		return castOnSelect;
+		return player.getMana() > 1 && player.canAttack();
 	}
 
 	public void endCast()
 	{
 		super.endCast();
-		player.setIceChains(false);
+		player.canTurn(true);
 	}
 }

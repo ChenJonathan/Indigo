@@ -41,7 +41,7 @@ public class ElectricBall extends Projectile
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight(), null);
 	}
 
 	public Shape getHitbox()

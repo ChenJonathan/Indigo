@@ -38,7 +38,7 @@ public class Geyser extends Skill
 	
 	public boolean canCast()
 	{
-		return (player.getMana() >= 20 && player.canAttack());
+		return player.getMana() >= 20 && player.canAttack();
 	}
 	
 	public void endCast()
