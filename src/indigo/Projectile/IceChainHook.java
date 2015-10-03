@@ -231,7 +231,7 @@ public class IceChainHook extends Projectile
 
 	public void collide(Entity ent)
 	{
-		if(!reverse)
+		if(!reverse && ent.isPushable())
 		{
 			reverse();
 			attached = ent;

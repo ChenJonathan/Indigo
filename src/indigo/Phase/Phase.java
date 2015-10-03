@@ -81,7 +81,7 @@ public abstract class Phase
 	{
 		skillStates[skill] = IDLE;
 		cooldowns[skill] = maxCooldowns[skill];
-		attackStartTime = playState.getTime();
+		resetAttackTimer();
 	}
 
 	public void resetAttackTimer()

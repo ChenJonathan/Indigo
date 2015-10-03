@@ -49,7 +49,7 @@ public abstract class Skill
 	public void endCast()
 	{
 		castTime = -1;
-		phase.endCast(position); // Resets skill icon
+		phase.endCast(position); // Resets skill icon and resets attack timer
 	}
 
 	public int id()

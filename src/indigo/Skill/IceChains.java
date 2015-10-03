@@ -31,7 +31,6 @@ public class IceChains extends Skill
 			player.setMana(player.getMana() - 1);
 			player.canAttack(false);
 			player.canTurn(false);
-			phase.resetAttackTimer();
 		}
 		else if(hook.isDead() || !playState.getProjectiles().contains(hook))
 		{

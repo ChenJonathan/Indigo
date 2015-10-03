@@ -355,6 +355,11 @@ public abstract class Entity
 	{
 		return height;
 	}
+	
+	public boolean isPushable()
+	{
+		return pushability > 0;
+	}
 
 	public double getPushability()
 	{

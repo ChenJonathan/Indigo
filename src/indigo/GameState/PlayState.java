@@ -212,17 +212,10 @@ public class PlayState extends GameState
 					}
 				}
 			}
-			else if(input.mouseDown() && activePhase.canNormalAttack())
+			else if(input.mouseLeftDown() && activePhase.canNormalAttack())
 			{
 				// Automatic attacking
-				if(input.mouseLeftDown())
-				{
-					player.attackMain();
-				}
-				else
-				{
-					player.attackAlt();
-				}
+				player.attackMain();
 			}
 			if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
 			{
