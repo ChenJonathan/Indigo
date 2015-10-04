@@ -2,6 +2,8 @@ package indigo.Entity;
 
 import indigo.Item.Item;
 import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
+import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
 import indigo.Stage.Stage;
@@ -14,6 +16,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public abstract class Entity
 {
@@ -202,51 +205,95 @@ public abstract class Entity
 		return !entArea.isEmpty();
 	}
 
-	// Used for entity-wall and entity-melee collision
-	// Checks intersection of hitbox and line and if the entity passed through the wall completely
-	public boolean intersects(Line2D.Double line)
+	// Used for entity-melee collision - Checks hitbox and travel line intersection
+	public boolean intersects(Weapon weapon)
 	{
 		boolean intersects = false;
 
 		if(getHitbox() instanceof Rectangle2D.Double)
 		{
-			intersects = line.intersects((Rectangle2D.Double)getHitbox());
+			intersects = weapon.getHitbox().intersects((Rectangle2D.Double)getHitbox());
 		}
 		else if(getHitbox() instanceof Ellipse2D.Double)
 		{
-			intersects = line.ptSegDist(getX(), getY()) < getHeight() / 2;
+			intersects = weapon.getHitbox().ptSegDist(getX(), getY()) < getHeight() / 2;
 		}
 
-		return intersects || line.intersectsLine(travel);
+		return intersects || weapon.getHitbox().intersectsLine(travel);
+	}
+
+	// Used for entity-wall collision - Checks hitbox and travel line intersection
+	public boolean intersects(Wall wall)
+	{
+		boolean intersects = false;
+
+		if(getHitbox() instanceof Rectangle2D.Double)
+		{
+			intersects = wall.getLine().intersects((Rectangle2D.Double)getHitbox());
+		}
+		else if(getHitbox() instanceof Ellipse2D.Double)
+		{
+			intersects = wall.getLine().ptSegDist(getX(), getY()) < getHeight() / 2;
+		}
+
+		return intersects || wall.getLine().intersectsLine(travel);
 	}
 
 	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isRightOfLine(Line2D.Double line)
+	public boolean isRightOfWall(Wall wall)
 	{
-		double deltaY = line.getP2().getY() - line.getP1().getY();
-		// Formula to calculate if a point is located on the right or left side of a line
-		double value = (line.getP2().getX() - line.getP1().getX()) * (getPrevY() - line.getP1().getY())
-				- (getPrevX() - line.getP1().getX()) * (line.getP2().getY() - line.getP1().getY());
+		double deltaY = wall.getLine().getP2().getY() - wall.getLine().getP1().getY();
+		// Formula to calculate if a point is located on the right or left side of a wall.getLine()
+		double value = (wall.getLine().getP2().getX() - wall.getLine().getP1().getX())
+				* (getPrevY() - wall.getLine().getP1().getY()) - (getPrevX() - wall.getLine().getP1().getX())
+				* (wall.getLine().getP2().getY() - wall.getLine().getP1().getY());
 		return value * deltaY < 0;
 	}
 
 	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isAboveLine(Line2D.Double line)
+	public boolean isAboveWall(Wall wall)
 	{
-		double deltaX = line.getP2().getX() - line.getP1().getX();
-		// Formula to calculate if a point is located above the line
-		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
-				- (getPrevY() - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
+		double deltaX = wall.getLine().getP2().getX() - wall.getLine().getP1().getX();
+		// Formula to calculate if a point is located above the wall.getLine()
+		double value = (wall.getLine().getP2().getY() - wall.getLine().getP1().getY())
+				* (getPrevX() - wall.getLine().getP1().getX()) - (getPrevY() - wall.getLine().getP1().getY())
+				* (wall.getLine().getP2().getX() - wall.getLine().getP1().getX());
 		return value * deltaX > 0;
 	}
 
-	// Used for entity-platform collision - Utilizes previous entity feet position
-	public boolean feetIsAboveLine(Line2D.Double line)
+	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)
+	public void sortWallsByDistance(ArrayList<Wall> walls)
 	{
-		double deltaX = line.getP2().getX() - line.getP1().getX();
-		// Formula to calculate if a point is located above the line
-		double value = (line.getP2().getY() - line.getP1().getY()) * (getPrevX() - line.getP1().getX())
-				- (getPrevY() + getHeight() / 2 - line.getP1().getY()) * (line.getP2().getX() - line.getP1().getX());
+		if(walls.size() < 2)
+		{
+			return;
+		}
+		
+		for(int count = 0; count < walls.size(); count++)
+		{
+			double length = walls.get(count).getLine().ptSegDist(prevX, prevY);
+			
+			for(int current = count + 1; current < walls.size(); current++)
+			{
+				if(walls.get(current).getLine().ptSegDist(prevX, prevY) < length)
+				{
+					Wall temp = walls.get(count);
+					walls.set(count, walls.get(current));
+					walls.set(current, temp);
+				}
+			}
+		}
+	}
+
+	// Used for entity-platform collision - Utilizes previous entity feet position
+	public boolean feetIsAbovePlatform(Platform platform)
+	{
+		double deltaX = platform.getLine().getP2().getX() - platform.getLine().getP1().getX();
+		// Formula to calculate if a point is located above the platform.getLine()
+		double value = (platform.getLine().getP2().getY() - platform.getLine().getP1().getY())
+				* (getPrevX() - platform.getLine().getP1().getX())
+				- (getPrevY() + getHeight() / 2 - platform.getLine().getP1().getY())
+				* (platform.getLine().getP2().getX() - platform.getLine().getP1().getX());
 		return value * deltaX > 0;
 	}
 
@@ -319,7 +366,7 @@ public abstract class Entity
 		{
 			this.velY = Stage.TERMINAL_VELOCITY;
 		}
-		
+
 		if(velY < 0)
 		{
 			removeGround();
@@ -355,7 +402,7 @@ public abstract class Entity
 	{
 		return height;
 	}
-	
+
 	public boolean isPushable()
 	{
 		return pushability > 0;
@@ -404,7 +451,7 @@ public abstract class Entity
 	{
 		return ground != null;
 	}
-	
+
 	public Land getGround()
 	{
 		return ground;
@@ -434,7 +481,7 @@ public abstract class Entity
 	{
 		return weapon != null;
 	}
-	
+
 	public boolean hasWeaponHitbox()
 	{
 		return hasWeapon() && weapon.getHitbox() != null;
@@ -469,7 +516,7 @@ public abstract class Entity
 	{
 		this.canMove = canMove;
 	}
-	
+
 	public boolean canTurn()
 	{
 		return canTurn;

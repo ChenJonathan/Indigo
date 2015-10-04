@@ -142,7 +142,7 @@ public abstract class Stage
 						// Entity-melee: Melee weapon interactions
 						if(ent.hasWeaponHitbox())
 						{
-							if(otherEnt.intersects(ent.getWeapon().getHitbox()))
+							if(otherEnt.intersects(ent.getWeapon()))
 							{
 								ent.getWeapon().collide(otherEnt);
 							}
@@ -180,7 +180,7 @@ public abstract class Stage
 			{
 				for(Platform plat : platforms)
 				{
-					if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAboveLine(plat.getLine()))
+					if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAbovePlatform(plat))
 					{
 						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
 					}
@@ -192,73 +192,88 @@ public abstract class Stage
 				}
 			}
 
+			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
+
 			// Entity-wall: Colliding with and landing on walls
 			for(Wall wall : walls)
 			{
-				if(wall.killsEntities() && ent.isActive()
-						&& (ent.intersects(wall.getLine()) || (ent.isGrounded() && ent.getGround().equals(wall))))
+				if(ent.intersects(wall) || (ent.isGrounded() && ent.getGround().equals(wall)))
 				{
-					ent.die();
-					trackDeath(wall.getName(), ent);
+					intersectedWalls.add(wall);
 				}
-				if(wall.blocksEntities())
+			}
+			if(intersectedWalls.size() > 0)
+			{
+				ent.sortWallsByDistance(intersectedWalls);
+
+				for(Wall intersectedWall : intersectedWalls)
 				{
-					if(!wall.isHorizontal())
+					if(intersectedWall.killsEntities() && ent.isActive())
 					{
-						// Leftward collision into wall
-						if(ent.isRightOfLine(wall.getLine()))
-						{
-							while(ent.intersects(wall.getLine()))
-							{
-								ent.setX(ent.getX() + PUSH_AMOUNT);
-								ent.setVelX(Math.max(ent.getVelX(), 0));
-							}
-						}
-						// Rightward collision into wall
-						else
-						{
-							while(ent.intersects(wall.getLine()))
-							{
-								ent.setX(ent.getX() - PUSH_AMOUNT);
-								ent.setVelX(Math.min(ent.getVelX(), 0));
-							}
-						}
+						ent.die();
+						trackDeath(intersectedWall.getName(), ent);
 					}
-					else
+					if(intersectedWall.blocksEntities())
 					{
-						// Downward collision into wall
-						if(ent.isAboveLine(wall.getLine()))
+						if(!intersectedWall.isHorizontal())
 						{
-							if(ent.isFlying())
+							// Leftward collision into wall
+							if(ent.isRightOfWall(intersectedWall))
 							{
-								while(ent.intersects(wall.getLine()))
+								while(ent.intersects(intersectedWall))
 								{
-									ent.setY(ent.getY() - PUSH_AMOUNT);
-									ent.setVelY(Math.min(ent.getVelY(), 0));
+									ent.setX(ent.getX() + PUSH_AMOUNT);
+									ent.setVelX(Math.max(ent.getVelX(), 0));
 								}
 							}
+							// Rightward collision into wall
 							else
 							{
-								if(feetTravel.intersectsLine(wall.getLine()))
+								while(ent.intersects(intersectedWall))
 								{
-									ent.setY(wall.getSurface(ent.getX()) - ent.getHeight() / 2);
-								}
-								if(ent.getX() > wall.getMinX()
-										&& ent.getX() < wall.getMaxX()
-										&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(wall
-												.getSurface(ent.getX())))
-								{
-									ground = wall;
+									ent.setX(ent.getX() - PUSH_AMOUNT);
+									ent.setVelX(Math.min(ent.getVelX(), 0));
 								}
 							}
 						}
-						// Upward collision into wall
 						else
 						{
-							while(ent.intersects(wall.getLine()))
+							// Downward collision into wall
+							// Only the closest wall is set as ground; other downward walls are ignored
+							if(ent.isAboveWall(intersectedWall))
 							{
-								ent.setY(ent.getY() + PUSH_AMOUNT);
-								ent.setVelY(Math.max(ent.getVelY(), 0));
+								if(!ent.isFlying() && ground == null)
+								{
+									if(ent.getX() > intersectedWall.getMinX() && ent.getX() < intersectedWall.getMaxX())
+									{
+										if(ent.isGrounded() && ent.getGround().equals(intersectedWall))
+										{
+											ground = intersectedWall;
+										}
+										else if(feetTravel.intersectsLine(intersectedWall.getLine()))
+										{
+											ground = intersectedWall;
+											ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
+										}
+									}
+								}
+								else if(ground == null)
+								{
+									while(ent.intersects(intersectedWall))
+									{
+										ent.setY(ent.getY() - PUSH_AMOUNT);
+										ent.setVelY(Math.min(ent.getVelY(), 0));
+									}
+								}
+							}
+							// Upward collision into wall
+							else
+							{
+								while(ent.intersects(intersectedWall))
+								{
+									ent.setY(ent.getY() + PUSH_AMOUNT);
+									ent.setVelY(Math.max(ent.getVelY(), 0));
+								}
 							}
 						}
 					}

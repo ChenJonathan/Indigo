@@ -57,8 +57,8 @@ public class Beach extends Stage
 
 		// Bottom level
 		walls.add(new Wall(0, 961, 2116, 961));
-		walls.add(new Wall(3100, 961, 3100, 1139)); // Swapped with below // TODO Temporary fix
-		walls.add(new Wall(2353, 961, 3100, 961)); // Swapped with above
+		walls.add(new Wall(2353, 961, 3100, 961));
+		walls.add(new Wall(3100, 961, 3100, 1139));
 		walls.add(new Wall(3100, 1139, 4220, 1139));
 		walls.add(new Wall(4220, 1139, 4220, 1000));
 		walls.add(new Wall(3843, 1000, 4220, 1000));

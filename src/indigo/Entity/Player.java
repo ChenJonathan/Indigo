@@ -64,17 +64,17 @@ public class Player extends Entity
 	public static final int SHIFT_STAMINA_COST = 25;
 
 	// Amount regenerated
-	public static final int HEALTH_REGEN = 1;
+	public static final int HEALTH_REGEN = 1000;
 	public static final int MANA_REGEN = 1;
 	public static final int STAMINA_REGEN = 1;
 
 	// Time between each regeneration
-	public static final int HEALTH_REGEN_DELAY = 15;
+	public static final int HEALTH_REGEN_DELAY = 1;
 	public static final int MANA_REGEN_DELAY = 15;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
 	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
-	public static final int HEALTH_REGEN_LONG_DELAY = 150;
+	public static final int HEALTH_REGEN_LONG_DELAY = 1;
 	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
 

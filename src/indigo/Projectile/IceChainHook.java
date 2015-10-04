@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
@@ -122,9 +123,10 @@ public class IceChainHook extends Projectile
 					}
 					attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight()
 							/ 2);
+					
+					attached.canAttack(true);
+					attached.canMove(true);
 				}
-
-				return;
 			}
 			else if(timer == RETURN_DURATION)
 			{
@@ -143,55 +145,69 @@ public class IceChainHook extends Projectile
 			
 			attached.removeGround();
 
-			// Checks if the attached entity is colliding with any walls
+			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
+
+			// Entity-wall: Colliding with and landing on walls
 			for(Wall wall : stage.getWalls())
 			{
-				if(wall.killsEntities() && attached.intersects(wall.getLine()))
+				if(attached.intersects(wall) || (attached.isGrounded() && attached.getGround().equals(wall)))
 				{
-					attached.die();
-					stage.trackDeath(wall.getName(), attached);
+					intersectedWalls.add(wall);
 				}
-				if(wall.blocksEntities())
+			}
+			if(intersectedWalls.size() > 0)
+			{
+				attached.sortWallsByDistance(intersectedWalls);
+
+				for(Wall intersectedWall : intersectedWalls)
 				{
-					if(!wall.isHorizontal())
+					if(intersectedWall.killsEntities() && attached.isActive())
 					{
-						// Leftward collision into wall
-						if(attached.isRightOfLine(wall.getLine()))
-						{
-							while(attached.intersects(wall.getLine()))
-							{
-								attached.setX(attached.getX() + Stage.PUSH_AMOUNT);
-								attached.setVelX(Math.max(attached.getVelX(), 0));
-							}
-						}
-						// Rightward collision into wall
-						else
-						{
-							while(attached.intersects(wall.getLine()))
-							{
-								attached.setX(attached.getX() - Stage.PUSH_AMOUNT);
-								attached.setVelX(Math.min(attached.getVelX(), 0));
-							}
-						}
+						attached.die();
+						stage.trackDeath(intersectedWall.getName(), attached);
 					}
-					else
+					if(intersectedWall.blocksEntities())
 					{
-						// Downward collision into wall
-						if(attached.isAboveLine(wall.getLine()))
+						if(!intersectedWall.isHorizontal())
 						{
-							while(attached.intersects(wall.getLine()))
+							// Leftward collision into wall
+							if(attached.isRightOfWall(intersectedWall))
 							{
-								attached.setY(attached.getY() - Stage.PUSH_AMOUNT);
-								attached.setVelY(Math.min(attached.getVelY(), 0));
+								while(attached.intersects(intersectedWall))
+								{
+									attached.setX(attached.getX() + Stage.PUSH_AMOUNT);
+									attached.setVelX(Math.max(attached.getVelX(), 0));
+								}
+							}
+							// Rightward collision into wall
+							else
+							{
+								while(attached.intersects(intersectedWall))
+								{
+									attached.setX(attached.getX() - Stage.PUSH_AMOUNT);
+									attached.setVelX(Math.min(attached.getVelX(), 0));
+								}
 							}
 						}
-						// Upward collision into wall
 						else
 						{
-							while(attached.intersects(wall.getLine()))
+							// Downward collision into wall
+							if(attached.isAboveWall(intersectedWall))
 							{
-								attached.setY(attached.getY() + Stage.PUSH_AMOUNT);
-								attached.setVelY(Math.max(attached.getVelY(), 0));
+								while(attached.intersects(intersectedWall))
+								{
+									attached.setY(attached.getY() - Stage.PUSH_AMOUNT);
+									attached.setVelY(Math.min(attached.getVelY(), 0));
+								}
+							}
+							// Upward collision into wall
+							else
+							{
+								while(attached.intersects(intersectedWall))
+								{
+									attached.setY(attached.getY() + Stage.PUSH_AMOUNT);
+									attached.setVelY(Math.max(attached.getVelY(), 0));
+								}
 							}
 						}
 					}
@@ -236,6 +252,9 @@ public class IceChainHook extends Projectile
 			reverse();
 			attached = ent;
 			attached.mark();
+			
+			attached.canAttack(false);
+			attached.canMove(false);
 		}
 	}
 
