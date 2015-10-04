@@ -64,17 +64,17 @@ public class Player extends Entity
 	public static final int SHIFT_STAMINA_COST = 25;
 
 	// Amount regenerated
-	public static final int HEALTH_REGEN = 1000;
+	public static final int HEALTH_REGEN = 1;
 	public static final int MANA_REGEN = 1;
 	public static final int STAMINA_REGEN = 1;
 
 	// Time between each regeneration
-	public static final int HEALTH_REGEN_DELAY = 1;
+	public static final int HEALTH_REGEN_DELAY = 15;
 	public static final int MANA_REGEN_DELAY = 15;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
 	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
-	public static final int HEALTH_REGEN_LONG_DELAY = 1;
+	public static final int HEALTH_REGEN_LONG_DELAY = 150;
 	public static final int MANA_REGEN_LONG_DELAY = 150;
 	public static final int STAMINA_REGEN_LONG_DELAY = 30;
 
@@ -342,10 +342,6 @@ public class Player extends Entity
 		{
 			yOffset -= 24;
 		}
-		else if(!isGrounded())
-		{
-			yOffset -= 54;
-		}
 		else
 		{
 			yOffset -= 54;
@@ -425,16 +421,8 @@ public class Player extends Entity
 		if(phase.id() == Phase.WATER)
 		{
 			// Water phase attack
-			double staffX = getX();
-			double staffY = getY() - 25;
-			if(isFacingRight())
-			{
-				staffX += 65;
-			}
-			else
-			{
-				staffX -= 65;
-			}
+			double staffX = isFacingRight()? getX() + 65 : getX() - 65;
+			double staffY = isCrouching()? getY() : getY() - 25;
 
 			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
 			double velX = WaterProjectile.SPEED * (stage.getMouseX() - staffX) / scale;
