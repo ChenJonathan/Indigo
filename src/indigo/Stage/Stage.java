@@ -191,8 +191,8 @@ public abstract class Stage
 						{
 							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
 						}
-						if(ent.getX() > plat.getMinX()
-								&& ent.getX() < plat.getMaxX()
+						if(ent.getX() >= plat.getMinX()
+								&& ent.getX() <= plat.getMaxX()
 								&& ent.getVelY() >= 0
 								&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent
 										.getX())))
@@ -256,17 +256,16 @@ public abstract class Stage
 							{
 								if(!ent.isFlying() && ground == null)
 								{
-									if(ent.getX() > intersectedWall.getMinX() && ent.getX() < intersectedWall.getMaxX())
+									if(ent.getX() >= intersectedWall.getMinX()
+											&& ent.getX() <= intersectedWall.getMaxX() && ent.isGrounded()
+											&& ent.getGround().equals(intersectedWall))
 									{
-										if(ent.isGrounded() && ent.getGround().equals(intersectedWall))
-										{
-											ground = intersectedWall;
-										}
-										else if(feetTravel.intersectsLine(intersectedWall.getLine()))
-										{
-											ground = intersectedWall;
-											ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
-										}
+										ground = intersectedWall;
+									}
+									else if(feetTravel.intersectsLine(intersectedWall.getLine()))
+									{
+										ground = intersectedWall;
+										ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
 									}
 								}
 								else if(ground == null)
