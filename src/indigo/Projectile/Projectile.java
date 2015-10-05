@@ -261,6 +261,12 @@ public abstract class Projectile
 		return dead;
 	}
 
+	// Do not use
+	public void setDead()
+	{
+		dead = true;
+	}
+
 	public Stage getStage()
 	{
 		return stage;

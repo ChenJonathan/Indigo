@@ -84,6 +84,12 @@ public abstract class Item
 	{
 		return dead;
 	}
+	
+	// Do not use
+	public void setDead()
+	{
+		dead = true;
+	}
 
 	public Stage getStage()
 	{

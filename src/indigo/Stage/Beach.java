@@ -15,12 +15,9 @@ import indigo.Manager.Content;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
-import java.util.Random;
 
 public class Beach extends Stage
 {
-	private Random generator = new Random();
-
 	private final int maxEnemies = 8;
 	private final int enemiesToKill = 25;
 	private int enemiesKilled = 0;
@@ -109,19 +106,19 @@ public class Beach extends Stage
 		}
 		else if(entities.size() - 1 < maxEnemies)
 		{
-			if((!entities.contains(turretCenter) || turretCenter.isDead()) && generator.nextInt(200) == 0)
+			if((!entities.contains(turretCenter) || turretCenter.isDead()) && (int)(Math.random() * 200) == 0)
 			{
 				turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 				entities.add(turretCenter);
 			}
-			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && generator.nextInt(200) == 0)
+			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && (int)(Math.random() * 200) == 0)
 			{
 				turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 				entities.add(turretFlag);
 			}
 			else
 			{
-				if(generator.nextInt(200) == 0)
+				if((int)(Math.random() * 200) == 0)
 				{
 					entities.add(new FlyingBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
 							FlyingBot.BASE_HEALTH));
@@ -129,7 +126,7 @@ public class Beach extends Stage
 			}
 		}
 		
-		if((!items.contains(pickup) || pickup.isDead()) && generator.nextInt(200) == 0)
+		if((!items.contains(pickup) || pickup.isDead()) && (int)(Math.random() * 200) == 0)
 		{
 			pickup = new HealthPickup(this, 2000, 920);
 			items.add(pickup);

@@ -47,10 +47,11 @@ public abstract class Stage
 	// Distance that entities are pushed when they collide with things - Fairly arbitrary
 	public static final double PUSH_AMOUNT = 0.5;
 
-	public static final double GRAVITY = 3;
-	public static final double FRICTION = 2;
+	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
+	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
 	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
-	public static final double SKY_LIMIT = -1000;
+	public static final double COLLISION_PROXIMITY = 250; // Maximum distance where collision is checked
+	public static final double SKY_LIMIT = -1000; // Upper boundary of the map
 
 	public Stage(PlayState playState)
 	{
@@ -82,14 +83,17 @@ public abstract class Stage
 						Item item = items.get(count);
 						item.update();
 
-						if(item.isActive() && ent.intersects(item)) // TODO Proximity check
+						if(item.isActive() && inProximity(ent, item) && ent.intersects(item))
 						{
 							item.activate(player);
 						}
 
-						if(item.isDead())
+						if(item.isDead() || item.getX() < 0 || item.getX() > getMapX() || item.getY() < SKY_LIMIT
+								|| item.getY() > getMapY())
 						{
+							item.setDead();
 							items.remove(item);
+							itemCount--;
 						}
 					}
 				}
@@ -99,7 +103,7 @@ public abstract class Stage
 				{
 					Entity otherEnt = entities.get(entCount);
 
-					if((otherEnt).isActive())
+					if((otherEnt).isActive() && inProximity(ent, otherEnt))
 					{
 						if(ent.intersects(otherEnt))
 						{
@@ -159,7 +163,8 @@ public abstract class Stage
 				{
 					Projectile proj = projectiles.get(projCount);
 					// Consider setting projectile location to intersection
-					if((proj.isFriendly() != ent.isFriendly()) && proj.isActive() && ent.intersects(proj))
+					if(inProximity(ent, proj) && proj.isFriendly() != ent.isFriendly() && proj.isActive()
+							&& ent.intersects(proj))
 					{
 						proj.collide(ent);
 						if(!ent.isActive())
@@ -180,14 +185,20 @@ public abstract class Stage
 			{
 				for(Platform plat : platforms)
 				{
-					if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAbovePlatform(plat))
+					if(inProximity(ent, plat))
 					{
-						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
-					}
-					if(ent.getX() > plat.getMinX() && ent.getX() < plat.getMaxX() && ent.getVelY() >= 0
-							&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent.getX())))
-					{
-						ground = plat;
+						if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAbovePlatform(plat))
+						{
+							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+						}
+						if(ent.getX() > plat.getMinX()
+								&& ent.getX() < plat.getMaxX()
+								&& ent.getVelY() >= 0
+								&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent
+										.getX())))
+						{
+							ground = plat;
+						}
 					}
 				}
 			}
@@ -197,7 +208,8 @@ public abstract class Stage
 			// Entity-wall: Colliding with and landing on walls
 			for(Wall wall : walls)
 			{
-				if(ent.intersects(wall) || (ent.isGrounded() && ent.getGround().equals(wall)))
+				if(inProximity(ent, wall)
+						&& (ent.intersects(wall) || (ent.isGrounded() && ent.getGround().equals(wall))))
 				{
 					intersectedWalls.add(wall);
 				}
@@ -239,7 +251,7 @@ public abstract class Stage
 						else
 						{
 							// Downward collision into wall
-							// Only the closest wall is set as ground; other downward walls are ignored
+							// Only the closest wall is set as ground; other downward collision walls are ignored
 							if(ent.isAboveWall(intersectedWall))
 							{
 								if(!ent.isFlying() && ground == null)
@@ -296,6 +308,7 @@ public abstract class Stage
 				{
 					playState.endGame();
 				}
+				ent.setDead();
 				entities.remove(entities.get(count));
 				count--;
 			}
@@ -309,9 +322,8 @@ public abstract class Stage
 			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
 			for(Wall wall : walls)
 			{
-				if(proj.isActive())
+				if(proj.isActive() && inProximity(proj, wall))
 				{
-					// TODO Proximity check
 					if(wall.killsNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
 					{
 						proj.die();
@@ -380,10 +392,41 @@ public abstract class Stage
 			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT
 					|| proj.getY() > getMapY())
 			{
+				proj.setDead();
 				projectiles.remove(proj);
 				count--;
 			}
 		}
+	}
+
+	public boolean inProximity(Entity ent, Item item)
+	{
+		return Math.sqrt(Math.pow(ent.getX() - item.getX(), 2) + Math.pow(ent.getY() - item.getY(), 2)) < COLLISION_PROXIMITY;
+	}
+
+	public boolean inProximity(Entity ent, Entity otherEnt)
+	{
+		return Math.sqrt(Math.pow(ent.getX() - otherEnt.getX(), 2) + Math.pow(ent.getY() - otherEnt.getY(), 2)) < COLLISION_PROXIMITY;
+	}
+
+	public boolean inProximity(Entity ent, Projectile proj)
+	{
+		return Math.sqrt(Math.pow(ent.getX() - proj.getX(), 2) + Math.pow(ent.getY() - proj.getY(), 2)) < COLLISION_PROXIMITY;
+	}
+
+	public boolean inProximity(Entity ent, Platform plat)
+	{
+		return plat.getLine().ptSegDist(ent.getX(), ent.getY()) < COLLISION_PROXIMITY;
+	}
+
+	public boolean inProximity(Entity ent, Wall wall)
+	{
+		return wall.getLine().ptSegDist(ent.getX(), ent.getY()) < COLLISION_PROXIMITY;
+	}
+
+	public boolean inProximity(Projectile proj, Wall wall)
+	{
+		return wall.getLine().ptSegDist(proj.getX(), proj.getY()) < COLLISION_PROXIMITY;
 	}
 
 	public void trackDeath(String killer, Entity killed)
@@ -395,14 +438,13 @@ public abstract class Stage
 		}
 		else if(killed.isMarked())
 		{
-			// TODO Gain experienced - Add experience variable to Entity class
+			// TODO Gain experience - Add experience variable to Entity class
 			// Consider doing after death animation
 		}
 	}
 
-	// Updates the camera and renders everything
-	// Subclasses need to render background, render targeting reticles, render projectiles, render items, and render
-	// entities (in that order)
+	// Updates the camera and renders everything - Subclasses need to render background, render targeting reticles,
+	// render projectiles, render items, and render entities (in that order)
 	public abstract void render(Graphics2D g);
 
 	// Updates camera reference point based on player position

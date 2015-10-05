@@ -268,11 +268,11 @@ public abstract class Entity
 		{
 			return;
 		}
-		
+
 		for(int count = 0; count < walls.size(); count++)
 		{
 			double length = walls.get(count).getLine().ptSegDist(prevX, prevY);
-			
+
 			for(int current = count + 1; current < walls.size(); current++)
 			{
 				if(walls.get(current).getLine().ptSegDist(prevX, prevY) < length)
@@ -560,6 +560,12 @@ public abstract class Entity
 	public boolean isDead()
 	{
 		return dead;
+	}
+
+	// Do not use
+	public void setDead()
+	{
+		dead = true;
 	}
 
 	public Stage getStage()
