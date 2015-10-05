@@ -1,5 +1,7 @@
 package indigo.Manager;
 
+import indigo.Main.Game;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -266,8 +268,8 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	 */
 	public void mouseSet(int x, int y)
 	{
-		mouseX = x;
-		mouseY = y;
+		mouseX = (int)((double)x / Game.WIDTH * 1920);
+		mouseY = (int)((double)y / Game.HEIGHT * 1080);
 	}
 
 	/**

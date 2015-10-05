@@ -20,7 +20,9 @@ import javax.swing.*;
 public class Game extends JPanel implements Runnable
 {
 	public static final int WIDTH = 1920;
-	public static final int HEIGHT = WIDTH / 16 * 9;
+	public static final int HEIGHT = 1080;
+	public static final int DEFAULT_WIDTH = 1920;
+	public static final int DEFAULT_HEIGHT = 1080;
 	public static final int CURSOR_WIDTH = 32;
 	public static final int CURSOR_HEIGHT = 32;
 
@@ -47,6 +49,7 @@ public class Game extends JPanel implements Runnable
 		running = true;
 		image = new BufferedImage(WIDTH, HEIGHT, 1);
 		g = (Graphics2D)image.getGraphics();
+		g.scale((double)WIDTH / DEFAULT_WIDTH, (double)HEIGHT / DEFAULT_HEIGHT);
 		input = new InputManager();
 		gsm = new GameStateManager(this);
 	}

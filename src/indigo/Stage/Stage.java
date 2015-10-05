@@ -408,8 +408,8 @@ public abstract class Stage
 	// Updates camera reference point based on player position
 	public void updateCam(Graphics2D g)
 	{
-		camX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
-		camY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
+		camX = (int)Math.round(player.getX()) - Game.DEFAULT_WIDTH / 2;
+		camY = (int)Math.round(player.getY()) - Game.DEFAULT_HEIGHT / 2;
 		if(camX > maxOffsetX)
 		{
 			camX = maxOffsetX;
@@ -452,8 +452,8 @@ public abstract class Stage
 	{
 		this.mapX = mapX;
 		this.mapY = mapY;
-		maxOffsetX = mapX - Game.WIDTH;
-		maxOffsetY = mapY - Game.HEIGHT;
+		maxOffsetX = mapX - Game.DEFAULT_WIDTH;
+		maxOffsetY = mapY - Game.DEFAULT_HEIGHT;
 		minOffsetX = 0;
 		minOffsetY = 0;
 	}

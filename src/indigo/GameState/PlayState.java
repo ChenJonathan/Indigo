@@ -6,6 +6,7 @@ import indigo.Entity.Player;
 import indigo.Item.Item;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
+import indigo.Main.Game;
 import indigo.Manager.Content;
 import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
