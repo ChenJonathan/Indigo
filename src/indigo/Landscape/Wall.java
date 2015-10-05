@@ -30,7 +30,7 @@ public class Wall implements Land
 		name = "a wall";
 		line = new Line2D.Double(x1, y1, x2, y2);
 
-		slope = (y2 - y1) / (x2 - x1);
+		slope = (y2 - y1) / ((x2 - x1) == 0 ? 0.0000001 : (x2 - x1));
 		minX = Math.min(x1, x2);
 		maxX = Math.max(x1, x2);
 
