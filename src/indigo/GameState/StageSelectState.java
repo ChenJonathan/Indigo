@@ -1,6 +1,6 @@
 package indigo.GameState;
 
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 
 import java.awt.Graphics2D;
@@ -34,7 +34,7 @@ public class StageSelectState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
-		g.drawImage(Content.STAGE_SELECT_BACKGROUND, 0, 0, 1920, 1080, null);
+		g.drawImage(ContentManager.getImage(ContentManager.STAGE_SELECT_BACKGROUND), 0, 0, 1920, 1080, null);
 	}
 
 	/**

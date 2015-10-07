@@ -1,7 +1,7 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Projectile.Mortar;
 import indigo.Stage.Stage;
 
@@ -42,7 +42,7 @@ public class Turret extends Entity
 
 		angle = Math.PI / 2;
 
-		setAnimation(DEFAULT, Content.TURRET_IDLE, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_IDLE), -1);
 	}
 
 	public void update()
@@ -219,7 +219,7 @@ public class Turret extends Entity
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, Content.TURRET_DEATH, 2);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_DEATH), 2);
 		}
 	}
 }

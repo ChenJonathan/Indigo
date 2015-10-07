@@ -1,6 +1,6 @@
 package indigo.Weapon;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
@@ -40,7 +40,7 @@ public abstract class Weapon
 
 	public abstract void update();
 
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics2D g);
 
 	public abstract void collide(Entity ent);
 

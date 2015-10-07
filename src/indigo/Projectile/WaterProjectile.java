@@ -2,7 +2,7 @@ package indigo.Projectile;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -41,7 +41,7 @@ public class WaterProjectile extends Projectile
 		}
 		timer = DURATION;
 
-		setAnimation(DEFAULT, Content.WATER_PROJECTILE, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE), -1);
 	}
 
 	public void update()
@@ -103,12 +103,11 @@ public class WaterProjectile extends Projectile
 
 	public void collide(Wall wall)
 	{
-		// TODO Consider making this more logical
 		double slopeAngle = Math.atan(-1 / wall.getSlope());
 		if(Math.abs(slopeAngle) < 0.0001)
 		{
-			// For completely horizontal walls
-			angle = Math.PI / 2 * getVelY() / Math.abs(getVelY());
+			// For completely vertical walls
+			angle = getVelX() > 0? 0 : Math.PI;
 		}
 		else if(Math.abs(slopeAngle - angle) < Math.abs(slopeAngle + Math.PI - angle))
 		{
@@ -119,7 +118,7 @@ public class WaterProjectile extends Projectile
 			angle = Math.PI + slopeAngle;
 		}
 
-		setAnimation(DEATH_WALL, Content.WATER_PROJECTILE_DEATH_WALL, 5);
+		setAnimation(DEATH_WALL, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE_DEATH_WALL), 5);
 		die();
 	}
 
@@ -132,9 +131,10 @@ public class WaterProjectile extends Projectile
 	{
 		setVelX(0);
 		setVelY(0);
+
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
-			setAnimation(DEATH, Content.WATER_PROJECTILE_DEATH, 5);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE_DEATH), 5);
 		}
 	}
 }

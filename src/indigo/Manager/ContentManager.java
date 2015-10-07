@@ -1,4 +1,3 @@
-
 package indigo.Manager;
 
 import java.awt.image.BufferedImage;
@@ -116,6 +115,20 @@ public class ContentManager
 	public static ImageData STAGE_BEACH = new ImageData("/stages/beach.png", 6400, 1200);
 
 	// Weapons
+	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/weapon/ice_sword/idle_left.png", 138, 146, 1);
+	public static AnimationData ICE_SWORD_IDLE_RIGHT = new AnimationData("/weapon/ice_sword/idle_right.png", 138, 146,
+			1);
+	public static AnimationData ICE_SWORD_DOWNSLASH_LEFT = new AnimationData("/weapon/ice_sword/downslash_left.png",
+			138, 146, 6);
+	public static AnimationData ICE_SWORD_DOWNSLASH_RIGHT = new AnimationData("/weapon/ice_sword/downslash_right.png",
+			138, 146, 6);
+	public static AnimationData ICE_SWORD_STAB_LEFT = new AnimationData("/weapon/ice_sword/stab_left.png", 138, 146, 4);
+	public static AnimationData ICE_SWORD_STAB_RIGHT = new AnimationData("/weapon/ice_sword/stab_right.png", 138, 146,
+			4);
+	public static AnimationData ICE_SWORD_UPSLASH_LEFT = new AnimationData("/weapon/ice_sword/upslash_left.png", 138,
+			146, 6);
+	public static AnimationData ICE_SWORD_UPSLASH_RIGHT = new AnimationData("/weapon/ice_sword/upslash_right.png", 138,
+			146, 6);
 	public static AnimationData STAFF_ATTACK_LEFT = new AnimationData("/weapon/staff/attack_left.png", 100, 90, 1);
 	public static AnimationData STAFF_ATTACK_RIGHT = new AnimationData("/weapon/staff/attack_right.png", 100, 90, 1);
 	public static AnimationData STAFF_CAST_LEFT = new AnimationData("/weapon/staff/cast_left.png", 100, 90, 6);
@@ -197,7 +210,7 @@ public class ContentManager
 		BufferedImage img;
 		try
 		{
-			img = ImageIO.read(Content.class.getResourceAsStream(path));
+			img = ImageIO.read(ContentManager.class.getResourceAsStream(path));
 			img = img.getSubimage(0, 0, width, height);
 			return img;
 		}

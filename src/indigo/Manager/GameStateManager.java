@@ -72,6 +72,7 @@ public class GameStateManager
 	public void setState(int state)
 	{
 		gameStates[currentState] = null;
+		ContentManager.dispose();
 		currentState = state;
 		if(state == MENU)
 		{

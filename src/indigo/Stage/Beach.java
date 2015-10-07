@@ -11,7 +11,7 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
@@ -135,7 +135,7 @@ public class Beach extends Stage
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(Content.STAGE_BEACH, 0, 0, 6400, 1200, null);
+		g.drawImage(ContentManager.getImage(ContentManager.STAGE_BEACH), 0, 0, 6400, 1200, null);
 
 		for(Projectile proj : projectiles)
 		{

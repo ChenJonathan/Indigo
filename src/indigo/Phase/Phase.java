@@ -184,7 +184,7 @@ public abstract class Phase
 				casting = true;
 			}
 		}
-		return player.canAttack() && !casting;
+		return player.canAttack() && player.canMove() && player.canTurn() && !player.hasWeaponHitbox() && !casting;
 	}
 
 	public abstract void unlockSkill();

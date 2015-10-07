@@ -1,6 +1,6 @@
 package indigo.Entity;
 
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Projectile.ElectricBall;
 import indigo.Stage.Stage;
 
@@ -46,7 +46,7 @@ public class FlyingBot extends Entity
 
 		timer = DEFAULT_TIMER;
 
-		setAnimation(DEFAULT, Content.BOT_IDLE, 3);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.BOT_IDLE), 3);
 	}
 
 	public void update()
@@ -97,7 +97,7 @@ public class FlyingBot extends Entity
 		if(getX() > 0 && getX() < stage.getMapX() && currentAnimation != DEATH)
 		{
 			g.rotate(angle, getX(), getY());
-			g.drawImage(Content.BOT_CANNON, (int)(getX() + 15), (int)(getY() - 5.5), 18, 11, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BOT_CANNON), (int)(getX() + 15), (int)(getY() - 5.5), 18, 11, null);
 			g.rotate(-angle, getX(), getY());
 		}
 	}
@@ -226,6 +226,6 @@ public class FlyingBot extends Entity
 	{
 		flying = false;
 		setVelX(0);
-		setAnimation(DEATH, Content.BOT_DEATH, 4);
+		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.BOT_DEATH), 4);
 	}
 }

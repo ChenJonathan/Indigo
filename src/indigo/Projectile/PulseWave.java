@@ -2,12 +2,11 @@ package indigo.Projectile;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 public class PulseWave extends Projectile
 {
@@ -32,7 +31,7 @@ public class PulseWave extends Projectile
 
 		timer = DURATION;
 
-		setAnimation(DEFAULT, Content.PULSE_WAVE, -1); // TODO: Change to be that of the pulse shot
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.PULSE_WAVE), -1);
 	}
 
 	public void update()
@@ -55,13 +54,6 @@ public class PulseWave extends Projectile
 				stage.getProjectiles().get(count).die();
 			}
 		}
-	}
-
-	public boolean intersects(Projectile proj)
-	{
-		Area entArea = new Area(getHitbox());
-		entArea.intersect(new Area(proj.getHitbox()));
-		return !entArea.isEmpty();
 	}
 
 	public void render(Graphics2D g)
@@ -87,7 +79,7 @@ public class PulseWave extends Projectile
 			double velX = PUSHBACK * iDP * (ent.getX() - getX()) / scale;
 			double velY = PUSHBACK * iDP * (ent.getY() - getY()) / scale;
 
-			if(scale < getWidth() * 0.02 || scale < getHeight() * 0.02) // TODO: Change for when get circular hitbox.
+			if(scale < getWidth() * 0.02) // TODO: Change for when get circular hitbox.
 			{
 				// Directly apply knockback to avoid divide by zero error
 				velX = PUSHBACK * (ent.getX() - getX()) / scale;
@@ -100,9 +92,8 @@ public class PulseWave extends Projectile
 			if(!ent.isDodging()) // damaged, won't hurt if is dodging, scale by distance
 			{
 				ent.setHealth((int)(ent.getHealth() - (DAMAGE * iDP)));
+				ent.mark();
 			}
-
-			ent.mark();
 		}
 	}
 

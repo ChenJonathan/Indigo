@@ -7,6 +7,7 @@ import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
@@ -127,10 +128,18 @@ public abstract class Projectile
 		dead = true;
 	}
 
-	// Used for projectile-wall collision - Checks if the projectile passed through the wall completely
-	public boolean intersects(Line2D.Double line)
+	// Used for Pulse skill
+	public boolean intersects(Projectile proj)
 	{
-		return line.intersectsLine(travel);
+		Area entArea = new Area(getHitbox());
+		entArea.intersect(new Area(proj.getHitbox()));
+		return !entArea.isEmpty();
+	}
+
+	// Used for projectile-wall collision - Checks if the projectile passed through the wall completely
+	public boolean intersects(Wall wall)
+	{
+		return wall.getLine().intersectsLine(travel);
 	}
 
 	// Used for projectile-wall collision - Utilizes previous projectile position

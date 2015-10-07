@@ -1,6 +1,6 @@
 package indigo.GameState;
 
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 
 import java.awt.Graphics2D;
@@ -36,7 +36,7 @@ public class MenuState extends GameState
 		instructions = false;
 		credits = false;
 
-		gsm.setCursor(Content.CURSOR);
+		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		buttonState = new int[5];
 		for(int i = 0; i < buttonState.length; i++)
@@ -62,68 +62,68 @@ public class MenuState extends GameState
 		if(instructions)
 		{
 			// Draw instructions
-			g.drawImage(Content.INSTRUCTIONS_BACKGROUND, 0, 0, 1920, 1080, null);
-			g.drawImage(Content.BACK_BUTTON, 180, 800, 200, 60, null);
+			g.drawImage(ContentManager.getImage(ContentManager.INSTRUCTIONS_BACKGROUND), 0, 0, 1920, 1080, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BACK_BUTTON), 180, 800, 200, 60, null);
 		}
 		else if(credits)
 		{
 			// Draw credits
-			g.drawImage(Content.CREDITS_BACKGROUND, 0, 0, 1920, 1080, null);
-			g.drawImage(Content.BACK_BUTTON, 180, 800, 200, 60, null);
+			g.drawImage(ContentManager.getImage(ContentManager.CREDITS_BACKGROUND), 0, 0, 1920, 1080, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BACK_BUTTON), 180, 800, 200, 60, null);
 		}
 		else
 		{
 			// Draw main menu
-			g.drawImage(Content.MENU_BACKGROUND, 0, 0, 1920, 1080, null);
-			g.drawImage(Content.TITLE, 200, 200, 800, 382, null);
-			g.drawImage(Content.PLAY_BUTTON, 1235, 285, 150, 100, null);
-			g.drawImage(Content.HELP_BUTTON, 1235, 385, 160, 100, null);
-			g.drawImage(Content.OPTIONS_BUTTON, 1235, 485, 280, 100, null);
-			g.drawImage(Content.CREDITS_BUTTON, 1235, 585, 250, 100, null);
-			g.drawImage(Content.EXIT_BUTTON, 1235, 685, 130, 100, null);
-			g.drawImage(Content.SELECT_BAR, 1235, 345, 268, 46, null);
-			g.drawImage(Content.SELECT_BAR, 1235, 445, 268, 46, null);
-			g.drawImage(Content.SELECT_BAR, 1235, 545, 268, 46, null);
-			g.drawImage(Content.SELECT_BAR, 1235, 645, 268, 46, null);
+			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
+			g.drawImage(ContentManager.getImage(ContentManager.TITLE), 200, 200, 800, 382, null);
+			g.drawImage(ContentManager.getImage(ContentManager.PLAY_BUTTON), 1235, 285, 150, 100, null);
+			g.drawImage(ContentManager.getImage(ContentManager.HELP_BUTTON), 1235, 385, 160, 100, null);
+			g.drawImage(ContentManager.getImage(ContentManager.OPTIONS_BUTTON), 1235, 485, 280, 100, null);
+			g.drawImage(ContentManager.getImage(ContentManager.CREDITS_BUTTON), 1235, 585, 250, 100, null);
+			g.drawImage(ContentManager.getImage(ContentManager.EXIT_BUTTON), 1235, 685, 130, 100, null);
+			g.drawImage(ContentManager.getImage(ContentManager.SELECT_BAR), 1235, 345, 268, 46, null);
+			g.drawImage(ContentManager.getImage(ContentManager.SELECT_BAR), 1235, 445, 268, 46, null);
+			g.drawImage(ContentManager.getImage(ContentManager.SELECT_BAR), 1235, 545, 268, 46, null);
+			g.drawImage(ContentManager.getImage(ContentManager.SELECT_BAR), 1235, 645, 268, 46, null);
 			if(buttonState[PLAY] == CLICKED)
 			{
-				g.drawImage(Content.GLOW, 1100, 240, 500, 160, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW), 1100, 240, 500, 160, null);
 			}
 			if(buttonState[PLAY] == HOVER || buttonState[PLAY] == CLICKED)
 			{
-				g.drawImage(Content.PLAY_BUTTON_HOVER, 1235, 285, 150, 100, null);
+				g.drawImage(ContentManager.getImage(ContentManager.PLAY_BUTTON_HOVER), 1235, 285, 150, 100, null);
 			}
 			if(buttonState[HELP] == CLICKED)
 			{
-				g.drawImage(Content.GLOW, 1100, 340, 500, 160, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW), 1100, 340, 500, 160, null);
 			}
 			if(buttonState[HELP] == HOVER || buttonState[HELP] == CLICKED)
 			{
-				g.drawImage(Content.HELP_BUTTON_HOVER, 1235, 385, 160, 100, null);
+				g.drawImage(ContentManager.getImage(ContentManager.HELP_BUTTON_HOVER), 1235, 385, 160, 100, null);
 			}
 			if(buttonState[OPTIONS] == CLICKED)
 			{
-				g.drawImage(Content.GLOW, 1100, 440, 500, 160, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW), 1100, 440, 500, 160, null);
 			}
 			if(buttonState[OPTIONS] == HOVER || buttonState[OPTIONS] == CLICKED)
 			{
-				g.drawImage(Content.OPTIONS_BUTTON_HOVER, 1235, 485, 280, 100, null);
+				g.drawImage(ContentManager.getImage(ContentManager.OPTIONS_BUTTON_HOVER), 1235, 485, 280, 100, null);
 			}
 			if(buttonState[CREDITS] == CLICKED)
 			{
-				g.drawImage(Content.GLOW, 1100, 540, 500, 160, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW), 1100, 540, 500, 160, null);
 			}
 			if(buttonState[CREDITS] == HOVER || buttonState[CREDITS] == CLICKED)
 			{
-				g.drawImage(Content.CREDITS_BUTTON_HOVER, 1235, 585, 250, 100, null);
+				g.drawImage(ContentManager.getImage(ContentManager.CREDITS_BUTTON_HOVER), 1235, 585, 250, 100, null);
 			}
 			if(buttonState[EXIT] == CLICKED)
 			{
-				g.drawImage(Content.GLOW, 1100, 640, 500, 160, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW), 1100, 640, 500, 160, null);
 			}
 			if(buttonState[EXIT] == HOVER || buttonState[EXIT] == CLICKED)
 			{
-				g.drawImage(Content.EXIT_BUTTON_HOVER, 1235, 685, 130, 100, null);
+				g.drawImage(ContentManager.getImage(ContentManager.EXIT_BUTTON_HOVER), 1235, 685, 130, 100, null);
 			}
 		}
 	}

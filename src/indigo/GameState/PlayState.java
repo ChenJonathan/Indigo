@@ -6,7 +6,7 @@ import indigo.Entity.Player;
 import indigo.Item.Item;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
@@ -58,7 +58,7 @@ public class PlayState extends GameState
 		super(gsm);
 		data.resetLevelData();
 
-		gsm.setCursor(Content.CURSOR);
+		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		// Initialize stage
 		switch(data.getStage())

@@ -1,7 +1,7 @@
 package indigo.Item;
 
 import indigo.Entity.Player;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -25,7 +25,7 @@ public class ManaPickup extends Item
 		width = WIDTH;
 		height = HEIGHT;
 
-		setAnimation(DEFAULT, Content.MANA_PICKUP, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MANA_PICKUP), -1);
 	}
 
 	public void update()
