@@ -2,15 +2,15 @@ package indigo.Landscape;
 
 import java.awt.geom.Line2D;
 
-public interface Land
+public abstract class Land
 {
-	Line2D.Double getLine();
+	public abstract Line2D.Double getLine();
 
-	double getSlope();
+	public abstract double getSlope();
 
-	double getMinX();
+	public abstract double getMinX();
 
-	double getMaxX();
+	public abstract double getMaxX();
 
-	double getSurface(double x);
+	public abstract double getSurface(double x);
 }

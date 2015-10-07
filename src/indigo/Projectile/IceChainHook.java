@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
 public class IceChainHook extends Projectile
@@ -27,6 +27,7 @@ public class IceChainHook extends Projectile
 	public static final int WIDTH = 160;
 	public static final int HEIGHT = 73;
 	public static final double SPEED = 70;
+	public static final double EXTENSION_RANGE = 50;
 	public static final int EXTEND_DURATION = 20; // Time before hook is recalled
 	public static final int RETURN_DURATION = 30; // Time for hook to return
 
@@ -50,7 +51,7 @@ public class IceChainHook extends Projectile
 		reverse = false;
 		timer = 0;
 
-		setAnimation(DEFAULT, Content.ICICLE, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.ICICLE), -1);
 	}
 
 	public void update()
@@ -84,12 +85,12 @@ public class IceChainHook extends Projectile
 			if(getX() > stage.getPlayer().getX())
 			{
 				stage.getPlayer().setDirection(true);
-				dx = stage.getPlayer().getX() + 30 - getX();
+				dx = stage.getPlayer().getX() + EXTENSION_RANGE - getX();
 			}
 			else
 			{
 				stage.getPlayer().setDirection(false);
-				dx = stage.getPlayer().getX() - 30 - getX();
+				dx = stage.getPlayer().getX() - EXTENSION_RANGE - getX();
 			}
 			double scale = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
@@ -115,15 +116,15 @@ public class IceChainHook extends Projectile
 				{
 					if(getX() > stage.getPlayer().getX())
 					{
-						attached.setX(stage.getPlayer().getX() + 30);
+						attached.setX(stage.getPlayer().getX() + EXTENSION_RANGE);
 					}
 					else
 					{
-						attached.setX(stage.getPlayer().getX() - 30);
+						attached.setX(stage.getPlayer().getX() - EXTENSION_RANGE);
 					}
 					attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight()
 							/ 2);
-					
+
 					attached.canAttack(true);
 					attached.canMove(true);
 				}
@@ -142,7 +143,7 @@ public class IceChainHook extends Projectile
 
 			attached.setVelX(0);
 			attached.setVelY(0);
-			
+
 			attached.removeGround();
 
 			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
@@ -157,7 +158,7 @@ public class IceChainHook extends Projectile
 			}
 			if(intersectedWalls.size() > 0)
 			{
-				attached.sortWallsByDistance(intersectedWalls);
+				stage.sortWallsByDistance(attached, intersectedWalls);
 
 				for(Wall intersectedWall : intersectedWalls)
 				{
@@ -252,7 +253,7 @@ public class IceChainHook extends Projectile
 			reverse();
 			attached = ent;
 			attached.mark();
-			
+
 			attached.canAttack(false);
 			attached.canMove(false);
 		}

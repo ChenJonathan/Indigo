@@ -1,11 +1,11 @@
 package indigo.Weapon;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 public class Staff extends Weapon
 {
@@ -25,11 +25,11 @@ public class Staff extends Weapon
 
 		if(user.isFacingRight())
 		{
-			setAnimation(IDLE_RIGHT, Content.STAFF_IDLE_RIGHT, -1);
+			setAnimation(IDLE_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_RIGHT), -1);
 		}
 		else
 		{
-			setAnimation(IDLE_LEFT, Content.STAFF_IDLE_LEFT, -1);
+			setAnimation(IDLE_LEFT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_LEFT), -1);
 		}
 	}
 
@@ -40,72 +40,66 @@ public class Staff extends Weapon
 		// Animation checking
 		if(animation.hasPlayedOnce())
 		{
-			if(user.isFacingRight() && currentAnimation != IDLE_RIGHT)
+			if(user.isFacingRight())
 			{
-				setAnimation(IDLE_RIGHT, Content.STAFF_IDLE_RIGHT, -1);
+				setAnimation(IDLE_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_RIGHT), -1);
 			}
-			else if(!user.isFacingRight() && currentAnimation != IDLE_LEFT)
+			else
 			{
-				setAnimation(IDLE_LEFT, Content.STAFF_IDLE_LEFT, -1);
-			}
-		}
-		else if(user.isFacingRight())
-		{
-			int frame = animation.getFrame();
-			switch(currentAnimation)
-			{
-				case ATTACK_LEFT:
-					setAnimation(ATTACK_RIGHT, Content.STAFF_ATTACK_RIGHT, 8);
-					animation.setFrame(frame);
-					break;
-				case IDLE_LEFT:
-					setAnimation(IDLE_RIGHT, Content.STAFF_IDLE_RIGHT, -1);
-					animation.setFrame(frame);
-					break;
-				case CAST_LEFT:
-					setAnimation(CAST_RIGHT, Content.STAFF_CAST_RIGHT, 2);
-					animation.setFrame(frame);
-					break;
-				default:
-					break;
+				setAnimation(IDLE_LEFT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_LEFT), -1);
 			}
 		}
-		else
+		else if(user.isFacingRight() != (currentAnimation % 2 == 1))
 		{
-			int frame = animation.getFrame();
-			switch(currentAnimation)
+			if(user.isFacingRight())
 			{
-				case ATTACK_RIGHT:
-					setAnimation(ATTACK_LEFT, Content.STAFF_ATTACK_LEFT, 8);
-					animation.setFrame(frame);
-					break;
-				case IDLE_RIGHT:
-					setAnimation(IDLE_LEFT, Content.STAFF_IDLE_LEFT, -1);
-					animation.setFrame(frame);
-					break;
-				case CAST_RIGHT:
-					setAnimation(CAST_LEFT, Content.STAFF_CAST_LEFT, 2);
-					animation.setFrame(frame);
-					break;
-				default:
-					break;
+				int frame = animation.getFrame();
+				switch(currentAnimation)
+				{
+					case IDLE_LEFT:
+						setAnimation(IDLE_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_RIGHT), -1);
+						break;
+					case ATTACK_LEFT:
+						setAnimation(ATTACK_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_ATTACK_RIGHT), 8);
+						animation.setFrame(frame);
+						break;
+					case CAST_LEFT:
+						setAnimation(CAST_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_CAST_RIGHT), 2);
+						animation.setFrame(frame);
+						break;
+					default:
+						break;
+				}
+			}
+			else
+			{
+				int frame = animation.getFrame();
+				switch(currentAnimation)
+				{
+					case IDLE_RIGHT:
+						setAnimation(IDLE_LEFT, ContentManager.getAnimation(ContentManager.STAFF_IDLE_LEFT), -1);
+						break;
+					case ATTACK_RIGHT:
+						setAnimation(ATTACK_LEFT, ContentManager.getAnimation(ContentManager.STAFF_ATTACK_LEFT), 8);
+						animation.setFrame(frame);
+						break;
+					case CAST_RIGHT:
+						setAnimation(CAST_LEFT, ContentManager.getAnimation(ContentManager.STAFF_CAST_LEFT), 2);
+						animation.setFrame(frame);
+						break;
+					default:
+						break;
+				}
 			}
 		}
 	}
 
-	public void render(Graphics g)
+	public void render(Graphics2D g)
 	{
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
 		
-		if(((Player)user).isCrouching())
-		{
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
-		}
-		else
-		{
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
-		}
+		g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
 	}
 
 	// Not used
@@ -123,11 +117,11 @@ public class Staff extends Weapon
 	{
 		if(user.isFacingRight())
 		{
-			setAnimation(ATTACK_RIGHT, Content.STAFF_ATTACK_RIGHT, 8);
+			setAnimation(ATTACK_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_ATTACK_RIGHT), 8);
 		}
 		else
 		{
-			setAnimation(ATTACK_LEFT, Content.STAFF_ATTACK_LEFT, 8);
+			setAnimation(ATTACK_LEFT, ContentManager.getAnimation(ContentManager.STAFF_ATTACK_LEFT), 8);
 		}
 	}
 
@@ -135,11 +129,11 @@ public class Staff extends Weapon
 	{
 		if(user.isFacingRight())
 		{
-			setAnimation(CAST_RIGHT, Content.STAFF_CAST_RIGHT, 2);
+			setAnimation(CAST_RIGHT, ContentManager.getAnimation(ContentManager.STAFF_CAST_RIGHT), 2);
 		}
 		else
 		{
-			setAnimation(CAST_LEFT, Content.STAFF_CAST_LEFT, 2);
+			setAnimation(CAST_LEFT, ContentManager.getAnimation(ContentManager.STAFF_CAST_LEFT), 2);
 		}
 	}
 	

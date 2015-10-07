@@ -2,8 +2,6 @@ package indigo.GameState;
 
 import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
-import indigo.Manager.InputManager;
-import indigo.Manager.SoundManager;
 
 import java.awt.Graphics2D;
 
@@ -14,8 +12,6 @@ public abstract class GameState
 {
 	protected Data data;
 	protected GameStateManager gsm;
-	protected InputManager input;
-	protected SoundManager sound;
 
 	/**
 	 * Sets up the game state and passes in the game state manager, allowing for control of game data, input, and sound.
@@ -26,8 +22,6 @@ public abstract class GameState
 	{
 		this.gsm = gsm;
 		data = gsm.getData();
-		input = gsm.getInputManager();
-		sound = gsm.getSoundManager();
 	}
 
 	/**

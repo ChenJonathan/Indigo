@@ -2,7 +2,7 @@ package indigo.Projectile;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -26,14 +26,14 @@ public class ElectricBall extends Projectile
 		solid = false;
 		flying = true;
 
-		setAnimation(DEFAULT, Content.ELECTRIC_BALL, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.ELECTRIC_BALL), -1);
 	}
 
 	public void update()
 	{
 		if(animation.hasPlayedOnce())
 		{
-			setAnimation(DEFAULT, Content.ELECTRIC_BALL, -1);
+			setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.ELECTRIC_BALL), -1);
 		}
 
 		super.update();
@@ -51,7 +51,7 @@ public class ElectricBall extends Projectile
 
 	public void collide(Entity ent)
 	{
-		setAnimation(SPARK, Content.ELECTRIC_SPARK, 1);
+		setAnimation(SPARK, ContentManager.getAnimation(ContentManager.ELECTRIC_SPARK), 1);
 
 		if(!ent.isDodging() && !ent.isBlocking(isFacingRight()))
 		{

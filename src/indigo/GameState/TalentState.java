@@ -2,6 +2,7 @@ package indigo.GameState;
 
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
+import indigo.Manager.Manager;
 
 import java.awt.Graphics2D;
 
@@ -40,7 +41,7 @@ public class TalentState extends GameState
 	@Override
 	public void handleInput()
 	{
-		if(input.keyPress(InputManager.ESCAPE))
+		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			gsm.setTalents(false);
 		}

@@ -1,7 +1,7 @@
 package indigo.Item;
 
 import indigo.Entity.Player;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -17,7 +17,7 @@ public class HealthPickup extends Item
 	public final static int HEALTH = 100;
 	public final static int WIDTH = 50;
 	public final static int HEIGHT = 50;
-	public final static double SPEED = 0;		
+	public final static double SPEED = 0;
 
 	public HealthPickup(Stage stage, double x, double y)
 	{
@@ -25,7 +25,7 @@ public class HealthPickup extends Item
 		width = WIDTH;
 		height = HEIGHT;
 
-		setAnimation(SPAWN, Content.HEALTH_PICKUP_SPAWN, 3);
+		setAnimation(SPAWN, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_SPAWN), 3);
 	}
 
 	public void update()
@@ -36,7 +36,7 @@ public class HealthPickup extends Item
 		{
 			if(animation.hasPlayedOnce())
 			{
-				setAnimation(IDLE, Content.HEALTH_PICKUP_IDLE, 6);
+				setAnimation(IDLE, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_IDLE), 6);
 			}
 		}
 		else if(currentAnimation == DEATH)
@@ -75,6 +75,6 @@ public class HealthPickup extends Item
 
 	public void die()
 	{
-		setAnimation(DEATH, Content.HEALTH_PICKUP_DEATH, 2);
+		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_DEATH), 2);
 	}
 }

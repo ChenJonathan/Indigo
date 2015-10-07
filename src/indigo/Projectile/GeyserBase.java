@@ -2,7 +2,7 @@ package indigo.Projectile;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -29,7 +29,7 @@ public class GeyserBase extends Projectile
 		setX(Math.max(getX(), getWidth() / 2));
 		setX(Math.min(getX(), stage.getMapX() - getWidth() / 2));
 
-		setAnimation(DEFAULT, Content.GEYSER_BASE, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.GEYSER_BASE), -1);
 	}
 
 	public void update()

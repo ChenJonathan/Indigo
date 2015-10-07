@@ -2,7 +2,7 @@ package indigo.Projectile;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -26,7 +26,7 @@ public class GeyserParticle extends Projectile
 		solid = false;
 		flying = true;
 
-		setAnimation(DEFAULT, Content.GEYSER, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.GEYSER), -1);
 	}
 
 	public void update()

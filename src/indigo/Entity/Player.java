@@ -1,7 +1,7 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.WaterProjectile;
 import indigo.Stage.Stage;
@@ -103,7 +103,7 @@ public class Player extends Entity
 
 		weapon = new Staff(this, Staff.DAMAGE);
 
-		setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 15);
+		setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT), 15);
 	}
 
 	public void update()
@@ -178,22 +178,22 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT_ARMOR, -1);
+						setAnimation(CROUCH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_RIGHT_ARMOR), -1);
 					}
 					else
 					{
-						setAnimation(CROUCH_RIGHT, Content.PLAYER_CROUCH_RIGHT, -1);
+						setAnimation(CROUCH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_RIGHT), -1);
 					}
 				}
 				else if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
 				{
 					if(iceArmor)
 					{
-						setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT_ARMOR, -1);
+						setAnimation(CROUCH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_LEFT_ARMOR), -1);
 					}
 					else
 					{
-						setAnimation(CROUCH_LEFT, Content.PLAYER_CROUCH_LEFT, -1);
+						setAnimation(CROUCH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_LEFT), -1);
 					}
 				}
 			}
@@ -203,22 +203,22 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(JUMP_RIGHT, Content.PLAYER_JUMP_RIGHT_ARMOR, -1);
+						setAnimation(JUMP_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_RIGHT_ARMOR), -1);
 					}
 					else
 					{
-						setAnimation(JUMP_RIGHT, Content.PLAYER_JUMP_RIGHT, -1);
+						setAnimation(JUMP_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_RIGHT), -1);
 					}
 				}
 				else if(!isFacingRight() && currentAnimation != JUMP_LEFT)
 				{
 					if(iceArmor)
 					{
-						setAnimation(JUMP_LEFT, Content.PLAYER_JUMP_LEFT_ARMOR, -1);
+						setAnimation(JUMP_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_LEFT_ARMOR), -1);
 					}
 					else
 					{
-						setAnimation(JUMP_LEFT, Content.PLAYER_JUMP_LEFT, -1);
+						setAnimation(JUMP_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_LEFT), -1);
 					}
 				}
 			}
@@ -228,22 +228,22 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT_ARMOR, 3);
+						setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT_ARMOR), 3);
 					}
 					else
 					{
-						setAnimation(GROUND_RIGHT, Content.PLAYER_IDLE_RIGHT, 3);
+						setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT), 3);
 					}
 				}
 				else if(!isFacingRight() && currentAnimation != GROUND_LEFT)
 				{
 					if(iceArmor)
 					{
-						setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT_ARMOR, 3);
+						setAnimation(GROUND_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_LEFT_ARMOR), 3);
 					}
 					else
 					{
-						setAnimation(GROUND_LEFT, Content.PLAYER_IDLE_LEFT, 3);
+						setAnimation(GROUND_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_LEFT), 3);
 					}
 				}
 			}
@@ -253,11 +253,11 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT_ARMOR, 2);
+						setAnimation(MOVE_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_MOVE_RIGHT_ARMOR), 2);
 					}
 					else
 					{
-						setAnimation(MOVE_RIGHT, Content.PLAYER_MOVE_RIGHT, 2);
+						setAnimation(MOVE_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_MOVE_RIGHT), 2);
 					}
 				}
 
@@ -276,11 +276,11 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT_ARMOR, 2);
+						setAnimation(MOVE_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_MOVE_LEFT_ARMOR), 2);
 					}
 					else
 					{
-						setAnimation(MOVE_LEFT, Content.PLAYER_MOVE_LEFT, 2);
+						setAnimation(MOVE_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_MOVE_LEFT), 2);
 					}
 				}
 
@@ -323,16 +323,14 @@ public class Player extends Entity
 
 	public double getWeaponXOffset()
 	{
-		double xOffset = 0;
 		if(isFacingRight())
 		{
-			xOffset -= 30;
+			return phase.id() == Phase.WATER ? -30 : -26;
 		}
 		else
 		{
-			xOffset -= 70;
+			return phase.id() == Phase.WATER ? -70 : -112;
 		}
-		return xOffset;
 	}
 
 	public double getWeaponYOffset()
@@ -340,7 +338,7 @@ public class Player extends Entity
 		double yOffset = 0;
 		if(isCrouching())
 		{
-			yOffset -= 24;
+			return phase.id() == Phase.WATER ? -24 : -76;
 		}
 		else
 		{
@@ -400,7 +398,7 @@ public class Player extends Entity
 				}
 			}
 		}
-		return yOffset;
+		return phase.id() == Phase.WATER ? yOffset : yOffset - 48;
 	}
 
 	public Shape getHitbox()
@@ -582,7 +580,7 @@ public class Player extends Entity
 	{
 		if(phase.id() == Phase.WATER)
 		{
-			setAnimation(MIST, Content.PLAYER_MIST, 1);
+			setAnimation(MIST, ContentManager.getAnimation(ContentManager.PLAYER_MIST), 1);
 
 			setVelX(x * 90);
 			setVelY(y * 90);
@@ -616,22 +614,22 @@ public class Player extends Entity
 		{
 			if(iceArmor)
 			{
-				setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT_ARMOR, 2);
+				setAnimation(DEATH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_DEATH_RIGHT_ARMOR), 2);
 			}
 			else
 			{
-				setAnimation(DEATH_RIGHT, Content.PLAYER_DEATH_RIGHT, 2);
+				setAnimation(DEATH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_DEATH_RIGHT), 2);
 			}
 		}
 		else
 		{
 			if(iceArmor)
 			{
-				setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT_ARMOR, 2);
+				setAnimation(DEATH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_DEATH_LEFT_ARMOR), 2);
 			}
 			else
 			{
-				setAnimation(DEATH_LEFT, Content.PLAYER_DEATH_LEFT, 2);
+				setAnimation(DEATH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_DEATH_LEFT), 2);
 			}
 		}
 

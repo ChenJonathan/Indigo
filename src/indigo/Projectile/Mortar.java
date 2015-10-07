@@ -2,7 +2,7 @@ package indigo.Projectile;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.Content;
+import indigo.Manager.ContentManager;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -26,7 +26,7 @@ public class Mortar extends Projectile
 		solid = true;
 		flying = false;
 
-		setAnimation(DEFAULT, Content.MORTAR, -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
 	}
 
 	public void update()
@@ -101,7 +101,7 @@ public class Mortar extends Projectile
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, Content.MORTAR_DEATH, 3);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.MORTAR_DEATH), 3);
 			setVelX(0);
 			setVelY(0);
 		}

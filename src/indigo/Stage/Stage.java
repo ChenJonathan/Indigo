@@ -203,9 +203,8 @@ public abstract class Stage
 				}
 			}
 
-			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-
 			// Entity-wall: Colliding with and landing on walls
+			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
 			for(Wall wall : walls)
 			{
 				if(inProximity(ent, wall)
@@ -216,7 +215,7 @@ public abstract class Stage
 			}
 			if(intersectedWalls.size() > 0)
 			{
-				ent.sortWallsByDistance(intersectedWalls);
+				sortWallsByDistance(ent, intersectedWalls);
 
 				for(Wall intersectedWall : intersectedWalls)
 				{
@@ -319,70 +318,53 @@ public abstract class Stage
 			proj.update();
 
 			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
+			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
 			for(Wall wall : walls)
 			{
-				if(proj.isActive() && inProximity(proj, wall))
+				if(inProximity(proj, wall) && proj.intersects(wall))
 				{
-					if(wall.killsNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						proj.die();
-					}
-					else if(wall.killsSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						proj.die();
-					}
-					if(wall.blocksNonsolidProjectiles() && !proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						double xInt = 0;
-						double yInt = 0;
+					intersectedWalls.add(wall);
+				}
+			}
+			if(intersectedWalls.size() > 0)
+			{
+				sortWallsByDistance(proj, intersectedWalls);
+				boolean collided = false;
 
-						// Calculate intersection point
-						if(proj.getPrevX() != proj.getX())
+				for(Wall wall : intersectedWalls)
+				{
+					if(proj.isActive() && !collided)
+					{
+						if((proj.isSolid() && wall.blocksSolidProjectiles())
+								|| (!proj.isSolid() && wall.blocksNonsolidProjectiles()))
 						{
-							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-							double projYInt = -proj.getX() * slope + proj.getY();
-							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-							yInt = xInt * slope + projYInt;
-						}
-						else
-						{
-							xInt = proj.getX();
-							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
-						}
+							double xInt = 0;
+							double yInt = 0;
 
-						proj.setX(xInt);
-						proj.setY(yInt);
-						if(proj.isActive())
-						{
+							// Calculate intersection point
+							if(proj.getPrevX() != proj.getX())
+							{
+								double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
+								double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
+								double projYInt = -proj.getX() * slope + proj.getY();
+								xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
+								yInt = xInt * slope + projYInt;
+							}
+							else
+							{
+								xInt = proj.getX();
+								yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+							}
+
+							proj.setX(xInt);
+							proj.setY(yInt);
 							proj.collide(wall);
+							collided = true;
 						}
-					}
-					else if(wall.blocksSolidProjectiles() && proj.isSolid() && proj.intersects(wall.getLine()))
-					{
-						double xInt = 0;
-						double yInt = 0;
-
-						// Calculate intersection point
-						if(proj.getPrevX() != proj.getX())
+						if((proj.isSolid() && wall.killsSolidProjectiles())
+								|| (!proj.isSolid() && wall.killsNonsolidProjectiles()))
 						{
-							double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-							double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-							double projYInt = -proj.getX() * slope + proj.getY();
-							xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-							yInt = xInt * slope + projYInt;
-						}
-						else
-						{
-							xInt = proj.getX();
-							yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
-						}
-
-						proj.setX(xInt);
-						proj.setY(yInt);
-						if(proj.isActive())
-						{
-							proj.collide(wall);
+							proj.die();
 						}
 					}
 				}
@@ -426,6 +408,54 @@ public abstract class Stage
 	public boolean inProximity(Projectile proj, Wall wall)
 	{
 		return wall.getLine().ptSegDist(proj.getX(), proj.getY()) < COLLISION_PROXIMITY;
+	}
+
+	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)
+	public void sortWallsByDistance(Entity ent, ArrayList<Wall> walls)
+	{
+		if(walls.size() < 2)
+		{
+			return;
+		}
+
+		for(int count = 0; count < walls.size(); count++)
+		{
+			double length = walls.get(count).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY());
+
+			for(int current = count + 1; current < walls.size(); current++)
+			{
+				if(walls.get(current).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY()) < length)
+				{
+					Wall temp = walls.get(count);
+					walls.set(count, walls.get(current));
+					walls.set(current, temp);
+				}
+			}
+		}
+	}
+
+	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)
+	public void sortWallsByDistance(Projectile proj, ArrayList<Wall> walls)
+	{
+		if(walls.size() < 2)
+		{
+			return;
+		}
+
+		for(int count = 0; count < walls.size(); count++)
+		{
+			double length = walls.get(count).getLine().ptSegDist(proj.getPrevX(), proj.getPrevY());
+
+			for(int current = count + 1; current < walls.size(); current++)
+			{
+				if(walls.get(current).getLine().ptSegDist(proj.getPrevX(), proj.getPrevY()) < length)
+				{
+					Wall temp = walls.get(count);
+					walls.set(count, walls.get(current));
+					walls.set(current, temp);
+				}
+			}
+		}
 	}
 
 	public void trackDeath(String killer, Entity killed)

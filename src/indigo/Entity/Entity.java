@@ -16,7 +16,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public abstract class Entity
 {
@@ -259,30 +258,6 @@ public abstract class Entity
 				* (getPrevX() - wall.getLine().getP1().getX()) - (getPrevY() - wall.getLine().getP1().getY())
 				* (wall.getLine().getP2().getX() - wall.getLine().getP1().getX());
 		return value * deltaX > 0;
-	}
-
-	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)
-	public void sortWallsByDistance(ArrayList<Wall> walls)
-	{
-		if(walls.size() < 2)
-		{
-			return;
-		}
-
-		for(int count = 0; count < walls.size(); count++)
-		{
-			double length = walls.get(count).getLine().ptSegDist(prevX, prevY);
-
-			for(int current = count + 1; current < walls.size(); current++)
-			{
-				if(walls.get(current).getLine().ptSegDist(prevX, prevY) < length)
-				{
-					Wall temp = walls.get(count);
-					walls.set(count, walls.get(current));
-					walls.set(current, temp);
-				}
-			}
-		}
 	}
 
 	// Used for entity-platform collision - Utilizes previous entity feet position

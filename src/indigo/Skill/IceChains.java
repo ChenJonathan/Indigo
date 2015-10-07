@@ -24,10 +24,19 @@ public class IceChains extends Skill
 			double dy = playState.getMouseY() - player.getY();
 			double scale = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-			hook = new IceChainHook(player, player.getX(), player.getY(), dx / scale * IceChainHook.SPEED, dy
-					/ scale * IceChainHook.SPEED, 0);
+			player.attackMain();
+			if(player.isFacingRight())
+			{
+				hook = new IceChainHook(player, player.getX() + IceChainHook.EXTENSION_RANGE, player.getY(), dx / scale
+						* IceChainHook.SPEED, dy / scale * IceChainHook.SPEED, 0);
+			}
+			else
+			{
+				hook = new IceChainHook(player, player.getX() - IceChainHook.EXTENSION_RANGE, player.getY(), dx / scale
+						* IceChainHook.SPEED, dy / scale * IceChainHook.SPEED, 0);
+			}
 			playState.getProjectiles().add(hook);
-			
+
 			player.setMana(player.getMana() - 1);
 			player.canAttack(false);
 			player.canTurn(false);
