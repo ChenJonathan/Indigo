@@ -62,6 +62,10 @@ public class IceSword extends Weapon
 		{
 			attackTime++;
 		}
+		else
+		{
+			swordAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
+		}
 
 		animation.update();
 
@@ -166,13 +170,9 @@ public class IceSword extends Weapon
 	{
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
-		double renderAngle = 0;
-		if(attacking)
-		{
-			renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
-					|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
-					% Math.PI + Math.PI;
-		}
+		double renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
+				|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
+				% Math.PI + Math.PI;
 
 		if(user.isFacingRight())
 		{
