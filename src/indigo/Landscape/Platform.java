@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
-public class Platform implements Land
+public class Platform extends Land
 {
 	private double slope;
 	private double minX;

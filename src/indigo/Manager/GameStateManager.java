@@ -20,8 +20,6 @@ public class GameStateManager
 {
 	private Game game;
 	private Data data;
-	private InputManager input;
-	private SoundManager sound;
 
 	private boolean paused;
 	private PauseState pauseState;
@@ -48,8 +46,6 @@ public class GameStateManager
 	{
 		this.game = game;
 		data = new Data();
-		input = game.getInput();
-		sound = new SoundManager();
 
 		paused = false;
 		pauseState = new PauseState(this);
@@ -178,26 +174,6 @@ public class GameStateManager
 	public Data getData()
 	{
 		return data;
-	}
-
-	/**
-	 * Relays InputManager object to GameState objects.
-	 * 
-	 * @return The input to be relayed.
-	 */
-	public InputManager getInputManager()
-	{
-		return input;
-	}
-
-	/**
-	 * Relays SoundManager object to GameState objects.
-	 * 
-	 * @return The sound to be relayed.
-	 */
-	public SoundManager getSoundManager()
-	{
-		return sound;
 	}
 
 	/**

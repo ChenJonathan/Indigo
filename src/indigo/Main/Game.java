@@ -1,7 +1,7 @@
 package indigo.Main;
 
 import indigo.Manager.GameStateManager;
-import indigo.Manager.InputManager;
+import indigo.Manager.Manager;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -35,7 +35,6 @@ public class Game extends JPanel implements Runnable
 	private Graphics2D g;
 
 	private GameStateManager gsm;
-	private InputManager input;
 
 	/**
 	 * Constructs game panel.
@@ -50,7 +49,6 @@ public class Game extends JPanel implements Runnable
 		image = new BufferedImage(WIDTH, HEIGHT, 1);
 		g = (Graphics2D)image.getGraphics();
 		g.scale((double)WIDTH / DEFAULT_WIDTH, (double)HEIGHT / DEFAULT_HEIGHT);
-		input = new InputManager();
 		gsm = new GameStateManager(this);
 	}
 
@@ -63,9 +61,9 @@ public class Game extends JPanel implements Runnable
 		super.addNotify();
 		if(thread == null)
 		{
-			addKeyListener(input);
-			addMouseListener(input);
-			addMouseMotionListener(input);
+			addKeyListener(Manager.input);
+			addMouseListener(Manager.input);
+			addMouseMotionListener(Manager.input);
 			thread = new Thread(this);
 			thread.start();
 		}
@@ -128,7 +126,7 @@ public class Game extends JPanel implements Runnable
 	private void update()
 	{
 		gsm.update();
-		input.update();
+		Manager.input.update();
 	}
 
 	/**
@@ -159,15 +157,5 @@ public class Game extends JPanel implements Runnable
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Cursor c = toolkit.createCustomCursor(image, new Point(CURSOR_WIDTH / 2, CURSOR_HEIGHT / 2), "Cursor");
 		setCursor(c);
-	}
-
-	/**
-	 * Handles the input.
-	 * 
-	 * @return The input.
-	 */
-	public InputManager getInput()
-	{
-		return input;
 	}
 }

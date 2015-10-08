@@ -2,6 +2,7 @@ package indigo.GameState;
 
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
+import indigo.Manager.Manager;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -54,7 +55,7 @@ public class ClearStageState extends GameState
 	public void handleInput()
 	{
 		// Change to whatever
-		if(input.keyPress(InputManager.ESCAPE))
+		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			gsm.setState(GameStateManager.MENU);
 			// Play sound

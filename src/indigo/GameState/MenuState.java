@@ -2,6 +2,7 @@ package indigo.GameState;
 
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
+import indigo.Manager.Manager;
 
 import java.awt.Graphics2D;
 
@@ -137,8 +138,8 @@ public class MenuState extends GameState
 		// Instruction button functionality goes here
 		if(instructions)
 		{
-			if(input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800
-					&& input.mouseY() <= 860)
+			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
+					&& Manager.input.mouseY() <= 860)
 			{
 				instructions = false;
 			}
@@ -146,8 +147,8 @@ public class MenuState extends GameState
 		// Credits button functionality goes here
 		else if(credits)
 		{
-			if(input.mouseLeftRelease() && input.mouseX() >= 180 && input.mouseX() <= 380 && input.mouseY() >= 800
-					&& input.mouseY() <= 860)
+			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
+					&& Manager.input.mouseY() <= 860)
 			{
 				credits = false;
 			}
@@ -155,15 +156,15 @@ public class MenuState extends GameState
 		// Main menu button functionality goes here
 		else
 		{
-			if(input.mouseX() >= 1235 && input.mouseX() <= 1385 && input.mouseY() >= 285 && input.mouseY() <= 385)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1385 && Manager.input.mouseY() >= 285 && Manager.input.mouseY() <= 385)
 			{
 				buttonState[PLAY] = HOVER;
 
-				if(input.mouseLeftDown())
+				if(Manager.input.mouseLeftDown())
 				{
 					buttonState[PLAY] = CLICKED;
 				}
-				if(input.mouseLeftRelease())
+				if(Manager.input.mouseLeftRelease())
 				{
 					gsm.setState(GameStateManager.SELECT);
 				}
@@ -172,15 +173,15 @@ public class MenuState extends GameState
 			{
 				buttonState[PLAY] = NORMAL;
 			}
-			if(input.mouseX() >= 1235 && input.mouseX() <= 1395 && input.mouseY() >= 385 && input.mouseY() <= 485)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1395 && Manager.input.mouseY() >= 385 && Manager.input.mouseY() <= 485)
 			{
 				buttonState[HELP] = HOVER;
 
-				if(input.mouseLeftDown())
+				if(Manager.input.mouseLeftDown())
 				{
 					buttonState[HELP] = CLICKED;
 				}
-				if(input.mouseLeftRelease())
+				if(Manager.input.mouseLeftRelease())
 				{
 					instructions = true;
 				}
@@ -189,15 +190,15 @@ public class MenuState extends GameState
 			{
 				buttonState[HELP] = NORMAL;
 			}
-			if(input.mouseX() >= 1235 && input.mouseX() <= 1515 && input.mouseY() >= 485 && input.mouseY() <= 585)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1515 && Manager.input.mouseY() >= 485 && Manager.input.mouseY() <= 585)
 			{
 				buttonState[OPTIONS] = HOVER;
 
-				if(input.mouseLeftDown())
+				if(Manager.input.mouseLeftDown())
 				{
 					buttonState[OPTIONS] = CLICKED;
 				}
-				if(input.mouseLeftRelease())
+				if(Manager.input.mouseLeftRelease())
 				{
 					gsm.setOptions(true);
 				}
@@ -206,15 +207,15 @@ public class MenuState extends GameState
 			{
 				buttonState[OPTIONS] = NORMAL;
 			}
-			if(input.mouseX() >= 1235 && input.mouseX() <= 1485 && input.mouseY() >= 585 && input.mouseY() <= 685)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1485 && Manager.input.mouseY() >= 585 && Manager.input.mouseY() <= 685)
 			{
 				buttonState[CREDITS] = HOVER;
 
-				if(input.mouseLeftDown())
+				if(Manager.input.mouseLeftDown())
 				{
 					buttonState[CREDITS] = CLICKED;
 				}
-				if(input.mouseLeftRelease())
+				if(Manager.input.mouseLeftRelease())
 				{
 					credits = true;
 				}
@@ -223,15 +224,15 @@ public class MenuState extends GameState
 			{
 				buttonState[CREDITS] = NORMAL;
 			}
-			if(input.mouseX() >= 1235 && input.mouseX() <= 1365 && input.mouseY() >= 685 && input.mouseY() <= 785)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1365 && Manager.input.mouseY() >= 685 && Manager.input.mouseY() <= 785)
 			{
 				buttonState[EXIT] = HOVER;
 
-				if(input.mouseLeftDown())
+				if(Manager.input.mouseLeftDown())
 				{
 					buttonState[EXIT] = CLICKED;
 				}
-				if(input.mouseLeftRelease())
+				if(Manager.input.mouseLeftRelease())
 				{
 					System.exit(0);
 				}

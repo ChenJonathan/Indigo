@@ -1,6 +1,5 @@
 package indigo.Weapon;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class IceSword extends Weapon
 
 	private final int length = 100;
 	private final int radialOffset = 30;
-	private final int verticalOffset = -20;
+	private final int verticalOffset = -10;
 
 	private boolean attacking = false; // TODO Replace with animation check
 
@@ -63,6 +62,10 @@ public class IceSword extends Weapon
 		{
 			attackTime++;
 		}
+		else
+		{
+			swordAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
+		}
 
 		animation.update();
 
@@ -95,11 +98,13 @@ public class IceSword extends Weapon
 						setAnimation(IDLE_RIGHT, ContentManager.getAnimation(ContentManager.ICE_SWORD_IDLE_RIGHT), -1);
 						break;
 					case DOWNSLASH_LEFT:
-						setAnimation(DOWNSLASH_RIGHT, ContentManager.getAnimation(ContentManager.ICE_SWORD_DOWNSLASH_RIGHT), 1);
+						setAnimation(DOWNSLASH_RIGHT,
+								ContentManager.getAnimation(ContentManager.ICE_SWORD_DOWNSLASH_RIGHT), 1);
 						animation.setFrame(frame);
 						break;
 					case UPSLASH_LEFT:
-						setAnimation(UPSLASH_RIGHT, ContentManager.getAnimation(ContentManager.ICE_SWORD_UPSLASH_RIGHT), 1);
+						setAnimation(UPSLASH_RIGHT,
+								ContentManager.getAnimation(ContentManager.ICE_SWORD_UPSLASH_RIGHT), 1);
 						animation.setFrame(frame);
 						break;
 					case STAB_LEFT:
@@ -119,11 +124,13 @@ public class IceSword extends Weapon
 						setAnimation(IDLE_LEFT, ContentManager.getAnimation(ContentManager.ICE_SWORD_IDLE_LEFT), -1);
 						break;
 					case DOWNSLASH_RIGHT:
-						setAnimation(DOWNSLASH_LEFT, ContentManager.getAnimation(ContentManager.ICE_SWORD_DOWNSLASH_LEFT), 1);
+						setAnimation(DOWNSLASH_LEFT,
+								ContentManager.getAnimation(ContentManager.ICE_SWORD_DOWNSLASH_LEFT), 1);
 						animation.setFrame(frame);
 						break;
 					case UPSLASH_RIGHT:
-						setAnimation(UPSLASH_LEFT, ContentManager.getAnimation(ContentManager.ICE_SWORD_UPSLASH_LEFT), 1);
+						setAnimation(UPSLASH_LEFT, ContentManager.getAnimation(ContentManager.ICE_SWORD_UPSLASH_LEFT),
+								1);
 						animation.setFrame(frame);
 						break;
 					case STAB_RIGHT:
@@ -163,13 +170,9 @@ public class IceSword extends Weapon
 	{
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
-		double renderAngle = 0;
-		if(attacking)
-		{
-			renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
-					|| (swordAngle > Math.PI && swordAngle < (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
-					% Math.PI + Math.PI;
-		}
+		double renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
+				|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
+				% Math.PI + Math.PI;
 
 		if(user.isFacingRight())
 		{

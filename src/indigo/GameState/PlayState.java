@@ -10,6 +10,7 @@ import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
+import indigo.Manager.Manager;
 import indigo.Phase.Ice;
 import indigo.Phase.Phase;
 import indigo.Phase.Water;
@@ -21,7 +22,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 /**
- * The state where the player is actively playing the game. Handles inputs (skill use) and sends the info to the HUD,
+ * The state where the player is actively playing the game. Handles Manager.inputs (skill use) and sends the info to the HUD,
  * Stage, and Phase objects.
  */
 public class PlayState extends GameState
@@ -119,7 +120,7 @@ public class PlayState extends GameState
 	}
 
 	/**
-	 * Handles all of the player input during play. Relays skillcasting information to both stage and HUD. Also checks
+	 * Handles all of the player Manager.input during play. Relays skillcasting information to both stage and HUD. Also checks
 	 * for pause, class switch, etc.
 	 */
 	public void handleInput()
@@ -127,53 +128,53 @@ public class PlayState extends GameState
 		if(player.isActive())
 		{
 			// Movement
-			if(input.keyDown(InputManager.W) && player.canJump())
+			if(Manager.input.keyDown(InputManager.W) && player.canJump())
 			{
 				player.jump();
 			}
-			else if(input.keyPress(InputManager.W) && player.canDoubleJump())
+			else if(Manager.input.keyPress(InputManager.W) && player.canDoubleJump())
 			{
 				player.canDoubleJump(false);
 				player.jump();
 			}
-			else if(input.keyDown(InputManager.W) && player.canJumpMore())
+			else if(Manager.input.keyDown(InputManager.W) && player.canJumpMore())
 			{
 				player.jumpMore();
 			}
-			if(input.keyDown(InputManager.S) && player.canCrouch())
+			if(Manager.input.keyDown(InputManager.S) && player.canCrouch())
 			{
 				player.crouch();
 			}
-			else if(input.keyRelease(InputManager.S))
+			else if(Manager.input.keyRelease(InputManager.S))
 			{
 				player.uncrouch();
 			}
-			if(input.keyDown(InputManager.A) && player.canMove() && !player.isCrouching())
+			if(Manager.input.keyDown(InputManager.A) && player.canMove() && !player.isCrouching())
 			{
 				player.left();
 			}
-			if(input.keyDown(InputManager.D) && player.canMove() && !player.isCrouching())
+			if(Manager.input.keyDown(InputManager.D) && player.canMove() && !player.isCrouching())
 			{
 				player.right();
 			}
-			if(input.keyPress(InputManager.SPACE) && activePhase.canShift())
+			if(Manager.input.keyPress(InputManager.SPACE) && activePhase.canShift())
 			{
 				double x = 0;
 				double y = 0;
 
-				if(input.keyDown(InputManager.W))
+				if(Manager.input.keyDown(InputManager.W))
 				{
 					y -= 1;
 				}
-				if(input.keyDown(InputManager.S))
+				if(Manager.input.keyDown(InputManager.S))
 				{
 					y += 1;
 				}
-				if(input.keyDown(InputManager.A))
+				if(Manager.input.keyDown(InputManager.A))
 				{
 					x -= 1;
 				}
-				if(input.keyDown(InputManager.D))
+				if(Manager.input.keyDown(InputManager.D))
 				{
 					x += 1;
 				}
@@ -189,7 +190,7 @@ public class PlayState extends GameState
 			}
 
 			// Combat
-			if(input.mousePress())
+			if(Manager.input.mousePress())
 			{
 				if(activePhase.skillSelected())
 				{
@@ -202,7 +203,7 @@ public class PlayState extends GameState
 				else if(activePhase.canNormalAttack())
 				{
 					// Manual attacking
-					if(input.mouseLeftPress())
+					if(Manager.input.mouseLeftPress())
 					{
 						player.attackMain();
 					}
@@ -212,12 +213,12 @@ public class PlayState extends GameState
 					}
 				}
 			}
-			else if(input.mouseLeftDown() && activePhase.canNormalAttack())
+			else if(Manager.input.mouseLeftDown() && activePhase.canNormalAttack())
 			{
 				// Automatic attacking
 				player.attackMain();
 			}
-			if(input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
+			if(Manager.input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
 			{
 				// Phase swapping
 				swapPhases();
@@ -225,19 +226,19 @@ public class PlayState extends GameState
 			else
 			{
 				// Skill selection - If a skill is already selected, it is automatically deselected
-				if(input.keyPress(InputManager.K1) && activePhase.canSelect(0))
+				if(Manager.input.keyPress(InputManager.K1) && activePhase.canSelect(0))
 				{
 					activePhase.selectSkill(0);
 				}
-				else if(input.keyPress(InputManager.K2) && activePhase.canSelect(1))
+				else if(Manager.input.keyPress(InputManager.K2) && activePhase.canSelect(1))
 				{
 					activePhase.selectSkill(1);
 				}
-				else if(input.keyPress(InputManager.K3) && activePhase.canSelect(2))
+				else if(Manager.input.keyPress(InputManager.K3) && activePhase.canSelect(2))
 				{
 					activePhase.selectSkill(2);
 				}
-				else if(input.keyPress(InputManager.K4) && activePhase.canSelect(3))
+				else if(Manager.input.keyPress(InputManager.K4) && activePhase.canSelect(3))
 				{
 					activePhase.selectSkill(3);
 				}
@@ -245,7 +246,7 @@ public class PlayState extends GameState
 		}
 
 		// Menu
-		if(input.keyPress(InputManager.ESCAPE))
+		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			// If a skill is selected, deselect it
 			if(activePhase.skillSelected())
@@ -257,7 +258,7 @@ public class PlayState extends GameState
 				gsm.setPaused(true);
 			}
 		}
-		else if(input.keyPress(InputManager.E))
+		else if(Manager.input.keyPress(InputManager.E))
 		{
 			if(activePhase.id() == Phase.WATER)
 			{
@@ -426,10 +427,10 @@ public class PlayState extends GameState
 	}
 
 	/**
-	 * @return The current input data.
+	 * @return The current Manager.input data.
 	 */
 	public InputManager getInput()
 	{
-		return input;
+		return Manager.input;
 	}
 }

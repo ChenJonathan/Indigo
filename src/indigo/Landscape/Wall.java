@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
-public class Wall implements Land
+public class Wall extends Land
 {
 	protected String name;
 	private Line2D.Double line;
