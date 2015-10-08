@@ -296,17 +296,12 @@ public class ContentManager
 		byte[] snd = new byte[0];
 		try
 		{
-			/*File AudioFile = new File(ContentManager.class.getResource(sd.path).getPath());
+			File AudioFile = new File(ContentManager.class.getResource(sd.path).getPath());
 			AudioInputStream ais = AudioSystem.getAudioInputStream(AudioFile);
-			snd = new byte[(int)AudioFile.length()];
-			SoundManager.Format = ais.getFormat();
-			//ais.read(snd, 0, snd.length);
-			Clip test = AudioSystem.getClip();
-			test.open(ais);
-			test.start();
-			test.
-			while(test.isRunning())
-			ais.close();*/
+			AudioFormat Format = ais.getFormat();
+			snd = new byte[(int)(ais.getFrameLength() * Format.getFrameSize())];
+			ais.read(snd, 0, snd.length);
+			ais.close();
 			return snd;
 		}
 		catch(Exception e)

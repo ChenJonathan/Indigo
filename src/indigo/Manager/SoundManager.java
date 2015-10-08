@@ -57,14 +57,15 @@ public class SoundManager{
 	{
 		try
 		{
-			//byte[] SoundBytes = ContentManager.getSound(snd);
-			File AudioFile = new File(SoundManager.class.getResource(snd.path()).getPath());
+			byte[] SoundBytes = ContentManager.getSound(snd);
+			/*File AudioFile = new File(SoundManager.class.getResource(snd.path()).getPath());
 			AudioInputStream ais = AudioSystem.getAudioInputStream(AudioFile);
 			Clip AudioClip = AudioSystem.getClip();
 			AudioClip.open(ais);
-			ais.close();
-			//Clip AudioClip = AudioSystem.getClip();
-			//AudioClip.open(Format, SoundBytes, 0, SoundBytes.length);
+			ais.close();*/
+			Clip AudioClip = AudioSystem.getClip();
+			AudioFormat Format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
+			AudioClip.open(Format, SoundBytes, 0, SoundBytes.length);
 			if(snd.doesLoop()){
 				AudioClip.setLoopPoints(0, -1);
 				AudioClip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -92,7 +93,8 @@ public class SoundManager{
 			});
 			playingSounds.add(AudioClip);
 			AudioClip.start();
-		}catch(Exception Ex)
+		}
+		catch(Exception Ex)
 		{
 			Ex.printStackTrace();
 			System.out.println("Error playing sound.");
