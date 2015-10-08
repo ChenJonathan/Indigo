@@ -1,6 +1,5 @@
 package indigo.Weapon;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -193,8 +192,8 @@ public class IceSword extends Weapon
 		if(attacking)
 		{
 			// Draws a simple line representing the sword // TODO Temporary
-			g.setColor(Color.BLUE);
-			g.drawLine(beginSwordX, beginSwordY, endSwordX, endSwordY);
+			// g.setColor(Color.BLUE);
+			// g.drawLine(beginSwordX, beginSwordY, endSwordX, endSwordY);
 		}
 	}
 
