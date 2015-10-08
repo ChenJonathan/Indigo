@@ -20,7 +20,7 @@ public class SteamVent extends Entity {
 	public static final double STEAMVENT_WIDTH = 100;
 	public static final double STEAMVENT_HEIGHT = 10;
 	public static final int BASE_HEALTH = 200;
-	public static final int DURATION = 45;
+	public static final int DURATION = 60;
 	
 	public SteamVent(Stage stage, double x, double y, int health) {
 		super(stage, x, y, health);
@@ -39,25 +39,23 @@ public class SteamVent extends Entity {
 	}
 	
 	public void update() {
-		if(currentAnimation == DEATH)
-		{
+		if(currentAnimation == DEATH) {
 			super.update();
-			if(animation.hasPlayedOnce())
-			{
+			if(animation.hasPlayedOnce()) {
 				dead = true;
 			}
 			return;
 		}
-
+		
 		super.update();
 		
 		if(canAttack() && timer == DURATION) {
-			stage.getProjectiles().add(new SteamCloud(this, getX(), getY(), 0, 
-					(int)(Math.random() * SteamCloud.SPEED + 1), 0));
+			double x = getX() + (Math.random() * SteamCloud.WIDTH) + SteamCloud.WIDTH / 2;
+			stage.getProjectiles().add(new SteamCloud(this, x, getY() - SteamCloud.HEIGHT, 0, 
+					-(int)(Math.random() * SteamCloud.SPEED + 5), SteamCloud.DAMAGE));
 			timer = 0;
 		}
 		timer++;
-		
 	}
 	
 	public void render(Graphics2D g) {
@@ -73,7 +71,7 @@ public class SteamVent extends Entity {
 	}
 	
 	public void die() {
-		
+		dead = true;
 	}
 
 }

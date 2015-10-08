@@ -6,6 +6,7 @@ import java.awt.geom.Ellipse2D;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
+import indigo.Manager.Content;
 
 public class SteamCloud extends Projectile {
 	
@@ -24,7 +25,10 @@ public class SteamCloud extends Projectile {
 		height = HEIGHT;
 		solid = true;
 		flying = false;
+		
+		setAnimation(DEFAULT, Content.MORTAR, -1);
 	}
+	
 	public void render(Graphics2D g) {
 		g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 	}
@@ -34,7 +38,6 @@ public class SteamCloud extends Projectile {
 	}
 
 	public void collide(Entity ent) {
-		//don't die
 		ent.setVelY(ent.getVelY() - ent.getPushability() / 3);
 		ent.setVelX(ent.getVelX() - ent.getPushability() / 3);
 	}
