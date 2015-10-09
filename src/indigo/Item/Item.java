@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
+// Interacts with the player only
 public abstract class Item
 {
 	protected Stage stage;
@@ -46,8 +47,8 @@ public abstract class Item
 	}
 
 	public abstract void render(Graphics2D g);
-	
-	public abstract void activate(Player player); // Does whatever the item is supposed to do
+
+	public abstract void activate(Player player); // Does whatever the item is supposed to do upon collision
 
 	public abstract Shape getHitbox();
 
@@ -84,7 +85,7 @@ public abstract class Item
 	{
 		return dead;
 	}
-	
+
 	// Do not use
 	public void setDead()
 	{

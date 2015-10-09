@@ -41,7 +41,7 @@ public class WaterProjectile extends Projectile
 		}
 		timer = DURATION;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE), -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE), 1);
 	}
 
 	public void update()
@@ -85,7 +85,7 @@ public class WaterProjectile extends Projectile
 
 	public Shape getHitbox()
 	{
-		return new Ellipse2D.Double(getX() - getHeight() / 2, getY() - getHeight() / 2, getHeight(), getHeight());
+		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
 	public void collide(Entity ent)

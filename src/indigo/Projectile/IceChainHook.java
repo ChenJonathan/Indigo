@@ -3,7 +3,7 @@ package indigo.Projectile;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 import indigo.Entity.Entity;
@@ -243,7 +243,7 @@ public class IceChainHook extends Projectile
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
 	public void collide(Entity ent)
