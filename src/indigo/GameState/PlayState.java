@@ -114,7 +114,6 @@ public class PlayState extends GameState
 	{
 		stage.updateCam(g);
 		stage.render(g);
-		stage.resetCam(g);
 
 		display.render(g);
 	}

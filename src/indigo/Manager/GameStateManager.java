@@ -69,6 +69,7 @@ public class GameStateManager
 	{
 		gameStates[currentState] = null;
 		ContentManager.dispose();
+		SoundManager.stopAll(); // TODO Temporary
 		currentState = state;
 		if(state == MENU)
 		{

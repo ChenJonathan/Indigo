@@ -38,7 +38,7 @@ public class Beach extends Stage
 		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets(6400, 1200);
+		setOffsets(6400, 1200, 2560, 1080);
 
 		// Boundaries
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
@@ -85,13 +85,13 @@ public class Beach extends Stage
 		platforms.add(new Platform(2816, 413, 3272, 413));
 		platforms.add(new Platform(3388, 341, 3850, 341));
 		platforms.add(new Platform(5334, 571, 5793, 571));
-		
+
 		turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 		entities.add(turretCenter);
-		
+
 		turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 		entities.add(turretFlag);
-		
+
 		pickup = new HealthPickup(this, 2000, 920);
 		items.add(pickup);
 		SoundManager.play(ContentManager.BACKGROUND_1);
@@ -127,7 +127,7 @@ public class Beach extends Stage
 				}
 			}
 		}
-		
+
 		if((!items.contains(pickup) || pickup.isDead()) && (int)(Math.random() * 200) == 0)
 		{
 			pickup = new HealthPickup(this, 2000, 920);
@@ -137,8 +137,12 @@ public class Beach extends Stage
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(ContentManager.getImage(ContentManager.STAGE_BEACH), 0, 0, 6400, 1200, null);
-
+		g.translate(-camBackX, -camBackY);
+		g.drawImage(ContentManager.getImage(ContentManager.FOREST_BACKGROUND), 0, 0, backX, backY, null);
+		g.translate(camBackX, camBackY);
+		
+		g.translate(-camForeX, -camForeY);
+		g.drawImage(ContentManager.getImage(ContentManager.STAGE_BEACH), 0, 0, mapX, mapY, null);
 		for(Projectile proj : projectiles)
 		{
 			// Don't render if in pipe
@@ -159,12 +163,12 @@ public class Beach extends Stage
 				ent.render(g);
 			}
 		}
-		
 		// Render player on top
 		if(!(player.getX() > 3834 && player.getX() < 4122 && player.getY() > 995 && player.getY() < 1140))
 		{
 			player.render(g); // TODO Don't render player twice
 		}
+		g.translate(camForeX, camForeY);
 	}
 
 	public void trackDeath(String killer, Entity killed)

@@ -24,8 +24,10 @@ public abstract class Stage
 
 	protected Player player;
 
-	private int camX;
-	private int camY;
+	protected int camForeX;
+	protected int camForeY;
+	protected int camBackX;
+	protected int camBackY;
 
 	private int maxOffsetX;
 	private int maxOffsetY;
@@ -37,6 +39,8 @@ public abstract class Stage
 
 	protected int mapX;
 	protected int mapY;
+	protected int backX;
+	protected int backY;
 
 	protected ArrayList<Entity> entities;
 	protected ArrayList<Item> items;
@@ -50,7 +54,7 @@ public abstract class Stage
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
 	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
-	public static final double COLLISION_PROXIMITY = 250; // Maximum distance where collision is checked
+	public static final double COLLISION_PROXIMITY = 2500; // Maximum distance where collision is checked // TODO Revert
 	public static final double SKY_LIMIT = -1000; // Upper boundary of the map
 
 	public Stage(PlayState playState)
@@ -250,7 +254,8 @@ public abstract class Stage
 						else
 						{
 							// Downward collision into wall
-							// Only the closest wall is set as ground; other downward collision walls are ignored
+							// Only the closest qualified wall is set as ground
+							// Other downward collision walls afterwards are ignored to an extent
 							if(ent.isAboveWall(intersectedWall))
 							{
 								if(!ent.isFlying() && ground == null)
@@ -274,6 +279,10 @@ public abstract class Stage
 										ent.setY(ent.getY() - PUSH_AMOUNT);
 										ent.setVelY(Math.min(ent.getVelY(), 0));
 									}
+								}
+								else if(feetTravel.intersectsLine(intersectedWall.getLine()))
+								{
+									ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
 								}
 							}
 							// Upward collision into wall
@@ -483,47 +492,43 @@ public abstract class Stage
 	// Updates camera reference point based on player position
 	public void updateCam(Graphics2D g)
 	{
-		camX = (int)Math.round(player.getX()) - Game.DEFAULT_WIDTH / 2;
-		camY = (int)Math.round(player.getY()) - Game.DEFAULT_HEIGHT / 2;
-		if(camX > maxOffsetX)
+		camForeX = (int)Math.round(player.getX()) - Game.DEFAULT_WIDTH / 2;
+		camForeY = (int)Math.round(player.getY()) - Game.DEFAULT_HEIGHT / 2;
+		if(camForeX > maxOffsetX)
 		{
-			camX = maxOffsetX;
+			camForeX = maxOffsetX;
 		}
-		else if(camX < minOffsetX)
+		else if(camForeX < minOffsetX)
 		{
-			camX = minOffsetX;
+			camForeX = minOffsetX;
 		}
-		if(camY > maxOffsetY)
+		if(camForeY > maxOffsetY)
 		{
-			camY = maxOffsetY;
+			camForeY = maxOffsetY;
 		}
-		else if(camY < minOffsetY)
+		else if(camForeY < minOffsetY)
 		{
-			camY = minOffsetY;
+			camForeY = minOffsetY;
 		}
-		g.translate(-camX, -camY);
-	}
 
-	// Consider changing - Inefficient
-	public void resetCam(Graphics2D g)
-	{
-		g.translate(camX, camY);
+		camBackX = (int)(((double)backX - Game.DEFAULT_WIDTH) * camForeX / maxOffsetX);
+		camBackY = (int)(((double)backY - Game.DEFAULT_HEIGHT) * camForeY / maxOffsetY);
 	}
 
 	// Returns mouse x position in game coordinates
 	public double getMouseX()
 	{
-		return playState.getInput().mouseX() + camX;
+		return playState.getInput().mouseX() + camForeX;
 	}
 
 	// Returns mouse y position in game coordinates
 	public double getMouseY()
 	{
-		return playState.getInput().mouseY() + camY;
+		return playState.getInput().mouseY() + camForeY;
 	}
 
 	// Sets camera boundaries when initializing the class
-	public void setOffsets(int mapX, int mapY)
+	public void setOffsets(int mapX, int mapY, int backX, int backY)
 	{
 		this.mapX = mapX;
 		this.mapY = mapY;
@@ -531,6 +536,8 @@ public abstract class Stage
 		maxOffsetY = mapY - Game.DEFAULT_HEIGHT;
 		minOffsetX = 0;
 		minOffsetY = 0;
+		this.backX = backX;
+		this.backY = backY;
 	}
 
 	public Entity getPlayer()
