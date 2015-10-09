@@ -287,6 +287,9 @@ public abstract class Stage
 							}
 						}
 					}
+
+					feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(),
+							ent.getY() + ent.getHeight() / 2);
 				}
 			}
 
@@ -353,7 +356,8 @@ public abstract class Stage
 							else
 							{
 								xInt = proj.getX();
-								yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1()) + wall.getLine().getY1();
+								yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1())
+										+ wall.getLine().getY1();
 							}
 
 							proj.setX(xInt);
