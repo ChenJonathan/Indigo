@@ -94,8 +94,7 @@ public class Beach extends Stage
 		
 		pickup = new HealthPickup(this, 2000, 920);
 		items.add(pickup);
-		
-		// SoundManager.play(ContentManager.BACKGROUND_1);
+		SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()

@@ -2,6 +2,7 @@ package indigo.Manager;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -143,9 +144,9 @@ public class ContentManager
 	//Sounds
 	
 	//TEMPORARY BACKGROUND MUSIC
-	public static SoundData BACKGROUND_1 = new SoundData("/sounds/background/Link_and_Zelda's_Duet.mid", true);
-	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda_Medley.mid", true);
-	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates_of_the_Caribbean_Medley.mid", true);
+	public static SoundData BACKGROUND_1 = new SoundData("/sounds/background/Link and Zelda's Duet.mid", true);
+	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda Medley.mid", true);
+	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates of the Caribbean Medley.mid", true);
 	
 	
 	private static HashMap<ImageData, BufferedImage> imageMap;
@@ -295,7 +296,8 @@ public class ContentManager
 		byte[] snd = new byte[0];
 		try
 		{
-			File AudioFile = new File(ContentManager.class.getResource(sd.path).getPath());
+			String FilePath = URLDecoder.decode(ContentManager.class.getResource(sd.path).getPath(), "UTF-8");
+			File AudioFile = new File(FilePath);
 			AudioInputStream ais = AudioSystem.getAudioInputStream(AudioFile);
 			AudioFormat Format = ais.getFormat();
 			snd = new byte[(int)(ais.getFrameLength() * Format.getFrameSize())];
