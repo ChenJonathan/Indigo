@@ -3,11 +3,13 @@ package indigo.Entity;
 import indigo.Landscape.Land;
 import indigo.Manager.ContentManager;
 import indigo.Phase.Phase;
-import indigo.Projectile.WaterProjectile;
+import indigo.Projectile.FrostOrb;
+import indigo.Projectile.WaterBolt;
 import indigo.Stage.Stage;
 import indigo.Weapon.IceSword;
 import indigo.Weapon.Staff;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -423,10 +425,10 @@ public class Player extends Entity
 			double staffY = isCrouching()? getY() : getY() - 25;
 
 			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
-			double velX = WaterProjectile.SPEED * (stage.getMouseX() - staffX) / scale;
-			double velY = WaterProjectile.SPEED * (stage.getMouseY() - staffY) / scale;
+			double velX = WaterBolt.SPEED * (stage.getMouseX() - staffX) / scale;
+			double velY = WaterBolt.SPEED * (stage.getMouseY() - staffY) / scale;
 
-			stage.getProjectiles().add(new WaterProjectile(this, staffX, staffY, velX, velY, WaterProjectile.DAMAGE));
+			stage.getProjectiles().add(new WaterBolt(this, staffX, staffY, velX, velY, WaterBolt.DAMAGE));
 
 			((Staff)weapon).attack();
 		}
@@ -444,22 +446,14 @@ public class Player extends Entity
 		if(phase.id() == Phase.WATER)
 		{
 			// Water phase attack
-			double staffX = getX();
-			double staffY = getY() - 25;
-			if(isFacingRight())
-			{
-				staffX += 65;
-			}
-			else
-			{
-				staffX -= 65;
-			}
+			double staffX = isFacingRight()? getX() + 65 : getX() - 65;
+			double staffY = isCrouching()? getY() : getY() - 25;
 
 			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
-			double velX = WaterProjectile.SPEED * (stage.getMouseX() - staffX) / scale;
-			double velY = WaterProjectile.SPEED * (stage.getMouseY() - staffY) / scale;
+			double velX = FrostOrb.SPEED * (stage.getMouseX() - staffX) / scale;
+			double velY = FrostOrb.SPEED * (stage.getMouseY() - staffY) / scale;
 
-			stage.getProjectiles().add(new WaterProjectile(this, staffX, staffY, velX, velY, WaterProjectile.DAMAGE));
+			stage.getProjectiles().add(new FrostOrb(this, staffX, staffY, velX, velY, FrostOrb.DAMAGE));
 
 			((Staff)weapon).attack();
 		}
@@ -642,7 +636,7 @@ public class Player extends Entity
 	public void setHealth(int health)
 	{
 		// Deducts mana instead of health if IceArmor skill is active
-		if(iceArmor && getMana() > 0)
+		if(iceArmor && getMana() > 0 && health < getHealth())
 		{
 			if(getMana() > (getHealth() - health))
 			{
@@ -742,6 +736,7 @@ public class Player extends Entity
 		if(phase.id() == Phase.WATER)
 		{
 			weapon = new Staff(this, Staff.DAMAGE);
+			iceArmor = false;
 		}
 		else
 		{

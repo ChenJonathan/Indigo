@@ -12,8 +12,8 @@ import javax.sound.sampled.AudioSystem;
 
 /**
  * This class is the content manager for Indigo. Call {@link ContentManager#getImage(ImageData)},
- * {@link ContentManager#getAnimation(AnimationData)}, or {@link ContentManager#getSound(SoundData)} with 
- * the respective static image or animation data to get and cache the content, if it hasn't already. <br>
+ * {@link ContentManager#getAnimation(AnimationData)}, or {@link ContentManager#getSound(SoundData)} with the respective
+ * static image or animation data to get and cache the content, if it hasn't already. <br>
  * <br>
  * Call {@link #dispose()} whenever the stage is changed. To prevent RAM hogging.<br>
  * <br>
@@ -34,9 +34,12 @@ public class ContentManager
 	public static ImageData POINTER = new ImageData("/images/hud/pointer.png", 100, 7);
 
 	// Items
-	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/items/health_pickup/death.png", 110, 110, 5);
-	public static AnimationData HEALTH_PICKUP_IDLE = new AnimationData("/images/items/health_pickup/idle.png", 110, 110, 4);
-	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/items/health_pickup/spawn.png", 110, 110, 5);
+	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/items/health_pickup/death.png", 110,
+			110, 5);
+	public static AnimationData HEALTH_PICKUP_IDLE = new AnimationData("/images/items/health_pickup/idle.png", 110,
+			110, 4);
+	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/items/health_pickup/spawn.png", 110,
+			110, 5);
 	public static AnimationData MANA_PICKUP = new AnimationData("/images/items/mana_pickup.png", 100, 100, 1);
 
 	// Menus
@@ -50,7 +53,8 @@ public class ContentManager
 	public static ImageData GLOW = new ImageData("/images/menus/glow.png", 500, 160);
 	public static ImageData HELP_BUTTON = new ImageData("/images/menus/help.png", 160, 100);
 	public static ImageData HELP_BUTTON_HOVER = new ImageData("/images/menus/help_hover.png", 160, 100);
-	public static ImageData INSTRUCTIONS_BACKGROUND = new ImageData("/images/menus/instructions_background.png", 1920, 1080);
+	public static ImageData INSTRUCTIONS_BACKGROUND = new ImageData("/images/menus/instructions_background.png", 1920,
+			1080);
 	public static ImageData MENU_BACKGROUND = new ImageData("/images/menus/menu_background.png", 1920, 1080);
 	public static ImageData OPTIONS_BACKGROUND = new ImageData("/images/menus/options_background.png", 1920, 1080);
 	public static ImageData OPTIONS_BUTTON = new ImageData("/images/menus/options.png", 280, 100);
@@ -58,58 +62,68 @@ public class ContentManager
 	public static ImageData PLAY_BUTTON = new ImageData("/images/menus/play.png", 150, 100);
 	public static ImageData PLAY_BUTTON_HOVER = new ImageData("/images/menus/play_hover.png", 150, 100);
 	public static ImageData SELECT_BAR = new ImageData("/images/menus/select_bar.png", 268, 46);
-	public static ImageData STAGE_SELECT_BACKGROUND = new ImageData("/images/menus/stage_select_background.png", 1920, 1080);
+	public static ImageData STAGE_SELECT_BACKGROUND = new ImageData("/images/menus/stage_select_background.png", 1920,
+			1080);
 	public static ImageData TALENTS_BACKGROUND = new ImageData("/images/menus/talents.png", 1920, 1080);
 	public static ImageData TITLE = new ImageData("/images/menus/title.png", 800, 382);
 
 	// Projectiles
 	public static AnimationData ELECTRIC_BALL = new AnimationData("/images/projectiles/electric_ball.png", 100, 100, 1);
-	public static AnimationData ELECTRIC_SPARK = new AnimationData("/images/projectiles/electric_spark.png", 100, 100, 1);
+	public static AnimationData ELECTRIC_SPARK = new AnimationData("/images/projectiles/electric_spark.png", 100, 100,
+			1);
+	public static AnimationData FROST_ORB = new AnimationData("/images/projectiles/frost_orb/default.png", 110, 110, 8);
 	public static AnimationData GEYSER_BASE = new AnimationData("/images/projectiles/geyser_base.png", 100, 100, 1);
 	public static AnimationData GEYSER = new AnimationData("/images/projectiles/geyser_particle.png", 80, 50, 1);
 	public static AnimationData ICICLE = new AnimationData("/images/projectiles/icicle/default.png", 160, 73, 1);
 	public static AnimationData MORTAR_DEATH = new AnimationData("/images/projectiles/mortar_death.png", 100, 100, 9);
 	public static AnimationData MORTAR = new AnimationData("/images/projectiles/mortar.png", 50, 50, 1);
-	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 1000, 1000, 1);
-	public static AnimationData WATER_PROJECTILE_DEATH = new AnimationData("/images/projectiles/water_projectile/death.png",
-			80, 73, 2);
-	public static AnimationData WATER_PROJECTILE_DEATH_WALL = new AnimationData(
-			"/images/projectiles/water_projectile/death_wall.png", 80, 73, 2);
-	public static AnimationData WATER_PROJECTILE = new AnimationData("/images/projectiles/water_projectile/default.png", 80,
+	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 1000,
+			1000, 1);
+	public static AnimationData WATER_BOLT_DEATH = new AnimationData("/images/projectiles/water_bolt/death.png", 80,
 			73, 2);
+	public static AnimationData WATER_BOLT_DEATH_WALL = new AnimationData(
+			"/images/projectiles/water_bolt/death_wall.png", 80, 73, 2);
+	public static AnimationData WATER_BOLT = new AnimationData("/images/projectiles/water_bolt/default.png", 80, 73, 2);
 
 	// Sprites
-	public static AnimationData PLAYER_CROUCH_LEFT = new AnimationData("/images/sprites/player/crouch_left.png", 68, 111, 1);
-	public static AnimationData PLAYER_CROUCH_LEFT_ARMOR = new AnimationData("/images/sprites/player/crouch_left_armor.png",
-			68, 111, 1);
-	public static AnimationData PLAYER_CROUCH_RIGHT = new AnimationData("/images/sprites/player/crouch_right.png", 68, 111, 1);
-	public static AnimationData PLAYER_CROUCH_RIGHT_ARMOR = new AnimationData("/images/sprites/player/crouch_right_armor.png",
-			68, 111, 1);
-	public static AnimationData PLAYER_DEATH_LEFT = new AnimationData("/images/sprites/player/death_left.png", 68, 111, 15);
-	public static AnimationData PLAYER_DEATH_LEFT_ARMOR = new AnimationData("/images/sprites/player/death_left_armor.png", 68,
+	public static AnimationData PLAYER_CROUCH_LEFT = new AnimationData("/images/sprites/player/crouch_left.png", 68,
+			111, 1);
+	public static AnimationData PLAYER_CROUCH_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/crouch_left_armor.png", 68, 111, 1);
+	public static AnimationData PLAYER_CROUCH_RIGHT = new AnimationData("/images/sprites/player/crouch_right.png", 68,
+			111, 1);
+	public static AnimationData PLAYER_CROUCH_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/crouch_right_armor.png", 68, 111, 1);
+	public static AnimationData PLAYER_DEATH_LEFT = new AnimationData("/images/sprites/player/death_left.png", 68, 111,
+			15);
+	public static AnimationData PLAYER_DEATH_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/death_left_armor.png", 68, 111, 15);
+	public static AnimationData PLAYER_DEATH_RIGHT = new AnimationData("/images/sprites/player/death_right.png", 68,
 			111, 15);
-	public static AnimationData PLAYER_DEATH_RIGHT = new AnimationData("/images/sprites/player/death_right.png", 68, 111, 15);
-	public static AnimationData PLAYER_DEATH_RIGHT_ARMOR = new AnimationData("/images/sprites/player/death_right_armor.png",
-			68, 111, 15);
+	public static AnimationData PLAYER_DEATH_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/death_right_armor.png", 68, 111, 15);
 	public static AnimationData PLAYER_IDLE_LEFT = new AnimationData("/images/sprites/player/idle_left.png", 68, 111, 6);
-	public static AnimationData PLAYER_IDLE_LEFT_ARMOR = new AnimationData("/images/sprites/player/idle_left_armor.png", 68,
-			111, 6);
-	public static AnimationData PLAYER_IDLE_RIGHT = new AnimationData("/images/sprites/player/idle_right.png", 68, 111, 6);
-	public static AnimationData PLAYER_IDLE_RIGHT_ARMOR = new AnimationData("/images/sprites/player/idle_right_armor.png", 68,
-			111, 6);
+	public static AnimationData PLAYER_IDLE_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/idle_left_armor.png", 68, 111, 6);
+	public static AnimationData PLAYER_IDLE_RIGHT = new AnimationData("/images/sprites/player/idle_right.png", 68, 111,
+			6);
+	public static AnimationData PLAYER_IDLE_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/idle_right_armor.png", 68, 111, 6);
 	public static AnimationData PLAYER_JUMP_LEFT = new AnimationData("/images/sprites/player/jump_left.png", 68, 111, 1);
-	public static AnimationData PLAYER_JUMP_LEFT_ARMOR = new AnimationData("/images/sprites/player/jump_left_armor.png", 68,
-			111, 1);
-	public static AnimationData PLAYER_JUMP_RIGHT = new AnimationData("/images/sprites/player/jump_right.png", 68, 111, 1);
-	public static AnimationData PLAYER_JUMP_RIGHT_ARMOR = new AnimationData("/images/sprites/player/jump_right_armor.png", 68,
-			111, 1);
+	public static AnimationData PLAYER_JUMP_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/jump_left_armor.png", 68, 111, 1);
+	public static AnimationData PLAYER_JUMP_RIGHT = new AnimationData("/images/sprites/player/jump_right.png", 68, 111,
+			1);
+	public static AnimationData PLAYER_JUMP_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/jump_right_armor.png", 68, 111, 1);
 	public static AnimationData PLAYER_MIST = new AnimationData("/images/sprites/player/mist.png", 68, 111, 5);
 	public static AnimationData PLAYER_MOVE_LEFT = new AnimationData("/images/sprites/player/move_left.png", 68, 111, 8);
-	public static AnimationData PLAYER_MOVE_LEFT_ARMOR = new AnimationData("/images/sprites/player/move_left_armor.png", 68,
-			111, 8);
-	public static AnimationData PLAYER_MOVE_RIGHT = new AnimationData("/images/sprites/player/move_right.png", 68, 111, 8);
-	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData("/images/sprites/player/move_right_armor.png", 68,
-			111, 8);
+	public static AnimationData PLAYER_MOVE_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/move_left_armor.png", 68, 111, 8);
+	public static AnimationData PLAYER_MOVE_RIGHT = new AnimationData("/images/sprites/player/move_right.png", 68, 111,
+			8);
+	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
 	public static ImageData BOT_CANNON = new ImageData("/images/sprites/bot/cannon.png", 18, 11);
 	public static AnimationData BOT_DEATH = new AnimationData("/images/sprites/bot/death.png", 60, 60, 6);
 	public static AnimationData BOT_IDLE = new AnimationData("/images/sprites/bot/idle.png", 60, 60, 4);
@@ -117,39 +131,42 @@ public class ContentManager
 	public static AnimationData TURRET_IDLE = new AnimationData("/images/sprites/turret_idle.png", 100, 130, 1);
 
 	// Stages
-	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);
+	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1335);
 	public static ImageData FOREST_BACKGROUND = new ImageData("/images/stages/forest_background.png", 2560, 1080);
 
 	// Weapons
-	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/images/weapon/ice_sword/idle_left.png", 138, 146, 1);
-	public static AnimationData ICE_SWORD_IDLE_RIGHT = new AnimationData("/images/weapon/ice_sword/idle_right.png", 138, 146,
+	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/images/weapon/ice_sword/idle_left.png", 138,
+			146, 1);
+	public static AnimationData ICE_SWORD_IDLE_RIGHT = new AnimationData("/images/weapon/ice_sword/idle_right.png",
+			138, 146, 1);
+	public static AnimationData ICE_SWORD_DOWNSLASH_LEFT = new AnimationData(
+			"/images/weapon/ice_sword/downslash_left.png", 138, 146, 6);
+	public static AnimationData ICE_SWORD_DOWNSLASH_RIGHT = new AnimationData(
+			"/images/weapon/ice_sword/downslash_right.png", 138, 146, 6);
+	public static AnimationData ICE_SWORD_STAB_LEFT = new AnimationData("/images/weapon/ice_sword/stab_left.png", 138,
+			146, 4);
+	public static AnimationData ICE_SWORD_STAB_RIGHT = new AnimationData("/images/weapon/ice_sword/stab_right.png",
+			138, 146, 4);
+	public static AnimationData ICE_SWORD_UPSLASH_LEFT = new AnimationData("/images/weapon/ice_sword/upslash_left.png",
+			138, 146, 6);
+	public static AnimationData ICE_SWORD_UPSLASH_RIGHT = new AnimationData(
+			"/images/weapon/ice_sword/upslash_right.png", 138, 146, 6);
+	public static AnimationData STAFF_ATTACK_LEFT = new AnimationData("/images/weapon/staff/attack_left.png", 100, 90,
 			1);
-	public static AnimationData ICE_SWORD_DOWNSLASH_LEFT = new AnimationData("/images/weapon/ice_sword/downslash_left.png",
-			138, 146, 6);
-	public static AnimationData ICE_SWORD_DOWNSLASH_RIGHT = new AnimationData("/images/weapon/ice_sword/downslash_right.png",
-			138, 146, 6);
-	public static AnimationData ICE_SWORD_STAB_LEFT = new AnimationData("/images/weapon/ice_sword/stab_left.png", 138, 146, 4);
-	public static AnimationData ICE_SWORD_STAB_RIGHT = new AnimationData("/images/weapon/ice_sword/stab_right.png", 138, 146,
-			4);
-	public static AnimationData ICE_SWORD_UPSLASH_LEFT = new AnimationData("/images/weapon/ice_sword/upslash_left.png", 138,
-			146, 6);
-	public static AnimationData ICE_SWORD_UPSLASH_RIGHT = new AnimationData("/images/weapon/ice_sword/upslash_right.png", 138,
-			146, 6);
-	public static AnimationData STAFF_ATTACK_LEFT = new AnimationData("/images/weapon/staff/attack_left.png", 100, 90, 1);
-	public static AnimationData STAFF_ATTACK_RIGHT = new AnimationData("/images/weapon/staff/attack_right.png", 100, 90, 1);
+	public static AnimationData STAFF_ATTACK_RIGHT = new AnimationData("/images/weapon/staff/attack_right.png", 100,
+			90, 1);
 	public static AnimationData STAFF_CAST_LEFT = new AnimationData("/images/weapon/staff/cast_left.png", 100, 90, 6);
 	public static AnimationData STAFF_CAST_RIGHT = new AnimationData("/images/weapon/staff/cast_right.png", 100, 90, 6);
 	public static AnimationData STAFF_IDLE_LEFT = new AnimationData("/images/weapon/staff/idle_left.png", 100, 90, 1);
 	public static AnimationData STAFF_IDLE_RIGHT = new AnimationData("/images/weapon/staff/idle_right.png", 100, 90, 1);
-	
-	//Sounds
-	
-	//TEMPORARY BACKGROUND MUSIC
+
+	// Sounds
+
+	// TEMPORARY BACKGROUND MUSIC
 	public static SoundData BACKGROUND_1 = new SoundData("/sounds/background/Link and Zelda's Duet.mid", true);
 	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda Medley.mid", true);
 	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates of the Caribbean Medley.mid", true);
-	
-	
+
 	private static HashMap<ImageData, BufferedImage> imageMap;
 	private static HashMap<AnimationData, BufferedImage[]> animationMap;
 	private static HashMap<SoundData, byte[]> soundMap;
@@ -188,12 +205,13 @@ public class ContentManager
 		animationMap.put(ad, ani);
 		return ani;
 	}
-	
+
 	/**
 	 * @param sd The SoundData to retrieve the sound from. Should be attained from {@link ContentManager}
 	 * @return A byte array containing the requested sound data.
 	 */
-	public static byte[] getSound(SoundData sd){
+	public static byte[] getSound(SoundData sd)
+	{
 		byte[] snd = soundMap.get(sd);
 		if(snd != null)
 			return snd;
@@ -228,22 +246,25 @@ public class ContentManager
 			this.frames = frames;
 		}
 	}
-	
+
 	static class SoundData
 	{
 		private String path;
 		private boolean doesLoop;
-		
-		private SoundData(String path, boolean doesLoop){
+
+		private SoundData(String path, boolean doesLoop)
+		{
 			this.path = path;
 			this.doesLoop = doesLoop;
 		}
-		
-		public String path(){
+
+		public String path()
+		{
 			return path;
 		}
-		
-		public boolean doesLoop(){
+
+		public boolean doesLoop()
+		{
 			return doesLoop;
 		}
 	}
@@ -291,7 +312,7 @@ public class ContentManager
 		}
 		return null;
 	}
-	
+
 	private static byte[] load(SoundData sd)
 	{
 		byte[] snd = new byte[0];
@@ -316,8 +337,8 @@ public class ContentManager
 	}
 
 	/**
-	 * Clears the image, animation, and sound cache. To be called between stages, but should conventionally be able to be called
-	 * at any time.
+	 * Clears the image, animation, and sound cache. To be called between stages, but should conventionally be able to
+	 * be called at any time.
 	 */
 	public static void dispose()
 	{

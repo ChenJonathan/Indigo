@@ -40,19 +40,42 @@ public class HUD
 	public void render(Graphics2D g)
 	{
 		// Draws health and mana bars
-		int anchorX = 88;
-		int anchorY = 90;
+		int anchorX = 230;
+		int anchorY = 1020;
+		g.setColor(Color.BLACK);
+		g.fill(new Rectangle2D.Double(0, 945, 1920, 135));
 		g.setColor(Color.RED);
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, player.getHealth(), 11));
 		g.setColor(Color.BLUE);
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, player.getMana(), 11));
+		for(int i = 0; i < 4; i++)
+		{
+			if(phase.getSkillState(i) == Phase.SELECT)
+			{
+				g.setColor(Color.YELLOW);
+				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
+			}
+			else if(phase.getSkillState(i) == Phase.CAST)
+			{
+				g.setColor(Color.RED);
+				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
+			}
+			else
+			{
+				g.setColor(Color.GREEN);
+				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
+				g.setColor(Color.BLUE);
+				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, (double)phase.getCooldown(i)
+						/ phase.getMaxCooldown(i) * 90));
+			}
+		}
 
 		// TODO Draw the experience bar
 
 		// Draws the decorative indicator on the left
 		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);
-
 		// Draws the stamina pointer
+
 		double pointerAngle = Math.toRadians(55 * (((double)player.getStamina() - Player.BASE_STAMINA / 2) / 50));
 		g.rotate(pointerAngle, anchorX, anchorY);
 		g.drawImage(ContentManager.getImage(ContentManager.POINTER), anchorX - 90, anchorY - 3, 100, 7, null);

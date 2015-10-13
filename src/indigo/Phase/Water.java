@@ -3,7 +3,7 @@ package indigo.Phase;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
-import indigo.Skill.EmptySkill;
+import indigo.Skill.LockedSkill;
 import indigo.Skill.Geyser;
 import indigo.Skill.ManaChannelling;
 import indigo.Skill.Pulse;
@@ -24,10 +24,11 @@ public class Water extends Phase
 		skills[0] = new Geyser(this, 0);
 		skills[1] = new Pulse(this, 1);
 		skills[2] = new ManaChannelling(this, 2); 
-		skills[3] = new EmptySkill(this, 3);
+		skills[3] = new LockedSkill(this, 3);
 		// TODO Implement locked skills
 	}
 
+	@Override
 	public boolean canNormalAttack()
 	{
 		if(player.canAttack())
@@ -44,6 +45,7 @@ public class Water extends Phase
 		return false;
 	}
 
+	@Override
 	public boolean canShift()
 	{
 		// Makes sure a direction is selected
@@ -53,6 +55,7 @@ public class Water extends Phase
 				&& directionSelected;
 	}
 
+	@Override
 	public void unlockSkill()
 	{
 		if(skills[0].id() == Skill.EMPTY)

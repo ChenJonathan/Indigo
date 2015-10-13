@@ -180,6 +180,14 @@ public abstract class Stage
 			}
 
 			Land ground = null;
+			if(ent.isGrounded())
+			{
+				Land prevGround = ent.getGround();
+				if(ent.getX() >= prevGround.getMinX() && ent.getX() <= prevGround.getMaxX())
+				{
+					ground = prevGround;
+				}
+			}
 
 			Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2,
 					ent.getX(), ent.getY() + ent.getHeight() / 2);
@@ -193,15 +201,8 @@ public abstract class Stage
 					{
 						if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAbovePlatform(plat))
 						{
-							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
-						}
-						if(ent.getX() >= plat.getMinX()
-								&& ent.getX() <= plat.getMaxX()
-								&& ent.getVelY() >= 0
-								&& Math.round(ent.getY() + ent.getHeight() / 2) == Math.round(plat.getSurface(ent
-										.getX())))
-						{
 							ground = plat;
+							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
 						}
 					}
 				}
@@ -211,8 +212,7 @@ public abstract class Stage
 			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
 			for(Wall wall : walls)
 			{
-				if(inProximity(ent, wall)
-						&& (ent.intersects(wall) || (ent.isGrounded() && ent.getGround().equals(wall))))
+				if(inProximity(ent, wall) && ent.intersects(wall))
 				{
 					intersectedWalls.add(wall);
 				}
@@ -258,21 +258,7 @@ public abstract class Stage
 							// Other downward collision walls afterwards are ignored to an extent
 							if(ent.isAboveWall(intersectedWall))
 							{
-								if(!ent.isFlying() && ground == null)
-								{
-									if(ent.getX() >= intersectedWall.getMinX()
-											&& ent.getX() <= intersectedWall.getMaxX() && ent.isGrounded()
-											&& ent.getGround().equals(intersectedWall))
-									{
-										ground = intersectedWall;
-									}
-									else if(feetTravel.intersectsLine(intersectedWall.getLine()))
-									{
-										ground = intersectedWall;
-										ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
-									}
-								}
-								else if(ground == null)
+								if(ent.isFlying())
 								{
 									while(ent.intersects(intersectedWall))
 									{
@@ -282,6 +268,7 @@ public abstract class Stage
 								}
 								else if(feetTravel.intersectsLine(intersectedWall.getLine()))
 								{
+									ground = intersectedWall;
 									ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
 								}
 							}

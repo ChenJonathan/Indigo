@@ -168,6 +168,11 @@ public abstract class Phase
 	{
 		return cooldowns[skill];
 	}
+	
+	public int getMaxCooldown(int skill)
+	{
+		return maxCooldowns[skill];
+	}
 
 	public abstract boolean canNormalAttack();
 

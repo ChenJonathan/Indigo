@@ -173,6 +173,12 @@ public class IceSword extends Weapon
 		double renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
 				|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
 				% Math.PI + Math.PI;
+		
+		// If Ice Chains is active but mouse is on other side of player
+		if(user.isFacingRight() != stage.getMouseX() >= user.getX())
+		{
+			renderAngle = -renderAngle;
+		}
 
 		if(user.isFacingRight())
 		{

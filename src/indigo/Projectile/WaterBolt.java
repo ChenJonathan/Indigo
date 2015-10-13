@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-public class WaterProjectile extends Projectile
+public class WaterBolt extends Projectile
 {
 	private double angle;
 	private int timer;
@@ -23,7 +23,7 @@ public class WaterProjectile extends Projectile
 	public static final double SPEED = 60;
 	public static final int DURATION = 25;
 
-	public WaterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)
+	public WaterBolt(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
 		width = WIDTH;
@@ -31,17 +31,14 @@ public class WaterProjectile extends Projectile
 		solid = true;
 		flying = true;
 
-		if(getVelX() >= 0)
-		{
-			angle = Math.atan(getVelY() / getVelX());
-		}
-		else
-		{
-			angle = Math.PI + Math.atan(getVelY() / getVelX());
-		}
+		// Calculates angle of projectile (0 to 2 pi)
+		angle = Math.atan(getVelY() / getVelX());
+		angle = getVelX() >= 0? angle : angle + Math.PI;
+		angle = angle >= 0? angle : angle + 2 * Math.PI;
+
 		timer = DURATION;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE), 1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_BOLT), 1);
 	}
 
 	public void update()
@@ -109,16 +106,24 @@ public class WaterProjectile extends Projectile
 			// For completely vertical walls
 			angle = getVelX() > 0? 0 : Math.PI;
 		}
-		else if(Math.abs(slopeAngle - angle) < Math.abs(slopeAngle + Math.PI - angle))
-		{
-			angle = slopeAngle;
-		}
 		else
 		{
-			angle = Math.PI + slopeAngle;
+			slopeAngle = slopeAngle >= 0? slopeAngle : slopeAngle + Math.PI;
+			if(Math.abs(slopeAngle - angle) < Math.abs(slopeAngle + Math.PI - angle))
+			{
+				angle = slopeAngle;
+			}
+			else if(Math.abs(slopeAngle + 2 * Math.PI - angle) < Math.abs(slopeAngle + Math.PI - angle))
+			{
+				angle = slopeAngle;
+			}
+			else
+			{
+				angle = Math.PI + slopeAngle;
+			}
 		}
 
-		setAnimation(DEATH_WALL, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE_DEATH_WALL), 5);
+		setAnimation(DEATH_WALL, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH_WALL), 5);
 		die();
 	}
 
@@ -134,7 +139,7 @@ public class WaterProjectile extends Projectile
 
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
-			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.WATER_PROJECTILE_DEATH), 5);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH), 5);
 		}
 	}
 }

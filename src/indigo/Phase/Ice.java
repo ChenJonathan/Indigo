@@ -1,7 +1,8 @@
 package indigo.Phase;
 
 import indigo.GameState.PlayState;
-import indigo.Skill.EmptySkill;
+import indigo.Manager.Data;
+import indigo.Skill.LockedSkill;
 import indigo.Skill.Geyser;
 import indigo.Skill.IceArmor;
 import indigo.Skill.IceChains;
@@ -19,13 +20,14 @@ public class Ice extends Phase
 
 		maxCooldowns = new int[] { 0, 0, 0, 1800 };
 
-		skills[0] = new EmptySkill(this, 0);
+		skills[0] = new LockedSkill(this, 0);
 		skills[1] = new IceChains(this, 1);
 		skills[2] = new IceArmor(this, 2);
-		skills[3] = new EmptySkill(this, 3);
+		skills[3] = new LockedSkill(this, 3);
 		// TODO Implement locked skills
 	}
 
+	@Override
 	public boolean canNormalAttack()
 	{
 		if(player.canAttack() && !((IceSword)player.getWeapon()).isAttacking() && (playState.getTime() - attackStartTime >= attackDelay))
@@ -35,11 +37,29 @@ public class Ice extends Phase
 		return false;
 	}
 
+	@Override
 	public boolean canShift()
 	{
 		return true; // TODO Finish
 	}
+	
+	@Override
+	public boolean canSwap()
+	{
+		// Makes sure no skills are casting
+		boolean casting = false;
+		for(int count = 0; count < Data.NUM_SKILLS; count++)
+		{
+			// Ice Armor is given an exception
+			if(skills[count].id() != Skill.ARMOR && skillStates[count] == CAST)
+			{
+				casting = true;
+			}
+		}
+		return player.canAttack() && player.canMove() && player.canTurn() && !player.hasWeaponHitbox() && !casting;
+	}
 
+	@Override
 	public void unlockSkill()
 	{
 		if(skills[0].id() == Skill.EMPTY) // TODO Add in other skills
@@ -58,5 +78,20 @@ public class Ice extends Phase
 		{
 			skills[3] = new Geyser(this, 3);
 		}
+	}
+
+	@Override
+	public void resetSkillStates()
+	{
+		for(int count = 0; count < Data.NUM_SKILLS; count++)
+		{
+			// Ends Ice Armor if active
+			if(skills[count].id() == Skill.ARMOR && skillStates[count] == CAST)
+			{
+				skills[count].endCast();
+			}
+			skillStates[count] = 0;
+		}
+		selectedSkill = NO_SKILL_SELECTED;
 	}
 }
