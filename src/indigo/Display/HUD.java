@@ -2,6 +2,7 @@ package indigo.Display;
 
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
+import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Phase.Phase;
@@ -22,6 +23,9 @@ public class HUD
 
 	private Player player;
 	private Phase phase;
+	
+	public static final int WIDTH = Game.WIDTH;
+	public static final int HEIGHT = 135;
 
 	public HUD(PlayState playState)
 	{
@@ -29,12 +33,12 @@ public class HUD
 		this.playState = playState;
 		data = playState.getData();
 
-		player = (Player)playState.getEntities().get(0);
+		player = (Player)playState.getPlayer();
 	}
 
 	public void update()
 	{
-		// Consider doing Zeno's Paradox shit for cool heal/mana effect
+		// Consider doing Zeno's Paradox stuff for cool heal/mana effect
 	}
 
 	public void render(Graphics2D g)
@@ -43,7 +47,7 @@ public class HUD
 		int anchorX = 230;
 		int anchorY = 1020;
 		g.setColor(Color.BLACK);
-		g.fill(new Rectangle2D.Double(0, 945, 1920, 135));
+		g.fill(new Rectangle2D.Double(0, Game.HEIGHT - HEIGHT, WIDTH, HEIGHT));
 		g.setColor(Color.RED);
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, player.getHealth(), 11));
 		g.setColor(Color.BLUE);

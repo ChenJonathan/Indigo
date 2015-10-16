@@ -3,14 +3,12 @@ package indigo.Phase;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Manager.Data;
-import indigo.Manager.InputManager;
 import indigo.Skill.Skill;
 
 // Handles condition checking for attacking and skillcasting
 public abstract class Phase
 {
 	protected PlayState playState;
-	protected InputManager input;
 
 	protected Player player;
 	protected int id;
@@ -36,7 +34,6 @@ public abstract class Phase
 	public Phase(PlayState playState)
 	{
 		this.playState = playState;
-		input = playState.getInput();
 		player = (Player)playState.getPlayer();
 
 		selectedSkill = NO_SKILL_SELECTED;
@@ -197,11 +194,6 @@ public abstract class Phase
 	public PlayState getPlayState()
 	{
 		return playState;
-	}
-
-	public InputManager getInput()
-	{
-		return input;
 	}
 
 	public Player getPlayer()

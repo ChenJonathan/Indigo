@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class InputManager implements KeyListener, MouseListener, MouseMotionListener
 {
-	public static final int NUM_KEYS = 13;
+	public static final int NUM_KEYS = 14;
 
 	private boolean keyState[] = new boolean[NUM_KEYS];
 	private boolean prevKeyState[] = new boolean[NUM_KEYS];
@@ -36,8 +36,9 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	public static final int Q = 8;
 	public static final int E = 9;
 	public static final int SPACE = 10;
-	public static final int SHIFT = 11;
-	public static final int ESCAPE = 12;
+	public static final int CONTROL = 11;
+	public static final int SHIFT = 12;
+	public static final int ESCAPE = 13;
 
 	/**
 	 * Default constructor.
@@ -89,6 +90,8 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 			keyState[E] = state;
 		else if(key == KeyEvent.VK_SPACE)
 			keyState[SPACE] = state;
+		else if(key == KeyEvent.VK_CONTROL)
+			keyState[CONTROL] = state;
 		else if(key == KeyEvent.VK_SHIFT)
 			keyState[SHIFT] = state;
 		else if(key == KeyEvent.VK_ESCAPE)
@@ -268,8 +271,8 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	 */
 	public void mouseSet(int x, int y)
 	{
-		mouseX = (int)((double)x / Game.WIDTH * 1920);
-		mouseY = (int)((double)y / Game.HEIGHT * 1080);
+		mouseX = (int)((double)x / Game.RESOLUTION_WIDTH * 1920);
+		mouseY = (int)((double)y / Game.RESOLUTION_HEIGHT * 1080);
 	}
 
 	/**

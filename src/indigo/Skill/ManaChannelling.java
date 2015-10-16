@@ -1,5 +1,6 @@
 package indigo.Skill;
 
+import indigo.Manager.Manager;
 import indigo.Phase.Phase;
 import indigo.Weapon.Staff;
 
@@ -16,7 +17,7 @@ public class ManaChannelling extends Skill
 	{
 		super.update();
 		
-		if(input.mouseDown() || castTime < 10)
+		if(Manager.input.mouseDown() || castTime < 10)
 		{
 			if(castTime == 0)
 			{

@@ -266,6 +266,12 @@ public class PlayState extends GameState
 
 			// gsm.setTalents(true);
 		}
+		
+		// Miscellaneous
+		if(Manager.input.keyPress(InputManager.CONTROL))
+		{
+			stage.toggleCam();
+		}
 	}
 
 	/**
@@ -423,13 +429,5 @@ public class PlayState extends GameState
 	public Data getData()
 	{
 		return data;
-	}
-
-	/**
-	 * @return The current Manager.input data.
-	 */
-	public InputManager getInput()
-	{
-		return Manager.input;
 	}
 }

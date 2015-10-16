@@ -1,5 +1,6 @@
 package indigo.Stage;
 
+import indigo.Display.HUD;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
@@ -9,6 +10,7 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Main.Game;
 import indigo.Manager.Data;
+import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
@@ -23,6 +25,8 @@ public abstract class Stage
 	protected Data data;
 
 	protected Player player;
+
+	private boolean camUnlocked;
 
 	protected int camForeX;
 	protected int camForeY;
@@ -51,6 +55,9 @@ public abstract class Stage
 	// Distance that entities are pushed when they collide with things - Fairly arbitrary
 	public static final double PUSH_AMOUNT = 0.5;
 
+	// Speed at which camera moves when unlocked
+	public static final int CAMERA_SPEED = 60;
+
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
 	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
@@ -61,6 +68,8 @@ public abstract class Stage
 	{
 		this.playState = playState;
 		data = playState.getData();
+
+		camUnlocked = false;
 
 		entities = new ArrayList<Entity>();
 		items = new ArrayList<Item>();
@@ -479,8 +488,51 @@ public abstract class Stage
 	// Updates camera reference point based on player position
 	public void updateCam(Graphics2D g)
 	{
-		camForeX = (int)Math.round(player.getX()) - Game.DEFAULT_WIDTH / 2;
-		camForeY = (int)Math.round(player.getY()) - Game.DEFAULT_HEIGHT / 2;
+		if(camUnlocked)
+		{
+			if(Manager.input.mouseX() > Game.WIDTH * 0.9)
+			{
+				camForeX += CAMERA_SPEED;
+			}
+			else if(Manager.input.mouseX() < Game.WIDTH * 0.1)
+			{
+				camForeX -= CAMERA_SPEED;
+			}
+			if(camForeX > (int)(Math.round(player.getX()) - Game.WIDTH * 0.1))
+			{
+				camForeX = (int)(Math.round(player.getX()) - Game.WIDTH * 0.1);
+			}
+			else if(camForeX < (int)(Math.round(player.getX()) - Game.WIDTH * 0.9))
+			{
+				camForeX = (int)(Math.round(player.getX()) - Game.WIDTH * 0.9);
+			}
+
+			if(Manager.input.mouseY() > Game.HEIGHT * 0.9)
+			{
+				camForeY += CAMERA_SPEED;
+			}
+			else if(Manager.input.mouseY() < Game.HEIGHT * 0.1)
+			{
+				camForeY -= CAMERA_SPEED;
+			}
+			if(camForeY > (int)(Math.round(player.getY()) - Game.HEIGHT * 0.1))
+			{
+				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.1);
+			}
+			else if(camForeY < (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT))
+			{
+				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT);
+			}
+		}
+		else
+		{
+			int newX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
+			int newY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
+			
+			camForeX = (int)(((double)camForeX + newX) / 2);
+			camForeY = (int)(((double)camForeY + newY) / 2);
+		}
+
 		if(camForeX > maxOffsetX)
 		{
 			camForeX = maxOffsetX;
@@ -498,20 +550,20 @@ public abstract class Stage
 			camForeY = minOffsetY;
 		}
 
-		camBackX = (int)(((double)backX - Game.DEFAULT_WIDTH) * camForeX / maxOffsetX);
-		camBackY = (int)(((double)backY - Game.DEFAULT_HEIGHT) * camForeY / maxOffsetY);
+		camBackX = (int)(((double)backX - Game.WIDTH) * camForeX / maxOffsetX);
+		camBackY = (int)(((double)backY - Game.HEIGHT) * camForeY / maxOffsetY);
 	}
 
 	// Returns mouse x position in game coordinates
 	public double getMouseX()
 	{
-		return playState.getInput().mouseX() + camForeX;
+		return Manager.input.mouseX() + camForeX;
 	}
 
 	// Returns mouse y position in game coordinates
 	public double getMouseY()
 	{
-		return playState.getInput().mouseY() + camForeY;
+		return Manager.input.mouseY() + camForeY;
 	}
 
 	// Sets camera boundaries when initializing the class
@@ -519,12 +571,17 @@ public abstract class Stage
 	{
 		this.mapX = mapX;
 		this.mapY = mapY;
-		maxOffsetX = mapX - Game.DEFAULT_WIDTH;
-		maxOffsetY = mapY - Game.DEFAULT_HEIGHT;
+		maxOffsetX = mapX - Game.WIDTH;
+		maxOffsetY = mapY - (Game.HEIGHT - HUD.HEIGHT);
 		minOffsetX = 0;
 		minOffsetY = 0;
 		this.backX = backX;
 		this.backY = backY;
+	}
+
+	public void toggleCam()
+	{
+		camUnlocked = !camUnlocked;
 	}
 
 	public Entity getPlayer()

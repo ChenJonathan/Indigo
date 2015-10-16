@@ -19,10 +19,10 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
 {
+	public static final int RESOLUTION_WIDTH = 1920; // Change this
+	public static final int RESOLUTION_HEIGHT = 1080; // Change this
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
-	public static final int DEFAULT_WIDTH = 1920;
-	public static final int DEFAULT_HEIGHT = 1080;
 	public static final int CURSOR_WIDTH = 32;
 	public static final int CURSOR_HEIGHT = 32;
 
@@ -41,14 +41,14 @@ public class Game extends JPanel implements Runnable
 	 */
 	public Game()
 	{
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setPreferredSize(new Dimension(RESOLUTION_WIDTH, RESOLUTION_HEIGHT));
 		setFocusable(true);
 		requestFocus();
 
 		running = true;
-		image = new BufferedImage(WIDTH, HEIGHT, 1);
+		image = new BufferedImage(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, 1);
 		g = (Graphics2D)image.getGraphics();
-		g.scale((double)WIDTH / DEFAULT_WIDTH, (double)HEIGHT / DEFAULT_HEIGHT);
+		g.scale((double)RESOLUTION_WIDTH / WIDTH, (double)RESOLUTION_HEIGHT / HEIGHT);
 		gsm = new GameStateManager(this);
 	}
 
@@ -143,7 +143,7 @@ public class Game extends JPanel implements Runnable
 	private void draw()
 	{
 		Graphics g2 = getGraphics();
-		g2.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
+		g2.drawImage(image, 0, 0, RESOLUTION_WIDTH, RESOLUTION_HEIGHT, null);
 		g2.dispose();
 	}
 

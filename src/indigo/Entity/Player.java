@@ -9,7 +9,6 @@ import indigo.Stage.Stage;
 import indigo.Weapon.IceSword;
 import indigo.Weapon.Staff;
 
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -40,9 +39,11 @@ public class Player extends Entity
 	private final int JUMP_RIGHT = 5;
 	private final int CROUCH_LEFT = 6;
 	private final int CROUCH_RIGHT = 7;
-	private final int MIST = 8;
-	private final int DEATH_LEFT = 9;
-	private final int DEATH_RIGHT = 10;
+	private final int BLOCK_LEFT = 8;
+	private final int BLOCK_RIGHT = 9;
+	private final int MIST = 10;
+	private final int DEATH_LEFT = 11;
+	private final int DEATH_RIGHT = 12;
 
 	// Movement constants
 	private final double ACCELERATION = 4;
@@ -176,26 +177,36 @@ public class Player extends Entity
 		{
 			if(isCrouching())
 			{
-				if(isFacingRight() && currentAnimation != CROUCH_RIGHT)
+				if(isFacingRight() && currentAnimation != CROUCH_RIGHT && currentAnimation != BLOCK_RIGHT)
 				{
-					if(iceArmor)
-					{
-						setAnimation(CROUCH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_RIGHT_ARMOR), -1);
-					}
-					else
+					if(phase.id() == Phase.WATER)
 					{
 						setAnimation(CROUCH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_RIGHT), -1);
 					}
-				}
-				else if(!isFacingRight() && currentAnimation != CROUCH_LEFT)
-				{
-					if(iceArmor)
+					else if(iceArmor)
 					{
-						setAnimation(CROUCH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_LEFT_ARMOR), -1);
+						setAnimation(BLOCK_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_RIGHT_ARMOR),
+								-1);
 					}
 					else
 					{
+						setAnimation(BLOCK_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_RIGHT), -1);
+					}
+				}
+				else if(!isFacingRight() && currentAnimation != CROUCH_LEFT && currentAnimation != BLOCK_LEFT)
+				{
+					if(phase.id() == Phase.WATER)
+					{
 						setAnimation(CROUCH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_LEFT), -1);
+					}
+					else if(iceArmor)
+					{
+						setAnimation(BLOCK_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_LEFT_ARMOR),
+								-1);
+					}
+					else
+					{
+						setAnimation(BLOCK_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_LEFT), -1);
 					}
 				}
 			}
@@ -205,7 +216,8 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(JUMP_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_RIGHT_ARMOR), -1);
+						setAnimation(JUMP_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_RIGHT_ARMOR),
+								-1);
 					}
 					else
 					{
@@ -230,7 +242,8 @@ public class Player extends Entity
 				{
 					if(iceArmor)
 					{
-						setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT_ARMOR), 3);
+						setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT_ARMOR),
+								3);
 					}
 					else
 					{
@@ -327,11 +340,11 @@ public class Player extends Entity
 	{
 		if(isFacingRight())
 		{
-			return phase.id() == Phase.WATER ? -30 : -26;
+			return phase.id() == Phase.WATER? -30 : -26;
 		}
 		else
 		{
-			return phase.id() == Phase.WATER ? -70 : -112;
+			return phase.id() == Phase.WATER? -70 : -112;
 		}
 	}
 
@@ -340,7 +353,7 @@ public class Player extends Entity
 		double yOffset = 0;
 		if(isCrouching())
 		{
-			return phase.id() == Phase.WATER ? -24 : -76;
+			return phase.id() == Phase.WATER? -24 : -76;
 		}
 		else
 		{
@@ -400,7 +413,7 @@ public class Player extends Entity
 				}
 			}
 		}
-		return phase.id() == Phase.WATER ? yOffset : yOffset - 48;
+		return phase.id() == Phase.WATER? yOffset : yOffset - 48;
 	}
 
 	public Shape getHitbox()

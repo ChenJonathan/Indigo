@@ -1,5 +1,6 @@
 package indigo.Skill;
 
+import indigo.Manager.Manager;
 import indigo.Phase.Phase;
 import indigo.Projectile.GeyserParticle;
 import indigo.Projectile.GeyserBase;
@@ -19,7 +20,7 @@ public class Blizzard extends Skill
 	{
 		super.update();
 		
-		if(player.getMana() >= 2 && (input.mouseDown() || castTime < 10))
+		if(player.getMana() >= 2 && (Manager.input.mouseDown() || castTime < 10))
 		{
 			if(castTime == 0)
 			{

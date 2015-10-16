@@ -18,7 +18,7 @@ public class Ice extends Phase
 		super(playState);
 		id = Phase.ICE;
 
-		maxCooldowns = new int[] { 0, 0, 0, 1800 };
+		maxCooldowns = new int[] { 150, 150, 150, 150 };
 
 		skills[0] = new LockedSkill(this, 0);
 		skills[1] = new IceChains(this, 1);
@@ -56,7 +56,7 @@ public class Ice extends Phase
 				casting = true;
 			}
 		}
-		return player.canAttack() && player.canMove() && player.canTurn() && !player.hasWeaponHitbox() && !casting;
+		return player.canAttack() && player.canMove() && player.canTurn() && !casting;
 	}
 
 	@Override

@@ -2,13 +2,11 @@ package indigo.Skill;
 
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
-import indigo.Manager.InputManager;
 import indigo.Phase.Phase;
 
 public abstract class Skill
 {
 	protected PlayState playState;
-	protected InputManager input;
 	protected Phase phase;
 
 	protected Player player;
@@ -30,7 +28,6 @@ public abstract class Skill
 	public Skill(Phase phase, int position)
 	{
 		playState = phase.getPlayState();
-		input = phase.getInput();
 		this.phase = phase;
 		player = phase.getPlayer();
 

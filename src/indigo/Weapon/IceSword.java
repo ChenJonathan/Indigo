@@ -175,8 +175,9 @@ public class IceSword extends Weapon
 				% Math.PI + Math.PI;
 		
 		// If Ice Chains is active but mouse is on other side of player
-		if(user.isFacingRight() != stage.getMouseX() >= user.getX())
+		if(!attacking && user.isFacingRight() != stage.getMouseX() > user.getX())
 		{
+			// TODO Fix last tick
 			renderAngle = -renderAngle;
 		}
 

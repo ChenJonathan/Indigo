@@ -3,6 +3,7 @@ package indigo.Phase;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
+import indigo.Manager.Manager;
 import indigo.Skill.LockedSkill;
 import indigo.Skill.Geyser;
 import indigo.Skill.ManaChannelling;
@@ -19,11 +20,11 @@ public class Water extends Phase
 		super(playState);
 		id = Phase.WATER;
 
-		maxCooldowns = new int[] { 0, 0, 0, 0 };
+		maxCooldowns = new int[] { 150, 150, 150, 150 };
 
 		skills[0] = new Geyser(this, 0);
 		skills[1] = new Pulse(this, 1);
-		skills[2] = new ManaChannelling(this, 2); 
+		skills[2] = new ManaChannelling(this, 2);
 		skills[3] = new LockedSkill(this, 3);
 		// TODO Implement locked skills
 	}
@@ -49,8 +50,8 @@ public class Water extends Phase
 	public boolean canShift()
 	{
 		// Makes sure a direction is selected
-		boolean directionSelected = input.keyDown(InputManager.W) || input.keyDown(InputManager.S)
-				|| input.keyDown(InputManager.A) || input.keyDown(InputManager.D);
+		boolean directionSelected = Manager.input.keyDown(InputManager.W) || Manager.input.keyDown(InputManager.S)
+				|| Manager.input.keyDown(InputManager.A) || Manager.input.keyDown(InputManager.D);
 		return player.canAttack() && player.canMove() && player.getStamina() >= Player.SHIFT_STAMINA_COST
 				&& directionSelected;
 	}

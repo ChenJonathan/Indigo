@@ -86,14 +86,18 @@ public class ContentManager
 	public static AnimationData WATER_BOLT = new AnimationData("/images/projectiles/water_bolt/default.png", 80, 73, 2);
 
 	// Sprites
+	public static AnimationData PLAYER_BLOCK_LEFT = new AnimationData("/images/sprites/player/block_left.png", 68,
+			111, 1);
+	public static AnimationData PLAYER_BLOCK_RIGHT = new AnimationData("/images/sprites/player/block_right.png", 68,
+			111, 1);
+	public static AnimationData PLAYER_BLOCK_LEFT_ARMOR = new AnimationData("/images/sprites/player/block_left_armor.png", 68,
+			111, 1);
+	public static AnimationData PLAYER_BLOCK_RIGHT_ARMOR = new AnimationData("/images/sprites/player/block_right_armor.png", 68,
+			111, 1);
 	public static AnimationData PLAYER_CROUCH_LEFT = new AnimationData("/images/sprites/player/crouch_left.png", 68,
 			111, 1);
-	public static AnimationData PLAYER_CROUCH_LEFT_ARMOR = new AnimationData(
-			"/images/sprites/player/crouch_left_armor.png", 68, 111, 1);
 	public static AnimationData PLAYER_CROUCH_RIGHT = new AnimationData("/images/sprites/player/crouch_right.png", 68,
 			111, 1);
-	public static AnimationData PLAYER_CROUCH_RIGHT_ARMOR = new AnimationData(
-			"/images/sprites/player/crouch_right_armor.png", 68, 111, 1);
 	public static AnimationData PLAYER_DEATH_LEFT = new AnimationData("/images/sprites/player/death_left.png", 68, 111,
 			15);
 	public static AnimationData PLAYER_DEATH_LEFT_ARMOR = new AnimationData(
@@ -131,7 +135,7 @@ public class ContentManager
 	public static AnimationData TURRET_IDLE = new AnimationData("/images/sprites/turret_idle.png", 100, 130, 1);
 
 	// Stages
-	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1335);
+	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);
 	public static ImageData FOREST_BACKGROUND = new ImageData("/images/stages/forest_background.png", 2560, 1080);
 
 	// Weapons
