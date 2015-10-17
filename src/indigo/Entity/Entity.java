@@ -6,6 +6,7 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
+import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 import indigo.Weapon.Weapon;
 
@@ -17,7 +18,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Entity
+public abstract class Entity implements Respawnable
 {
 	protected Stage stage;
 
@@ -68,7 +69,7 @@ public abstract class Entity
 		this.y = prevY = y;
 		travel = new Line2D.Double(prevX, prevY, x, y); // Line formed by previous and current position
 
-		maxHealth = this.health = health;
+		maxHealth = this.health = health; // TODO Modify based on player level
 
 		canAttack = canMove = canTurn = true;
 

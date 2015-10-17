@@ -15,15 +15,15 @@ import indigo.Phase.Ice;
 import indigo.Phase.Phase;
 import indigo.Phase.Water;
 import indigo.Projectile.Projectile;
-import indigo.Stage.Beach;
+import indigo.Stage.BattleStage;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 /**
- * The state where the player is actively playing the game. Handles Manager.inputs (skill use) and sends the info to the HUD,
- * Stage, and Phase objects.
+ * The state where the player is actively playing the game. Handles Manager.inputs (skill use) and sends the info to the
+ * HUD, Stage, and Phase objects.
  */
 public class PlayState extends GameState
 {
@@ -44,10 +44,7 @@ public class PlayState extends GameState
 
 	private int swapCooldown; // Cooldown for switching classes
 
-	private int maxSwapCooldown = 0; // TODO Set
-
-	// Values corresponding to each stage
-	public static final int BEACH = 0;
+	private int maxSwapCooldown = 150; // TODO Set
 
 	/**
 	 * Sets up the play state and initializes stage, stage objects, phases, display, and timer.
@@ -62,11 +59,9 @@ public class PlayState extends GameState
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		// Initialize stage
-		switch(data.getStage())
+		if(data.getStage().get("type").equals("battle"))
 		{
-			case BEACH:
-				stage = new Beach(this);
-				break;
+			stage = new BattleStage(this, data.getStage());
 		}
 
 		// Initialize stage objects
@@ -119,8 +114,8 @@ public class PlayState extends GameState
 	}
 
 	/**
-	 * Handles all of the player Manager.input during play. Relays skillcasting information to both stage and HUD. Also checks
-	 * for pause, class switch, etc.
+	 * Handles all of the player Manager.input during play. Relays skillcasting information to both stage and HUD. Also
+	 * checks for pause, class switch, etc.
 	 */
 	public void handleInput()
 	{
@@ -177,7 +172,7 @@ public class PlayState extends GameState
 				{
 					x += 1;
 				}
-				
+
 				if(x != 0 && y != 0)
 				{
 					x *= Math.sqrt(2) / 2;
@@ -217,7 +212,7 @@ public class PlayState extends GameState
 				// Automatic attacking
 				player.attackMain();
 			}
-			if(Manager.input.keyPress(InputManager.Q) && activePhase.canSwap() && swapCooldown == 0)
+			if(Manager.input.keyPress(InputManager.CONTROL) && activePhase.canSwap() && swapCooldown == 0)
 			{
 				// Phase swapping
 				swapPhases();
@@ -266,9 +261,9 @@ public class PlayState extends GameState
 
 			// gsm.setTalents(true);
 		}
-		
+
 		// Miscellaneous
-		if(Manager.input.keyPress(InputManager.CONTROL))
+		if(Manager.input.keyPress(InputManager.SHIFT))
 		{
 			stage.toggleCam();
 		}
@@ -313,6 +308,22 @@ public class PlayState extends GameState
 	}
 
 	/**
+	 * @return The current cooldown for swapping phases.
+	 */
+	public int getSwapCooldown()
+	{
+		return swapCooldown;
+	}
+
+	/**
+	 * @return The maximum cooldown for swapping phases.
+	 */
+	public int getMaxSwapCooldown()
+	{
+		return maxSwapCooldown;
+	}
+
+	/**
 	 * Swaps out the player's active phase with the player's inactive phase.
 	 */
 	public void swapPhases()
@@ -349,7 +360,7 @@ public class PlayState extends GameState
 	{
 		return entities;
 	}
-	
+
 	/**
 	 * @return A list of the items in play.
 	 */

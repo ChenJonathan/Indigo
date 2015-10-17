@@ -49,6 +49,7 @@ public class Game extends JPanel implements Runnable
 		image = new BufferedImage(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, 1);
 		g = (Graphics2D)image.getGraphics();
 		g.scale((double)RESOLUTION_WIDTH / WIDTH, (double)RESOLUTION_HEIGHT / HEIGHT);
+		g.clipRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		gsm = new GameStateManager(this);
 	}
 
@@ -111,8 +112,8 @@ public class Game extends JPanel implements Runnable
 				e.printStackTrace();
 			}
 
-			ticks++; // For counter
-			if(ticks % FPS == 0) // For counter
+			ticks++;
+			if(ticks % FPS == 0)
 			{
 				System.out.println("Resources used: " + (100 * elapsedTotal / (TARGET_TIME * FPS)) + "%");
 				elapsedTotal = 0;

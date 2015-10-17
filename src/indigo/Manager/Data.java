@@ -1,5 +1,7 @@
 package indigo.Manager;
 
+import org.json.simple.JSONObject;
+
 /**
  * Stores general persisting information (player statistics, map statistics, etc). Consider doing unlock stage
  * calculation purely in StageSelectState.
@@ -12,12 +14,11 @@ public class Data
 
 	private int[] talents;
 
-	private int currentStage;
+	private JSONObject currentStage;
 	private int unlockedStages;
-	private int stagesToUnlock;
 	private int clearTime;
 	private String killer;
-	private boolean victory = false;
+	private boolean victory = true;
 
 	public static final int NUM_STAGES = 10;
 	public static final int NUM_PHASES = 2;
@@ -35,7 +36,6 @@ public class Data
 		talents = new int[NUM_PHASES * NUM_TALENTS];
 
 		unlockedStages = 0;
-		stagesToUnlock = 1;
 
 		killer = "";
 	}
@@ -119,7 +119,7 @@ public class Data
 	/**
 	 * @return The current stage.
 	 */
-	public int getStage()
+	public JSONObject getStage()
 	{
 		return currentStage;
 	}
@@ -127,7 +127,7 @@ public class Data
 	/**
 	 * @param stage The new stage.
 	 */
-	public void setStage(int stage)
+	public void setStage(JSONObject stage)
 	{
 		currentStage = stage;
 	}
@@ -146,22 +146,6 @@ public class Data
 	public void setUnlockedStages(int unlockedStages)
 	{
 		this.unlockedStages = unlockedStages;
-	}
-
-	/**
-	 * @return The current number of stages to be unlocked.
-	 */
-	public int getStagesToUnlock()
-	{
-		return stagesToUnlock;
-	}
-
-	/**
-	 * @param stagesToUnlock The new number of stages to be unlocked.
-	 */
-	public void setStagesToUnlock(int stagesToUnlock)
-	{
-		this.stagesToUnlock = stagesToUnlock;
 	}
 
 	/**

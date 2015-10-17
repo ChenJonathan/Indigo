@@ -2,6 +2,7 @@ package indigo.Manager;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileReader;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
@@ -9,6 +10,9 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * This class is the content manager for Indigo. Call {@link ContentManager#getImage(ImageData)},
@@ -136,7 +140,7 @@ public class ContentManager
 
 	// Stages
 	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);
-	public static ImageData FOREST_BACKGROUND = new ImageData("/images/stages/forest_background.png", 2560, 1080);
+	public static ImageData BACKGROUND = new ImageData("/images/stages/forest_background.png", 2560, 1080);
 
 	// Weapons
 	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/images/weapon/ice_sword/idle_left.png", 138,
@@ -174,12 +178,16 @@ public class ContentManager
 	private static HashMap<ImageData, BufferedImage> imageMap;
 	private static HashMap<AnimationData, BufferedImage[]> animationMap;
 	private static HashMap<SoundData, byte[]> soundMap;
+	
+	private static JSONParser parser;
 
 	static
 	{
 		imageMap = new HashMap<>();
 		animationMap = new HashMap<>();
 		soundMap = new HashMap<>();
+		
+		parser = new JSONParser();
 	}
 
 	/**
@@ -336,6 +344,20 @@ public class ContentManager
 			e.printStackTrace();
 			System.out.println("Error loading sounds.");
 			System.exit(0);
+		}
+		return null;
+	}
+	
+	public static JSONObject load(String path)
+	{
+		try
+		{
+			path = new File("").getAbsolutePath().concat("/resources" + path);
+			return (JSONObject)parser.parse(new FileReader(path));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 		return null;
 	}

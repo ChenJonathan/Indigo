@@ -7,11 +7,6 @@ import java.awt.geom.Line2D;
 public class Wall extends Land
 {
 	protected String name;
-	private Line2D.Double line;
-
-	private double slope;
-	private double minX;
-	private double maxX;
 
 	private boolean horizontal;
 
@@ -59,31 +54,6 @@ public class Wall extends Land
 	public String getName()
 	{
 		return name;
-	}
-
-	public Line2D.Double getLine()
-	{
-		return line;
-	}
-
-	public double getSlope()
-	{
-		return slope;
-	}
-
-	public double getMinX()
-	{
-		return minX;
-	}
-
-	public double getMaxX()
-	{
-		return maxX;
-	}
-
-	public double getSurface(double x)
-	{
-		return slope * (x - line.getX1()) + line.getY1() - 1;
 	}
 
 	public boolean isHorizontal()

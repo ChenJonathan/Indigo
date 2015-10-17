@@ -23,7 +23,7 @@ public class HUD
 
 	private Player player;
 	private Phase phase;
-	
+
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = 135;
 
@@ -52,6 +52,27 @@ public class HUD
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, player.getHealth(), 11));
 		g.setColor(Color.BLUE);
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, player.getMana(), 11));
+
+		// TODO Draw the experience bar
+
+		// Draws the decorative indicator on the left
+		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);
+
+		// Draws the stamina pointer
+		double pointerAngle = Math.toRadians(55 * (((double)player.getStamina() - Player.BASE_STAMINA / 2) / 50));
+		g.rotate(pointerAngle, anchorX, anchorY);
+		g.drawImage(ContentManager.getImage(ContentManager.POINTER), anchorX - 90, anchorY - 3, 100, 7, null);
+		g.rotate(-pointerAngle, anchorX, anchorY);
+
+		// Draws the HUD
+		g.drawImage(ContentManager.getImage(ContentManager.PLAYER_HUD), anchorX - 88, anchorY - 50, 350, 100, null);
+
+		// Writes the player's level
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		g.setColor(Color.BLACK);
+		g.drawString(data.getLevel() + "", anchorX + 25 + 2, anchorY + 35);
+
+		// Draw skill icons and cooldowns
 		for(int i = 0; i < 4; i++)
 		{
 			if(phase.getSkillState(i) == Phase.SELECT)
@@ -74,24 +95,23 @@ public class HUD
 			}
 		}
 
-		// TODO Draw the experience bar
-
-		// Draws the decorative indicator on the left
-		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);
-		// Draws the stamina pointer
-
-		double pointerAngle = Math.toRadians(55 * (((double)player.getStamina() - Player.BASE_STAMINA / 2) / 50));
-		g.rotate(pointerAngle, anchorX, anchorY);
-		g.drawImage(ContentManager.getImage(ContentManager.POINTER), anchorX - 90, anchorY - 3, 100, 7, null);
-		g.rotate(-pointerAngle, anchorX, anchorY);
-
-		// Draws the HUD
-		g.drawImage(ContentManager.getImage(ContentManager.PLAYER_HUD), anchorX - 88, anchorY - 50, 350, 100, null);
-
-		// Writes the player's level
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		g.setColor(Color.BLACK);
-		g.drawString(data.getLevel() + "", anchorX + 25 + 2, anchorY + 35);
+		// Draw phase state
+		if(phase.canSwap() && playState.getSwapCooldown() == 0)
+		{
+			g.setColor(Color.WHITE);
+			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, 50));
+		}
+		else
+		{
+			g.setColor(Color.GRAY);
+			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, 50));
+		}
+		if(playState.getSwapCooldown() > 0)
+		{
+			g.setColor(Color.BLUE);
+			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, (double)playState.getSwapCooldown()
+					/ playState.getMaxSwapCooldown() * 50));
+		}
 
 		// TODO Draw cooldowns and timer
 	}

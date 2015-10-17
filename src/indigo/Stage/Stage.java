@@ -18,7 +18,6 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 // Shows the map, including platforms, entities, and projectiles
-// Subclasses - When two walls are connected, initialize the vertical one before the horizontal one
 public abstract class Stage
 {
 	protected PlayState playState;
@@ -57,6 +56,10 @@ public abstract class Stage
 
 	// Speed at which camera moves when unlocked
 	public static final int CAMERA_SPEED = 60;
+	
+	// Dimensions of default background image
+	public static final int BACKGROUND_X = 2560;
+	public static final int BACKGROUND_Y = 1080;
 
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero

@@ -3,6 +3,7 @@ package indigo.Projectile;
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
+import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -11,7 +12,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Projectile
+public abstract class Projectile implements Respawnable
 {
 	protected Stage stage;
 	protected Entity creator;
@@ -61,7 +62,7 @@ public abstract class Projectile
 			velX = Stage.TERMINAL_VELOCITY;
 		}
 
-		damage = dmg;
+		damage = dmg; // TODO Modify based on player level
 
 		if(creator != null)
 		{

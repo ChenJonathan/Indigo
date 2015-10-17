@@ -2,6 +2,7 @@ package indigo.Item;
 
 import indigo.Entity.Player;
 import indigo.Manager.Animation;
+import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -9,7 +10,7 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 // Interacts with the player only
-public abstract class Item
+public abstract class Item implements Respawnable
 {
 	protected Stage stage;
 

@@ -166,7 +166,8 @@ public class MenuState extends GameState
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					gsm.setState(GameStateManager.SELECT);
+					data.setStage(ContentManager.load("/stages/beach.json"));
+					gsm.setState(GameStateManager.PLAY);
 				}
 			}
 			else
@@ -200,7 +201,7 @@ public class MenuState extends GameState
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					gsm.setOptions(true);
+					gsm.setState(GameStateManager.DESIGN);
 				}
 			}
 			else

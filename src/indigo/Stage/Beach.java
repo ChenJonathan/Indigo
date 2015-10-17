@@ -38,8 +38,8 @@ public class Beach extends Stage
 		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets(6400, 1200, 2560, 1080);
-		
+		setOffsets(6400, 1200, BACKGROUND_X, BACKGROUND_Y);
+
 		// Boundaries
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
 		walls.add(new Wall(mapX, SKY_LIMIT, mapX, mapY));
@@ -113,18 +113,15 @@ public class Beach extends Stage
 				turretCenter = new Turret(this, 3470, 665, Turret.BASE_HEALTH);
 				entities.add(turretCenter);
 			}
-			else if((!entities.contains(turretFlag) || turretFlag.isDead()) && (int)(Math.random() * 200) == 0)
+			if((!entities.contains(turretFlag) || turretFlag.isDead()) && (int)(Math.random() * 200) == 0)
 			{
 				turretFlag = new Turret(this, 6335, 285, Turret.BASE_HEALTH);
 				entities.add(turretFlag);
 			}
-			else
+			if((int)(Math.random() * 200) == 0)
 			{
-				if((int)(Math.random() * 200) == 0)
-				{
-					entities.add(new FlyingBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
-							FlyingBot.BASE_HEALTH));
-				}
+				entities.add(new FlyingBot(this, Math.random() * 5000 + 700, Math.random() * 300 + 350,
+						FlyingBot.BASE_HEALTH));
 			}
 		}
 
@@ -138,9 +135,9 @@ public class Beach extends Stage
 	public void render(Graphics2D g)
 	{
 		g.translate(-camBackX, -camBackY);
-		g.drawImage(ContentManager.getImage(ContentManager.FOREST_BACKGROUND), 0, 0, backX, backY, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BACKGROUND), 0, 0, backX, backY, null);
 		g.translate(camBackX, camBackY);
-		
+
 		g.translate(-camForeX, -camForeY);
 		g.drawImage(ContentManager.getImage(ContentManager.STAGE_BEACH), 0, 0, mapX, mapY, null);
 		for(Projectile proj : projectiles)

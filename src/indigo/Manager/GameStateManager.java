@@ -1,6 +1,7 @@
 package indigo.Manager;
 
 import indigo.GameState.ClearStageState;
+import indigo.GameState.DesignState;
 import indigo.GameState.GameState;
 import indigo.GameState.MenuState;
 import indigo.GameState.OptionState;
@@ -28,14 +29,13 @@ public class GameStateManager
 	private boolean talents;
 	private TalentState talentState;
 
-	private GameState[] gameStates;
-	private int currentState;
+	private GameState currentState;
 
-	public static final int NUM_STATES = 4;
 	public static final int MENU = 0;
 	public static final int SELECT = 1;
 	public static final int PLAY = 2;
 	public static final int CLEAR = 3;
+	public static final int DESIGN = 4;
 
 	/**
 	 * Sets up the GameManager with the current game instance.
@@ -56,7 +56,6 @@ public class GameStateManager
 		talents = false;
 		talentState = new TalentState(this);
 
-		gameStates = new GameState[NUM_STATES];
 		setState(MENU);
 	}
 
@@ -67,25 +66,28 @@ public class GameStateManager
 	 */
 	public void setState(int state)
 	{
-		gameStates[currentState] = null;
+		currentState = null;
 		ContentManager.dispose();
 		SoundManager.stopAll(); // TODO Temporary
-		currentState = state;
 		if(state == MENU)
 		{
-			gameStates[state] = new MenuState(this);
+			currentState = new MenuState(this);
 		}
 		else if(state == SELECT)
 		{
-			gameStates[state] = new StageSelectState(this);
+			currentState = new StageSelectState(this);
 		}
 		else if(state == PLAY)
 		{
-			gameStates[state] = new PlayState(this);
+			currentState = new PlayState(this);
 		}
 		else if(state == CLEAR)
 		{
-			gameStates[state] = new ClearStageState(this);
+			currentState = new ClearStageState(this);
+		}
+		else if(state == DESIGN)
+		{
+			currentState = new DesignState(this);
 		}
 	}
 
@@ -136,9 +138,9 @@ public class GameStateManager
 		{
 			pauseState.update();
 		}
-		else if(gameStates[currentState] != null)
+		else
 		{
-			gameStates[currentState].update();
+			currentState.update();
 		}
 	}
 
@@ -161,9 +163,9 @@ public class GameStateManager
 		{
 			pauseState.render(g);
 		}
-		else if(gameStates[currentState] != null)
+		else
 		{
-			gameStates[currentState].render(g);
+			currentState.render(g);
 		}
 	}
 

@@ -34,7 +34,7 @@ public class Turret extends Entity
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
 
-		pushability = 5;
+		pushability = 0;
 		flying = false;
 		frictionless = false;
 

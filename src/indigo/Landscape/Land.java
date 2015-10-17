@@ -4,13 +4,34 @@ import java.awt.geom.Line2D;
 
 public abstract class Land
 {
-	public abstract Line2D.Double getLine();
+	protected Line2D.Double line;
 
-	public abstract double getSlope();
+	protected double slope;
+	protected double minX;
+	protected double maxX;
 
-	public abstract double getMinX();
+	public Line2D.Double getLine()
+	{
+		return line;
+	}
 
-	public abstract double getMaxX();
+	public double getSlope()
+	{
+		return slope;
+	}
 
-	public abstract double getSurface(double x);
+	public double getMinX()
+	{
+		return minX;
+	}
+
+	public double getMaxX()
+	{
+		return maxX;
+	}
+
+	public double getSurface(double x)
+	{
+		return slope * (x - line.getX1()) + line.getY1() - 1;
+	}
 }
