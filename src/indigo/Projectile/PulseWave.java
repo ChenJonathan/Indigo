@@ -19,7 +19,7 @@ public class PulseWave extends Projectile
 	public final static int HEIGHT = 1000;
 	public final static double PUSHBACK = 100; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
 												// Shot, keeping hitbox size in mind
-	public final static int DURATION = 5;
+	public final static int DURATION = 3;
 
 	public PulseWave(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
@@ -57,33 +57,9 @@ public class PulseWave extends Projectile
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void collide(Entity ent) // Pushes enemies
+	// Not used
+	public void collide(Entity ent)
 	{
-		if(!stage.getPlayer().isGrounded() || (ent.getY() < getY() + stage.getPlayer().getHeight() / 2))
-		{
-			// Push enemy away, further when closer
-			double scale = Math.sqrt(Math.pow(ent.getY() - getY(), 2) + Math.pow(ent.getX() - getX(), 2));
-			double iDP = 1 - (scale / WIDTH); // Inverse distance percentage; TODO: Change WIDTH to Radius here when
-												// animation is drawn
-			double velX = PUSHBACK * iDP * (ent.getX() - getX()) / scale;
-			double velY = PUSHBACK * iDP * (ent.getY() - getY()) / scale;
-
-			if(scale < getWidth() * 0.02) // TODO: Change for when get circular hitbox.
-			{
-				// Directly apply knockback to avoid divide by zero error
-				velX = PUSHBACK * (ent.getX() - getX()) / scale;
-				velY = PUSHBACK * (ent.getY() - getY()) / scale;
-			}
-
-			ent.setVelX(velX + ent.getVelX()); // velocity is added on rather than set
-			ent.setVelY(velY + ent.getVelY());
-
-			if(!ent.isDodging()) // damaged, won't hurt if is dodging, scale by distance
-			{
-				ent.setHealth((int)(ent.getHealth() - (DAMAGE * iDP)));
-				ent.mark();
-			}
-		}
 	}
 
 	// Not used

@@ -10,7 +10,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,9 +29,9 @@ public class DesignState extends GameState
 	private JSONObject index;
 	private JSONObject json;
 
-	private ArrayList<Line2D> walls;
-	private ArrayList<Line2D> platforms;
-	private ArrayList<Point2D> respawnables;
+	private ArrayList<WallData> walls;
+	private ArrayList<PlatformData> platforms;
+	private ArrayList<RespawnableData> respawnables;
 
 	private ArrayList<Object> creationOrder; // Tracks the order in which objects were created
 
@@ -42,10 +41,6 @@ public class DesignState extends GameState
 	// Measured in actual size
 	private int mapX;
 	private int mapY;
-
-	// Measured in visual size
-	private int scaledMapX;
-	private int scaledMapY;
 
 	private double scale = 1; // Factor by which the grid is scaled up to be easier to see
 
@@ -83,9 +78,9 @@ public class DesignState extends GameState
 
 		name = JOptionPane.showInputDialog("Map name:");
 
-		walls = new ArrayList<Line2D>();
-		platforms = new ArrayList<Line2D>();
-		respawnables = new ArrayList<Point2D>();
+		walls = new ArrayList<WallData>();
+		platforms = new ArrayList<PlatformData>();
+		respawnables = new ArrayList<RespawnableData>();
 
 		creationOrder = new ArrayList<Object>();
 
@@ -94,7 +89,7 @@ public class DesignState extends GameState
 		{
 			json = new JSONObject();
 			json.put("name", name);
-			type = JOptionPane.showInputDialog("Map type (battle / protect / survive):");
+			type = JOptionPane.showInputDialog("Map type (Battle / Protect / Survive):");
 			json.put("type", type);
 
 			do
@@ -108,7 +103,7 @@ public class DesignState extends GameState
 			}
 			while(mapY < 100 || mapY > 9000);
 			json.put("mapX", mapX);
-			json.put("mapX", mapY);
+			json.put("mapY", mapY);
 		}
 		else
 		{
@@ -117,11 +112,12 @@ public class DesignState extends GameState
 			for(Object obj : (JSONArray)json.get("walls"))
 			{
 				JSONObject wall = (JSONObject)obj;
+				String type = (String)wall.get("type");
 				int x1 = (int)(long)wall.get("x1");
 				int y1 = (int)(long)wall.get("y1");
 				int x2 = (int)(long)wall.get("x2");
 				int y2 = (int)(long)wall.get("y2");
-				walls.add(new Line2D.Double(x1, y1, x2, y2));
+				walls.add(new WallData(type, x1, y1, x2, y2));
 			}
 			for(Object obj : (JSONArray)json.get("platforms"))
 			{
@@ -130,14 +126,16 @@ public class DesignState extends GameState
 				int y1 = (int)(long)plat.get("y1");
 				int x2 = (int)(long)plat.get("x2");
 				int y2 = (int)(long)plat.get("y2");
-				platforms.add(new Line2D.Double(x1, y1, x2, y2));
+				platforms.add(new PlatformData(x1, y1, x2, y2));
 			}
 			for(Object obj : (JSONArray)json.get("respawnables"))
 			{
 				JSONObject respawnable = (JSONObject)obj;
+				String type = (String)respawnable.get("type");
 				int x = (int)(long)respawnable.get("x");
 				int y = (int)(long)respawnable.get("y");
-				respawnables.add(new Point2D.Double(x, y));
+				int respawnTime = (int)(long)respawnable.get("respawnTime");
+				respawnables.add(new RespawnableData(type, x, y, respawnTime));
 			}
 
 			mapX = (int)(long)json.get("mapX");
@@ -145,10 +143,125 @@ public class DesignState extends GameState
 		}
 
 		scale = Math.min(1600.0 / scale(mapX), 900.0 / scale(mapY));
-		pointRadius = (int)(scale * 3);
+		pointRadius = (int)(scale * 2);
 
 		xMargin = (int)(50);
 		yMargin = (int)((Game.HEIGHT - scale(mapY)) / (2));
+	}
+
+	private class WallData
+	{
+		private String type;
+		private int x1;
+		private int y1;
+		private int x2;
+		private int y2;
+
+		private WallData(String type, int x1, int y1, int x2, int y2)
+		{
+			this.type = type;
+			this.x1 = x1;
+			this.y1 = y1;
+			this.x2 = x2;
+			this.y2 = y2;
+		}
+
+		public String type()
+		{
+			return type;
+		}
+
+		public int x1()
+		{
+			return x1;
+		}
+
+		public int y1()
+		{
+			return y1;
+		}
+
+		public int x2()
+		{
+			return x2;
+		}
+
+		public int y2()
+		{
+			return y2;
+		}
+	}
+
+	private class PlatformData
+	{
+		private int x1;
+		private int y1;
+		private int x2;
+		private int y2;
+
+		private PlatformData(int x1, int y1, int x2, int y2)
+		{
+			this.x1 = x1;
+			this.y1 = y1;
+			this.x2 = x2;
+			this.y2 = y2;
+		}
+
+		public int x1()
+		{
+			return x1;
+		}
+
+		public int y1()
+		{
+			return y1;
+		}
+
+		public int x2()
+		{
+			return x2;
+		}
+
+		public int y2()
+		{
+			return y2;
+		}
+	}
+
+	private class RespawnableData
+	{
+		private String type;
+		private int x;
+		private int y;
+		private int respawnTime;
+
+		private RespawnableData(String type, int x, int y, int respawnTime)
+		{
+			this.type = type;
+			this.x = x;
+			this.y = y;
+			this.respawnTime = respawnTime;
+		}
+
+		public String type()
+		{
+			return type;
+		}
+
+		public int x()
+		{
+			return x;
+		}
+
+		public int y()
+		{
+			return y;
+		}
+
+		public int respawnTime()
+		{
+			return respawnTime;
+		}
 	}
 
 	@Override
@@ -179,23 +292,23 @@ public class DesignState extends GameState
 		// Draw walls
 		g.setColor(Color.BLUE);
 		g.setStroke(new BasicStroke((int)(scale)));
-		for(Line2D wall : walls)
+		for(WallData wall : walls)
 		{
-			int x1 = (int)(xMargin + scale(wall.getX1()));
-			int y1 = (int)(yMargin + scale(wall.getY1()));
-			int x2 = (int)(xMargin + scale(wall.getX2()));
-			int y2 = (int)(yMargin + scale(wall.getY2()));
+			int x1 = (int)(xMargin + scale(wall.x1()));
+			int y1 = (int)(yMargin + scale(wall.y1()));
+			int x2 = (int)(xMargin + scale(wall.x2()));
+			int y2 = (int)(yMargin + scale(wall.y2()));
 			g.drawLine(x1, y1, x2, y2);
 		}
 
 		// Draw platforms
 		g.setColor(Color.RED);
-		for(Line2D plat : platforms)
+		for(PlatformData plat : platforms)
 		{
-			int x1 = (int)(xMargin + scale(plat.getX1()));
-			int y1 = (int)(yMargin + scale(plat.getY1()));
-			int x2 = (int)(xMargin + scale(plat.getX2()));
-			int y2 = (int)(yMargin + scale(plat.getY2()));
+			int x1 = (int)(xMargin + scale(plat.x1()));
+			int y1 = (int)(yMargin + scale(plat.y1()));
+			int x2 = (int)(xMargin + scale(plat.x2()));
+			int y2 = (int)(yMargin + scale(plat.y2()));
 			g.drawLine(x1, y1, x2, y2);
 		}
 
@@ -254,7 +367,7 @@ public class DesignState extends GameState
 				save = JOptionPane.showInputDialog("Save? (Y / N):");
 				if(save.equals("Y"))
 				{
-					saveAndExit();
+					save(true);
 				}
 				else if(save.equals("N"))
 				{
@@ -294,21 +407,21 @@ public class DesignState extends GameState
 			{
 				if(x != selectedPoint.getX() || y != selectedPoint.getY()) // Length > 0
 				{
-					double x1 = selectedPoint.getX() * GRID_SCALE;
-					double y1 = selectedPoint.getY() * GRID_SCALE;
-					double x2 = x * GRID_SCALE;
-					double y2 = y * GRID_SCALE;
+					int x1 = (int)(selectedPoint.getX() * GRID_SCALE);
+					int y1 = (int)(selectedPoint.getY() * GRID_SCALE);
+					int x2 = x * GRID_SCALE;
+					int y2 = y * GRID_SCALE;
 					if(selectedTool == DRAW_WALL)
 					{
-						Line2D.Double line = new Line2D.Double(x1, y1, x2, y2);
-						walls.add(line);
-						creationOrder.add(line);
+						WallData wall = new WallData(selectedToolType, x1, y1, x2, y2);
+						walls.add(wall);
+						creationOrder.add(wall);
 					}
 					else
 					{
-						Line2D.Double line = new Line2D.Double(x1, y1, x2, y2);
-						platforms.add(line);
-						creationOrder.add(line);
+						PlatformData plat = new PlatformData(x1, y1, x2, y2);
+						platforms.add(plat);
+						creationOrder.add(plat);
 					}
 				}
 				selectedPoint = null;
@@ -330,24 +443,45 @@ public class DesignState extends GameState
 	public void selectTool(int tool)
 	{
 		selectedPoint = null;
-		if(tool == SET_OBJECTIVE && type.equals("battle"))
+		if(tool == SET_OBJECTIVE)
 		{
-			int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
-			json.put("enemiesToDefeat", enemiesToDefeat); // TODO Move to set objective
+			if(type.equals("Battle"))
+			{
+				int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
+				json.put("enemiesToDefeat", enemiesToDefeat);
+			}
 		}
 		else
 		{
 			selectedTool = tool;
+
+			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM
+					|| selectedTool == DRAW_WALL)
+			{
+				selectedToolType = JOptionPane.showInputDialog("Tool Type:");
+			}
 		}
 	}
 
 	/**
-	 * Reverts the last change
+	 * Converts actual size to visual size.
+	 * 
+	 * @param value Value to be converted.
+	 * @return Value in visual pixels.
+	 */
+	public int scale(double value)
+	{
+		return (int)(value / GRID_SCALE * GRID_SPACE * scale);
+	}
+
+	/**
+	 * Reverts the last change.
 	 */
 	public void undo()
 	{
 		if(creationOrder.size() > 0)
 		{
+			selectedPoint = null;
 			Object remove = creationOrder.get(creationOrder.size() - 1);
 			walls.remove(remove);
 			platforms.remove(remove);
@@ -358,8 +492,10 @@ public class DesignState extends GameState
 
 	/**
 	 * Saves the designed level.
+	 * 
+	 * @param exit Whether to exit to the menu afterwards or not.
 	 */
-	public void save()
+	public void save(boolean exit)
 	{
 		if(!playerSet)
 		{
@@ -391,11 +527,26 @@ public class DesignState extends GameState
 				}
 				else
 				{
+					json.put("id", index.size());
 					index.put(name, index.size());
 					FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
 					file.write(index.toJSONString());
 					file.flush();
 					file.close();
+				}
+
+				// Packing objects into JSONObject
+				for(WallData wall : walls)
+				{
+					addToJSON(wall);
+				}
+				for(PlatformData plat : platforms)
+				{
+					addToJSON(plat);
+				}
+				for(RespawnableData respawnable : respawnables)
+				{
+					addToJSON(respawnable);
 				}
 
 				// Saving and exiting
@@ -406,6 +557,10 @@ public class DesignState extends GameState
 				file.flush();
 				file.close();
 				JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
+				if(exit)
+				{
+					gsm.setState(GameStateManager.MENU);
+				}
 			}
 			catch(Exception e)
 			{
@@ -415,70 +570,60 @@ public class DesignState extends GameState
 	}
 
 	/**
-	 * Saves and exits the designed level.
+	 * Adds the WallData object to the JSON.
 	 */
-	public void saveAndExit()
+	public void addToJSON(WallData wall)
 	{
-		if(!playerSet)
+		JSONArray walls = (JSONArray)json.get("walls");
+		if(walls == null)
 		{
-			JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
+			walls = new JSONArray();
+			json.put("walls", walls);
 		}
-		else if(!objectiveSet)
-		{
-			JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-		}
-		else
-		{
-			try
-			{
-				// Overwrite check
-				if(index.get(name) != null)
-				{
-					String overwrite;
-					do
-					{
-						overwrite = JOptionPane.showInputDialog("Overwrite existing file? (Y / N):");
-						if(overwrite.equals("N"))
-						{
-							return;
-						}
-					}
-					while(!overwrite.equals("Y") && !overwrite.equals("N"));
-				}
-				else
-				{
-					index.put(name, index.size());
-					FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
-					file.write(index.toJSONString());
-					file.flush();
-					file.close();
-				}
-
-				// Saving and exiting
-				String fileName = name.replace(" ", "_").toLowerCase();
-				FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/levels/" + fileName
-						+ ".json");
-				file.write(json.toJSONString());
-				file.flush();
-				file.close();
-				JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
-				gsm.setState(GameStateManager.MENU);
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
+		JSONObject obj = new JSONObject();
+		obj.put("type", wall.type());
+		obj.put("x1", wall.x1());
+		obj.put("y1", wall.y1());
+		obj.put("x2", wall.x2());
+		obj.put("y2", wall.y2());
+		walls.add(obj);
 	}
 
 	/**
-	 * Converts actual size to visual size.
-	 * 
-	 * @param value Value to be converted
-	 * @return Value in visual pixels
+	 * Adds the PlatformData object to the JSON.
 	 */
-	public int scale(double value)
+	public void addToJSON(PlatformData plat)
 	{
-		return (int)(value / GRID_SCALE * GRID_SPACE * scale);
+		JSONArray platforms = (JSONArray)json.get("platforms");
+		if(platforms == null)
+		{
+			platforms = new JSONArray();
+			json.put("platforms", platforms);
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("x1", plat.x1());
+		obj.put("y1", plat.y1());
+		obj.put("x2", plat.x2());
+		obj.put("y2", plat.y2());
+		platforms.add(obj);
+	}
+
+	/**
+	 * Adds the RespawnableData object to the JSON.
+	 */
+	public void addToJSON(RespawnableData respawnable)
+	{
+		JSONArray respawnables = (JSONArray)json.get("respawnables");
+		if(respawnables == null)
+		{
+			respawnables = new JSONArray();
+			json.put("respawnables", respawnables);
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("type", respawnable.type());
+		obj.put("x1", respawnable.x());
+		obj.put("y1", respawnable.y());
+		obj.put("respawnTime", respawnable.respawnTime());
+		respawnables.add(obj);
 	}
 }

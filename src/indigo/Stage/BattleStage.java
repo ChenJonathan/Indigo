@@ -50,17 +50,18 @@ public class BattleStage extends Stage
 		for(int count = 0; count < array.size(); count++)
 		{
 			JSONObject object = (JSONObject)array.get(count);
-			Wall wall = new Wall((int)(long)object.get("x1"), (int)(long)object.get("y1"), (int)(long)object.get("x2"),
-					(int)(long)object.get("y2"));
-			walls.add(wall);
-		}
-		array = (JSONArray)json.get("spike pits");
-		for(int count = 0; count < array.size(); count++)
-		{
-			JSONObject object = (JSONObject)array.get(count);
-			SpikePit wall = new SpikePit((int)(long)object.get("x1"), (int)(long)object.get("y1"),
-					(int)(long)object.get("x2"), (int)(long)object.get("y2"));
-			walls.add(wall);
+			if(object.get("type").equals("Wall"))
+			{
+				Wall wall = new Wall((int)(long)object.get("x1"), (int)(long)object.get("y1"),
+						(int)(long)object.get("x2"), (int)(long)object.get("y2"));
+				walls.add(wall);
+			}
+			else if(object.get("type").equals("SpikePit"))
+			{
+				SpikePit wall = new SpikePit((int)(long)object.get("x1"), (int)(long)object.get("y1"),
+						(int)(long)object.get("x2"), (int)(long)object.get("y2"));
+				walls.add(wall);
+			}
 		}
 
 		array = (JSONArray)json.get("platforms");

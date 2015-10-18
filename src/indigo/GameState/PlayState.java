@@ -58,7 +58,7 @@ public class PlayState extends GameState
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		// Initialize stage
-		if(data.getStage().get("type").equals("battle"))
+		if(data.getStage().get("type").equals("Battle"))
 		{
 			stage = new BattleStage(this, data.getStage());
 		}

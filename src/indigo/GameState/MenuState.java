@@ -274,10 +274,9 @@ public class MenuState extends GameState implements ActionListener
 		level = level.replace(" ","_").toLowerCase();
 		if(!level.equals(""))
 		{
-			System.out.println(level);
 			data.setStage(ContentManager.load("/levels/" + level + ".json"));
-			gsm.setState(GameStateManager.PLAY);
 			frame.dispose();
+			gsm.setState(GameStateManager.PLAY);
 		}
 	}
 }
