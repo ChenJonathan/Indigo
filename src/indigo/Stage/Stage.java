@@ -46,8 +46,9 @@ public abstract class Stage
 	protected int mapY;
 	protected int backX;
 	protected int backY;
-	
+
 	protected BufferedImage background;
+	protected BufferedImage foreground;
 
 	protected ArrayList<Entity> entities;
 	protected ArrayList<Item> items;
@@ -60,7 +61,7 @@ public abstract class Stage
 
 	// Speed at which camera moves when unlocked
 	public static final int CAMERA_SPEED = 60;
-	
+
 	// Dimensions of default background image
 	public static final int BACKGROUND_X = 2560;
 	public static final int BACKGROUND_Y = 1080;
@@ -491,12 +492,12 @@ public abstract class Stage
 	// Updates the camera and renders everything
 	public void render(Graphics2D g)
 	{
-		g.translate(-camBackX, -camBackY);
-		g.drawImage(ContentManager.getImage(ContentManager.BACKGROUND), 0, 0, backX, backY, null);
-		g.translate(camBackX, camBackY);
+		BufferedImage backgroundCrop = background.getSubimage(camBackX, camBackY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
+		g.drawImage(backgroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT, null);
+		BufferedImage foregroundCrop = foreground.getSubimage(camForeX, camForeY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
+		g.drawImage(foregroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT, null);
 
 		g.translate(-camForeX, -camForeY);
-		g.drawImage(background, 0, 0, mapX, mapY, null);
 		for(Projectile proj : projectiles)
 		{
 			proj.render(g);
@@ -560,7 +561,7 @@ public abstract class Stage
 		{
 			int newX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
 			int newY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
-			
+
 			camForeX = (int)(((double)camForeX + newX) / 2);
 			camForeY = (int)(((double)camForeY + newY) / 2);
 		}

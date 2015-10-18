@@ -14,6 +14,7 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
+import indigo.Manager.ContentManager;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,10 +37,11 @@ public class BattleStage extends Stage
 		entities.add(0, player);
 
 		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"), BACKGROUND_X, BACKGROUND_Y);
+		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try
 		{
 			String fileName = ((String)json.get("name")).replace(" ", "_").toLowerCase();
-			background = ImageIO.read(new File(new File("").getAbsolutePath() + "/resources/images/stages/" + fileName
+			foreground = ImageIO.read(new File(new File("").getAbsolutePath() + "/resources/images/stages/" + fileName
 					+ ".png"));
 		}
 		catch(Exception e)

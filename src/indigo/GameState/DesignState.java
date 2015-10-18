@@ -167,7 +167,7 @@ public class DesignState extends GameState
 					platforms.add(new PlatformData(x1, y1, x2, y2));
 				}
 			}
-			if(json.get("respawnabless") != null)
+			if(json.get("respawnables") != null)
 			{
 				for(Object obj : (JSONArray)json.get("respawnables"))
 				{
@@ -320,14 +320,14 @@ public class DesignState extends GameState
 		// Draw grid
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke((int)Math.sqrt(scale)));
-		for(int count = xMargin; count < scale(mapX) + xMargin; count += GRID_SPACE * scale)
+		for(double count = xMargin; count < scale(mapX) + xMargin; count += GRID_SPACE * scale)
 		{
-			g.drawLine(count, yMargin, count, (int)scale(mapY) + yMargin);
+			g.drawLine((int)count, yMargin, (int)count, (int)scale(mapY) + yMargin);
 		}
 		g.drawLine((int)scale(mapX) + xMargin, yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
-		for(int count = yMargin; count < scale(mapY) + yMargin; count += GRID_SPACE * scale)
+		for(double count = yMargin; count < scale(mapY) + yMargin; count += GRID_SPACE * scale)
 		{
-			g.drawLine(xMargin, count, (int)scale(mapX) + xMargin, count);
+			g.drawLine(xMargin, (int)count, (int)scale(mapX) + xMargin, (int)count);
 		}
 		g.drawLine(xMargin, (int)scale(mapY) + yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
 
