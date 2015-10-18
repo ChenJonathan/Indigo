@@ -43,17 +43,6 @@ public class PulseWave extends Projectile
 		{
 			die();
 		}
-
-		// Kill projectiles - projectile.die()
-		for(int count = 0; count < stage.getProjectiles().size(); count++)
-		{
-			if(intersects(stage.getProjectiles().get(count))
-					&& !(stage.getProjectiles().get(count).getX() == this.getX() && stage.getProjectiles().get(count)
-							.getY() == this.getY()))
-			{
-				stage.getProjectiles().get(count).die();
-			}
-		}
 	}
 
 	public void render(Graphics2D g)
