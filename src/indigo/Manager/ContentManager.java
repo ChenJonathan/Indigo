@@ -70,6 +70,7 @@ public class ContentManager
 			1080);
 	public static ImageData TALENTS_BACKGROUND = new ImageData("/images/menus/talents.png", 1920, 1080);
 	public static ImageData TITLE = new ImageData("/images/menus/title.png", 800, 382);
+	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 90, 990);
 
 	// Projectiles
 	public static AnimationData ELECTRIC_BALL = new AnimationData("/images/projectiles/electric_ball.png", 100, 100, 1);

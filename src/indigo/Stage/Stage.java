@@ -527,7 +527,7 @@ public abstract class Stage
 				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT);
 			}
 		}
-		else
+		else if(!player.isCharging())
 		{
 			int newX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
 			int newY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
@@ -535,6 +535,13 @@ public abstract class Stage
 			camForeX = (int)(((double)camForeX + newX) / 2);
 			camForeY = (int)(((double)camForeY + newY) / 2);
 		}
+		/*
+		else
+		{
+			camForeX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
+			camForeY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
+		}
+		*/
 
 		if(camForeX > maxOffsetX)
 		{

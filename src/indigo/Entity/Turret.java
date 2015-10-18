@@ -5,6 +5,7 @@ import indigo.Manager.ContentManager;
 import indigo.Projectile.Mortar;
 import indigo.Stage.Stage;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -102,6 +103,7 @@ public class Turret extends Entity
 
 		// Draws a simple line representing the turret arm // TODO Temporary
 		g.setColor(Color.RED);
+		g.setStroke(new BasicStroke(3));
 		g.drawLine((int)getX(), (int)getY(), (int)(getX() + 50 * Math.cos(angle)), (int)(getY() - 50 * Math.sin(angle)));
 	}
 

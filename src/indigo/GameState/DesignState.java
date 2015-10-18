@@ -8,12 +8,16 @@ import indigo.Manager.Manager;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -38,11 +42,17 @@ public class DesignState extends GameState
 	private String name;
 	private String type;
 
-	// Measured in actual size
+	// Map size - Measured in actual size
 	private int mapX;
 	private int mapY;
 
+	// Starting player location - Measured in actual size
+	private int startingX;
+	private int startingY;
+
 	private double scale = 1; // Factor by which the grid is scaled up to be easier to see
+	private int pointRadius; // Radius of selected point
+	private int respawnableRadius; // Radius of respawnable visual
 
 	private int xMargin;
 	private int yMargin;
@@ -50,11 +60,17 @@ public class DesignState extends GameState
 	private boolean playerSet = false;
 	private boolean objectiveSet = false;
 
-	private int selectedTool;
+	private int selectedTool = -1;
 	private String selectedToolType;
 
 	private Point2D selectedPoint;
-	private int pointRadius;
+
+	private List<String> objectives = Arrays.asList("Battle", "Defend", "Survive");
+
+	private int hoverValue;
+	private String[] hoverText = {"", "Sets the player location", "Sets the map objective",
+			"Creates an entity spawn point", "Creates a projectile spawn point", "Creates an item spawn point",
+			"Draws a wall", "Draws a platform", "Reverts the last action", "Saves the level", "Exits the level editor"};
 
 	private static final int GRID_SPACE = 10; // Visual pixels per grid square
 	private static final int GRID_SCALE = 100; // Actual pixels per grid square
@@ -89,7 +105,11 @@ public class DesignState extends GameState
 		{
 			json = new JSONObject();
 			json.put("name", name);
-			type = JOptionPane.showInputDialog("Map type (Battle / Protect / Survive):");
+			do
+			{
+				type = JOptionPane.showInputDialog("Map type (Battle / Defend / Survive):");
+			}
+			while(!objectives.contains(type));
 			json.put("type", type);
 
 			do
@@ -108,6 +128,15 @@ public class DesignState extends GameState
 		else
 		{
 			json = ContentManager.load("/levels/" + name + ".json");
+
+			playerSet = true;
+			objectiveSet = true;
+
+			startingX = (int)(long)json.get("startingX");
+			startingY = (int)(long)json.get("startingY");
+
+			mapX = (int)(long)json.get("mapX");
+			mapY = (int)(long)json.get("mapY");
 
 			for(Object obj : (JSONArray)json.get("walls"))
 			{
@@ -137,13 +166,11 @@ public class DesignState extends GameState
 				int respawnTime = (int)(long)respawnable.get("respawnTime");
 				respawnables.add(new RespawnableData(type, x, y, respawnTime));
 			}
-
-			mapX = (int)(long)json.get("mapX");
-			mapY = (int)(long)json.get("mapY");
 		}
 
 		scale = Math.min(1600.0 / scale(mapX), 900.0 / scale(mapY));
 		pointRadius = (int)(scale * 2);
+		respawnableRadius = (int)(scale * 3);
 
 		xMargin = (int)(50);
 		yMargin = (int)((Game.HEIGHT - scale(mapY)) / (2));
@@ -282,11 +309,11 @@ public class DesignState extends GameState
 		g.setStroke(new BasicStroke((int)Math.sqrt(scale)));
 		for(int count = xMargin; count <= scale(mapX) + xMargin; count += GRID_SPACE * scale)
 		{
-			g.drawLine(count, yMargin, count, scale(mapY) + yMargin);
+			g.drawLine(count, yMargin, count, (int)scale(mapY) + yMargin);
 		}
 		for(int count = yMargin; count <= scale(mapY) + yMargin; count += GRID_SPACE * scale)
 		{
-			g.drawLine(xMargin, count, scale(mapX) + xMargin, count);
+			g.drawLine(xMargin, count, (int)scale(mapX) + xMargin, count);
 		}
 
 		// Draw walls
@@ -312,13 +339,55 @@ public class DesignState extends GameState
 			g.drawLine(x1, y1, x2, y2);
 		}
 
+		// Draw respawnables
+		g.setColor(Color.GREEN);
+		for(RespawnableData respawnable : respawnables)
+		{
+			int x = (int)(xMargin + scale(respawnable.x()));
+			int y = (int)(yMargin + scale(respawnable.y()));
+			g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
+					respawnableRadius * 2));
+		}
+
+		// Draw player
+		g.setColor(Color.MAGENTA);
+		if(playerSet)
+		{
+			int x = (int)(xMargin + scale(startingX));
+			int y = (int)(yMargin + scale(startingY));
+			g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
+					respawnableRadius * 2));
+		}
+
 		// Draw selected point
-		g.setColor(Color.CYAN);
+		g.setColor(Color.GRAY);
 		if(selectedPoint != null)
 		{
 			int x = (int)(xMargin + selectedPoint.getX() * GRID_SPACE * scale);
 			int y = (int)(yMargin + selectedPoint.getY() * GRID_SPACE * scale);
 			g.fill(new Ellipse2D.Double(x - pointRadius, y - pointRadius, pointRadius * 2, pointRadius * 2));
+		}
+
+		// Draw toolbars
+		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1741, 45, 90, 990, null);
+
+		// Draw hover text
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		FontMetrics fontMetrics = g.getFontMetrics();
+		g.drawString(hoverText[hoverValue], 1690 - fontMetrics.stringWidth(hoverText[hoverValue]), 74);
+		if(hoverValue != 0)
+		{
+			g.drawRect(1670 - fontMetrics.stringWidth(hoverText[hoverValue]), 46,
+					fontMetrics.stringWidth(hoverText[hoverValue]) + 40, 40);
+		}
+		
+		// Draw selected tool box
+		if(selectedTool != -1)
+		{
+			g.setColor(Color.YELLOW);
+			g.setStroke(new BasicStroke(6));
+			g.drawRect(1741, 100 * selectedTool + 45, 90, 90);
 		}
 	}
 
@@ -378,7 +447,8 @@ public class DesignState extends GameState
 		}
 
 		// Mouse clicking and hovering
-		if(Manager.input.mouseInRect(xMargin, yMargin, scale(mapX), scale(mapY)))
+		if(Manager.input.mouseInRect(xMargin - GRID_SPACE * scale / 2, yMargin - GRID_SPACE * scale / 2, scale(mapX)
+				+ GRID_SPACE * scale, scale(mapY) + GRID_SPACE * scale))
 		{
 			if(Manager.input.mousePress())
 			{
@@ -386,6 +456,19 @@ public class DesignState extends GameState
 				int gridY = (int)Math.round((Manager.input.mouseY() - yMargin) / (GRID_SPACE * scale));
 				selectPoint(gridX, gridY);
 			}
+		}
+		for(int count = 1; count <= 10; count++)
+		{
+			if(Manager.input.mouseInRect(1741, 100 * count - 55, 90, 90))
+			{
+				hoverValue = count;
+				if(Manager.input.mousePress() && count <= 7)
+				{
+					selectTool(count - 1);
+				}
+				break;
+			}
+			hoverValue = 0;
 		}
 	}
 
@@ -431,11 +514,11 @@ public class DesignState extends GameState
 		{
 			if(selectedTool == SET_PLAYER)
 			{
-
-			}
-			else if(selectedTool == SET_OBJECTIVE)
-			{
-
+				playerSet = true;
+				startingX = x * GRID_SCALE;
+				startingY = y * GRID_SCALE;
+				json.put("startingX", startingX);
+				json.put("startingY", startingY);
 			}
 		}
 	}
@@ -449,6 +532,18 @@ public class DesignState extends GameState
 			{
 				int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
 				json.put("enemiesToDefeat", enemiesToDefeat);
+			}
+			else if(type.equals("Defend"))
+			{
+				int coreX = Integer.parseInt(JOptionPane.showInputDialog("X-position of the core:"));
+				int coreY = Integer.parseInt(JOptionPane.showInputDialog("Y-position of the core:"));
+				json.put("coreX", coreX);
+				json.put("coreY", coreY);
+			}
+			else if(type.equals("Survive"))
+			{
+				int surviveTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration:"));
+				json.put("surviveTime", surviveTime);
 			}
 		}
 		else
@@ -469,9 +564,9 @@ public class DesignState extends GameState
 	 * @param value Value to be converted.
 	 * @return Value in visual pixels.
 	 */
-	public int scale(double value)
+	public double scale(double value)
 	{
-		return (int)(value / GRID_SCALE * GRID_SPACE * scale);
+		return value / GRID_SCALE * GRID_SPACE * scale;
 	}
 
 	/**
@@ -621,8 +716,8 @@ public class DesignState extends GameState
 		}
 		JSONObject obj = new JSONObject();
 		obj.put("type", respawnable.type());
-		obj.put("x1", respawnable.x());
-		obj.put("y1", respawnable.y());
+		obj.put("x", respawnable.x());
+		obj.put("y", respawnable.y());
 		obj.put("respawnTime", respawnable.respawnTime());
 		respawnables.add(obj);
 	}

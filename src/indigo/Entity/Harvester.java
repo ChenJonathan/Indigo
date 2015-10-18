@@ -8,26 +8,19 @@ import indigo.Landscape.Land;
 import indigo.Projectile.HarvesterProjectile;
 import indigo.Stage.Stage;
 
-public class Harvester extends Entity
+public class Harvester extends Entity // TODO Revert hidden code after Tree is implemented
 {
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
-	private final Tree tree;
 	
 	public static final double HARVESTER_WIDTH = 100;
 	public static final double HARVESTER_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;// TODO: Change to harvester's stats
 	public static final int RANGE = 50;// TODO: Balancing
 	
-	public void setHealth(int health)
-	{
-		super.setHealth(health);
-	}
-	
-	public Harvester(Stage stage, double x, double y, int health, Tree tree)
+	public Harvester(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
-		this.tree = tree;
 		name = "a harvester";
 		
 		width = HARVESTER_WIDTH;
@@ -44,11 +37,14 @@ public class Harvester extends Entity
 	
 	public void update()
 	{
+		/*
 		super.update();
+		
 		if(inRange() && canAttack())
 		{
 			//something about facing left or right, and then attacking
 		}
+		*/
 	}
 	
 	public void render(Graphics2D g)
@@ -57,6 +53,7 @@ public class Harvester extends Entity
 				(int)(getWidth()), (int)(getHeight()), null);
 	}
 	
+	/*
 	public boolean inRange()
 	{
 		//in range is if harvester is within attacking range (distance) of tree on both x and y.
@@ -64,6 +61,7 @@ public class Harvester extends Entity
 		boolean yInRange = (getY() - HARVESTER_HEIGHT >= tree.getY()-tree.HEIGHT) && (getY() + HARVESTER_HEIGHT <= tree.getY() + tree.HEIGHT);
 		return xInRange && yInRange;
 	}
+	*/
 	
 	public void attack()
 	{
