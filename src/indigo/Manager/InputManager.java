@@ -13,7 +13,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class InputManager implements KeyListener, MouseListener, MouseMotionListener
 {
-	public static final int NUM_KEYS = 14;
+	public static final int NUM_KEYS = 19;
 
 	private boolean keyState[] = new boolean[NUM_KEYS];
 	private boolean prevKeyState[] = new boolean[NUM_KEYS];
@@ -29,16 +29,21 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	public static final int K2 = 1;
 	public static final int K3 = 2;
 	public static final int K4 = 3;
-	public static final int W = 4;
-	public static final int A = 5;
-	public static final int S = 6;
-	public static final int D = 7;
-	public static final int Q = 8;
-	public static final int E = 9;
-	public static final int SPACE = 10;
-	public static final int CONTROL = 11;
-	public static final int SHIFT = 12;
-	public static final int ESCAPE = 13;
+	public static final int K5 = 4;
+	public static final int K6 = 5;
+	public static final int K7 = 6;
+	public static final int K8 = 7;
+	public static final int K9 = 8;
+	public static final int W = 9;
+	public static final int A = 10;
+	public static final int S = 11;
+	public static final int D = 12;
+	public static final int Q = 13;
+	public static final int E = 14;
+	public static final int SPACE = 15;
+	public static final int CONTROL = 16;
+	public static final int SHIFT = 17;
+	public static final int ESCAPE = 18;
 
 	/**
 	 * Default constructor.
@@ -76,6 +81,16 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 			keyState[K3] = state;
 		else if(key == KeyEvent.VK_4)
 			keyState[K4] = state;
+		else if(key == KeyEvent.VK_5)
+			keyState[K5] = state;
+		else if(key == KeyEvent.VK_6)
+			keyState[K6] = state;
+		else if(key == KeyEvent.VK_7)
+			keyState[K7] = state;
+		else if(key == KeyEvent.VK_8)
+			keyState[K8] = state;
+		else if(key == KeyEvent.VK_9)
+			keyState[K9] = state;
 		else if(key == KeyEvent.VK_W)
 			keyState[W] = state;
 		else if(key == KeyEvent.VK_A)
@@ -353,5 +368,18 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	public int mouseY()
 	{
 		return mouseY;
+	}
+	
+	/**
+	 * @param x The x-position of the top left corner of the rectangle.
+	 * @param y The y-position of the top left corner of the rectangle.
+	 * @param width The width of the rectangle.
+	 * @param height The height of the rectangle.
+	 * 
+	 * @return Whether the mouse is in the specified rectangle.
+	 */
+	public boolean mouseInRect(double x, double y, double width, double height)
+	{
+		return mouseX() >= x && mouseX() <= x + width && mouseY() >= y && mouseY() <= y + height;
 	}
 }

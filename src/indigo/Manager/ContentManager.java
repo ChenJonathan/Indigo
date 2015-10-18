@@ -90,14 +90,14 @@ public class ContentManager
 	public static AnimationData WATER_BOLT = new AnimationData("/images/projectiles/water_bolt/default.png", 80, 73, 2);
 
 	// Sprites
-	public static AnimationData PLAYER_BLOCK_LEFT = new AnimationData("/images/sprites/player/block_left.png", 68,
-			111, 1);
+	public static AnimationData PLAYER_BLOCK_LEFT = new AnimationData("/images/sprites/player/block_left.png", 68, 111,
+			1);
 	public static AnimationData PLAYER_BLOCK_RIGHT = new AnimationData("/images/sprites/player/block_right.png", 68,
 			111, 1);
-	public static AnimationData PLAYER_BLOCK_LEFT_ARMOR = new AnimationData("/images/sprites/player/block_left_armor.png", 68,
-			111, 1);
-	public static AnimationData PLAYER_BLOCK_RIGHT_ARMOR = new AnimationData("/images/sprites/player/block_right_armor.png", 68,
-			111, 1);
+	public static AnimationData PLAYER_BLOCK_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/block_left_armor.png", 68, 111, 1);
+	public static AnimationData PLAYER_BLOCK_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/block_right_armor.png", 68, 111, 1);
 	public static AnimationData PLAYER_CROUCH_LEFT = new AnimationData("/images/sprites/player/crouch_left.png", 68,
 			111, 1);
 	public static AnimationData PLAYER_CROUCH_RIGHT = new AnimationData("/images/sprites/player/crouch_right.png", 68,
@@ -178,7 +178,7 @@ public class ContentManager
 	private static HashMap<ImageData, BufferedImage> imageMap;
 	private static HashMap<AnimationData, BufferedImage[]> animationMap;
 	private static HashMap<SoundData, byte[]> soundMap;
-	
+
 	private static JSONParser parser;
 
 	static
@@ -186,7 +186,7 @@ public class ContentManager
 		imageMap = new HashMap<>();
 		animationMap = new HashMap<>();
 		soundMap = new HashMap<>();
-		
+
 		parser = new JSONParser();
 	}
 
@@ -347,15 +347,15 @@ public class ContentManager
 		}
 		return null;
 	}
-	
+
 	public static JSONObject load(String path)
 	{
 		try
 		{
-			path = new File("").getAbsolutePath().concat("/resources" + path);
+			path = new File("").getAbsolutePath().concat("/resources/data" + path);
 			return (JSONObject)parser.parse(new FileReader(path));
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}

@@ -42,7 +42,7 @@ public class StageSelectState extends GameState
 		if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 113 && Manager.input.mouseX() <= 365
 				&& Manager.input.mouseY() >= 116 && Manager.input.mouseY() <= 293)
 		{
-			data.setStage(ContentManager.load("/stages/beach.json")); // TODO Temporary
+			data.setStage(ContentManager.load("/levels/beach.json")); // TODO Temporary
 			gsm.setState(GameStateManager.PLAY);
 		}
 	}

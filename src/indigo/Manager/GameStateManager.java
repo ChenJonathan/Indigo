@@ -138,7 +138,7 @@ public class GameStateManager
 		{
 			pauseState.update();
 		}
-		else
+		else if(currentState != null)
 		{
 			currentState.update();
 		}
@@ -163,7 +163,7 @@ public class GameStateManager
 		{
 			pauseState.render(g);
 		}
-		else
+		else if(currentState != null)
 		{
 			currentState.render(g);
 		}

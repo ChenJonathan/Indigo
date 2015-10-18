@@ -45,6 +45,7 @@ public class Data
 	 */
 	public void resetLevelData()
 	{
+		currentStage = null;
 		clearTime = 0;
 		killer = "";
 		victory = false;

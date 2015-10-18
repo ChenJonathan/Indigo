@@ -54,7 +54,6 @@ public class PlayState extends GameState
 	public PlayState(GameStateManager gsm)
 	{
 		super(gsm);
-		data.resetLevelData();
 
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
@@ -63,6 +62,7 @@ public class PlayState extends GameState
 		{
 			stage = new BattleStage(this, data.getStage());
 		}
+		data.resetLevelData();
 
 		// Initialize stage objects
 		entities = stage.getEntities();

@@ -4,13 +4,23 @@ import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+
+import org.json.simple.JSONObject;
 
 /**
  * The state where the main menu is displayed. Present at game startup.
  */
-public class MenuState extends GameState
+public class MenuState extends GameState implements ActionListener
 {
+	private JFrame frame; // For level selection
+	
 	private boolean instructions; // Whether the instructions are open or not
 	private boolean credits; // Whether the credits are open or not
 
@@ -166,8 +176,20 @@ public class MenuState extends GameState
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					data.setStage(ContentManager.load("/stages/beach.json"));
-					gsm.setState(GameStateManager.PLAY);
+					JSONObject index = ContentManager.load("/index.json");
+					String[] levels = (String[])index.keySet().toArray(new String[0]);
+					JComboBox levelSelect = new JComboBox(levels);
+					levelSelect.addActionListener(this);
+					
+					frame = new JFrame("");
+			        frame.setSize(new Dimension(120, 100));
+			        frame.setLayout(null);
+			        frame.setResizable(false);
+			        frame.setLocationRelativeTo(null);
+			        frame.setVisible(true);
+			        
+			        levelSelect.setBounds(10, 10, 100, 30);
+			        frame.add(levelSelect);
 				}
 			}
 			else
@@ -242,6 +264,20 @@ public class MenuState extends GameState
 			{
 				buttonState[EXIT] = NORMAL;
 			}
+		}
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		JComboBox levelSelect = (JComboBox)e.getSource();
+		String level = (String)levelSelect.getSelectedItem();
+		level = level.replace(" ","_").toLowerCase();
+		if(!level.equals(""))
+		{
+			System.out.println(level);
+			data.setStage(ContentManager.load("/levels/" + level + ".json"));
+			gsm.setState(GameStateManager.PLAY);
+			frame.dispose();
 		}
 	}
 }
