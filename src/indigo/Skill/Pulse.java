@@ -82,8 +82,11 @@ public class Pulse extends Skill
 						velY = PUSHBACK * (ent.getY() - player.getY()) / scale;
 					}
 
-					ent.setVelX(velX + ent.getVelX()); // Velocity is added on rather than set
-					ent.setVelY(velY + ent.getVelY());
+					if(ent.isPushable())
+					{
+						ent.setVelX(velX + ent.getVelX()); // Velocity is added on rather than set
+						ent.setVelY(velY + ent.getVelY());
+					}
 
 					if(!ent.isDodging()) // Damaged, won't hurt if is dodging, scale by distance
 					{
