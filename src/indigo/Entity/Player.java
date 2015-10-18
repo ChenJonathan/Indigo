@@ -776,11 +776,6 @@ public class Player extends Entity
 	{
 		return crouching;
 	}
-	
-	public boolean isCharging()
-	{
-		return currentAnimation == MIST;
-	}
 
 	public boolean canDoubleJump()
 	{

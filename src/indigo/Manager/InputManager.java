@@ -51,7 +51,7 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	public InputManager()
 	{
 	}
-	
+
 	/**
 	 * Updates mouse and key states. Previous mouse position is tracked to help check for changes in mouse state.
 	 */
@@ -112,14 +112,16 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 		else if(key == KeyEvent.VK_ESCAPE)
 			keyState[ESCAPE] = state;
 	}
-	
+
 	/**
 	 * Not used.
 	 * 
 	 * @param key The key pressed.
 	 */
 	@Override
-	public void keyTyped(KeyEvent key){}
+	public void keyTyped(KeyEvent key)
+	{
+	}
 
 	/**
 	 * Detects key press.
@@ -129,7 +131,7 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void keyPressed(KeyEvent key)
 	{
-		this.keySet(key.getKeyCode(), true);
+		keySet(key.getKeyCode(), true);
 	}
 
 	/**
@@ -140,9 +142,9 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void keyReleased(KeyEvent key)
 	{
-		this.keySet(key.getKeyCode(), false);
+		keySet(key.getKeyCode(), false);
 	}
-	
+
 	/**
 	 * Checks if key is pressed.
 	 * 
@@ -175,22 +177,30 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	{
 		return !keyState[i] && prevKeyState[i];
 	}
-	
-	/**
-	 * Not used.
-	 * 
-	 * @param e The current mouse action.
-	 */
-	@Override
-	public void mouseEntered(MouseEvent e){}
 
 	/**
-	 * Not used.
+	 * Sets mouse states to false when window loses focus.
 	 * 
 	 * @param e The current mouse action.
 	 */
 	@Override
-	public void mouseExited(MouseEvent e){}
+	public void mouseEntered(MouseEvent e)
+	{
+		mouseRightSet(false);
+		mouseLeftSet(false);
+	}
+
+	/**
+	 * Sets mouse states to false when window loses focus.
+	 * 
+	 * @param e The current mouse action.
+	 */
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+		mouseRightSet(false);
+		mouseLeftSet(false);
+	}
 
 	/**
 	 * Detects mouse click.
@@ -202,11 +212,11 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	{
 		if(e.getButton() == MouseEvent.BUTTON3)
 		{
-			this.mouseRightSet(true);
+			mouseRightSet(true);
 		}
 		else
 		{
-			this.mouseLeftSet(true);
+			mouseLeftSet(true);
 		}
 	}
 
@@ -220,11 +230,11 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	{
 		if(e.getButton() == MouseEvent.BUTTON3)
 		{
-			this.mouseRightSet(false);
+			mouseRightSet(false);
 		}
 		else
 		{
-			this.mouseLeftSet(false);
+			mouseLeftSet(false);
 		}
 	}
 
@@ -234,7 +244,9 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	 * @param e The current mouse action.
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e){}
+	public void mouseClicked(MouseEvent e)
+	{
+	}
 
 	/**
 	 * Handles the mouse being dragged. Interpreted same as moving.
@@ -244,7 +256,7 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
-		this.mouseSet(e.getX(), e.getY());
+		mouseSet(e.getX(), e.getY());
 	}
 
 	/**
@@ -255,7 +267,7 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
-		this.mouseSet(e.getX(), e.getY());
+		mouseSet(e.getX(), e.getY());
 	}
 
 	/**
@@ -369,7 +381,7 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	{
 		return mouseY;
 	}
-	
+
 	/**
 	 * @param x The x-position of the top left corner of the rectangle.
 	 * @param y The y-position of the top left corner of the rectangle.

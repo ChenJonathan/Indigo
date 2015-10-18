@@ -1,21 +1,19 @@
 package indigo.Stage;
 
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.Entity.FlyingBot;
 import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
 import indigo.Item.HealthPickup;
-import indigo.Item.Item;
 import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
-import indigo.Manager.ContentManager;
-import indigo.Manager.SoundManager;
-import indigo.Projectile.Projectile;
-
-import java.awt.Graphics2D;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +36,16 @@ public class BattleStage extends Stage
 		entities.add(0, player);
 
 		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"), BACKGROUND_X, BACKGROUND_Y);
+		try
+		{
+			String fileName = ((String)json.get("name")).replace(" ", "_").toLowerCase();
+			background = ImageIO.read(new File(new File("").getAbsolutePath() + "/resources/images/stages/" + fileName
+					+ ".png"));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		enemiesToKill = (int)(long)json.get("enemiesToDefeat");
 
@@ -47,6 +55,10 @@ public class BattleStage extends Stage
 		walls.add(new SkyBounds(0, SKY_LIMIT, mapX, SKY_LIMIT));
 
 		JSONArray array = (JSONArray)json.get("walls");
+		if(array == null)
+		{
+			array = new JSONArray();
+		}
 		for(int count = 0; count < array.size(); count++)
 		{
 			JSONObject object = (JSONObject)array.get(count);
@@ -65,6 +77,10 @@ public class BattleStage extends Stage
 		}
 
 		array = (JSONArray)json.get("platforms");
+		if(array == null)
+		{
+			array = new JSONArray();
+		}
 		for(int count = 0; count < array.size(); count++)
 		{
 			JSONObject object = (JSONObject)array.get(count);
@@ -74,6 +90,10 @@ public class BattleStage extends Stage
 		}
 
 		array = (JSONArray)json.get("respawnables");
+		if(array == null)
+		{
+			array = new JSONArray();
+		}
 		respawnables = new Respawnable[array.size()];
 		respawnInfo = new JSONObject[array.size()];
 		respawnTimers = new int[array.size()];
@@ -111,42 +131,6 @@ public class BattleStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
-	}
-
-	public void render(Graphics2D g)
-	{
-		g.translate(-camBackX, -camBackY);
-		g.drawImage(ContentManager.getImage(ContentManager.BACKGROUND), 0, 0, backX, backY, null);
-		g.translate(camBackX, camBackY);
-
-		g.translate(-camForeX, -camForeY);
-		g.drawImage(ContentManager.getImage(ContentManager.STAGE_BEACH), 0, 0, mapX, mapY, null);
-		for(Projectile proj : projectiles)
-		{
-			// Don't render if in pipe
-			if(!(proj.isSolid() && proj.getX() > 3834 && proj.getX() < 4122 && proj.getY() > 995 && proj.getY() < 1140))
-			{
-				proj.render(g);
-			}
-		}
-		for(Item item : items)
-		{
-			item.render(g);
-		}
-		for(Entity ent : entities)
-		{
-			// Don't render if in pipe
-			if(!(ent.getX() > 3834 && ent.getX() < 4122 && ent.getY() > 995 && ent.getY() < 1140))
-			{
-				ent.render(g);
-			}
-		}
-		// Render player on top
-		if(!(player.getX() > 3834 && player.getX() < 4122 && player.getY() > 995 && player.getY() < 1140))
-		{
-			player.render(g); // TODO Don't render player twice
-		}
-		g.translate(camForeX, camForeY);
 	}
 
 	public void trackDeath(String killer, Entity killed)

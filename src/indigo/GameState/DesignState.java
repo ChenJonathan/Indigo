@@ -13,12 +13,14 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -114,14 +116,16 @@ public class DesignState extends GameState
 
 			do
 			{
-				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (100 to 16000):"));
+				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (2000 to 16000):"));
+				mapX = mapX / 100 * 100;
 			}
-			while(mapX < 100 || mapX > 16000);
+			while(mapX < 2000 || mapX > 16000);
 			do
 			{
-				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (100 to 9000):"));
+				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (1000 to 9000):"));
+				mapY = mapY / 100 * 100;
 			}
-			while(mapY < 100 || mapY > 9000);
+			while(mapY < 1000 || mapY > 9000);
 			json.put("mapX", mapX);
 			json.put("mapY", mapY);
 		}
@@ -138,33 +142,42 @@ public class DesignState extends GameState
 			mapX = (int)(long)json.get("mapX");
 			mapY = (int)(long)json.get("mapY");
 
-			for(Object obj : (JSONArray)json.get("walls"))
+			if(json.get("walls") != null)
 			{
-				JSONObject wall = (JSONObject)obj;
-				String type = (String)wall.get("type");
-				int x1 = (int)(long)wall.get("x1");
-				int y1 = (int)(long)wall.get("y1");
-				int x2 = (int)(long)wall.get("x2");
-				int y2 = (int)(long)wall.get("y2");
-				walls.add(new WallData(type, x1, y1, x2, y2));
+				for(Object obj : (JSONArray)json.get("walls"))
+				{
+					JSONObject wall = (JSONObject)obj;
+					String type = (String)wall.get("type");
+					int x1 = (int)(long)wall.get("x1");
+					int y1 = (int)(long)wall.get("y1");
+					int x2 = (int)(long)wall.get("x2");
+					int y2 = (int)(long)wall.get("y2");
+					walls.add(new WallData(type, x1, y1, x2, y2));
+				}
 			}
-			for(Object obj : (JSONArray)json.get("platforms"))
+			if(json.get("platforms") != null)
 			{
-				JSONObject plat = (JSONObject)obj;
-				int x1 = (int)(long)plat.get("x1");
-				int y1 = (int)(long)plat.get("y1");
-				int x2 = (int)(long)plat.get("x2");
-				int y2 = (int)(long)plat.get("y2");
-				platforms.add(new PlatformData(x1, y1, x2, y2));
+				for(Object obj : (JSONArray)json.get("platforms"))
+				{
+					JSONObject plat = (JSONObject)obj;
+					int x1 = (int)(long)plat.get("x1");
+					int y1 = (int)(long)plat.get("y1");
+					int x2 = (int)(long)plat.get("x2");
+					int y2 = (int)(long)plat.get("y2");
+					platforms.add(new PlatformData(x1, y1, x2, y2));
+				}
 			}
-			for(Object obj : (JSONArray)json.get("respawnables"))
+			if(json.get("respawnabless") != null)
 			{
-				JSONObject respawnable = (JSONObject)obj;
-				String type = (String)respawnable.get("type");
-				int x = (int)(long)respawnable.get("x");
-				int y = (int)(long)respawnable.get("y");
-				int respawnTime = (int)(long)respawnable.get("respawnTime");
-				respawnables.add(new RespawnableData(type, x, y, respawnTime));
+				for(Object obj : (JSONArray)json.get("respawnables"))
+				{
+					JSONObject respawnable = (JSONObject)obj;
+					String type = (String)respawnable.get("type");
+					int x = (int)(long)respawnable.get("x");
+					int y = (int)(long)respawnable.get("y");
+					int respawnTime = (int)(long)respawnable.get("respawnTime");
+					respawnables.add(new RespawnableData(type, x, y, respawnTime));
+				}
 			}
 		}
 
@@ -307,14 +320,16 @@ public class DesignState extends GameState
 		// Draw grid
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke((int)Math.sqrt(scale)));
-		for(int count = xMargin; count <= scale(mapX) + xMargin; count += GRID_SPACE * scale)
+		for(int count = xMargin; count < scale(mapX) + xMargin; count += GRID_SPACE * scale)
 		{
 			g.drawLine(count, yMargin, count, (int)scale(mapY) + yMargin);
 		}
-		for(int count = yMargin; count <= scale(mapY) + yMargin; count += GRID_SPACE * scale)
+		g.drawLine((int)scale(mapX) + xMargin, yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
+		for(int count = yMargin; count < scale(mapY) + yMargin; count += GRID_SPACE * scale)
 		{
 			g.drawLine(xMargin, count, (int)scale(mapX) + xMargin, count);
 		}
+		g.drawLine(xMargin, (int)scale(mapY) + yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
 
 		// Draw walls
 		g.setColor(Color.BLUE);
@@ -381,7 +396,7 @@ public class DesignState extends GameState
 			g.drawRect(1670 - fontMetrics.stringWidth(hoverText[hoverValue]), 46,
 					fontMetrics.stringWidth(hoverText[hoverValue]) + 40, 40);
 		}
-		
+
 		// Draw selected tool box
 		if(selectedTool != -1)
 		{
@@ -423,27 +438,9 @@ public class DesignState extends GameState
 		{
 			selectTool(DRAW_PLATFORM);
 		}
-		else if(Manager.input.keyPress(InputManager.K8))
-		{
-			undo();
-		}
 		else if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
-			// Quitting the level editor
-			String save;
-			do
-			{
-				save = JOptionPane.showInputDialog("Save? (Y / N):");
-				if(save.equals("Y"))
-				{
-					save(true);
-				}
-				else if(save.equals("N"))
-				{
-					gsm.setState(GameStateManager.MENU);
-				}
-			}
-			while(!save.equals("Y") && !save.equals("N"));
+			exit();
 		}
 
 		// Mouse clicking and hovering
@@ -462,13 +459,28 @@ public class DesignState extends GameState
 			if(Manager.input.mouseInRect(1741, 100 * count - 55, 90, 90))
 			{
 				hoverValue = count;
-				if(Manager.input.mousePress() && count <= 7)
-				{
-					selectTool(count - 1);
-				}
 				break;
 			}
 			hoverValue = 0;
+		}
+		if(Manager.input.mousePress())
+		{
+			if(hoverValue >= 1 && hoverValue <= 7)
+			{
+				selectTool(hoverValue - 1);
+			}
+			else if(hoverValue == 8)
+			{
+				undo();
+			}
+			else if(hoverValue == 9)
+			{
+				save(false);
+			}
+			else if(hoverValue == 10)
+			{
+				exit();
+			}
 		}
 	}
 
@@ -520,6 +532,14 @@ public class DesignState extends GameState
 				json.put("startingX", startingX);
 				json.put("startingY", startingY);
 			}
+			else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM)
+			{
+				int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In frames):"));
+				RespawnableData respawnable = new RespawnableData(selectedToolType, x * GRID_SCALE, y * GRID_SCALE,
+						respawnTime);
+				respawnables.add(respawnable);
+				creationOrder.add(respawnable);
+			}
 		}
 	}
 
@@ -530,11 +550,13 @@ public class DesignState extends GameState
 		{
 			if(type.equals("Battle"))
 			{
+				objectiveSet = true;
 				int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
 				json.put("enemiesToDefeat", enemiesToDefeat);
 			}
 			else if(type.equals("Defend"))
 			{
+				objectiveSet = true;
 				int coreX = Integer.parseInt(JOptionPane.showInputDialog("X-position of the core:"));
 				int coreY = Integer.parseInt(JOptionPane.showInputDialog("Y-position of the core:"));
 				json.put("coreX", coreX);
@@ -542,6 +564,7 @@ public class DesignState extends GameState
 			}
 			else if(type.equals("Survive"))
 			{
+				objectiveSet = true;
 				int surviveTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration:"));
 				json.put("surviveTime", surviveTime);
 			}
@@ -651,6 +674,10 @@ public class DesignState extends GameState
 				file.write(json.toJSONString());
 				file.flush();
 				file.close();
+
+				ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
+						+ "/resources/images/stages/" + fileName + ".png"));
+
 				JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
 				if(exit)
 				{
@@ -662,6 +689,27 @@ public class DesignState extends GameState
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Attempts to quit the level editor
+	 */
+	public void exit()
+	{
+		String save;
+		do
+		{
+			save = JOptionPane.showInputDialog("Save? (Y / N):");
+			if(save.equals("Y"))
+			{
+				save(true);
+			}
+			else if(save.equals("N"))
+			{
+				gsm.setState(GameStateManager.MENU);
+			}
+		}
+		while(!save.equals("Y") && !save.equals("N"));
 	}
 
 	/**
@@ -720,5 +768,42 @@ public class DesignState extends GameState
 		obj.put("y", respawnable.y());
 		obj.put("respawnTime", respawnable.respawnTime());
 		respawnables.add(obj);
+	}
+
+	public BufferedImage createImage()
+	{
+		BufferedImage stage = new BufferedImage(mapX, mapY, BufferedImage.TYPE_INT_ARGB);
+		try
+		{
+			Graphics2D stageGraphics = stage.createGraphics();
+			stageGraphics.setStroke(new BasicStroke(10));
+
+			// Draw walls
+			stageGraphics.setColor(Color.BLUE);
+			for(WallData wall : walls)
+			{
+				int x1 = (int)wall.x1();
+				int y1 = (int)wall.y1();
+				int x2 = (int)wall.x2();
+				int y2 = (int)wall.y2();
+				stageGraphics.drawLine(x1, y1, x2, y2);
+			}
+
+			// Draw platforms
+			stageGraphics.setColor(Color.RED);
+			for(PlatformData plat : platforms)
+			{
+				int x1 = (int)plat.x1();
+				int y1 = (int)plat.y1();
+				int x2 = (int)plat.x2();
+				int y2 = (int)plat.y2();
+				stageGraphics.drawLine(x1, y1, x2, y2);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return stage;
 	}
 }

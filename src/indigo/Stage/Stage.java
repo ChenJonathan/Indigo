@@ -9,12 +9,14 @@ import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Main.Game;
+import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 // Shows the map, including platforms, entities, and projectiles
@@ -44,6 +46,8 @@ public abstract class Stage
 	protected int mapY;
 	protected int backX;
 	protected int backY;
+	
+	protected BufferedImage background;
 
 	protected ArrayList<Entity> entities;
 	protected ArrayList<Item> items;
@@ -484,9 +488,34 @@ public abstract class Stage
 		}
 	}
 
-	// Updates the camera and renders everything - Subclasses need to render background, render targeting reticles,
-	// render projectiles, render items, and render entities (in that order)
-	public abstract void render(Graphics2D g);
+	// Updates the camera and renders everything
+	public void render(Graphics2D g)
+	{
+		g.translate(-camBackX, -camBackY);
+		g.drawImage(ContentManager.getImage(ContentManager.BACKGROUND), 0, 0, backX, backY, null);
+		g.translate(camBackX, camBackY);
+
+		g.translate(-camForeX, -camForeY);
+		g.drawImage(background, 0, 0, mapX, mapY, null);
+		for(Projectile proj : projectiles)
+		{
+			proj.render(g);
+		}
+		for(Item item : items)
+		{
+			item.render(g);
+		}
+		for(Entity ent : entities)
+		{
+			ent.render(g);
+		}
+		// Render player on top
+		if(!(player.getX() > 3834 && player.getX() < 4122 && player.getY() > 995 && player.getY() < 1140))
+		{
+			player.render(g); // TODO Don't render player twice
+		}
+		g.translate(camForeX, camForeY);
+	}
 
 	// Updates camera reference point based on player position
 	public void updateCam(Graphics2D g)
@@ -527,7 +556,7 @@ public abstract class Stage
 				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT);
 			}
 		}
-		else if(!player.isCharging())
+		else
 		{
 			int newX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
 			int newY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
@@ -535,13 +564,6 @@ public abstract class Stage
 			camForeX = (int)(((double)camForeX + newX) / 2);
 			camForeY = (int)(((double)camForeY + newY) / 2);
 		}
-		/*
-		else
-		{
-			camForeX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
-			camForeY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
-		}
-		*/
 
 		if(camForeX > maxOffsetX)
 		{
