@@ -244,9 +244,9 @@ public abstract class Stage
 					{
 						if(!intersectedWall.isHorizontal())
 						{
-							// Leftward collision into wall
 							if(ent.isRightOfWall(intersectedWall))
 							{
+								System.out.println(ent.getX());
 								while(ent.intersects(intersectedWall))
 								{
 									ent.setX(ent.getX() + PUSH_AMOUNT);

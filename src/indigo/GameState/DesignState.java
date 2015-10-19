@@ -392,15 +392,15 @@ public class DesignState extends GameState
 		{
 			if(type.equals("Defend"))
 			{
-				int x = (int)(xMargin + scale((int)(long)json.get("coreX")));
-				int y = (int)(yMargin + scale((int)(long)json.get("coreY")));
+				int x = (int)(xMargin + scale(Integer.parseInt(json.get("coreX") + "")));
+				int y = (int)(yMargin + scale(Integer.parseInt(json.get("coreY") + "")));
 				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
 						respawnableRadius * 2));
 			}
 			else if(type.equals("Travel"))
 			{
-				int x = (int)(xMargin + scale((int)(long)json.get("destinationX")));
-				int y = (int)(yMargin + scale((int)(long)json.get("destinationY")));
+				int x = (int)(xMargin + scale((int)json.get("destinationX")));
+				int y = (int)(yMargin + scale((int)json.get("destinationY")));
 				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
 						respawnableRadius * 2));
 			}

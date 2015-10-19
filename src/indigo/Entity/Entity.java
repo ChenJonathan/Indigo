@@ -235,6 +235,12 @@ public abstract class Entity implements Respawnable
 		{
 			intersects = wall.getLine().ptSegDist(getX(), getY()) < getHeight() / 2;
 		}
+		
+		// In case entities are spawned directly on top of walls
+		if(stage.getTime() != 0)
+		{
+			intersects = intersects || wall.getLine().intersectsLine(travel);
+		}
 
 		return intersects;
 	}
