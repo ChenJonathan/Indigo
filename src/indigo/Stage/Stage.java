@@ -246,7 +246,6 @@ public abstract class Stage
 						{
 							if(ent.isRightOfWall(intersectedWall))
 							{
-								System.out.println(ent.getX());
 								while(ent.intersects(intersectedWall))
 								{
 									ent.setX(ent.getX() + PUSH_AMOUNT);

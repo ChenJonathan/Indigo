@@ -21,6 +21,11 @@ public class Turret extends Entity
 	public static final double TURRET_WIDTH = 100;
 	public static final double TURRET_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;
+	
+	public Turret(Stage stage, double x, double y)
+	{
+		this(stage, x, y, BASE_HEALTH);
+	}
 
 	public Turret(Stage stage, double x, double y, int health)
 	{

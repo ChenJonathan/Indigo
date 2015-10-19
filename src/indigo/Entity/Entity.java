@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 public abstract class Entity implements Respawnable
 {
 	protected Stage stage;
-
 	protected String name; // Used upon defeat to show who killed you
 
 	private double x, y;

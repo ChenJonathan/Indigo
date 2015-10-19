@@ -28,6 +28,11 @@ public class FlyingBot extends Entity
 	public static final int BASE_HEALTH = 50;
 	public static final int DEFAULT_TIMER = 30;
 
+	public FlyingBot(Stage stage, double x, double y)
+	{
+		this(stage, x, y, BASE_HEALTH);
+	}
+	
 	public FlyingBot(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);

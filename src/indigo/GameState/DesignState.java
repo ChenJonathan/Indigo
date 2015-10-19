@@ -35,12 +35,12 @@ public class DesignState extends GameState
 	private JSONObject index;
 	private JSONObject json;
 
-	private ArrayList<WallData> walls;
-	private ArrayList<PlatformData> platforms;
-	private ArrayList<RespawnableData> respawnables;
+	private ArrayList<LandData> landscape;
+	private ArrayList<SpawnData> spawns;
 
 	private ArrayList<Object> creationOrder; // Tracks the order in which objects were created
-	RespawnableData[][] respawnablesGrid;
+	LandData[][][][] landscapeGrid;
+	SpawnData[][] spawnsGrid;
 
 	private String name = "";
 	private String type = "";
@@ -54,8 +54,8 @@ public class DesignState extends GameState
 	private int startingY;
 
 	private double scale = 1; // Factor by which the grid is scaled up to be easier to see
-	private int pointRadius; // Radius of selected point
-	private int respawnableRadius; // Radius of respawnable visual
+	private int selectedPointRadius; // Radius of selected point
+	private int spawnRadius; // Radius of respawnable visual
 
 	private int xMargin;
 	private int yMargin;
@@ -68,7 +68,13 @@ public class DesignState extends GameState
 
 	private Point2D selectedPoint;
 
+	// Tool types
+	private List<String> player = Arrays.asList("Player");
 	private List<String> objectives = Arrays.asList("Battle", "Defend", "Survival", "Travel");
+	private List<String> lands = Arrays.asList("Platform", "Wall", "Spike Pit");
+	private List<String> entities = Arrays.asList("Flying Bot", "Turret");
+	private List<String> projectiles = Arrays.asList("Steel Beam");
+	private List<String> interactives = Arrays.asList("Health Pickup");
 
 	private int hoverValue;
 	private String[] hoverText = {"Sets the player location", "Sets the map objective",
@@ -83,8 +89,8 @@ public class DesignState extends GameState
 	public static final int SET_OBJECTIVE = 1;
 	public static final int SET_ENTITY = 2;
 	public static final int SET_PROJECTILE = 3;
-	public static final int SET_ITEM = 4;
-	public static final int DRAW_WALL = 5;
+	public static final int SET_INTERACTIVE = 4;
+	public static final int DRAW_LAND = 5;
 	public static final int DRAW_PLATFORM = 6;
 
 	/**
@@ -98,9 +104,8 @@ public class DesignState extends GameState
 
 		name = JOptionPane.showInputDialog("Map name:");
 
-		walls = new ArrayList<WallData>();
-		platforms = new ArrayList<PlatformData>();
-		respawnables = new ArrayList<RespawnableData>();
+		landscape = new ArrayList<LandData>();
+		spawns = new ArrayList<SpawnData>();
 
 		creationOrder = new ArrayList<Object>();
 
@@ -113,19 +118,21 @@ public class DesignState extends GameState
 			do
 			{
 				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (2000 to 16000):"));
-				mapX = mapX / 100 * 100;
+				mapX = mapX / GRID_SCALE * GRID_SCALE;
 			}
 			while(mapX < 2000 || mapX > 16000);
 			do
 			{
 				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (1000 to 9000):"));
-				mapY = mapY / 100 * 100;
+				mapY = mapY / GRID_SCALE * GRID_SCALE;
 			}
 			while(mapY < 1000 || mapY > 9000);
 			json.put("mapX", mapX);
 			json.put("mapY", mapY);
-			
-			respawnablesGrid = new RespawnableData[mapX / GRID_SCALE][mapY / GRID_SCALE];
+
+			spawnsGrid = new SpawnData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1];
+			landscapeGrid = new LandData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1][mapX / GRID_SCALE + 1][mapY
+					/ GRID_SCALE + 1];
 		}
 		else
 		{
@@ -146,62 +153,52 @@ public class DesignState extends GameState
 
 			mapX = (int)(long)json.get("mapX");
 			mapY = (int)(long)json.get("mapY");
-			
-			respawnablesGrid = new RespawnableData[mapX / GRID_SCALE][mapY / GRID_SCALE];
 
-			if(json.get("walls") != null)
+			spawnsGrid = new SpawnData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1];
+			landscapeGrid = new LandData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1][mapX / GRID_SCALE + 1][mapY
+					/ GRID_SCALE + 1];
+
+			if(json.get("landscape") != null)
 			{
-				for(Object obj : (JSONArray)json.get("walls"))
+				for(Object obj : (JSONArray)json.get("landscape"))
 				{
-					JSONObject wall = (JSONObject)obj;
-					String type = (String)wall.get("type");
-					int x1 = (int)(long)wall.get("x1");
-					int y1 = (int)(long)wall.get("y1");
-					int x2 = (int)(long)wall.get("x2");
-					int y2 = (int)(long)wall.get("y2");
-					walls.add(new WallData(type, x1, y1, x2, y2));
+					JSONObject land = (JSONObject)obj;
+					String type = (String)land.get("type");
+					int x1 = (int)(long)land.get("x1");
+					int y1 = (int)(long)land.get("y1");
+					int x2 = (int)(long)land.get("x2");
+					int y2 = (int)(long)land.get("y2");
+					LandData landData = new LandData(type, x1, y1, x2, y2);
+					addToList(landData);
 				}
 			}
-			if(json.get("platforms") != null)
+			if(json.get("spawns") != null)
 			{
-				for(Object obj : (JSONArray)json.get("platforms"))
+				for(Object obj : (JSONArray)json.get("spawns"))
 				{
-					JSONObject plat = (JSONObject)obj;
-					int x1 = (int)(long)plat.get("x1");
-					int y1 = (int)(long)plat.get("y1");
-					int x2 = (int)(long)plat.get("x2");
-					int y2 = (int)(long)plat.get("y2");
-					platforms.add(new PlatformData(x1, y1, x2, y2));
+					JSONObject spawn = (JSONObject)obj;
+					String category = (String)spawn.get("category");
+					String type = (String)spawn.get("type");
+					int x = (int)(long)spawn.get("x");
+					int y = (int)(long)spawn.get("y");
+					int respawnTime = (int)(long)spawn.get("respawnTime");
+					SpawnData spawnData = new SpawnData(category, type, x, y, respawnTime);
+					addToList(spawnData);
 				}
 			}
-			if(json.get("respawnables") != null)
-			{
-				for(Object obj : (JSONArray)json.get("respawnables"))
-				{
-					JSONObject respawnable = (JSONObject)obj;
-					String type = (String)respawnable.get("type");
-					int x = (int)(long)respawnable.get("x");
-					int y = (int)(long)respawnable.get("y");
-					int respawnTime = (int)(long)respawnable.get("respawnTime");
-					RespawnableData respawnableData = new RespawnableData(type, x, y, respawnTime);
-					respawnables.add(respawnableData);
-					if(x % GRID_SCALE == 0 && y % GRID_SCALE == 0)
-					{
-						respawnablesGrid[x / GRID_SCALE][y / GRID_SCALE] = respawnableData;
-					}
-				}
-			}
+
+			creationOrder.clear(); // Prevents undoing elements from loaded file
 		}
 
 		scale = Math.min(1600.0 / scale(mapX), 900.0 / scale(mapY));
-		pointRadius = (int)(scale * 3);
-		respawnableRadius = (int)(scale * 4);
+		selectedPointRadius = (int)(scale * 3);
+		spawnRadius = (int)(scale * 4);
 
 		xMargin = (int)(50);
 		yMargin = (int)((Game.HEIGHT - scale(mapY)) / (2));
 	}
 
-	private class WallData
+	private class LandData
 	{
 		private String type;
 		private int x1;
@@ -209,7 +206,7 @@ public class DesignState extends GameState
 		private int x2;
 		private int y2;
 
-		private WallData(String type, int x1, int y1, int x2, int y2)
+		private LandData(String type, int x1, int y1, int x2, int y2)
 		{
 			this.type = type;
 			this.x1 = x1;
@@ -217,102 +214,23 @@ public class DesignState extends GameState
 			this.x2 = x2;
 			this.y2 = y2;
 		}
-
-		public String type()
-		{
-			return type;
-		}
-
-		public int x1()
-		{
-			return x1;
-		}
-
-		public int y1()
-		{
-			return y1;
-		}
-
-		public int x2()
-		{
-			return x2;
-		}
-
-		public int y2()
-		{
-			return y2;
-		}
 	}
 
-	private class PlatformData
+	private class SpawnData
 	{
-		private int x1;
-		private int y1;
-		private int x2;
-		private int y2;
-
-		private PlatformData(int x1, int y1, int x2, int y2)
-		{
-			this.x1 = x1;
-			this.y1 = y1;
-			this.x2 = x2;
-			this.y2 = y2;
-		}
-
-		public int x1()
-		{
-			return x1;
-		}
-
-		public int y1()
-		{
-			return y1;
-		}
-
-		public int x2()
-		{
-			return x2;
-		}
-
-		public int y2()
-		{
-			return y2;
-		}
-	}
-
-	private class RespawnableData
-	{
+		private String category;
 		private String type;
 		private int x;
 		private int y;
 		private int respawnTime;
 
-		private RespawnableData(String type, int x, int y, int respawnTime)
+		private SpawnData(String category, String type, int x, int y, int respawnTime)
 		{
+			this.category = category;
 			this.type = type;
 			this.x = x;
 			this.y = y;
 			this.respawnTime = respawnTime;
-		}
-
-		public String type()
-		{
-			return type;
-		}
-
-		public int x()
-		{
-			return x;
-		}
-
-		public int y()
-		{
-			return y;
-		}
-
-		public int respawnTime()
-		{
-			return respawnTime;
 		}
 	}
 
@@ -343,37 +261,29 @@ public class DesignState extends GameState
 		}
 		g.drawLine(xMargin, (int)scale(mapY) + yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
 
-		// Draw walls
-		g.setColor(Color.BLUE);
+		// Draw landscape
 		g.setStroke(new BasicStroke((int)(scale)));
-		for(WallData wall : walls)
+		for(LandData land : landscape)
 		{
-			int x1 = (int)(xMargin + scale(wall.x1()));
-			int y1 = (int)(yMargin + scale(wall.y1()));
-			int x2 = (int)(xMargin + scale(wall.x2()));
-			int y2 = (int)(yMargin + scale(wall.y2()));
+			g.setColor(Color.BLUE);
+			if(land.type.equals("Platform"))
+			{
+				g.setColor(Color.RED);
+			}
+			int x1 = (int)(xMargin + scale(land.x1));
+			int y1 = (int)(yMargin + scale(land.y1));
+			int x2 = (int)(xMargin + scale(land.x2));
+			int y2 = (int)(yMargin + scale(land.y2));
 			g.drawLine(x1, y1, x2, y2);
 		}
 
-		// Draw platforms
-		g.setColor(Color.RED);
-		for(PlatformData plat : platforms)
-		{
-			int x1 = (int)(xMargin + scale(plat.x1()));
-			int y1 = (int)(yMargin + scale(plat.y1()));
-			int x2 = (int)(xMargin + scale(plat.x2()));
-			int y2 = (int)(yMargin + scale(plat.y2()));
-			g.drawLine(x1, y1, x2, y2);
-		}
-
-		// Draw respawnables
+		// Draw spawns
 		g.setColor(Color.GREEN);
-		for(RespawnableData respawnable : respawnables)
+		for(SpawnData spawn : spawns)
 		{
-			int x = (int)(xMargin + scale(respawnable.x()));
-			int y = (int)(yMargin + scale(respawnable.y()));
-			g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
-					respawnableRadius * 2));
+			int x = (int)(xMargin + scale(spawn.x));
+			int y = (int)(yMargin + scale(spawn.y));
+			g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 		}
 
 		// Draw player
@@ -382,8 +292,7 @@ public class DesignState extends GameState
 		{
 			int x = (int)(xMargin + scale(startingX));
 			int y = (int)(yMargin + scale(startingY));
-			g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
-					respawnableRadius * 2));
+			g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 		}
 
 		// Draw core (Map type Defend) or destination (Map type Travel)
@@ -394,15 +303,13 @@ public class DesignState extends GameState
 			{
 				int x = (int)(xMargin + scale(Integer.parseInt(json.get("coreX") + "")));
 				int y = (int)(yMargin + scale(Integer.parseInt(json.get("coreY") + "")));
-				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
-						respawnableRadius * 2));
+				g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 			}
 			else if(type.equals("Travel"))
 			{
 				int x = (int)(xMargin + scale((int)json.get("destinationX")));
 				int y = (int)(yMargin + scale((int)json.get("destinationY")));
-				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
-						respawnableRadius * 2));
+				g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 			}
 		}
 
@@ -412,7 +319,8 @@ public class DesignState extends GameState
 		{
 			int x = (int)(xMargin + selectedPoint.getX() * GRID_SPACE * scale);
 			int y = (int)(yMargin + selectedPoint.getY() * GRID_SPACE * scale);
-			g.fill(new Ellipse2D.Double(x - pointRadius, y - pointRadius, pointRadius * 2, pointRadius * 2));
+			g.fill(new Ellipse2D.Double(x - selectedPointRadius, y - selectedPointRadius, selectedPointRadius * 2,
+					selectedPointRadius * 2));
 		}
 
 		// Draw toolbars
@@ -421,12 +329,21 @@ public class DesignState extends GameState
 		// Draw hover text
 		if(hoverValue != -1)
 		{
-			g.setColor(Color.BLACK);
-			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 			FontMetrics fontMetrics = g.getFontMetrics();
-			g.drawString(hoverText[hoverValue], 1690 - fontMetrics.stringWidth(hoverText[hoverValue]), 74);
-			g.drawRect(1670 - fontMetrics.stringWidth(hoverText[hoverValue]), 46,
-					fontMetrics.stringWidth(hoverText[hoverValue]) + 40, 40);
+
+			g.setColor(Color.GRAY);
+			g.setStroke(new BasicStroke(6));
+			g.drawRect(1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 90, 100 * hoverValue + 45,
+					fontMetrics.stringWidth(hoverText[hoverValue]) + 90, 90);
+
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 90, 100 * hoverValue + 45,
+					fontMetrics.stringWidth(hoverText[hoverValue]) + 90, 90);
+
+			g.setColor(Color.BLACK);
+			g.drawString(hoverText[hoverValue], 1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 45, 100
+					* hoverValue + 90 + fontMetrics.getHeight() / 4);
 		}
 
 		// Draw hover box
@@ -468,19 +385,40 @@ public class DesignState extends GameState
 		}
 		else if(Manager.input.keyPress(InputManager.K5))
 		{
-			selectTool(SET_ITEM);
+			selectTool(SET_INTERACTIVE);
 		}
 		else if(Manager.input.keyPress(InputManager.K6))
 		{
-			selectTool(DRAW_WALL);
+			selectTool(DRAW_LAND);
 		}
 		else if(Manager.input.keyPress(InputManager.K7))
 		{
 			selectTool(DRAW_PLATFORM);
 		}
+		else if(Manager.input.keyPress(InputManager.K8))
+		{
+			undo();
+		}
+		else if(Manager.input.keyPress(InputManager.K9))
+		{
+			save(false);
+		}
 		else if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
-			exit();
+			String exit;
+			do
+			{
+				exit = JOptionPane.showInputDialog("Exit? (Y / N):");
+				if(exit.equals("Y"))
+				{
+					exit();
+				}
+				else if(exit.equals("N"))
+				{
+					gsm.setState(GameStateManager.MENU);
+				}
+			}
+			while(!exit.equals("Y") && !exit.equals("N"));
 		}
 
 		// Mouse clicking and hovering
@@ -532,7 +470,9 @@ public class DesignState extends GameState
 	 */
 	public void selectPoint(int x, int y)
 	{
-		if(selectedTool == DRAW_WALL || selectedTool == DRAW_PLATFORM)
+		// TODO Return if selectedToolType is ""
+
+		if(selectedTool == DRAW_LAND)
 		{
 			if(selectedPoint == null)
 			{
@@ -546,37 +486,31 @@ public class DesignState extends GameState
 					int y1 = (int)(selectedPoint.getY() * GRID_SCALE);
 					int x2 = x * GRID_SCALE;
 					int y2 = y * GRID_SCALE;
-					if(selectedTool == DRAW_WALL)
-					{
-						WallData wall = new WallData(selectedToolType, x1, y1, x2, y2);
-						walls.add(wall);
-						creationOrder.add(wall);
-					}
-					else
-					{
-						PlatformData plat = new PlatformData(x1, y1, x2, y2);
-						platforms.add(plat);
-						creationOrder.add(plat);
-					}
+					LandData land = new LandData(selectedToolType, x1, y1, x2, y2);
+					addToList(land);
 				}
 				selectedPoint = null;
 			}
 		}
 		else
 		{
-			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM)
+			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 			{
 				int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In frames):"));
-				RespawnableData respawnable = new RespawnableData(selectedToolType, x * GRID_SCALE, y * GRID_SCALE,
-						respawnTime);
-				respawnables.add(respawnable);
-				creationOrder.add(respawnable);
-				if(respawnablesGrid[x][y] != null)
+				SpawnData spawn = null;
+				if(selectedTool == SET_ENTITY)
 				{
-					respawnables.remove(respawnablesGrid[x][y]);
-					creationOrder.remove(respawnablesGrid[x][y]);
+					spawn = new SpawnData("Entity", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
 				}
-				respawnablesGrid[x][y] = respawnable;
+				else if(selectedTool == SET_PROJECTILE)
+				{
+					spawn = new SpawnData("Projectile", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+				}
+				else if(selectedTool == SET_INTERACTIVE)
+				{
+					spawn = new SpawnData("Interactive", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+				}
+				addToList(spawn);
 			}
 			else if(selectedTool == SET_PLAYER)
 			{
@@ -650,8 +584,8 @@ public class DesignState extends GameState
 		{
 			selectedTool = tool;
 
-			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM
-					|| selectedTool == DRAW_WALL)
+			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE
+					|| selectedTool == DRAW_LAND)
 			{
 				selectedToolType = JOptionPane.showInputDialog("Tool Type:");
 			}
@@ -678,9 +612,8 @@ public class DesignState extends GameState
 		{
 			selectedPoint = null;
 			Object remove = creationOrder.get(creationOrder.size() - 1);
-			walls.remove(remove);
-			platforms.remove(remove);
-			respawnables.remove(remove);
+			landscape.remove(remove);
+			spawns.remove(remove);
 			creationOrder.remove(remove);
 		}
 	}
@@ -731,17 +664,13 @@ public class DesignState extends GameState
 				}
 
 				// Packing objects into JSONObject
-				for(WallData wall : walls)
+				for(LandData land : landscape)
 				{
-					addToJSON(wall);
+					addToJSON(land);
 				}
-				for(PlatformData plat : platforms)
+				for(SpawnData spawn : spawns)
 				{
-					addToJSON(plat);
-				}
-				for(RespawnableData respawnable : respawnables)
-				{
-					addToJSON(respawnable);
+					addToJSON(spawn);
 				}
 
 				// Saving and exiting
@@ -752,8 +681,18 @@ public class DesignState extends GameState
 				file.flush();
 				file.close();
 
-				ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
-						+ "/resources/images/stages/" + fileName + ".png"));
+				// Generating image
+				String generate;
+				do
+				{
+					generate = JOptionPane.showInputDialog("Generate image? (Y / N):");
+					if(generate.equals("Y"))
+					{
+						ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
+								+ "/resources/images/stages/" + fileName + ".png"));
+					}
+				}
+				while(!generate.equals("Y") && !generate.equals("N"));
 
 				JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
 				if(exit)
@@ -790,61 +729,88 @@ public class DesignState extends GameState
 	}
 
 	/**
-	 * Adds the WallData object to the JSON.
+	 * Adds the LandData object to the landscape list.
 	 */
-	public void addToJSON(WallData wall)
+	public void addToList(LandData land)
 	{
-		JSONArray walls = (JSONArray)json.get("walls");
-		if(walls == null)
+		if(land.x1 % GRID_SCALE == 0 && land.y1 % GRID_SCALE == 0 && land.x2 % GRID_SCALE == 0
+				&& land.y2 % GRID_SCALE == 0)
 		{
-			walls = new JSONArray();
-			json.put("walls", walls);
+			if(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] != null)
+			{
+				landscape.remove(landscapeGrid[land.x1][land.y1][land.x2][land.y2]);
+				creationOrder.remove(landscapeGrid[land.x1][land.y1][land.x2][land.y2]);
+			}
+			landscape.add(land);
+			creationOrder.add(land);
 		}
-		JSONObject obj = new JSONObject();
-		obj.put("type", wall.type());
-		obj.put("x1", wall.x1());
-		obj.put("y1", wall.y1());
-		obj.put("x2", wall.x2());
-		obj.put("y2", wall.y2());
-		walls.add(obj);
+		else
+		{
+			landscape.add(land);
+			creationOrder.add(land);
+		}
 	}
 
 	/**
-	 * Adds the PlatformData object to the JSON.
+	 * Adds the SpawnData object to the spawns list.
 	 */
-	public void addToJSON(PlatformData plat)
+	public void addToList(SpawnData spawn)
 	{
-		JSONArray platforms = (JSONArray)json.get("platforms");
-		if(platforms == null)
+		if(spawn.x % GRID_SCALE == 0 && spawn.y % GRID_SCALE == 0)
 		{
-			platforms = new JSONArray();
-			json.put("platforms", platforms);
+			if(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] != null)
+			{
+				spawns.remove(spawnsGrid[spawn.x][spawn.y]);
+				creationOrder.remove(spawnsGrid[spawn.x][spawn.y]);
+			}
+			spawns.add(spawn);
+			creationOrder.add(spawn);
 		}
-		JSONObject obj = new JSONObject();
-		obj.put("x1", plat.x1());
-		obj.put("y1", plat.y1());
-		obj.put("x2", plat.x2());
-		obj.put("y2", plat.y2());
-		platforms.add(obj);
+		else
+		{
+			spawns.add(spawn);
+			creationOrder.add(spawn);
+		}
 	}
 
 	/**
-	 * Adds the RespawnableData object to the JSON.
+	 * Adds the LandData object to the JSON.
 	 */
-	public void addToJSON(RespawnableData respawnable)
+	public void addToJSON(LandData land)
 	{
-		JSONArray respawnables = (JSONArray)json.get("respawnables");
-		if(respawnables == null)
+		JSONArray landscape = (JSONArray)json.get("landscape");
+		if(landscape == null)
 		{
-			respawnables = new JSONArray();
-			json.put("respawnables", respawnables);
+			landscape = new JSONArray();
+			json.put("landscape", landscape);
 		}
 		JSONObject obj = new JSONObject();
-		obj.put("type", respawnable.type());
-		obj.put("x", respawnable.x());
-		obj.put("y", respawnable.y());
-		obj.put("respawnTime", respawnable.respawnTime());
-		respawnables.add(obj);
+		obj.put("type", land.type);
+		obj.put("x1", land.x1);
+		obj.put("y1", land.y1);
+		obj.put("x2", land.x2);
+		obj.put("y2", land.y2);
+		landscape.add(obj);
+	}
+
+	/**
+	 * Adds the SpawnData object to the JSON.
+	 */
+	public void addToJSON(SpawnData spawn)
+	{
+		JSONArray spawns = (JSONArray)json.get("spawns");
+		if(spawns == null)
+		{
+			spawns = new JSONArray();
+			json.put("spawns", spawns);
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("category", spawn.category);
+		obj.put("type", spawn.type);
+		obj.put("x", spawn.x);
+		obj.put("y", spawn.y);
+		obj.put("respawnTime", spawn.respawnTime);
+		spawns.add(obj);
 	}
 
 	public BufferedImage createImage()
@@ -855,25 +821,18 @@ public class DesignState extends GameState
 			Graphics2D stageGraphics = stage.createGraphics();
 			stageGraphics.setStroke(new BasicStroke(10));
 
-			// Draw walls
-			stageGraphics.setColor(Color.BLUE);
-			for(WallData wall : walls)
+			// Draw landscape
+			for(LandData land : landscape)
 			{
-				int x1 = (int)wall.x1();
-				int y1 = (int)wall.y1();
-				int x2 = (int)wall.x2();
-				int y2 = (int)wall.y2();
-				stageGraphics.drawLine(x1, y1, x2, y2);
-			}
-
-			// Draw platforms
-			stageGraphics.setColor(Color.RED);
-			for(PlatformData plat : platforms)
-			{
-				int x1 = (int)plat.x1();
-				int y1 = (int)plat.y1();
-				int x2 = (int)plat.x2();
-				int y2 = (int)plat.y2();
+				stageGraphics.setColor(Color.BLUE);
+				if(land.type.equals("Platform"))
+				{
+					stageGraphics.setColor(Color.RED);
+				}
+				int x1 = (int)land.x1;
+				int y1 = (int)land.y1;
+				int x2 = (int)land.x2;
+				int y2 = (int)land.y2;
 				stageGraphics.drawLine(x1, y1, x2, y2);
 			}
 		}

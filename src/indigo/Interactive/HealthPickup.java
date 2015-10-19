@@ -17,7 +17,6 @@ public class HealthPickup extends Interactive
 	public final static int HEALTH = 100;
 	public final static int WIDTH = 50;
 	public final static int HEIGHT = 50;
-	public final static double SPEED = 0;
 
 	public HealthPickup(Stage stage, double x, double y)
 	{

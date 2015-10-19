@@ -1,21 +1,21 @@
 package indigo.Stage;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 
 import javax.imageio.ImageIO;
 
 import indigo.Entity.Core;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
-import indigo.Entity.FlyingBot;
-import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
-import indigo.Interactive.HealthPickup;
+import indigo.Interactive.Interactive;
+import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
-import indigo.Landscape.SpikePit;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
+import indigo.Projectile.Projectile;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -56,11 +56,11 @@ public class DefendStage extends Stage
 		survivalTime = (int)(long)json.get("survivalTime");
 
 		// Bounding walls
-		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
-		walls.add(new Wall(mapX, SKY_LIMIT, mapX, mapY));
-		walls.add(new SkyBounds(0, SKY_LIMIT, mapX, SKY_LIMIT));
+		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
+		walls.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
+		walls.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
 
-		JSONArray array = (JSONArray)json.get("walls");
+		JSONArray array = (JSONArray)json.get("landscape");
 		if(array == null)
 		{
 			array = new JSONArray();
@@ -68,34 +68,10 @@ public class DefendStage extends Stage
 		for(int count = 0; count < array.size(); count++)
 		{
 			JSONObject object = (JSONObject)array.get(count);
-			if(object.get("type").equals("Wall"))
-			{
-				Wall wall = new Wall((int)(long)object.get("x1"), (int)(long)object.get("y1"),
-						(int)(long)object.get("x2"), (int)(long)object.get("y2"));
-				walls.add(wall);
-			}
-			else if(object.get("type").equals("SpikePit"))
-			{
-				SpikePit wall = new SpikePit((int)(long)object.get("x1"), (int)(long)object.get("y1"),
-						(int)(long)object.get("x2"), (int)(long)object.get("y2"));
-				walls.add(wall);
-			}
+			createLand(object);
 		}
 
-		array = (JSONArray)json.get("platforms");
-		if(array == null)
-		{
-			array = new JSONArray();
-		}
-		for(int count = 0; count < array.size(); count++)
-		{
-			JSONObject object = (JSONObject)array.get(count);
-			Platform plat = new Platform((int)(long)object.get("x1"), (int)(long)object.get("y1"),
-					(int)(long)object.get("x2"), (int)(long)object.get("y2"));
-			platforms.add(plat);
-		}
-
-		array = (JSONArray)json.get("respawnables");
+		array = (JSONArray)json.get("spawns");
 		if(array == null)
 		{
 			array = new JSONArray();
@@ -122,7 +98,7 @@ public class DefendStage extends Stage
 			data.setDeathMessage("The core was destroyed by _");
 			playState.endGame(false);
 		}
-		
+
 		if(playState.getTime() == survivalTime)
 		{
 			data.setVictory(true);
@@ -167,27 +143,71 @@ public class DefendStage extends Stage
 		return core;
 	}
 
+	public void createLand(JSONObject info)
+	{
+		Land object = null;
+		String type = ((String)info.get("type")).replace(" ", "");
+		double x1 = Integer.parseInt(info.get("x1") + "");
+		double y1 = Integer.parseInt(info.get("y1") + "");
+		double x2 = Integer.parseInt(info.get("x2") + "");
+		double y2 = Integer.parseInt(info.get("y2") + "");
+
+		try
+		{
+			String className = "indigo.Landscape." + type;
+			Class<?> varClass = Class.forName(className);
+			Constructor<?> varConstructor = varClass.getConstructor(Stage.class, double.class, double.class,
+					double.class, double.class);
+			object = (Land)varConstructor.newInstance(new Object[] {this, x1, y1, x2, y2});
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		if(object instanceof Platform)
+		{
+			platforms.add((Platform)object);
+		}
+		else
+		{
+			walls.add((Wall)object);
+		}
+	}
+
 	public Respawnable spawnObject(JSONObject info)
 	{
-		if(info.get("type").equals("Turret"))
+		Respawnable object = null;
+		String category = (String)info.get("category");
+		String type = ((String)info.get("type")).replace(" ", "");
+		double x = Integer.parseInt(info.get("x") + "");
+		double y = Integer.parseInt(info.get("y") + "");
+
+		try
 		{
-			Turret turret = new Turret(this, (int)(long)info.get("x"), (int)(long)info.get("y"), Turret.BASE_HEALTH);
-			entities.add(turret);
-			return turret;
+			String className = "indigo." + info.get("category") + "." + type;
+			Class<?> varClass = Class.forName(className);
+			Constructor<?> varConstructor = varClass.getConstructor(Stage.class, double.class, double.class);
+			object = (Respawnable)varConstructor.newInstance(new Object[] {this, x, y});
 		}
-		else if(info.get("type").equals("FlyingBot"))
+		catch(Exception e)
 		{
-			FlyingBot flyingBot = new FlyingBot(this, (int)(long)info.get("x"), (int)(long)info.get("y"),
-					FlyingBot.BASE_HEALTH);
-			entities.add(flyingBot);
-			return flyingBot;
+			e.printStackTrace();
 		}
-		else if(info.get("type").equals("HealthPickup"))
+
+		switch(category)
 		{
-			HealthPickup healthPickup = new HealthPickup(this, (int)(long)info.get("x"), (int)(long)info.get("y"));
-			interactives.add(healthPickup);
-			return healthPickup;
+			case "Entity":
+				entities.add((Entity)object);
+				break;
+			case "Projectile":
+				projectiles.add((Projectile)object);
+				break;
+			case "Interactive":
+				interactives.add((Interactive)object);
+				break;
 		}
-		return null;
+
+		return object;
 	}
 }
