@@ -1,6 +1,11 @@
 package indigo.Projectile;
 
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+
 import indigo.Entity.Entity;
+import indigo.Landscape.Wall;
 
 public class SteelBeam extends Projectile
 {
@@ -41,7 +46,7 @@ public class SteelBeam extends Projectile
 	{
 		if(!ent.isDodging())
 		{
-			if(!(ent.isBlocking(.isFacingRight())))
+			if(!(ent.isBlocking(isFacingRight())))
 			{
 				ent.mark();
 				ent.setHealth(ent.getHealth() - damage);
