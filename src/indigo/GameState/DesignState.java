@@ -40,9 +40,10 @@ public class DesignState extends GameState
 	private ArrayList<RespawnableData> respawnables;
 
 	private ArrayList<Object> creationOrder; // Tracks the order in which objects were created
+	RespawnableData[][] respawnablesGrid;
 
-	private String name;
-	private String type;
+	private String name = "";
+	private String type = "";
 
 	// Map size - Measured in actual size
 	private int mapX;
@@ -67,12 +68,13 @@ public class DesignState extends GameState
 
 	private Point2D selectedPoint;
 
-	private List<String> objectives = Arrays.asList("Battle", "Defend", "Survive");
+	private List<String> objectives = Arrays.asList("Battle", "Defend", "Survival", "Travel");
 
 	private int hoverValue;
-	private String[] hoverText = {"", "Sets the player location", "Sets the map objective",
-			"Creates an entity spawn point", "Creates a projectile spawn point", "Creates an item spawn point",
-			"Draws a wall", "Draws a platform", "Reverts the last action", "Saves the level", "Exits the level editor"};
+	private String[] hoverText = {"Sets the player location", "Sets the map objective",
+			"Creates an entity spawn point", "Creates a projectile spawn point",
+			"Creates an interactive object spawn point", "Draws a wall", "Draws a platform", "Reverts the last action",
+			"Saves the level", "Exits the level editor"};
 
 	private static final int GRID_SPACE = 10; // Visual pixels per grid square
 	private static final int GRID_SCALE = 100; // Actual pixels per grid square
@@ -107,12 +109,6 @@ public class DesignState extends GameState
 		{
 			json = new JSONObject();
 			json.put("name", name);
-			do
-			{
-				type = JOptionPane.showInputDialog("Map type (Battle / Defend / Survive):");
-			}
-			while(!objectives.contains(type));
-			json.put("type", type);
 
 			do
 			{
@@ -128,19 +124,30 @@ public class DesignState extends GameState
 			while(mapY < 1000 || mapY > 9000);
 			json.put("mapX", mapX);
 			json.put("mapY", mapY);
+			
+			respawnablesGrid = new RespawnableData[mapX / GRID_SCALE][mapY / GRID_SCALE];
 		}
 		else
 		{
 			json = ContentManager.load("/levels/" + name + ".json");
 
-			playerSet = true;
-			objectiveSet = true;
+			if(json.get("type") != null)
+			{
+				type = (String)json.get("type");
+				objectiveSet = true;
+			}
 
-			startingX = (int)(long)json.get("startingX");
-			startingY = (int)(long)json.get("startingY");
+			if(json.get("startingX") != null && json.get("startingY") != null)
+			{
+				startingX = (int)(long)json.get("startingX");
+				startingY = (int)(long)json.get("startingY");
+				playerSet = true;
+			}
 
 			mapX = (int)(long)json.get("mapX");
 			mapY = (int)(long)json.get("mapY");
+			
+			respawnablesGrid = new RespawnableData[mapX / GRID_SCALE][mapY / GRID_SCALE];
 
 			if(json.get("walls") != null)
 			{
@@ -176,14 +183,19 @@ public class DesignState extends GameState
 					int x = (int)(long)respawnable.get("x");
 					int y = (int)(long)respawnable.get("y");
 					int respawnTime = (int)(long)respawnable.get("respawnTime");
-					respawnables.add(new RespawnableData(type, x, y, respawnTime));
+					RespawnableData respawnableData = new RespawnableData(type, x, y, respawnTime);
+					respawnables.add(respawnableData);
+					if(x % GRID_SCALE == 0 && y % GRID_SCALE == 0)
+					{
+						respawnablesGrid[x / GRID_SCALE][y / GRID_SCALE] = respawnableData;
+					}
 				}
 			}
 		}
 
 		scale = Math.min(1600.0 / scale(mapX), 900.0 / scale(mapY));
-		pointRadius = (int)(scale * 2);
-		respawnableRadius = (int)(scale * 3);
+		pointRadius = (int)(scale * 3);
+		respawnableRadius = (int)(scale * 4);
 
 		xMargin = (int)(50);
 		yMargin = (int)((Game.HEIGHT - scale(mapY)) / (2));
@@ -374,6 +386,26 @@ public class DesignState extends GameState
 					respawnableRadius * 2));
 		}
 
+		// Draw core (Map type Defend) or destination (Map type Travel)
+		g.setColor(Color.PINK);
+		if(objectiveSet)
+		{
+			if(type.equals("Defend"))
+			{
+				int x = (int)(xMargin + scale((int)(long)json.get("coreX")));
+				int y = (int)(yMargin + scale((int)(long)json.get("coreY")));
+				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
+						respawnableRadius * 2));
+			}
+			else if(type.equals("Travel"))
+			{
+				int x = (int)(xMargin + scale((int)(long)json.get("destinationX")));
+				int y = (int)(yMargin + scale((int)(long)json.get("destinationY")));
+				g.fill(new Ellipse2D.Double(x - respawnableRadius, y - respawnableRadius, respawnableRadius * 2,
+						respawnableRadius * 2));
+			}
+		}
+
 		// Draw selected point
 		g.setColor(Color.GRAY);
 		if(selectedPoint != null)
@@ -387,14 +419,22 @@ public class DesignState extends GameState
 		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1741, 45, 90, 990, null);
 
 		// Draw hover text
-		g.setColor(Color.BLACK);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		FontMetrics fontMetrics = g.getFontMetrics();
-		g.drawString(hoverText[hoverValue], 1690 - fontMetrics.stringWidth(hoverText[hoverValue]), 74);
-		if(hoverValue != 0)
+		if(hoverValue != -1)
 		{
+			g.setColor(Color.BLACK);
+			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+			FontMetrics fontMetrics = g.getFontMetrics();
+			g.drawString(hoverText[hoverValue], 1690 - fontMetrics.stringWidth(hoverText[hoverValue]), 74);
 			g.drawRect(1670 - fontMetrics.stringWidth(hoverText[hoverValue]), 46,
 					fontMetrics.stringWidth(hoverText[hoverValue]) + 40, 40);
+		}
+
+		// Draw hover box
+		if(hoverValue != -1)
+		{
+			g.setColor(Color.GRAY);
+			g.setStroke(new BasicStroke(6));
+			g.drawRect(1741, 100 * hoverValue + 45, 90, 90);
 		}
 
 		// Draw selected tool box
@@ -454,30 +494,30 @@ public class DesignState extends GameState
 				selectPoint(gridX, gridY);
 			}
 		}
-		for(int count = 1; count <= 10; count++)
+		for(int count = 0; count < 10; count++)
 		{
-			if(Manager.input.mouseInRect(1741, 100 * count - 55, 90, 90))
+			if(Manager.input.mouseInRect(1741, 100 * count + 45, 90, 90))
 			{
 				hoverValue = count;
 				break;
 			}
-			hoverValue = 0;
+			hoverValue = -1;
 		}
 		if(Manager.input.mousePress())
 		{
-			if(hoverValue >= 1 && hoverValue <= 7)
+			if(hoverValue >= 0 && hoverValue <= 6)
 			{
-				selectTool(hoverValue - 1);
+				selectTool(hoverValue);
 			}
-			else if(hoverValue == 8)
+			else if(hoverValue == 7)
 			{
 				undo();
 			}
-			else if(hoverValue == 9)
+			else if(hoverValue == 8)
 			{
 				save(false);
 			}
-			else if(hoverValue == 10)
+			else if(hoverValue == 9)
 			{
 				exit();
 			}
@@ -524,21 +564,46 @@ public class DesignState extends GameState
 		}
 		else
 		{
-			if(selectedTool == SET_PLAYER)
-			{
-				playerSet = true;
-				startingX = x * GRID_SCALE;
-				startingY = y * GRID_SCALE;
-				json.put("startingX", startingX);
-				json.put("startingY", startingY);
-			}
-			else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM)
+			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_ITEM)
 			{
 				int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In frames):"));
 				RespawnableData respawnable = new RespawnableData(selectedToolType, x * GRID_SCALE, y * GRID_SCALE,
 						respawnTime);
 				respawnables.add(respawnable);
 				creationOrder.add(respawnable);
+				if(respawnablesGrid[x][y] != null)
+				{
+					respawnables.remove(respawnablesGrid[x][y]);
+					creationOrder.remove(respawnablesGrid[x][y]);
+				}
+				respawnablesGrid[x][y] = respawnable;
+			}
+			else if(selectedTool == SET_PLAYER)
+			{
+				startingX = x * GRID_SCALE;
+				startingY = y * GRID_SCALE;
+				json.put("startingX", startingX);
+				json.put("startingY", startingY);
+				playerSet = true;
+			}
+			else if(selectedTool == SET_OBJECTIVE)
+			{
+				if(type.equals("Defend"))
+				{
+					int coreX = x * GRID_SCALE;
+					int coreY = y * GRID_SCALE;
+					json.put("coreX", coreX);
+					json.put("coreY", coreY);
+					objectiveSet = true;
+				}
+				else if(type.equals("Travel"))
+				{
+					int destinationX = x * GRID_SCALE;
+					int destinationY = y * GRID_SCALE;
+					json.put("destinationX", destinationX);
+					json.put("destinationY", destinationY);
+					objectiveSet = true;
+				}
 			}
 		}
 	}
@@ -548,25 +613,37 @@ public class DesignState extends GameState
 		selectedPoint = null;
 		if(tool == SET_OBJECTIVE)
 		{
+			while(!objectives.contains(type))
+			{
+				type = JOptionPane.showInputDialog("Map type (Battle / Defend / Survival / Travel):");
+				json.put("type", type);
+			}
+
 			if(type.equals("Battle"))
 			{
-				objectiveSet = true;
 				int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
 				json.put("enemiesToDefeat", enemiesToDefeat);
+				objectiveSet = true;
 			}
 			else if(type.equals("Defend"))
 			{
-				objectiveSet = true;
-				int coreX = Integer.parseInt(JOptionPane.showInputDialog("X-position of the core:"));
-				int coreY = Integer.parseInt(JOptionPane.showInputDialog("Y-position of the core:"));
-				json.put("coreX", coreX);
-				json.put("coreY", coreY);
+				selectedTool = tool;
+				selectedToolType = "Core";
+				int survivalTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
+				json.put("survivalTime", survivalTime);
 			}
-			else if(type.equals("Survive"))
+			else if(type.equals("Survival"))
 			{
+				int survivalTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
+				json.put("survivalTime", survivalTime);
 				objectiveSet = true;
-				int surviveTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration:"));
-				json.put("surviveTime", surviveTime);
+			}
+			else if(type.equals("Travel"))
+			{
+				selectedTool = tool;
+				selectedToolType = "Destination";
+				int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In frames):"));
+				json.put("timeLimit", timeLimit);
 			}
 		}
 		else

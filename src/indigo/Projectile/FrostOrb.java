@@ -29,7 +29,7 @@ public class FrostOrb extends Projectile
 		solid = true;
 		flying = false;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.FROST_ORB), 1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.FROST_ORB), 2);
 	}
 
 	public void update()
@@ -114,6 +114,9 @@ public class FrostOrb extends Projectile
 		setVelX(0);
 		setVelY(0);
 
+		width = 150;
+		height = 150;
+		
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
 			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH), 5);

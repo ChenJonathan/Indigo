@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
 
-public class HarvesterProjectile extends Projectile
+public class HarvestSaw extends Projectile
 {
 	private int timer;
 
@@ -17,7 +17,7 @@ public class HarvesterProjectile extends Projectile
 	public final static int HEIGHT = 8;
 	public final static int DURATION = 5;
 
-	public HarvesterProjectile(Entity entity, double x, double y, double velX, double velY, int dmg)
+	public HarvestSaw(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
 		width = WIDTH;

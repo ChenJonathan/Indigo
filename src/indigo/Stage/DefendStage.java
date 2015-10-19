@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import indigo.Entity.Core;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.Entity.FlyingBot;
@@ -19,18 +20,17 @@ import indigo.Manager.ContentManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class BattleStage extends Stage
+public class DefendStage extends Stage
 {
-	private Entity lastEnemy;
-	
-	private int enemiesToKill;
-	private int enemiesKilled = 0;
+	private Core core;
+
+	private int survivalTime;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
 	private int[] respawnTimers;
 
-	public BattleStage(PlayState playState, JSONObject json)
+	public DefendStage(PlayState playState, JSONObject json)
 	{
 		super(playState);
 
@@ -51,7 +51,9 @@ public class BattleStage extends Stage
 			e.printStackTrace();
 		}
 
-		enemiesToKill = (int)(long)json.get("enemiesToDefeat");
+		core = new Core(this, (int)(long)json.get("coreX"), (int)(long)json.get("coreY"), Core.BASE_HEALTH);
+		entities.add(1, core);
+		survivalTime = (int)(long)json.get("survivalTime");
 
 		// Bounding walls
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
@@ -115,11 +117,17 @@ public class BattleStage extends Stage
 	{
 		super.update();
 
-		if(lastEnemy != null && !entities.contains(lastEnemy))
+		if(!entities.contains(core))
 		{
-			playState.endGame(true);
+			data.setDeathMessage("The core was destroyed by _");
+			playState.endGame(false);
 		}
 		
+		if(playState.getTime() == survivalTime)
+		{
+			data.setVictory(true);
+		}
+
 		// Check for dead respawnables and respawn them when time is up
 		for(int count = 0; count < respawnables.length; count++)
 		{
@@ -144,20 +152,19 @@ public class BattleStage extends Stage
 
 	public void trackDeath(String killer, Entity killed)
 	{
-		if(killed.equals(player))
+		if(killed.equals(player) || killed.equals(core))
 		{
 			data.setKiller(killer);
 		}
 		else if(killed.isMarked())
 		{
-			enemiesKilled++;
-			System.out.println("Enemies killed: " + enemiesKilled);
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
-		if(enemiesKilled >= enemiesToKill)
-		{
-			lastEnemy = killed;
-		}
+	}
+
+	public Entity getPlayer()
+	{
+		return core;
 	}
 
 	public Respawnable spawnObject(JSONObject info)

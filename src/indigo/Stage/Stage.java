@@ -4,12 +4,11 @@ import indigo.Display.HUD;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
-import indigo.Item.Item;
+import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Main.Game;
-import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
@@ -29,10 +28,10 @@ public abstract class Stage
 
 	private boolean camUnlocked;
 
-	protected int camForeX;
-	protected int camForeY;
-	protected int camBackX;
-	protected int camBackY;
+	private int camForeX;
+	private int camForeY;
+	private int camBackX;
+	private int camBackY;
 
 	private int maxOffsetX;
 	private int maxOffsetY;
@@ -51,7 +50,7 @@ public abstract class Stage
 	protected BufferedImage foreground;
 
 	protected ArrayList<Entity> entities;
-	protected ArrayList<Item> items;
+	protected ArrayList<Interactive> interactives;
 	protected ArrayList<Projectile> projectiles;
 	protected ArrayList<Platform> platforms;
 	protected ArrayList<Wall> walls;
@@ -61,10 +60,6 @@ public abstract class Stage
 
 	// Speed at which camera moves when unlocked
 	public static final int CAMERA_SPEED = 60;
-
-	// Dimensions of default background image
-	public static final int BACKGROUND_X = 2560;
-	public static final int BACKGROUND_Y = 1080;
 
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
@@ -80,7 +75,7 @@ public abstract class Stage
 		camUnlocked = false;
 
 		entities = new ArrayList<Entity>();
-		items = new ArrayList<Item>();
+		interactives = new ArrayList<Interactive>();
 		projectiles = new ArrayList<Projectile>();
 		platforms = new ArrayList<Platform>();
 		walls = new ArrayList<Wall>();
@@ -99,9 +94,9 @@ public abstract class Stage
 				// Entity-item: Allows player to use items
 				if(ent.equals(player))
 				{
-					for(int itemCount = 0; itemCount < items.size(); itemCount++)
+					for(int itemCount = 0; itemCount < interactives.size(); itemCount++)
 					{
-						Item item = items.get(count);
+						Interactive item = interactives.get(count);
 						item.update();
 
 						if(item.isActive() && inProximity(ent, item) && ent.intersects(item))
@@ -113,7 +108,7 @@ public abstract class Stage
 								|| item.getY() > getMapY())
 						{
 							item.setDead();
-							items.remove(item);
+							interactives.remove(item);
 							itemCount--;
 						}
 					}
@@ -170,10 +165,10 @@ public abstract class Stage
 							if(otherEnt.intersects(ent.getWeapon()))
 							{
 								ent.getWeapon().collide(otherEnt);
-							}
-							if(!otherEnt.isActive())
-							{
-								trackDeath(ent.getName(), otherEnt);
+								if(!otherEnt.isActive())
+								{
+									trackDeath(ent.getName(), otherEnt);
+								}
 							}
 						}
 					}
@@ -318,9 +313,9 @@ public abstract class Stage
 			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT
 					|| ent.getY() > getMapY())
 			{
-				if(count == 0)
+				if(count == 0) // Player dies
 				{
-					playState.endGame();
+					playState.endGame(false);
 				}
 				ent.setDead();
 				entities.remove(entities.get(count));
@@ -397,7 +392,7 @@ public abstract class Stage
 		}
 	}
 
-	public boolean inProximity(Entity ent, Item item)
+	public boolean inProximity(Entity ent, Interactive item)
 	{
 		return Math.sqrt(Math.pow(ent.getX() - item.getX(), 2) + Math.pow(ent.getY() - item.getY(), 2)) < COLLISION_PROXIMITY;
 	}
@@ -480,7 +475,6 @@ public abstract class Stage
 		if(killed.equals(player))
 		{
 			data.setKiller(killer);
-			data.setVictory(false);
 		}
 		else if(killed.isMarked())
 		{
@@ -502,7 +496,7 @@ public abstract class Stage
 		{
 			proj.render(g);
 		}
-		for(Item item : items)
+		for(Interactive item : interactives)
 		{
 			item.render(g);
 		}
@@ -511,10 +505,7 @@ public abstract class Stage
 			ent.render(g);
 		}
 		// Render player on top
-		if(!(player.getX() > 3834 && player.getX() < 4122 && player.getY() > 995 && player.getY() < 1140))
-		{
-			player.render(g); // TODO Don't render player twice
-		}
+		player.render(g); // TODO Don't render player twice
 		g.translate(camForeX, camForeY);
 	}
 
@@ -531,13 +522,13 @@ public abstract class Stage
 			{
 				camForeX -= CAMERA_SPEED;
 			}
-			if(camForeX > (int)(Math.round(player.getX()) - Game.WIDTH * 0.1))
+			if(camForeX > (int)(player.getX() - Game.WIDTH * 0.1))
 			{
-				camForeX = (int)(Math.round(player.getX()) - Game.WIDTH * 0.1);
+				camForeX = (int)(player.getX() - Game.WIDTH * 0.1);
 			}
-			else if(camForeX < (int)(Math.round(player.getX()) - Game.WIDTH * 0.9))
+			else if(camForeX < (int)(player.getX() - Game.WIDTH * 0.9))
 			{
-				camForeX = (int)(Math.round(player.getX()) - Game.WIDTH * 0.9);
+				camForeX = (int)(player.getX() - Game.WIDTH * 0.9);
 			}
 
 			if(Manager.input.mouseY() > Game.HEIGHT * 0.9)
@@ -548,19 +539,19 @@ public abstract class Stage
 			{
 				camForeY -= CAMERA_SPEED;
 			}
-			if(camForeY > (int)(Math.round(player.getY()) - Game.HEIGHT * 0.1))
+			if(camForeY > (int)(player.getY() - Game.HEIGHT * 0.1))
 			{
-				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.1);
+				camForeY = (int)(player.getY() - Game.HEIGHT * 0.1);
 			}
-			else if(camForeY < (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT))
+			else if(camForeY < (int)(player.getY() - Game.HEIGHT * 0.9 + HUD.HEIGHT))
 			{
-				camForeY = (int)(Math.round(player.getY()) - Game.HEIGHT * 0.9 + HUD.HEIGHT);
+				camForeY = (int)(player.getY() - Game.HEIGHT * 0.9 + HUD.HEIGHT);
 			}
 		}
 		else
 		{
-			int newX = (int)Math.round(player.getX()) - Game.WIDTH / 2;
-			int newY = (int)Math.round(player.getY()) - Game.HEIGHT / 2;
+			int newX = (int)player.getX() - Game.WIDTH / 2;
+			int newY = (int)player.getY() - Game.HEIGHT / 2;
 
 			camForeX = (int)(((double)camForeX + newX) / 2);
 			camForeY = (int)(((double)camForeY + newY) / 2);
@@ -600,7 +591,7 @@ public abstract class Stage
 	}
 
 	// Sets camera boundaries when initializing the class
-	public void setOffsets(int mapX, int mapY, int backX, int backY)
+	public void setOffsets(int mapX, int mapY)
 	{
 		this.mapX = mapX;
 		this.mapY = mapY;
@@ -608,8 +599,29 @@ public abstract class Stage
 		maxOffsetY = mapY - (Game.HEIGHT - HUD.HEIGHT);
 		minOffsetX = 0;
 		minOffsetY = 0;
-		this.backX = backX;
-		this.backY = backY;
+		this.backX = Game.WIDTH + (maxOffsetX - minOffsetX) / 10;
+		this.backY = Game.HEIGHT + (maxOffsetY - minOffsetY) / 10;
+
+		camForeX = (int)player.getX() - Game.WIDTH / 2;
+		camForeY = (int)player.getY() - Game.HEIGHT / 2;
+		if(camForeX > maxOffsetX)
+		{
+			camForeX = maxOffsetX;
+		}
+		else if(camForeX < minOffsetX)
+		{
+			camForeX = minOffsetX;
+		}
+		if(camForeY > maxOffsetY)
+		{
+			camForeY = maxOffsetY;
+		}
+		else if(camForeY < minOffsetY)
+		{
+			camForeY = minOffsetY;
+		}
+		camBackX = (int)(((double)backX - Game.WIDTH) * camForeX / maxOffsetX);
+		camBackY = (int)(((double)backY - Game.HEIGHT) * camForeY / maxOffsetY);
 	}
 
 	public void toggleCam()
@@ -627,9 +639,9 @@ public abstract class Stage
 		return entities;
 	}
 
-	public ArrayList<Item> getItems()
+	public ArrayList<Interactive> getItems()
 	{
-		return items;
+		return interactives;
 	}
 
 	public ArrayList<Projectile> getProjectiles()

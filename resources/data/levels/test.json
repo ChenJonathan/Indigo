@@ -1,1 +1,1 @@
-{"enemiesToDefeat":25,"walls":[{"y1":4600,"x1":6400,"y2":4600,"x2":7300,"type":"Wall"}],"startingY":4300,"startingX":6900,"name":"Test","id":2,"type":"Battle","mapY":9000,"mapX":16000}
+{"enemiesToDefeat":2,"walls":[{"y1":700,"x1":400,"y2":700,"x2":1300,"type":"Wall"},{"y1":700,"x1":400,"y2":700,"x2":1300,"type":"Wall"},{"y1":200,"x1":1000,"y2":600,"x2":1000,"type":"Wall"}],"startingY":600,"startingX":500,"respawnables":[{"respawnTime":200,"x":1000,"y":400,"type":"Turret"}],"name":"Test","id":2,"type":"Battle","mapY":1000,"mapX":2000}

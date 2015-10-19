@@ -1,6 +1,6 @@
 package indigo.Entity;
 
-import indigo.Item.Item;
+import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
@@ -190,7 +190,7 @@ public abstract class Entity implements Respawnable
 	public abstract void die(); // Triggers death animation
 
 	// Used for entity-item collision
-	public boolean intersects(Item item)
+	public boolean intersects(Interactive item)
 	{
 		Area entArea = new Area(getHitbox());
 		entArea.intersect(new Area(item.getHitbox()));
@@ -222,7 +222,7 @@ public abstract class Entity implements Respawnable
 		return intersects || weapon.getHitbox().intersectsLine(travel);
 	}
 
-	// Used for entity-wall collision - Checks hitbox and travel line intersection
+	// Used for entity-wall collision - Checks hitbox intersection
 	public boolean intersects(Wall wall)
 	{
 		boolean intersects = false;
@@ -236,7 +236,7 @@ public abstract class Entity implements Respawnable
 			intersects = wall.getLine().ptSegDist(getX(), getY()) < getHeight() / 2;
 		}
 
-		return intersects || wall.getLine().intersectsLine(travel);
+		return intersects;
 	}
 
 	// Used for entity-wall collision - Utilizes previous entity position

@@ -3,7 +3,7 @@ package indigo.GameState;
 import indigo.Display.HUD;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
-import indigo.Item.Item;
+import indigo.Interactive.Interactive;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
@@ -16,7 +16,10 @@ import indigo.Phase.Phase;
 import indigo.Phase.Water;
 import indigo.Projectile.Projectile;
 import indigo.Stage.BattleStage;
+import indigo.Stage.DefendStage;
 import indigo.Stage.Stage;
+import indigo.Stage.SurvivalStage;
+import indigo.Stage.TravelStage;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class PlayState extends GameState
 	public HUD display;
 
 	private ArrayList<Entity> entities;
-	private ArrayList<Item> items;
+	private ArrayList<Interactive> items;
 	private ArrayList<Projectile> projectiles;
 	private ArrayList<Platform> platforms;
 	private ArrayList<Wall> walls;
@@ -62,6 +65,18 @@ public class PlayState extends GameState
 		{
 			stage = new BattleStage(this, data.getStage());
 		}
+		else if(data.getStage().get("type").equals("Defend"))
+		{
+			stage = new DefendStage(this, data.getStage());
+		}
+		else if(data.getStage().get("type").equals("Survival"))
+		{
+			stage = new SurvivalStage(this, data.getStage());
+		}
+		else if(data.getStage().get("type").equals("Travel"))
+		{
+			stage = new TravelStage(this, data.getStage());
+		}
 		data.resetLevelData();
 
 		// Initialize stage objects
@@ -70,7 +85,7 @@ public class PlayState extends GameState
 		projectiles = stage.getProjectiles();
 		platforms = stage.getPlatforms();
 		walls = stage.getWalls();
-		player = (Player)stage.getPlayer();
+		player = (Player)getPlayer();
 
 		// Initialize phases
 		activePhase = new Water(this);
@@ -364,7 +379,7 @@ public class PlayState extends GameState
 	/**
 	 * @return A list of the items in play.
 	 */
-	public ArrayList<Item> getItems()
+	public ArrayList<Interactive> getItems()
 	{
 		return items;
 	}
@@ -427,10 +442,13 @@ public class PlayState extends GameState
 
 	/**
 	 * Ends the current game and transitions to ClearStateState.
+	 * 
+	 * @param victory Whether the game ended as a victory or not.
 	 */
-	public void endGame()
+	public void endGame(boolean victory)
 	{
 		data.setClearTime(time);
+		data.setVictory(victory);
 		gsm.setState(GameStateManager.CLEAR);
 	}
 

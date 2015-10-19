@@ -1,4 +1,4 @@
-package indigo.Item;
+package indigo.Interactive;
 
 import indigo.Entity.Player;
 import indigo.Manager.Animation;
@@ -10,7 +10,7 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 // Interacts with the player only
-public abstract class Item implements Respawnable
+public abstract class Interactive implements Respawnable
 {
 	protected Stage stage;
 
@@ -25,7 +25,7 @@ public abstract class Item implements Respawnable
 	protected boolean dead;
 
 	// Subclasses - Initialize solid and flying
-	public Item(Stage stage, double x, double y)
+	public Interactive(Stage stage, double x, double y)
 	{
 		this.stage = stage;
 

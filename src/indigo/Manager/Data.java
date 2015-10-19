@@ -17,8 +17,10 @@ public class Data
 	private JSONObject currentStage;
 	private int unlockedStages;
 	private int clearTime;
-	private String killer;
 	private boolean victory = true;
+	
+	private String killer;
+	private String deathMessage;
 
 	public static final int NUM_STAGES = 10;
 	public static final int NUM_PHASES = 2;
@@ -38,6 +40,7 @@ public class Data
 		unlockedStages = 0;
 
 		killer = "";
+		deathMessage = "You were killed by _";
 	}
 
 	/**
@@ -47,8 +50,10 @@ public class Data
 	{
 		currentStage = null;
 		clearTime = 0;
-		killer = "";
 		victory = false;
+		
+		killer = "";
+		deathMessage = "You were killed by _";
 	}
 
 	/**
@@ -166,28 +171,6 @@ public class Data
 	}
 
 	/**
-	 * Returns a message identifying the player's killer.
-	 * 
-	 * @return The message.
-	 */
-	public String getDeathMessage()
-	{
-		if(killer.equals(""))
-		{
-			return "You were vaporized instantly"; // Default death message
-		}
-		return "You were killed by " + killer;
-	}
-
-	/**
-	 * @param name The name of the player's killer.
-	 */
-	public void setKiller(String name)
-	{
-		killer = name;
-	}
-
-	/**
 	 * @return Whether the last finished stage was a win or a loss.
 	 */
 	public boolean getVictory()
@@ -201,5 +184,37 @@ public class Data
 	public void setVictory(boolean victory)
 	{
 		this.victory = victory;
+	}
+
+	/**
+	 * @param name The name of the player's killer.
+	 */
+	public void setKiller(String name)
+	{
+		killer = name;
+	}
+
+	/**
+	 * Returns a message identifying the player's killer.
+	 * 
+	 * @return The message.
+	 */
+	public String getDeathMessage()
+	{
+		if(killer.equals(""))
+		{
+			return "You were vaporized instantly"; // Default death message
+		}
+		return deathMessage.replace("_", killer);
+	}
+	
+	/**
+	 * Sets a message identifying how the player died.
+	 * 
+	 * @param message The message.
+	 */
+	public void setDeathMessage(String message)
+	{
+		deathMessage = message;
 	}
 }

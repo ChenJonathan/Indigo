@@ -591,6 +591,8 @@ public class Player extends Entity
 
 			setVelX(x * 90);
 			setVelY(y * 90);
+			
+			removeGround();
 
 			flying = true;
 			frictionless = true;
@@ -795,6 +797,9 @@ public class Player extends Entity
 	public void setIceArmor(boolean active)
 	{
 		iceArmor = active;
-		currentAnimation = -1; // Forces animation reset
+		if(isActive())
+		{
+			currentAnimation = -1; // Forces animation reset
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package indigo.Item;
+package indigo.Interactive;
 
 import indigo.Entity.Player;
 import indigo.Manager.ContentManager;
@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-public class ManaPickup extends Item
+public class ManaPickup extends Interactive
 {
 	private final int DEFAULT = 0;
 

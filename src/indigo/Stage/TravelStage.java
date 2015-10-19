@@ -9,6 +9,7 @@ import indigo.Entity.Player;
 import indigo.Entity.FlyingBot;
 import indigo.Entity.Turret;
 import indigo.GameState.PlayState;
+import indigo.Interactive.Destination;
 import indigo.Interactive.HealthPickup;
 import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
@@ -19,18 +20,17 @@ import indigo.Manager.ContentManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class BattleStage extends Stage
+public class TravelStage extends Stage
 {
-	private Entity lastEnemy;
+	private Destination destination;
 	
-	private int enemiesToKill;
-	private int enemiesKilled = 0;
+	private int timeLimit;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
 	private int[] respawnTimers;
 
-	public BattleStage(PlayState playState, JSONObject json)
+	public TravelStage(PlayState playState, JSONObject json)
 	{
 		super(playState);
 
@@ -51,7 +51,11 @@ public class BattleStage extends Stage
 			e.printStackTrace();
 		}
 
-		enemiesToKill = (int)(long)json.get("enemiesToDefeat");
+		int destinationX = (int)(long)json.get("destinationX");
+		int destinationY = (int)(long)json.get("destinationY");
+		destination = new Destination(this, destinationX, destinationY);
+		interactives.add(destination);
+		timeLimit = (int)(long)json.get("timeLimit");
 
 		// Bounding walls
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
@@ -114,12 +118,16 @@ public class BattleStage extends Stage
 	public void update()
 	{
 		super.update();
-
-		if(lastEnemy != null && !entities.contains(lastEnemy))
+		
+		if(!interactives.contains(destination))
 		{
 			playState.endGame(true);
 		}
-		
+		else if(playState.getTime() == timeLimit)
+		{
+			playState.endGame(false);
+		}
+
 		// Check for dead respawnables and respawn them when time is up
 		for(int count = 0; count < respawnables.length; count++)
 		{
@@ -139,24 +147,6 @@ public class BattleStage extends Stage
 			{
 				respawnTimers[count]--;
 			}
-		}
-	}
-
-	public void trackDeath(String killer, Entity killed)
-	{
-		if(killed.equals(player))
-		{
-			data.setKiller(killer);
-		}
-		else if(killed.isMarked())
-		{
-			enemiesKilled++;
-			System.out.println("Enemies killed: " + enemiesKilled);
-			// TODO Gain experienced - Add experience variable to Entity class
-		}
-		if(enemiesKilled >= enemiesToKill)
-		{
-			lastEnemy = killed;
 		}
 	}
 

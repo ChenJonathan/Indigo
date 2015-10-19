@@ -5,7 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 import indigo.Landscape.Land;
-import indigo.Projectile.HarvesterProjectile;
+import indigo.Projectile.HarvestSaw;
 import indigo.Projectile.WaterBolt;
 import indigo.Stage.Stage;
 
@@ -14,7 +14,7 @@ public class Harvester extends Entity
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
-	private Tree TREE = null; // find tree later
+	private Tree tree = null; // Find tree later
 
 	public static final double HARVESTER_WIDTH = 100;
 	public static final double HARVESTER_HEIGHT = 130;
@@ -132,8 +132,8 @@ public class Harvester extends Entity
 		if(stage.getTime() % 5 == 0)
 		{
 			// Summon projectile, it should never move, disappear after time
-			stage.getProjectiles().add(new HarvesterProjectile(this, this.getX() + this.getWidth() / 2, this.getY(), 0,
-					0, HarvesterProjectile.DAMAGE));
+			stage.getProjectiles().add(new HarvestSaw(this, this.getX() + this.getWidth() / 2, this.getY(), 0,
+					0, HarvestSaw.DAMAGE));
 		}
 	}
 

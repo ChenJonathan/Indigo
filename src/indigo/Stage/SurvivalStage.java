@@ -4,7 +4,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.Entity.FlyingBot;
 import indigo.Entity.Turret;
@@ -19,18 +18,15 @@ import indigo.Manager.ContentManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class BattleStage extends Stage
+public class SurvivalStage extends Stage
 {
-	private Entity lastEnemy;
-	
-	private int enemiesToKill;
-	private int enemiesKilled = 0;
+	private int survivalTime;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
 	private int[] respawnTimers;
 
-	public BattleStage(PlayState playState, JSONObject json)
+	public SurvivalStage(PlayState playState, JSONObject json)
 	{
 		super(playState);
 
@@ -51,7 +47,7 @@ public class BattleStage extends Stage
 			e.printStackTrace();
 		}
 
-		enemiesToKill = (int)(long)json.get("enemiesToDefeat");
+		survivalTime = (int)(long)json.get("survivalTime");
 
 		// Bounding walls
 		walls.add(new Wall(0, SKY_LIMIT, 0, mapY));
@@ -114,12 +110,12 @@ public class BattleStage extends Stage
 	public void update()
 	{
 		super.update();
-
-		if(lastEnemy != null && !entities.contains(lastEnemy))
+		
+		if(playState.getTime() == survivalTime)
 		{
 			playState.endGame(true);
 		}
-		
+
 		// Check for dead respawnables and respawn them when time is up
 		for(int count = 0; count < respawnables.length; count++)
 		{
@@ -139,24 +135,6 @@ public class BattleStage extends Stage
 			{
 				respawnTimers[count]--;
 			}
-		}
-	}
-
-	public void trackDeath(String killer, Entity killed)
-	{
-		if(killed.equals(player))
-		{
-			data.setKiller(killer);
-		}
-		else if(killed.isMarked())
-		{
-			enemiesKilled++;
-			System.out.println("Enemies killed: " + enemiesKilled);
-			// TODO Gain experienced - Add experience variable to Entity class
-		}
-		if(enemiesKilled >= enemiesToKill)
-		{
-			lastEnemy = killed;
 		}
 	}
 
