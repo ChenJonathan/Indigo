@@ -82,6 +82,15 @@ public class DesignState extends GameState
 			"Creates an interactive object spawn point", "Draws a wall", "Draws a platform", "Reverts the last action",
 			"Saves the level", "Exits the level editor"};
 
+	// Used to format the JSON String
+	String[] formatMaster = {"name", "type", "", "mapX", "mapY", "", "startingX", "startingY", "", "objectives", "",
+			"landscape", "", "spawns"};
+	String[][] formatObjective = { {"enemiesToDefeat"}, {"coreX", "coreY", "", "survivalDuration"},
+			{"survivalDuration"}, {"destinationX", "destinationY", "", "timeLimit"}};
+	String[] formatLand = {"type", "x1", "y1", "x2", "y2"};
+	String[] formatSpawn = {"category", "type", "x", "y", "respawnTime"};
+	String[] formatIndex = {};
+
 	private static final int GRID_SPACE = 10; // Visual pixels per grid square
 	private static final int GRID_SCALE = 100; // Actual pixels per grid square
 
@@ -307,8 +316,8 @@ public class DesignState extends GameState
 			}
 			else if(type.equals("Travel"))
 			{
-				int x = (int)(xMargin + scale((int)json.get("destinationX")));
-				int y = (int)(yMargin + scale((int)json.get("destinationY")));
+				int x = (int)(xMargin + scale(Integer.parseInt(json.get("destinationX") + "")));
+				int y = (int)(yMargin + scale(Integer.parseInt(json.get("destinationY") + "")));
 				g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 			}
 		}
@@ -405,20 +414,7 @@ public class DesignState extends GameState
 		}
 		else if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
-			String exit;
-			do
-			{
-				exit = JOptionPane.showInputDialog("Exit? (Y / N):");
-				if(exit.equals("Y"))
-				{
-					exit();
-				}
-				else if(exit.equals("N"))
-				{
-					gsm.setState(GameStateManager.MENU);
-				}
-			}
-			while(!exit.equals("Y") && !exit.equals("N"));
+			exit();
 		}
 
 		// Mouse clicking and hovering
@@ -563,13 +559,13 @@ public class DesignState extends GameState
 			{
 				selectedTool = tool;
 				selectedToolType = "Core";
-				int survivalTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
-				json.put("survivalTime", survivalTime);
+				int survivalDuration = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
+				json.put("survivalDuration", survivalDuration);
 			}
 			else if(type.equals("Survival"))
 			{
-				int survivalTime = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
-				json.put("survivalTime", survivalTime);
+				int survivalDuration = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
+				json.put("survivalDuration", survivalDuration);
 				objectiveSet = true;
 			}
 			else if(type.equals("Travel"))
@@ -658,12 +654,14 @@ public class DesignState extends GameState
 					json.put("id", index.size());
 					index.put(name, index.size());
 					FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
-					file.write(index.toJSONString());
+					file.write(toJSONString(index, formatIndex));
 					file.flush();
 					file.close();
 				}
 
 				// Packing objects into JSONObject
+				json.remove("landscape");
+				json.remove("spawns");
 				for(LandData land : landscape)
 				{
 					addToJSON(land);
@@ -674,10 +672,10 @@ public class DesignState extends GameState
 				}
 
 				// Saving and exiting
-				String fileName = name.replace(" ", "_").toLowerCase();
-				FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/levels/" + fileName
-						+ ".json");
-				file.write(json.toJSONString());
+				String fileName = name.replace(" ", "_").toLowerCase() + ".json";
+				String filePath = new File("").getAbsolutePath() + "/resources/data/levels/" + fileName;
+				FileWriter file = new FileWriter(filePath);
+				file.write(toJSONString(json, formatMaster));
 				file.flush();
 				file.close();
 
@@ -712,20 +710,33 @@ public class DesignState extends GameState
 	 */
 	public void exit()
 	{
-		String save;
+		String exit;
 		do
 		{
-			save = JOptionPane.showInputDialog("Save? (Y / N):");
-			if(save.equals("Y"))
+			exit = JOptionPane.showInputDialog("Exit? (Y / N):");
+			if(exit.equals("Y"))
 			{
-				save(true);
+				String save;
+				do
+				{
+					save = JOptionPane.showInputDialog("Save? (Y / N):");
+					if(save.equals("Y"))
+					{
+						save(true);
+					}
+					else if(save.equals("N"))
+					{
+						gsm.setState(GameStateManager.MENU);
+					}
+				}
+				while(!save.equals("Y") && !save.equals("N"));
 			}
-			else if(save.equals("N"))
+			else if(exit.equals("N"))
 			{
 				gsm.setState(GameStateManager.MENU);
 			}
 		}
-		while(!save.equals("Y") && !save.equals("N"));
+		while(!exit.equals("Y") && !exit.equals("N"));
 	}
 
 	/**
@@ -738,11 +749,16 @@ public class DesignState extends GameState
 		{
 			if(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] != null)
 			{
-				landscape.remove(landscapeGrid[land.x1][land.y1][land.x2][land.y2]);
-				creationOrder.remove(landscapeGrid[land.x1][land.y1][land.x2][land.y2]);
+				landscape
+						.remove(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2
+								/ GRID_SCALE]);
+				creationOrder
+						.remove(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2
+								/ GRID_SCALE]);
 			}
 			landscape.add(land);
 			creationOrder.add(land);
+			landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] = land;
 		}
 		else
 		{
@@ -758,13 +774,15 @@ public class DesignState extends GameState
 	{
 		if(spawn.x % GRID_SCALE == 0 && spawn.y % GRID_SCALE == 0)
 		{
+			System.out.println(spawn.x + " " + spawn.y);
 			if(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] != null)
 			{
-				spawns.remove(spawnsGrid[spawn.x][spawn.y]);
-				creationOrder.remove(spawnsGrid[spawn.x][spawn.y]);
+				spawns.remove(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE]);
+				creationOrder.remove(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE]);
 			}
 			spawns.add(spawn);
 			creationOrder.add(spawn);
+			spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] = spawn;
 		}
 		else
 		{
@@ -811,6 +829,98 @@ public class DesignState extends GameState
 		obj.put("y", spawn.y);
 		obj.put("respawnTime", spawn.respawnTime);
 		spawns.add(obj);
+	}
+
+	/**
+	 * Formats the JSON String to be more readable. Do yourself a favor and don't look through this.
+	 * 
+	 * @return The formatted String.
+	 */
+	public String toJSONString(JSONObject obj, String[] format)
+	{
+		String string = "";
+
+		// Index does not require recursion
+		if(format.equals(formatIndex))
+		{
+			for(int count = 0; count < obj.size(); count++)
+			{
+				for(Object name : obj.entrySet())
+				{
+					String[] pair = (name + "").split("=");
+					int id = Integer.parseInt(pair[1]);
+					if(id == count)
+					{
+						string += "    \"" + pair[0] + "\":" + id + ",\n";
+					}
+				}
+			}
+
+			return "{\n" + string.substring(0, string.length() - 2) + "\n}";
+		}
+
+		for(String line : format)
+		{
+			if(!line.equals(""))
+			{
+				if(line.equals("objectives"))
+				{
+					string += toJSONString(obj, formatObjective[objectives.indexOf(type)]);
+				}
+				else if(obj.get(line) instanceof JSONArray)
+				{
+					string += "    \"" + line + "\":[\n";
+
+					JSONArray array = (JSONArray)obj.get(line);
+					String[] subFormat = null;
+					switch(line)
+					{
+						case "landscape":
+							subFormat = formatLand;
+							break;
+						case "spawns":
+							subFormat = formatSpawn;
+							break;
+					}
+					for(Object subObj : array)
+					{
+						string += "        " + toJSONString((JSONObject)subObj, subFormat) + "\n";
+					}
+
+					string += "    ],";
+				}
+				else
+				{
+					if(!format.equals(formatLand) && !format.equals(formatSpawn))
+					{
+						string += "    ";
+					}
+					string += "\"" + line + "\":";
+					string += obj.get(line) instanceof String? "\"" + obj.get(line) + "\"" : obj.get(line);
+					string += ",";
+				}
+			}
+			if(format.equals(formatMaster))
+			{
+				string += "\n";
+			}
+			else if(format.equals(formatLand) || format.equals(formatSpawn))
+			{
+				string += " ";
+			}
+		}
+
+		// Remove last comma
+		if(format.equals(formatMaster))
+		{
+			string = "{\n" + string.substring(0, string.length() - 2) + "\n}";
+		}
+		else if(format.equals(formatLand) || format.equals(formatSpawn))
+		{
+			string = "{" + string.substring(0, string.length() - 2) + "}";
+		}
+
+		return string;
 	}
 
 	public BufferedImage createImage()

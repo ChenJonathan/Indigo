@@ -21,7 +21,7 @@ import org.json.simple.JSONObject;
 
 public class SurvivalStage extends Stage
 {
-	private int survivalTime;
+	private int survivalDuration;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
@@ -48,7 +48,7 @@ public class SurvivalStage extends Stage
 			e.printStackTrace();
 		}
 
-		survivalTime = (int)(long)json.get("survivalTime");
+		survivalDuration = (int)(long)json.get("survivalDuration");
 
 		// Bounding walls
 		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
@@ -88,7 +88,7 @@ public class SurvivalStage extends Stage
 	{
 		super.update();
 
-		if(playState.getTime() == survivalTime)
+		if(playState.getTime() == survivalDuration)
 		{
 			playState.endGame(true);
 		}

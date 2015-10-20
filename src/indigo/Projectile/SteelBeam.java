@@ -12,7 +12,7 @@ public class SteelBeam extends Projectile
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
-	public static final int DAMAGE = 15;// TODO: Balance?
+	public static final int DAMAGE = 15;
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 50;

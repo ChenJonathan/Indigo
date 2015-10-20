@@ -1,40 +1,53 @@
-{"enemiesToDefeat":25,"startingY":900,"startingX":150,"name":"Beach","id":0,"type":"Battle",
-"spawns":[
-{"respawnTime":200,"x":3470,"y":665,"type":"Turret","category":"Entity"},
-{"respawnTime":200,"x":6335,"y":285,"type":"Turret","category":"Entity"},
-{"respawnTime":60,"x":3470,"y":500,"type":"Flying Bot","category":"Entity"},
-{"respawnTime":200,"x":2000,"y":920,"type":"Health Pickup","category":"Interactive"},
-],"mapY":1200,
-"landscape":[
-{"y1":961,"x1":2116,"y2":1180,"x2":2116,"type":"Wall"},
-{"y1":1180,"x1":2353,"y2":961,"x2":2353,"type":"Wall"},
-{"y1":961,"x1":5651,"y2":1180,"x2":5651,"type":"Wall"},
-{"y1":1180,"x1":5888,"y2":961,"x2":5888,"type":"Wall"},
-{"y1":961,"x1":0,"y2":961,"x2":2116,"type":"Wall"},
-{"y1":961,"x1":2353,"y2":961,"x2":3100,"type":"Wall"},
-{"y1":961,"x1":3100,"y2":1139,"x2":3100,"type":"Wall"},
-{"y1":1139,"x1":3100,"y2":1139,"x2":4220,"type":"Wall"},
-{"y1":1139,"x1":4220,"y2":1000,"x2":4220,"type":"Wall"},
-{"y1":1000,"x1":3843,"y2":1000,"x2":4220,"type":"Wall"},
-{"y1":1000,"x1":3843,"y2":961,"x2":3924,"type":"Wall"},
-{"y1":961,"x1":3924,"y2":961,"x2":5651,"type":"Wall"},
-{"y1":961,"x1":5888,"y2":961,"x2":6400,"type":"Wall"},
-{"y1":961,"x1":4025,"y2":693,"x2":4357,"type":"Wall"},
-{"y1":693,"x1":4357,"y2":693,"x2":4753,"type":"Wall"},
-{"y1":693,"x1":4753,"y2":961,"x2":5280,"type":"Wall"},
-{"y1":1180,"x1":2116,"y2":1180,"x2":2353,"type":"SpikePit"},
-{"y1":1180,"x1":5651,"y2":1180,"x2":5888,"type":"SpikePit"},
+{
+    "name":"Beach",
+    "type":"Battle",
 
-{"y1":850,"x1":1169,"y2":850,"x2":1420,"type":"Platform"},
-{"y1":736,"x1":1398,"y2":736,"x2":1649,"type":"Platform"},
-{"y1":842,"x1":1736,"y2":842,"x2":1980,"type":"Platform"},
-{"y1":732,"x1":3349,"y2":732,"x2":3600,"type":"Platform"},
-{"y1":961,"x1":3218,"y2":961,"x2":3735,"type":"Platform"},
-{"y1":355,"x1":6318,"y2":355,"x2":6400,"type":"Platform"},
-{"y1":693,"x1":4753,"y2":467,"x2":5137,"type":"Platform"},
-{"y1":467,"x1":4848,"y2":467,"x2":5246,"type":"Platform"},
-{"y1":618,"x1":1727,"y2":618,"x2":2190,"type":"Platform"},
-{"y1":515,"x1":2247,"y2":515,"x2":2704,"type":"Platform"},
-{"y1":413,"x1":2816,"y2":413,"x2":3272,"type":"Platform"},
-{"y1":341,"x1":3388,"y2":341,"x2":3850,"type":"Platform"},
-{"y1":571,"x1":5334,"y2":571,"x2":5793,"type":"Platform"}],"mapX":6400}
+    "mapX":6400,
+    "mapY":1200,
+
+    "startingX":150,
+    "startingY":900,
+
+    "enemiesToDefeat":25,
+
+    "landscape":[
+        {"type":"Wall", "x1":2116, "y1":961, "x2":2116, "y2":1180}
+        {"type":"Wall", "x1":2353, "y1":1180, "x2":2353, "y2":961}
+        {"type":"Wall", "x1":5651, "y1":961, "x2":5651, "y2":1180}
+        {"type":"Wall", "x1":5888, "y1":1180, "x2":5888, "y2":961}
+        {"type":"Wall", "x1":0, "y1":961, "x2":2116, "y2":961}
+        {"type":"Wall", "x1":2353, "y1":961, "x2":3100, "y2":961}
+        {"type":"Wall", "x1":3100, "y1":961, "x2":3100, "y2":1139}
+        {"type":"Wall", "x1":3100, "y1":1139, "x2":4220, "y2":1139}
+        {"type":"Wall", "x1":4220, "y1":1139, "x2":4220, "y2":1000}
+        {"type":"Wall", "x1":3843, "y1":1000, "x2":4220, "y2":1000}
+        {"type":"Wall", "x1":3843, "y1":1000, "x2":3924, "y2":961}
+        {"type":"Wall", "x1":3924, "y1":961, "x2":5651, "y2":961}
+        {"type":"Wall", "x1":5888, "y1":961, "x2":6400, "y2":961}
+        {"type":"Wall", "x1":4025, "y1":961, "x2":4357, "y2":693}
+        {"type":"Wall", "x1":4357, "y1":693, "x2":4753, "y2":693}
+        {"type":"Wall", "x1":4753, "y1":693, "x2":5280, "y2":961}
+        {"type":"SpikePit", "x1":2116, "y1":1180, "x2":2353, "y2":1180}
+        {"type":"SpikePit", "x1":5651, "y1":1180, "x2":5888, "y2":1180}
+        {"type":"Platform", "x1":1169, "y1":850, "x2":1420, "y2":850}
+        {"type":"Platform", "x1":1398, "y1":736, "x2":1649, "y2":736}
+        {"type":"Platform", "x1":1736, "y1":842, "x2":1980, "y2":842}
+        {"type":"Platform", "x1":3349, "y1":732, "x2":3600, "y2":732}
+        {"type":"Platform", "x1":3218, "y1":961, "x2":3735, "y2":961}
+        {"type":"Platform", "x1":6318, "y1":355, "x2":6400, "y2":355}
+        {"type":"Platform", "x1":4753, "y1":693, "x2":5137, "y2":467}
+        {"type":"Platform", "x1":4848, "y1":467, "x2":5246, "y2":467}
+        {"type":"Platform", "x1":1727, "y1":618, "x2":2190, "y2":618}
+        {"type":"Platform", "x1":2247, "y1":515, "x2":2704, "y2":515}
+        {"type":"Platform", "x1":2816, "y1":413, "x2":3272, "y2":413}
+        {"type":"Platform", "x1":3388, "y1":341, "x2":3850, "y2":341}
+        {"type":"Platform", "x1":5334, "y1":571, "x2":5793, "y2":571}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Turret", "x":3470, "y":665, "respawnTime":200}
+        {"category":"Entity", "type":"Turret", "x":6335, "y":285, "respawnTime":200}
+        {"category":"Entity", "type":"Flying Bot", "x":3470, "y":500, "respawnTime":60}
+        {"category":"Interactive", "type":"Health Pickup", "x":2000, "y":920, "respawnTime":200}
+    ]
+}

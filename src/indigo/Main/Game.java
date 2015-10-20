@@ -76,7 +76,6 @@ public class Game extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
-		long elapsedTotal = 0; // For counter
 		long ticks = 0; // For counter
 		long skips = 0; // For counter
 
@@ -93,14 +92,17 @@ public class Game extends JPanel implements Runnable
 			draw();
 
 			elapsed = System.currentTimeMillis() - start;
-			elapsedTotal += elapsed;
 
 			wait = TARGET_TIME - elapsed;
 			while(wait < 0)
 			{
 				wait += TARGET_TIME;
 				skips++;
-				System.out.println("* Frameskip " + skips + " *");
+				if((ticks + skips) == FPS)
+				{
+					System.out.println("FPS: " + ticks);
+					ticks = skips = 0;
+				}
 			}
 
 			try
@@ -113,10 +115,10 @@ public class Game extends JPanel implements Runnable
 			}
 
 			ticks++;
-			if(ticks % FPS == 0)
+			if((ticks + skips) == FPS)
 			{
-				System.out.println("Resources used: " + (100 * elapsedTotal / (TARGET_TIME * FPS)) + "%");
-				elapsedTotal = 0;
+				System.out.println("FPS: " + ticks);
+				ticks = skips = 0;
 			}
 		}
 	}
