@@ -11,7 +11,7 @@ public class Pulse extends Skill
 
 	private int manaCost = 1; // TODO: Change for game balancing
 
-	public final static double PUSHBACK = 100; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
+	public final static double PUSHBACK = 40; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
 	// Shot, keeping hitbox size in mind
 	public final static double RADIUS = 1000; // Radius of effect
 	public static final int DAMAGE = 20;

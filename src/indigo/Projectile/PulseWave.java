@@ -17,9 +17,9 @@ public class PulseWave extends Projectile
 	public static final int DAMAGE = 20; // Will scale by distance
 	public final static int WIDTH = 1000;
 	public final static int HEIGHT = 1000;
-	public final static double PUSHBACK = 100; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
+	public final static double PUSHBACK = 40; // TODO: Change getWidth(), getHeight(), and PUSHBACK to suit the Pulse
 												// Shot, keeping hitbox size in mind
-	public final static int DURATION = 3;
+	public final static int DURATION = 8;
 
 	public PulseWave(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
@@ -48,8 +48,8 @@ public class PulseWave extends Projectile
 	public void render(Graphics2D g)
 	{
 		// TODO: If necessary, change to be that of the pulse shot
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - (getWidth() / 2 * (1 - (double)timer / DURATION))), (int)(getY() - (getHeight() / 2 * (1 - (double)timer / DURATION))),
+				(int)(getWidth() * (1 - (double)timer / DURATION)), (int)(getHeight() * (1 - (double)timer / DURATION)), null);
 	}
 
 	public Shape getHitbox()

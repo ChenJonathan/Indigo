@@ -88,8 +88,8 @@ public class ContentManager
 	public static AnimationData ICICLE = new AnimationData("/images/projectiles/icicle/default.png", 160, 73, 1);
 	public static AnimationData MORTAR_DEATH = new AnimationData("/images/projectiles/mortar_death.png", 100, 100, 9);
 	public static AnimationData MORTAR = new AnimationData("/images/projectiles/mortar.png", 50, 50, 1);
-	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 1000,
-			1000, 1);
+	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100,
+			100, 1);
 	public static AnimationData WATER_BOLT_DEATH = new AnimationData("/images/projectiles/water_bolt/death.png", 80,
 			73, 2);
 	public static AnimationData WATER_BOLT_DEATH_WALL = new AnimationData(
