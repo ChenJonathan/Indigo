@@ -93,7 +93,7 @@ public class PlayState extends GameState
 		player.setPhase(activePhase);
 
 		// Initialize display
-		display = new HUD(this);
+		display = new HUD(this, stage);
 		display.setPhase(activePhase);
 
 		// Initialize timer

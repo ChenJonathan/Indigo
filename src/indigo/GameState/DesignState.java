@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -57,50 +58,59 @@ public class DesignState extends GameState
 	private int selectedPointRadius; // Radius of selected point
 	private int spawnRadius; // Radius of respawnable visual
 
-	private int xMargin;
-	private int yMargin;
+	private int xMargin = 50;
+	private int yMargin = 50;
 
 	private boolean playerSet = false;
 	private boolean objectiveSet = false;
 
-	private int selectedTool = -1;
-	private String selectedToolType;
+	// Selected toolbar item and subtype
+	private int selectedTool = 0;
+	private int selectedToolType = 0;
 
+	// Toolbar item that the mouse is hovering over
+	private int hoverValue;
+
+	// Whether certain UI features should be shown or not
+	private boolean confirmBox = false;
+	private boolean arrowLeft = false;
+	private boolean arrowRight = false;
+
+	// Point selected if the current tool requires two points
 	private Point2D selectedPoint;
 
-	// Tool types
-	private List<String> player = Arrays.asList("Player");
-	private List<String> objectives = Arrays.asList("Battle", "Defend", "Survival", "Travel");
-	private List<String> lands = Arrays.asList("Platform", "Wall", "Spike Pit");
-	private List<String> entities = Arrays.asList("Flying Bot", "Turret");
-	private List<String> projectiles = Arrays.asList("Steel Beam");
-	private List<String> interactives = Arrays.asList("Health Pickup");
-
-	private int hoverValue;
-	private String[] hoverText = {"Sets the player location", "Sets the map objective",
-			"Creates an entity spawn point", "Creates a projectile spawn point",
-			"Creates an interactive object spawn point", "Draws a wall", "Draws a platform", "Reverts the last action",
-			"Saves the level", "Exits the level editor"};
+	// Tool types - Display text on selection box
+	private HashMap<Integer, String[]> toolTypes = new HashMap<Integer, String[]>();
 
 	// Used to format the JSON String
-	String[] formatMaster = {"name", "type", "", "mapX", "mapY", "", "startingX", "startingY", "", "objectives", "",
-			"landscape", "", "spawns"};
-	String[][] formatObjective = { {"enemiesToDefeat"}, {"coreX", "coreY", "", "survivalDuration"},
+	private String[] formatMaster = {"name", "type", "", "mapX", "mapY", "", "startingX", "startingY", "",
+			"objectives", "", "landscape", "", "spawns"};
+	private String[][] formatObjective = { {"enemiesToDefeat"}, {"coreX", "coreY", "", "survivalDuration"},
 			{"survivalDuration"}, {"destinationX", "destinationY", "", "timeLimit"}};
-	String[] formatLand = {"type", "x1", "y1", "x2", "y2"};
-	String[] formatSpawn = {"category", "type", "x", "y", "respawnTime"};
-	String[] formatIndex = {};
+	private String[] formatLand = {"type", "x1", "y1", "x2", "y2"};
+	private String[] formatSpawn = {"category", "type", "x", "y", "respawnTime"};
+	private String[] formatIndex = {};
 
 	private static final int GRID_SPACE = 10; // Visual pixels per grid square
 	private static final int GRID_SCALE = 100; // Actual pixels per grid square
 
+	private static final int DEFAULT_MARGIN_X = 40;
+	private static final int DEFAULT_MARGIN_Y = 40;
+
+	public static final int NUM_TOOLS = 12;
+
 	public static final int SET_PLAYER = 0;
 	public static final int SET_OBJECTIVE = 1;
-	public static final int SET_ENTITY = 2;
-	public static final int SET_PROJECTILE = 3;
-	public static final int SET_INTERACTIVE = 4;
-	public static final int DRAW_LAND = 5;
-	public static final int DRAW_PLATFORM = 6;
+	public static final int SET_LAND = 2;
+	public static final int SET_ENTITY = 3;
+	public static final int SET_PROJECTILE = 4;
+	public static final int SET_INTERACTIVE = 5;
+	public static final int UNDO = 6;
+	public static final int DELETE = 7;
+	public static final int CLEAR = 8;
+	public static final int SAVE = 9;
+	public static final int LOAD = 10;
+	public static final int EXIT = 11;
 
 	/**
 	 * Sets up the edit game state for level design.
@@ -110,6 +120,20 @@ public class DesignState extends GameState
 	public DesignState(GameStateManager gsm)
 	{
 		super(gsm);
+
+		// Initialize tool types
+		toolTypes.put(SET_PLAYER, new String[] {"Player"});
+		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
+		toolTypes.put(SET_LAND, new String[] {"Wall", "Spike Pit", "Platform"});
+		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret"});
+		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
+		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup"});
+		toolTypes.put(UNDO, new String[] {"Undo"});
+		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
+		toolTypes.put(CLEAR, new String[] {"Clear"});
+		toolTypes.put(SAVE, new String[] {"Save"});
+		toolTypes.put(LOAD, new String[] {"Load"});
+		toolTypes.put(EXIT, new String[] {"Exit"});
 
 		name = JOptionPane.showInputDialog("Map name:");
 
@@ -199,12 +223,12 @@ public class DesignState extends GameState
 			creationOrder.clear(); // Prevents undoing elements from loaded file
 		}
 
-		scale = Math.min(1600.0 / scale(mapX), 900.0 / scale(mapY));
+		scale = Math.min(1500.0 / scale(mapX), 1000.0 / scale(mapY));
 		selectedPointRadius = (int)(scale * 3);
 		spawnRadius = (int)(scale * 4);
 
-		xMargin = (int)(50);
-		yMargin = (int)((Game.HEIGHT - scale(mapY)) / (2));
+		xMargin = (int)((1500 - scale(mapX)) / 2) + DEFAULT_MARGIN_X;
+		yMargin = (int)((1000 - scale(mapY)) / 2) + DEFAULT_MARGIN_Y;
 	}
 
 	private class LandData
@@ -332,43 +356,55 @@ public class DesignState extends GameState
 					selectedPointRadius * 2));
 		}
 
-		// Draw toolbars
-		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1741, 45, 90, 990, null);
-
-		// Draw hover text
-		if(hoverValue != -1)
-		{
-			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
-			FontMetrics fontMetrics = g.getFontMetrics();
-
-			g.setColor(Color.GRAY);
-			g.setStroke(new BasicStroke(6));
-			g.drawRect(1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 90, 100 * hoverValue + 45,
-					fontMetrics.stringWidth(hoverText[hoverValue]) + 90, 90);
-
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 90, 100 * hoverValue + 45,
-					fontMetrics.stringWidth(hoverText[hoverValue]) + 90, 90);
-
-			g.setColor(Color.BLACK);
-			g.drawString(hoverText[hoverValue], 1720 - fontMetrics.stringWidth(hoverText[hoverValue]) - 45, 100
-					* hoverValue + 90 + fontMetrics.getHeight() / 4);
-		}
+		// Draw toolbar
+		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1580, 40, 300, 405, null);
 
 		// Draw hover box
 		if(hoverValue != -1)
 		{
 			g.setColor(Color.GRAY);
 			g.setStroke(new BasicStroke(6));
-			g.drawRect(1741, 100 * hoverValue + 45, 90, 90);
+			g.drawRect(1580 + (hoverValue % 3) * 105, 40 + (hoverValue / 3) * 105, 90, 90);
 		}
 
-		// Draw selected tool box
-		if(selectedTool != -1)
+		// Draw tool selection box
+		g.setColor(Color.YELLOW);
+		g.setStroke(new BasicStroke(6));
+		g.drawRect(1580 + (selectedTool % 3) * 105, 40 + (selectedTool / 3) * 105, 90, 90);
+
+		// Draw selection box
+		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 485, 300, 110, null);
+		if(arrowLeft)
 		{
-			g.setColor(Color.YELLOW);
-			g.setStroke(new BasicStroke(6));
-			g.drawRect(1741, 100 * selectedTool + 45, 90, 90);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 485, 60, 110, null);
+		}
+		else
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 485, 60, 110, null);
+		}
+		if(arrowRight)
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 485, 60, 110, null);
+		}
+		else
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 485, 60, 110, null);
+		}
+		
+		// Draw tool type text
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		FontMetrics fontMetrics = g.getFontMetrics();
+		String text = toolTypes.get(selectedTool)[selectedToolType];
+		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 540 + fontMetrics.getHeight() / 4);
+
+		// Draw description box
+		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 635, 300, 405, null);
+
+		// Draw confirm button
+		if(confirmBox)
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.CONFIRM_BUTTON), 1642, 940, 175, 75, null);
 		}
 	}
 
@@ -386,31 +422,19 @@ public class DesignState extends GameState
 		}
 		else if(Manager.input.keyPress(InputManager.K3))
 		{
-			selectTool(SET_ENTITY);
+			selectTool(SET_LAND);
 		}
 		else if(Manager.input.keyPress(InputManager.K4))
 		{
-			selectTool(SET_PROJECTILE);
+			selectTool(SET_ENTITY);
 		}
 		else if(Manager.input.keyPress(InputManager.K5))
 		{
-			selectTool(SET_INTERACTIVE);
+			selectTool(SET_PROJECTILE);
 		}
 		else if(Manager.input.keyPress(InputManager.K6))
 		{
-			selectTool(DRAW_LAND);
-		}
-		else if(Manager.input.keyPress(InputManager.K7))
-		{
-			selectTool(DRAW_PLATFORM);
-		}
-		else if(Manager.input.keyPress(InputManager.K8))
-		{
-			undo();
-		}
-		else if(Manager.input.keyPress(InputManager.K9))
-		{
-			save(false);
+			selectTool(SET_INTERACTIVE);
 		}
 		else if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
@@ -428,32 +452,52 @@ public class DesignState extends GameState
 				selectPoint(gridX, gridY);
 			}
 		}
-		for(int count = 0; count < 10; count++)
+		else if(Manager.input.mouseInRect(1580, 485, 300, 110))
 		{
-			if(Manager.input.mouseInRect(1741, 100 * count + 45, 90, 90))
+			if(Manager.input.mousePress())
 			{
-				hoverValue = count;
-				break;
+				// Clicking on left arrow
+				if(arrowLeft && Manager.input.mouseX() <= 1640)
+				{
+					selectedToolType--;
+					arrowLeft = (selectedToolType != 0);
+					arrowRight = (selectedToolType != toolTypes.get(selectedTool).length - 1);
+				}
+				// Clicking on right arrow
+				else if(arrowRight && Manager.input.mouseX() >= 1820)
+				{
+					selectedToolType++;
+					arrowLeft = (selectedToolType != 0);
+					arrowRight = (selectedToolType != toolTypes.get(selectedTool).length - 1);
+				}
 			}
-			hoverValue = -1;
 		}
-		if(Manager.input.mousePress())
+		else if(Manager.input.mouseInRect(1642, 940, 175, 75))
 		{
-			if(hoverValue >= 0 && hoverValue <= 6)
+			if(confirmBox && Manager.input.mousePress())
 			{
-				selectTool(hoverValue);
+				confirm();
 			}
-			else if(hoverValue == 7)
+		}
+		else
+		{
+			hoverValue = -1;
+			for(int row = 0; row < 4; row++)
 			{
-				undo();
+				for(int col = 0; col < 3; col++)
+				{
+					if(Manager.input.mouseInRect(1580 + col * 105, 40 + row * 105, 90, 90))
+					{
+						hoverValue = row * 3 + col;
+					}
+				}
 			}
-			else if(hoverValue == 8)
+			if(Manager.input.mousePress())
 			{
-				save(false);
-			}
-			else if(hoverValue == 9)
-			{
-				exit();
+				if(hoverValue >= 0 && hoverValue < NUM_TOOLS)
+				{
+					selectTool(hoverValue);
+				}
 			}
 		}
 	}
@@ -466,9 +510,7 @@ public class DesignState extends GameState
 	 */
 	public void selectPoint(int x, int y)
 	{
-		// TODO Return if selectedToolType is ""
-
-		if(selectedTool == DRAW_LAND)
+		if(selectedTool == SET_LAND)
 		{
 			if(selectedPoint == null)
 			{
@@ -482,13 +524,13 @@ public class DesignState extends GameState
 					int y1 = (int)(selectedPoint.getY() * GRID_SCALE);
 					int x2 = x * GRID_SCALE;
 					int y2 = y * GRID_SCALE;
-					LandData land = new LandData(selectedToolType, x1, y1, x2, y2);
+					LandData land = new LandData(toolTypes.get(SET_LAND)[selectedToolType], x1, y1, x2, y2);
 					addToList(land);
 				}
 				selectedPoint = null;
 			}
 		}
-		else
+		else // TODO Replace Strings
 		{
 			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 			{
@@ -496,15 +538,18 @@ public class DesignState extends GameState
 				SpawnData spawn = null;
 				if(selectedTool == SET_ENTITY)
 				{
-					spawn = new SpawnData("Entity", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+					spawn = new SpawnData("Entity", toolTypes.get(SET_ENTITY)[selectedToolType], x * GRID_SCALE, y
+							* GRID_SCALE, respawnTime);
 				}
 				else if(selectedTool == SET_PROJECTILE)
 				{
-					spawn = new SpawnData("Projectile", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+					spawn = new SpawnData("Projectile", toolTypes.get(SET_PROJECTILE)[selectedToolType], x * GRID_SCALE,
+							y * GRID_SCALE, respawnTime);
 				}
 				else if(selectedTool == SET_INTERACTIVE)
 				{
-					spawn = new SpawnData("Interactive", selectedToolType, x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+					spawn = new SpawnData("Interactive", toolTypes.get(SET_INTERACTIVE)[selectedToolType],
+							x * GRID_SCALE, y * GRID_SCALE, respawnTime);
 				}
 				addToList(spawn);
 			}
@@ -540,51 +585,62 @@ public class DesignState extends GameState
 
 	public void selectTool(int tool)
 	{
+		selectedTool = tool;
+		selectedToolType = 0;
+		arrowLeft = false;
+		arrowRight = (0 != toolTypes.get(selectedTool).length - 1);
+		confirmBox = (tool == SET_OBJECTIVE || tool >= 6);
 		selectedPoint = null;
-		if(tool == SET_OBJECTIVE)
-		{
-			while(!objectives.contains(type))
-			{
-				type = JOptionPane.showInputDialog("Map type (Battle / Defend / Survival / Travel):");
-				json.put("type", type);
-			}
+	}
 
-			if(type.equals("Battle"))
-			{
-				int enemiesToDefeat = Integer.parseInt(JOptionPane.showInputDialog("Number of enemies to defeat:"));
-				json.put("enemiesToDefeat", enemiesToDefeat);
-				objectiveSet = true;
-			}
-			else if(type.equals("Defend"))
-			{
-				selectedTool = tool;
-				selectedToolType = "Core";
-				int survivalDuration = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
-				json.put("survivalDuration", survivalDuration);
-			}
-			else if(type.equals("Survival"))
-			{
-				int survivalDuration = Integer.parseInt(JOptionPane.showInputDialog("Survival duration (In frames):"));
-				json.put("survivalDuration", survivalDuration);
-				objectiveSet = true;
-			}
-			else if(type.equals("Travel"))
-			{
-				selectedTool = tool;
-				selectedToolType = "Destination";
-				int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In frames):"));
-				json.put("timeLimit", timeLimit);
-			}
-		}
-		else
+	/**
+	 * Confirms the selection
+	 */
+	public void confirm()
+	{
+		switch(selectedTool)
 		{
-			selectedTool = tool;
-
-			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE
-					|| selectedTool == DRAW_LAND)
-			{
-				selectedToolType = JOptionPane.showInputDialog("Tool Type:");
-			}
+			case SET_OBJECTIVE:
+				switch(type)
+				{
+					case "Battle":
+						int enemiesToDefeat = Integer.parseInt(JOptionPane
+								.showInputDialog("Number of enemies to defeat:"));
+						json.put("enemiesToDefeat", enemiesToDefeat);
+						objectiveSet = true;
+						break;
+					case "Defend":
+						int survivalDuration = Integer.parseInt(JOptionPane
+								.showInputDialog("Survival duration (In frames):"));
+						json.put("survivalDuration", survivalDuration);
+						break;
+					case "Survival":
+						survivalDuration = Integer.parseInt(JOptionPane
+								.showInputDialog("Survival duration (In frames):"));
+						json.put("survivalDuration", survivalDuration);
+						objectiveSet = true;
+						break;
+					case "Travel":
+						int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In frames):"));
+						json.put("timeLimit", timeLimit);
+						break;
+				}
+				break;
+			case UNDO:
+				undo();
+				break;
+			case CLEAR:
+				clear();
+				break;
+			case SAVE:
+				save();
+				break;
+			case LOAD:
+				load();
+				break;
+			case EXIT:
+				exit();
+				break;
 		}
 	}
 
@@ -615,98 +671,188 @@ public class DesignState extends GameState
 	}
 
 	/**
-	 * Saves the designed level.
-	 * 
-	 * @param exit Whether to exit to the menu afterwards or not.
+	 * Attempts to load another level.
 	 */
-	public void save(boolean exit)
+	public void clear()
 	{
-		if(!playerSet)
+		String clearFile;
+		do
 		{
-			JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
-		}
-		else if(!objectiveSet)
-		{
-			JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-		}
-		else
-		{
-			try
+			clearFile = JOptionPane.showInputDialog("Delete the level permanently? (Y / N):");
+			if(clearFile.equals("Y"))
 			{
-				JSONObject index = ContentManager.load("/index.json");
-
-				// Overwrite check
-				if(index.get(name) != null)
+				if(index.get(name) == null)
 				{
-					String overwrite;
-					do
-					{
-						overwrite = JOptionPane.showInputDialog("Overwrite existing file? (Y / N):");
-						if(overwrite.equals("N"))
-						{
-							return;
-						}
-					}
-					while(!overwrite.equals("Y") && !overwrite.equals("N"));
+					JOptionPane.showMessageDialog(new JFrame(), "Level was not saved yet.");
 				}
 				else
 				{
-					json.put("id", index.size());
-					index.put(name, index.size());
-					FileWriter file = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
-					file.write(toJSONString(index, formatIndex));
-					file.flush();
-					file.close();
-				}
-
-				// Packing objects into JSONObject
-				json.remove("landscape");
-				json.remove("spawns");
-				for(LandData land : landscape)
-				{
-					addToJSON(land);
-				}
-				for(SpawnData spawn : spawns)
-				{
-					addToJSON(spawn);
-				}
-
-				// Saving and exiting
-				String fileName = name.replace(" ", "_").toLowerCase() + ".json";
-				String filePath = new File("").getAbsolutePath() + "/resources/data/levels/" + fileName;
-				FileWriter file = new FileWriter(filePath);
-				file.write(toJSONString(json, formatMaster));
-				file.flush();
-				file.close();
-
-				// Generating image
-				String generate;
-				do
-				{
-					generate = JOptionPane.showInputDialog("Generate image? (Y / N):");
-					if(generate.equals("Y"))
+					try
 					{
-						ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
-								+ "/resources/images/stages/" + fileName + ".png"));
+						int currentId = Integer.parseInt(index.get(name) + "");
+						index.remove(name);
+						for(Object level : index.entrySet())
+						{
+							String[] pair = (level + "").split("=");
+							int id = Integer.parseInt(pair[1]);
+							if(id > currentId)
+							{
+								index.put(pair[0], id - 1);
+							}
+						}
+						FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath()
+								+ "/resources/data/index.json");
+						indexWriter.write(toJSONString(index, formatIndex));
+						indexWriter.flush();
+						indexWriter.close();
+
+						String clearImage;
+						do
+						{
+							clearImage = JOptionPane.showInputDialog("Delete the associated image? (Y / N):");
+							if(clearImage.equals("Y"))
+							{
+								String fileName = name.replace(" ", "_").toLowerCase();
+								String filePath = new File("").getAbsolutePath() + "/resources/images/stages/"
+										+ fileName + ".png";
+								File file = new File(filePath);
+								file.delete();
+								JOptionPane.showMessageDialog(new JFrame(), "Level data and image deleted!");
+							}
+							else if(clearImage.equals("N"))
+							{
+								JOptionPane.showMessageDialog(new JFrame(), "Level data deleted!");
+							}
+						}
+						while(!clearImage.equals("Y") && !clearImage.equals("N"));
+
+						gsm.setState(GameStateManager.MENU);
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
 					}
 				}
-				while(!generate.equals("Y") && !generate.equals("N"));
+			}
+		}
+		while(!clearFile.equals("Y") && !clearFile.equals("N"));
+	}
 
-				JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
-				if(exit)
+	/**
+	 * Saves the designed level.
+	 */
+	public void save()
+	{
+		try
+		{
+			JSONObject index = ContentManager.load("/index.json");
+
+			// Overwrite check
+			if(index.get(name) != null)
+			{
+				String overwrite;
+				do
 				{
-					gsm.setState(GameStateManager.MENU);
+					overwrite = JOptionPane.showInputDialog("Overwrite existing file? (Y / N):");
+					if(overwrite.equals("N"))
+					{
+						return;
+					}
+				}
+				while(!overwrite.equals("Y") && !overwrite.equals("N"));
+			}
+			else
+			{
+				index.put(name, index.size());
+				FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
+				indexWriter.write(toJSONString(index, formatIndex));
+				indexWriter.flush();
+				indexWriter.close();
+			}
+
+			// Packing objects into JSONObject
+			json.remove("landscape");
+			json.remove("spawns");
+			for(LandData land : landscape)
+			{
+				addToJSON(land);
+			}
+			for(SpawnData spawn : spawns)
+			{
+				addToJSON(spawn);
+			}
+
+			// Saving and exiting
+			String fileName = name.replace(" ", "_").toLowerCase();
+			String filePath = new File("").getAbsolutePath() + "/resources/data/levels/" + fileName + ".json";
+			FileWriter fileWriter = new FileWriter(filePath);
+			fileWriter.write(toJSONString(json, formatMaster));
+			fileWriter.flush();
+			fileWriter.close();
+
+			// Generating image
+			String generate;
+			do
+			{
+				generate = JOptionPane.showInputDialog("Generate image? (Y / N):");
+				if(generate.equals("Y"))
+				{
+					ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
+							+ "/resources/images/stages/" + fileName + ".png"));
 				}
 			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+			while(!generate.equals("Y") && !generate.equals("N"));
+
+			JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Attempts to quit the level editor
+	 * Attempts to load another level.
+	 */
+	public void load()
+	{
+		String exit;
+		do
+		{
+			exit = JOptionPane.showInputDialog("Load another map? (Y / N):");
+			if(exit.equals("Y"))
+			{
+				String save;
+				do
+				{
+					save = JOptionPane.showInputDialog("Save? (Y / N):");
+					if(save.equals("Y"))
+					{
+						if(!playerSet)
+						{
+							JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
+							return;
+						}
+						else if(!objectiveSet)
+						{
+							JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
+							return;
+						}
+						else
+						{
+							save();
+						}
+					}
+				}
+				while(!save.equals("Y") && !save.equals("N"));
+				gsm.setState(GameStateManager.DESIGN);
+			}
+		}
+		while(!exit.equals("Y") && !exit.equals("N"));
+	}
+
+	/**
+	 * Attempts to quit the level editor.
 	 */
 	public void exit()
 	{
@@ -722,17 +868,23 @@ public class DesignState extends GameState
 					save = JOptionPane.showInputDialog("Save? (Y / N):");
 					if(save.equals("Y"))
 					{
-						save(true);
-					}
-					else if(save.equals("N"))
-					{
-						gsm.setState(GameStateManager.MENU);
+						if(!playerSet)
+						{
+							JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
+							return;
+						}
+						else if(!objectiveSet)
+						{
+							JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
+							return;
+						}
+						else
+						{
+							save();
+						}
 					}
 				}
 				while(!save.equals("Y") && !save.equals("N"));
-			}
-			else if(exit.equals("N"))
-			{
 				gsm.setState(GameStateManager.MENU);
 			}
 		}
@@ -741,6 +893,8 @@ public class DesignState extends GameState
 
 	/**
 	 * Adds the LandData object to the landscape list.
+	 * 
+	 * @param land The object to be added.
 	 */
 	public void addToList(LandData land)
 	{
@@ -769,12 +923,13 @@ public class DesignState extends GameState
 
 	/**
 	 * Adds the SpawnData object to the spawns list.
+	 * 
+	 * @param spawn The object to be added.
 	 */
 	public void addToList(SpawnData spawn)
 	{
 		if(spawn.x % GRID_SCALE == 0 && spawn.y % GRID_SCALE == 0)
 		{
-			System.out.println(spawn.x + " " + spawn.y);
 			if(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] != null)
 			{
 				spawns.remove(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE]);
@@ -793,6 +948,8 @@ public class DesignState extends GameState
 
 	/**
 	 * Adds the LandData object to the JSON.
+	 * 
+	 * @param land The object to be added.
 	 */
 	public void addToJSON(LandData land)
 	{
@@ -813,6 +970,8 @@ public class DesignState extends GameState
 
 	/**
 	 * Adds the SpawnData object to the JSON.
+	 * 
+	 * @param spawn The object to be added.
 	 */
 	public void addToJSON(SpawnData spawn)
 	{
@@ -833,6 +992,9 @@ public class DesignState extends GameState
 
 	/**
 	 * Formats the JSON String to be more readable. Do yourself a favor and don't look through this.
+	 * 
+	 * @param obj The JSON object to be formatted.
+	 * @param format The format to be used.
 	 * 
 	 * @return The formatted String.
 	 */
@@ -865,7 +1027,22 @@ public class DesignState extends GameState
 			{
 				if(line.equals("objectives"))
 				{
-					string += toJSONString(obj, formatObjective[objectives.indexOf(type)]);
+					// TODO Automate
+					switch(type)
+					{
+						case "Battle":
+							string += toJSONString(obj, formatObjective[0]);
+							break;
+						case "Defend":
+							string += toJSONString(obj, formatObjective[1]);
+							break;
+						case "Survival":
+							string += toJSONString(obj, formatObjective[2]);
+							break;
+						case "Travel":
+							string += toJSONString(obj, formatObjective[3]);
+							break;
+					}
 				}
 				else if(obj.get(line) instanceof JSONArray)
 				{

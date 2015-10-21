@@ -1,0 +1,16 @@
+{
+    "name":"Test2",
+    "type":"Defend",
+
+    "mapX":2000,
+    "mapY":1000,
+
+    "startingX":1400,
+    "startingY":200,
+
+    "coreX":1600,    "coreY":300,    "survivalDuration":25,
+
+    "landscape":null,
+
+    "spawns":null
+}
