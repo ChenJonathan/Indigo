@@ -31,6 +31,8 @@ import java.util.ArrayList;
 public class PlayState extends GameState
 {
 	public Stage stage;
+	public String type;
+	
 	public Player player;
 	public HUD display;
 
@@ -61,21 +63,21 @@ public class PlayState extends GameState
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		// Initialize stage
-		if(data.getStage().get("type").equals("Battle"))
+		type = data.getStage().get("type") + "";
+		switch(type)
 		{
-			stage = new BattleStage(this, data.getStage());
-		}
-		else if(data.getStage().get("type").equals("Defend"))
-		{
-			stage = new DefendStage(this, data.getStage());
-		}
-		else if(data.getStage().get("type").equals("Survival"))
-		{
-			stage = new SurvivalStage(this, data.getStage());
-		}
-		else if(data.getStage().get("type").equals("Travel"))
-		{
-			stage = new TravelStage(this, data.getStage());
+			case "Battle":
+				stage = new BattleStage(this, data.getStage());
+				break;
+			case "Defend":
+				stage = new DefendStage(this, data.getStage());
+				break;
+			case "Survival":
+				stage = new SurvivalStage(this, data.getStage());
+				break;
+			case "Travel":
+				stage = new TravelStage(this, data.getStage());
+				break;
 		}
 		data.resetLevelData();
 
@@ -93,7 +95,7 @@ public class PlayState extends GameState
 		player.setPhase(activePhase);
 
 		// Initialize display
-		display = new HUD(this, stage);
+		display = new HUD(this, type);
 		display.setPhase(activePhase);
 
 		// Initialize timer

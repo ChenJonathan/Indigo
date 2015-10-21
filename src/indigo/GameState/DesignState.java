@@ -19,7 +19,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -39,7 +38,23 @@ public class DesignState extends GameState
 	private ArrayList<LandData> landscape;
 	private ArrayList<SpawnData> spawns;
 
-	private ArrayList<Object> creationOrder; // Tracks the order in which objects were created
+	private enum Action
+	{
+		ADD, REMOVE, OVERWRITE
+	}
+
+	// Tracks the order in which objects were created / deleted
+	private ArrayList<Action> actionOrder;
+	private ArrayList<Object> creationOrder;
+	private ArrayList<Object> deletionOrder;
+
+	// Tracks position in above arrays - Used for undo / redo
+	private int[] indices = {-1, -1, -1};
+	private int ACTION = 0;
+	private int CREATION = 1;
+	private int DELETION = 2;
+
+	// Grids of objects
 	LandData[][][][] landscapeGrid;
 	SpawnData[][] spawnsGrid;
 
@@ -79,7 +94,8 @@ public class DesignState extends GameState
 	// Point selected if the current tool requires two points
 	private Point2D selectedPoint;
 
-	// Tool types - Display text on selection box
+	// Tools and tool types - Display text on selection box
+	private HashMap<Integer, String> tools = new HashMap<Integer, String>();
 	private HashMap<Integer, String[]> toolTypes = new HashMap<Integer, String[]>();
 
 	// Used to format the JSON String
@@ -121,6 +137,20 @@ public class DesignState extends GameState
 	{
 		super(gsm);
 
+		// Initialize tools
+		tools.put(SET_PLAYER, "Set Player");
+		tools.put(SET_OBJECTIVE, "Set Objective");
+		tools.put(SET_LAND, "Set Land");
+		tools.put(SET_ENTITY, "Set Entity");
+		tools.put(SET_PROJECTILE, "Set Projectile");
+		tools.put(SET_INTERACTIVE, "Set Interactive");
+		tools.put(UNDO, "Undo / Redo");
+		tools.put(DELETE, "Delete Tool");
+		tools.put(CLEAR, "Clear Map");
+		tools.put(SAVE, "Save Map");
+		tools.put(LOAD, "Load Map");
+		tools.put(EXIT, "Exit Level Editor");
+
 		// Initialize tool types
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
 		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
@@ -128,7 +158,7 @@ public class DesignState extends GameState
 		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
 		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup"});
-		toolTypes.put(UNDO, new String[] {"Undo"});
+		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
 		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
 		toolTypes.put(CLEAR, new String[] {"Clear"});
 		toolTypes.put(SAVE, new String[] {"Save"});
@@ -140,7 +170,9 @@ public class DesignState extends GameState
 		landscape = new ArrayList<LandData>();
 		spawns = new ArrayList<SpawnData>();
 
+		actionOrder = new ArrayList<Action>();
 		creationOrder = new ArrayList<Object>();
+		deletionOrder = new ArrayList<Object>();
 
 		index = ContentManager.load("/index.json");
 		if(index.get(name) == null)
@@ -220,7 +252,11 @@ public class DesignState extends GameState
 				}
 			}
 
-			creationOrder.clear(); // Prevents undoing elements from loaded file
+			// Prevents modifying elements from loaded file
+			actionOrder.clear();
+			deletionOrder.clear();
+			creationOrder.clear();
+			indices = new int[] {-1, -1, -1};
 		}
 
 		scale = Math.min(1500.0 / scale(mapX), 1000.0 / scale(mapY));
@@ -295,14 +331,10 @@ public class DesignState extends GameState
 		g.drawLine(xMargin, (int)scale(mapY) + yMargin, (int)scale(mapX) + xMargin, (int)scale(mapY) + yMargin);
 
 		// Draw landscape
-		g.setStroke(new BasicStroke((int)(scale)));
+		g.setStroke(new BasicStroke((int)(scale * 1.5)));
 		for(LandData land : landscape)
 		{
-			g.setColor(Color.BLUE);
-			if(land.type.equals("Platform"))
-			{
-				g.setColor(Color.RED);
-			}
+			g.setColor(land.type.equals("Platform")? Color.GREEN : Color.BLUE);
 			int x1 = (int)(xMargin + scale(land.x1));
 			int y1 = (int)(yMargin + scale(land.y1));
 			int x2 = (int)(xMargin + scale(land.x2));
@@ -311,9 +343,20 @@ public class DesignState extends GameState
 		}
 
 		// Draw spawns
-		g.setColor(Color.GREEN);
 		for(SpawnData spawn : spawns)
 		{
+			switch(spawn.category)
+			{
+				case "Entity":
+					g.setColor(Color.RED);
+					break;
+				case "Projectile":
+					g.setColor(Color.ORANGE);
+					break;
+				case "Interactive":
+					g.setColor(Color.PINK);
+					break;
+			}
 			int x = (int)(xMargin + scale(spawn.x));
 			int y = (int)(yMargin + scale(spawn.y));
 			g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
@@ -390,7 +433,7 @@ public class DesignState extends GameState
 		{
 			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 485, 60, 110, null);
 		}
-		
+
 		// Draw tool type text
 		g.setColor(Color.BLACK);
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
@@ -412,31 +455,7 @@ public class DesignState extends GameState
 	public void handleInput()
 	{
 		// Tool select
-		if(Manager.input.keyPress(InputManager.K1))
-		{
-			selectTool(SET_PLAYER);
-		}
-		else if(Manager.input.keyPress(InputManager.K2))
-		{
-			selectTool(SET_OBJECTIVE);
-		}
-		else if(Manager.input.keyPress(InputManager.K3))
-		{
-			selectTool(SET_LAND);
-		}
-		else if(Manager.input.keyPress(InputManager.K4))
-		{
-			selectTool(SET_ENTITY);
-		}
-		else if(Manager.input.keyPress(InputManager.K5))
-		{
-			selectTool(SET_PROJECTILE);
-		}
-		else if(Manager.input.keyPress(InputManager.K6))
-		{
-			selectTool(SET_INTERACTIVE);
-		}
-		else if(Manager.input.keyPress(InputManager.ESCAPE))
+		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			exit();
 		}
@@ -530,7 +549,42 @@ public class DesignState extends GameState
 				selectedPoint = null;
 			}
 		}
-		else // TODO Replace Strings
+		else if(selectedTool == DELETE)
+		{
+			if(toolTypes.get(selectedTool)[selectedToolType] == "Delete Land")
+			{
+				if(selectedPoint == null)
+				{
+					selectedPoint = new Point2D.Double(x, y);
+				}
+				else
+				{
+					if(x != selectedPoint.getX() || y != selectedPoint.getY()) // Length > 0
+					{
+						System.out.println("gg");
+						LandData land = landscapeGrid[(int)selectedPoint.getX()][(int)selectedPoint.getY()][x][y];
+						if(land == null)
+						{
+							land = landscapeGrid[x][y][(int)selectedPoint.getX()][(int)selectedPoint.getY()];
+						}
+						if(land != null)
+						{
+							removeFromList(land);
+						}
+					}
+					selectedPoint = null;
+				}
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType] == "Delete Spawn")
+			{
+				SpawnData spawn = spawnsGrid[x][y];
+				if(spawn != null)
+				{
+					removeFromList(spawn);
+				}
+			}
+		}
+		else
 		{
 			if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 			{
@@ -543,13 +597,13 @@ public class DesignState extends GameState
 				}
 				else if(selectedTool == SET_PROJECTILE)
 				{
-					spawn = new SpawnData("Projectile", toolTypes.get(SET_PROJECTILE)[selectedToolType], x * GRID_SCALE,
-							y * GRID_SCALE, respawnTime);
+					spawn = new SpawnData("Projectile", toolTypes.get(SET_PROJECTILE)[selectedToolType],
+							x * GRID_SCALE, y * GRID_SCALE, respawnTime);
 				}
 				else if(selectedTool == SET_INTERACTIVE)
 				{
-					spawn = new SpawnData("Interactive", toolTypes.get(SET_INTERACTIVE)[selectedToolType],
-							x * GRID_SCALE, y * GRID_SCALE, respawnTime);
+					spawn = new SpawnData("Interactive", toolTypes.get(SET_INTERACTIVE)[selectedToolType], x
+							* GRID_SCALE, y * GRID_SCALE, respawnTime);
 				}
 				addToList(spawn);
 			}
@@ -585,11 +639,16 @@ public class DesignState extends GameState
 
 	public void selectTool(int tool)
 	{
+		if(tool == SET_OBJECTIVE && !objectiveSet) // TODO May or may not be temporary
+		{
+			return;
+		}
+
 		selectedTool = tool;
 		selectedToolType = 0;
 		arrowLeft = false;
 		arrowRight = (0 != toolTypes.get(selectedTool).length - 1);
-		confirmBox = (tool == SET_OBJECTIVE || tool >= 6);
+		confirmBox = (tool == SET_OBJECTIVE || (tool != DELETE && tool >= 6));
 		selectedPoint = null;
 	}
 
@@ -601,7 +660,8 @@ public class DesignState extends GameState
 		switch(selectedTool)
 		{
 			case SET_OBJECTIVE:
-				switch(type)
+				objectiveSet = false;
+				switch(toolTypes.get(SET_OBJECTIVE)[selectedToolType])
 				{
 					case "Battle":
 						int enemiesToDefeat = Integer.parseInt(JOptionPane
@@ -627,7 +687,15 @@ public class DesignState extends GameState
 				}
 				break;
 			case UNDO:
-				undo();
+				switch(selectedToolType)
+				{
+					case 0:
+						undo();
+						break;
+					case 1:
+						redo();
+						break;
+				}
 				break;
 			case CLEAR:
 				clear();
@@ -648,6 +716,7 @@ public class DesignState extends GameState
 	 * Converts actual size to visual size.
 	 * 
 	 * @param value Value to be converted.
+	 * 
 	 * @return Value in visual pixels.
 	 */
 	public double scale(double value)
@@ -656,17 +725,126 @@ public class DesignState extends GameState
 	}
 
 	/**
-	 * Reverts the last change.
+	 * Checks if the object is on the grid lines.
+	 * 
+	 * @param The object to be checked.
+	 * 
+	 * @return Whether the object is on the grid or not.
+	 */
+	public boolean onGrid(Object obj)
+	{
+		if(obj instanceof LandData)
+		{
+			LandData land = (LandData)obj;
+			return land.x1 % GRID_SCALE == 0 && land.y1 % GRID_SCALE == 0 && land.x2 % GRID_SCALE == 0
+					&& land.y2 % GRID_SCALE == 0;
+		}
+		else if(obj instanceof SpawnData)
+		{
+			SpawnData spawn = (SpawnData)obj;
+			return spawn.x % GRID_SCALE == 0 && spawn.y % GRID_SCALE == 0;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the object is overlapping another object.
+	 * 
+	 * @param The object to be checked.
+	 * 
+	 * @return Whether the object is overlapping another object or not.
+	 */
+	public Object overlapExists(Object obj)
+	{
+		if(obj instanceof LandData)
+		{
+			LandData land = (LandData)obj;
+			for(LandData otherLand : landscape)
+			{
+				if(land.equals(otherLand))
+				{
+					continue;
+				}
+				else if(land.x1 == otherLand.x1 && land.y1 == otherLand.y1 && land.x2 == otherLand.x2
+						&& land.y2 == otherLand.y2)
+				{
+					return otherLand;
+				}
+				else if(land.x1 == otherLand.x2 && land.y1 == otherLand.y2 && land.x2 == otherLand.x1
+						&& land.y2 == otherLand.y1)
+				{
+					return otherLand;
+				}
+			}
+		}
+		else if(obj instanceof SpawnData)
+		{
+			SpawnData spawn = (SpawnData)obj;
+			for(SpawnData otherSpawn : spawns)
+			{
+				if(spawn.equals(otherSpawn))
+				{
+					continue;
+				}
+				else if(spawn.x == otherSpawn.x && spawn.y == otherSpawn.y)
+				{
+					return otherSpawn;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Reverts the last action.
 	 */
 	public void undo()
 	{
-		if(creationOrder.size() > 0)
+		selectedPoint = null;
+		if(actionOrder.isEmpty() || indices[ACTION] == -1)
 		{
-			selectedPoint = null;
-			Object remove = creationOrder.get(creationOrder.size() - 1);
-			landscape.remove(remove);
-			spawns.remove(remove);
-			creationOrder.remove(remove);
+			return;
+		}
+
+		Action action = actionOrder.get(indices[ACTION]);
+		switch(action)
+		{
+			case ADD:
+				removeFromList(creationOrder.get(indices[CREATION]));
+				break;
+			case REMOVE:
+				addToList(deletionOrder.get(indices[DELETION]));
+				break;
+			case OVERWRITE:
+				overwriteToList(deletionOrder.get(indices[DELETION]), creationOrder.get(indices[CREATION]));
+				break;
+
+		}
+	}
+
+	/**
+	 * Reverts the last undo.
+	 */
+	public void redo()
+	{
+		selectedPoint = null;
+		if(actionOrder.isEmpty() || indices[ACTION] + 1 == actionOrder.size())
+		{
+			return;
+		}
+
+		Action action = actionOrder.get(indices[ACTION] + 1);
+		switch(action)
+		{
+			case ADD:
+				addToList(creationOrder.get(indices[CREATION] + 1));
+				break;
+			case REMOVE:
+				removeFromList(deletionOrder.get(indices[DELETION] + 1));
+				break;
+			case OVERWRITE:
+				overwriteToList(creationOrder.get(indices[CREATION] + 1), deletionOrder.get(indices[DELETION] + 1));
+				break;
 		}
 	}
 
@@ -816,39 +994,30 @@ public class DesignState extends GameState
 	 */
 	public void load()
 	{
-		String exit;
+		String save;
 		do
 		{
-			exit = JOptionPane.showInputDialog("Load another map? (Y / N):");
-			if(exit.equals("Y"))
+			save = JOptionPane.showInputDialog("Save? (Y / N):");
+			if(save.equals("Y"))
 			{
-				String save;
-				do
+				if(!playerSet)
 				{
-					save = JOptionPane.showInputDialog("Save? (Y / N):");
-					if(save.equals("Y"))
-					{
-						if(!playerSet)
-						{
-							JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
-							return;
-						}
-						else if(!objectiveSet)
-						{
-							JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-							return;
-						}
-						else
-						{
-							save();
-						}
-					}
+					JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
+					return;
 				}
-				while(!save.equals("Y") && !save.equals("N"));
-				gsm.setState(GameStateManager.DESIGN);
+				else if(!objectiveSet)
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
+					return;
+				}
+				else
+				{
+					save();
+				}
 			}
 		}
-		while(!exit.equals("Y") && !exit.equals("N"));
+		while(!save.equals("Y") && !save.equals("N"));
+		gsm.setState(GameStateManager.DESIGN);
 	}
 
 	/**
@@ -856,93 +1025,197 @@ public class DesignState extends GameState
 	 */
 	public void exit()
 	{
-		String exit;
+		String save;
 		do
 		{
-			exit = JOptionPane.showInputDialog("Exit? (Y / N):");
-			if(exit.equals("Y"))
+			save = JOptionPane.showInputDialog("Save? (Y / N):");
+			if(save.equals("Y"))
 			{
-				String save;
-				do
+				if(!playerSet)
 				{
-					save = JOptionPane.showInputDialog("Save? (Y / N):");
-					if(save.equals("Y"))
-					{
-						if(!playerSet)
-						{
-							JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
-							return;
-						}
-						else if(!objectiveSet)
-						{
-							JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-							return;
-						}
-						else
-						{
-							save();
-						}
-					}
+					JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
+					return;
 				}
-				while(!save.equals("Y") && !save.equals("N"));
-				gsm.setState(GameStateManager.MENU);
+				else if(!objectiveSet)
+				{
+					JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
+					return;
+				}
+				else
+				{
+					save();
+				}
 			}
 		}
-		while(!exit.equals("Y") && !exit.equals("N"));
+		while(!save.equals("Y") && !save.equals("N"));
+		gsm.setState(GameStateManager.MENU);
 	}
 
 	/**
-	 * Adds the LandData object to the landscape list.
+	 * Adds the Object to its corresponding list.
 	 * 
-	 * @param land The object to be added.
+	 * @param add The object to be added.
 	 */
-	public void addToList(LandData land)
+	public void addToList(Object add)
 	{
-		if(land.x1 % GRID_SCALE == 0 && land.y1 % GRID_SCALE == 0 && land.x2 % GRID_SCALE == 0
-				&& land.y2 % GRID_SCALE == 0)
+		// Overwrite check
+		if(onGrid(add))
 		{
-			if(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] != null)
+			Object overlap = overlapExists(add);
+			if(overlap != null)
 			{
-				landscape
-						.remove(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2
-								/ GRID_SCALE]);
-				creationOrder
-						.remove(landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2
-								/ GRID_SCALE]);
+				overwriteToList(add, overlap);
+				return;
 			}
-			landscape.add(land);
-			creationOrder.add(land);
-			landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] = land;
+			else if(add instanceof LandData)
+			{
+				LandData land = (LandData)add;
+				landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] = land;
+			}
+			else if(add instanceof SpawnData)
+			{
+				SpawnData spawn = (SpawnData)add;
+				spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] = spawn;
+			}
+		}
+
+		if(add instanceof LandData)
+		{
+			landscape.add((LandData)add);
+		}
+		else if(add instanceof SpawnData)
+		{
+			spawns.add((SpawnData)add);
+		}
+		if(selectedTool == UNDO)
+		{
+			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
+			{
+				indices[ACTION]--;
+				indices[DELETION]--;
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
+			{
+				indices[ACTION]++;
+				indices[CREATION]++;
+			}
 		}
 		else
 		{
-			landscape.add(land);
-			creationOrder.add(land);
+			indices[ACTION]++;
+			indices[CREATION]++;
+			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
+			creationOrder.subList(indices[CREATION], creationOrder.size()).clear();
+			actionOrder.add(Action.ADD);
+			creationOrder.add(add);
 		}
 	}
 
 	/**
-	 * Adds the SpawnData object to the spawns list.
+	 * Removes the LandData or SpawnData object from the list.
 	 * 
-	 * @param spawn The object to be added.
+	 * @param remove The object to be removed.
 	 */
-	public void addToList(SpawnData spawn)
+	public void removeFromList(Object remove)
 	{
-		if(spawn.x % GRID_SCALE == 0 && spawn.y % GRID_SCALE == 0)
+		if(onGrid(remove))
 		{
-			if(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] != null)
+			if(remove instanceof LandData)
 			{
-				spawns.remove(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE]);
-				creationOrder.remove(spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE]);
+				LandData land = (LandData)remove;
+				landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] = null;
 			}
-			spawns.add(spawn);
-			creationOrder.add(spawn);
-			spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] = spawn;
+			else if(remove instanceof SpawnData)
+			{
+				SpawnData spawn = (SpawnData)remove;
+				spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] = null;
+			}
+		}
+
+		landscape.remove(remove);
+		spawns.remove(remove);
+		if(selectedTool == UNDO)
+		{
+			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
+			{
+				indices[ACTION]--;
+				indices[CREATION]--;
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
+			{
+				indices[ACTION]++;
+				indices[DELETION]++;
+			}
 		}
 		else
 		{
-			spawns.add(spawn);
-			creationOrder.add(spawn);
+			indices[ACTION]++;
+			indices[DELETION]++;
+			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
+			deletionOrder.subList(indices[DELETION], deletionOrder.size()).clear();
+			actionOrder.add(Action.REMOVE);
+			deletionOrder.add(remove);
+		}
+	}
+
+	/**
+	 * Overwrites the LandData or SpawnData object with another one.
+	 * 
+	 * @param add The object to be added.
+	 * @param remove The object to be removed.
+	 */
+	public void overwriteToList(Object add, Object remove)
+	{
+		if(onGrid(add))
+		{
+			if(add instanceof LandData)
+			{
+				LandData land = (LandData)add;
+				landscapeGrid[land.x1 / GRID_SCALE][land.y1 / GRID_SCALE][land.x2 / GRID_SCALE][land.y2 / GRID_SCALE] = land;
+			}
+			else if(add instanceof SpawnData)
+			{
+				SpawnData spawn = (SpawnData)add;
+				spawnsGrid[spawn.x / GRID_SCALE][spawn.y / GRID_SCALE] = spawn;
+			}
+		}
+
+		landscape.remove(remove);
+		spawns.remove(remove);
+		if(add instanceof LandData)
+		{
+			landscape.add((LandData)add);
+		}
+		else if(add instanceof SpawnData)
+		{
+			spawns.add((SpawnData)add);
+		}
+		if(selectedTool == UNDO)
+		{
+			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
+			{
+				indices[ACTION]--;
+				indices[CREATION]--;
+				indices[DELETION]--;
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
+			{
+				indices[ACTION]++;
+				indices[CREATION]++;
+				indices[DELETION]++;
+			}
+		}
+		else
+		{
+			indices[ACTION]++;
+			indices[CREATION]++;
+			indices[DELETION]++;
+			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
+			creationOrder.subList(indices[CREATION], creationOrder.size()).clear();
+			deletionOrder.subList(indices[DELETION], deletionOrder.size()).clear();
+			actionOrder.add(Action.OVERWRITE);
+			creationOrder.add(add);
+			deletionOrder.add(remove);
 		}
 	}
 
@@ -1027,22 +1300,8 @@ public class DesignState extends GameState
 			{
 				if(line.equals("objectives"))
 				{
-					// TODO Automate
-					switch(type)
-					{
-						case "Battle":
-							string += toJSONString(obj, formatObjective[0]);
-							break;
-						case "Defend":
-							string += toJSONString(obj, formatObjective[1]);
-							break;
-						case "Survival":
-							string += toJSONString(obj, formatObjective[2]);
-							break;
-						case "Travel":
-							string += toJSONString(obj, formatObjective[3]);
-							break;
-					}
+					int objective = Arrays.asList(toolTypes.get(SET_OBJECTIVE)).indexOf(type);
+					string += toJSONString(obj, formatObjective[objective]);
 				}
 				else if(obj.get(line) instanceof JSONArray)
 				{

@@ -21,7 +21,7 @@ public class HUD
 	// Retrieve current class and cooldowns from Data
 	// Timer is in ticks
 	private PlayState playState;
-	private Stage type;
+	private String type;
 	private Data data;
 
 	private Player player;
@@ -30,7 +30,7 @@ public class HUD
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = 135;
 
-	public HUD(PlayState playState, Stage stage)
+	public HUD(PlayState playState, String type)
 	{
 		// Gives the HUD access to other information
 		this.playState = playState;
