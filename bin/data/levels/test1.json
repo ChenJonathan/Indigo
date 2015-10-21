@@ -1,0 +1,16 @@
+{
+    "name":"Test1",
+    "type":"Battle",
+
+    "mapX":2000,
+    "mapY":1000,
+
+    "startingX":1500,
+    "startingY":200,
+
+    "enemiesToDefeat":25,
+
+    "landscape":null,
+
+    "spawns":null
+}

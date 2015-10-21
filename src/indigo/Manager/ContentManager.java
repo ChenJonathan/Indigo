@@ -47,11 +47,16 @@ public class ContentManager
 	public static AnimationData MANA_PICKUP = new AnimationData("/images/items/mana_pickup.png", 100, 100, 1);
 
 	// Menus
+	public static ImageData ARROW_LEFT_ACTIVE = new ImageData("/images/menus/arrow_left_active.png", 60, 110);
+	public static ImageData ARROW_LEFT_INACTIVE = new ImageData("/images/menus/arrow_left_inactive.png", 60, 110);
+	public static ImageData ARROW_RIGHT_ACTIVE = new ImageData("/images/menus/arrow_right_active.png", 60, 110);
+	public static ImageData ARROW_RIGHT_INACTIVE = new ImageData("/images/menus/arrow_right_inactive.png", 60, 110);
 	public static ImageData BACK_BUTTON = new ImageData("/images/menus/back_button.png", 200, 60);
-	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 200, 60);
+	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 175, 70);
 	public static ImageData CREDITS_BACKGROUND = new ImageData("/images/menus/credits_background.png", 1920, 1080);
 	public static ImageData CREDITS_BUTTON = new ImageData("/images/menus/credits.png", 250, 100);
 	public static ImageData CREDITS_BUTTON_HOVER = new ImageData("/images/menus/credits_hover.png", 250, 100);
+	public static ImageData DESCRIPTION_BOX = new ImageData("/images/menus/description_box.png", 300, 405);
 	public static ImageData EXIT_BUTTON_HOVER = new ImageData("/images/menus/exit_hover.png", 130, 100);
 	public static ImageData EXIT_BUTTON = new ImageData("/images/menus/exit.png", 130, 100);
 	public static ImageData GLOW = new ImageData("/images/menus/glow.png", 500, 160);
@@ -66,11 +71,12 @@ public class ContentManager
 	public static ImageData PLAY_BUTTON = new ImageData("/images/menus/play.png", 150, 100);
 	public static ImageData PLAY_BUTTON_HOVER = new ImageData("/images/menus/play_hover.png", 150, 100);
 	public static ImageData SELECT_BAR = new ImageData("/images/menus/select_bar.png", 268, 46);
+	public static ImageData SELECTION_BOX = new ImageData("/images/menus/selection_box.png", 300, 110);
 	public static ImageData STAGE_SELECT_BACKGROUND = new ImageData("/images/menus/stage_select_background.png", 1920,
 			1080);
 	public static ImageData TALENTS_BACKGROUND = new ImageData("/images/menus/talents.png", 1920, 1080);
 	public static ImageData TITLE = new ImageData("/images/menus/title.png", 800, 382);
-	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 90, 990);
+	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 300, 405);
 
 	// Projectiles
 	public static AnimationData ELECTRIC_BALL = new AnimationData("/images/projectiles/electric_ball.png", 100, 100, 1);

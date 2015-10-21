@@ -6,7 +6,9 @@ import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Phase.Phase;
+import indigo.Stage.Stage;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -19,6 +21,7 @@ public class HUD
 	// Retrieve current class and cooldowns from Data
 	// Timer is in ticks
 	private PlayState playState;
+	private Stage type;
 	private Data data;
 
 	private Player player;
@@ -27,10 +30,11 @@ public class HUD
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = 135;
 
-	public HUD(PlayState playState)
+	public HUD(PlayState playState, Stage stage)
 	{
 		// Gives the HUD access to other information
 		this.playState = playState;
+		this.type = type;
 		data = playState.getData();
 
 		player = (Player)playState.getPlayer();
@@ -113,7 +117,25 @@ public class HUD
 					/ playState.getMaxSwapCooldown() * 50));
 		}
 
-		// TODO Draw cooldowns and timer
+		// Draw stage specific information
+		g.setColor(Color.WHITE);
+		g.setStroke(new BasicStroke(4));
+		if(type.equals("Battle"))
+		{
+			g.drawString("Enemies defeated: ", Game.WIDTH - 200, Game.HEIGHT - 10);
+		}
+		else if(type.equals("Defend"))
+		{
+			
+		}
+		else if(type.equals("Survival"))
+		{
+			
+		}
+		else if(type.equals("Travel"))
+		{
+			
+		}
 	}
 
 	public void setPhase(Phase phase)
