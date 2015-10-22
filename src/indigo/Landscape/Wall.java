@@ -28,11 +28,7 @@ public class Wall extends Land
 		name = "a wall";
 
 		// Checks if angle is greater or less than 45 degrees
-		horizontal = false;
-		if(Math.abs(x2 - x1) >= Math.abs(y2 - y1))
-		{
-			horizontal = true;
-		}
+		horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 
 		blocksEntities = true;
 		blocksNonsolidProjectiles = false;

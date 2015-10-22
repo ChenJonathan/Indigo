@@ -76,6 +76,7 @@ public class DesignState extends GameState
 	private int xMargin = 50;
 	private int yMargin = 50;
 
+	// Whether the player and objective is set or not
 	private boolean playerSet = false;
 	private boolean objectiveSet = false;
 
@@ -98,6 +99,7 @@ public class DesignState extends GameState
 	// Tools and tool types - Display text on selection box
 	private HashMap<Integer, String> tools = new HashMap<Integer, String>();
 	private HashMap<Integer, String[]> toolTypes = new HashMap<Integer, String[]>();
+	private HashMap<String, String> descriptionText = new HashMap<String, String>();
 
 	// Used to format the JSON String
 	private String[] formatMaster = {"name", "type", "", "mapX", "mapY", "", "startingX", "startingY", "",
@@ -147,7 +149,7 @@ public class DesignState extends GameState
 		tools.put(SET_INTERACTIVE, "Set Interactive");
 		tools.put(UNDO, "Undo / Redo");
 		tools.put(DELETE, "Delete Tool");
-		tools.put(CLEAR, "Clear Map");
+		tools.put(CLEAR, "Reset / Clear Map");
 		tools.put(SAVE, "Save Map");
 		tools.put(LOAD, "Load Map");
 		tools.put(EXIT, "Exit Level Editor");
@@ -162,9 +164,44 @@ public class DesignState extends GameState
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
 		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
 		toolTypes.put(CLEAR, new String[] {"Reset Map", "Clear Map"});
-		toolTypes.put(SAVE, new String[] {"Save"});
-		toolTypes.put(LOAD, new String[] {"Load"});
-		toolTypes.put(EXIT, new String[] {"Exit"});
+		toolTypes.put(SAVE, new String[] {"Save Map"});
+		toolTypes.put(LOAD, new String[] {"Load Map"});
+		toolTypes.put(EXIT, new String[] {"Exit Level Editor"});
+
+		// Initialize tool hover description text
+		descriptionText.put("Set Player", "Set the player's starting location.");
+		descriptionText.put("Set Objective", "Set the level objective.");
+		descriptionText.put("Set Land", "Create walls or platforms.");
+		descriptionText.put("Set Entity", "Create an entity spawn point.");
+		descriptionText.put("Set Projectile", "Create a projectile spawn point.");
+		descriptionText.put("Set Interactive", "Create an interactive object spawn point.");
+		descriptionText.put("Undo / Redo", "Undo or redo an action.");
+		descriptionText.put("Delete Tool", "Delete an object.");
+		descriptionText.put("Reset / Clear Map", "Reset or clear the level.");
+		descriptionText.put("Save Map", "Save the level.");
+		descriptionText.put("Load Map", "Load a level.");
+		descriptionText.put("Exit Level Editor", "Exit to the main menu.");
+
+		// Initialize tool type description text
+		descriptionText.put("Player", "The player's starting location.");
+		descriptionText.put("Battle", "Defeat a specified number of enemies.");
+		descriptionText.put("Defend", "Defend a core from enemy attack for a specified duration.");
+		descriptionText.put("Survival", "Survive for a specified duration.");
+		descriptionText.put("Travel", "Reach a specified destination.");
+		descriptionText.put("Wall", "An unpassable wall.");
+		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
+		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on.");
+		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
+		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target.");
+		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
+		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
+		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
+		descriptionText.put("Redo", "Reverts the last undo.");
+		descriptionText.put("Delete Land", "Deletes a wall or platform from the map.");
+		descriptionText.put("Delete Spawn", "Deletes an entity, projectile, or interactive object from the map.");
+		descriptionText.put("Reset Map", "Deletes all contents of the map but does not save or modify the file.");
+		descriptionText.put("Clear Map", "Deletes the map from the index and returns to the main menu. "
+				+ "The file still exists but the program will overwrite it automatically.");
 
 		name = JOptionPane.showInputDialog("Map name:");
 
@@ -287,6 +324,9 @@ public class DesignState extends GameState
 		private int x2;
 		private int y2;
 
+		private double slope;
+		private boolean horizontal;
+
 		private LandData(String type, int x1, int y1, int x2, int y2)
 		{
 			super("Land", type);
@@ -294,6 +334,9 @@ public class DesignState extends GameState
 			this.y1 = y1;
 			this.x2 = x2;
 			this.y2 = y2;
+
+			slope = (x2 - x1 == 0)? 999999 : (y2 - y1) / (x2 - x1);
+			horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 		}
 	}
 
@@ -380,7 +423,7 @@ public class DesignState extends GameState
 			g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 		}
 
-		// Draw core (Map type Defend) or destination (Map type Travel)
+		// Draw objectives
 		g.setColor(Color.PINK);
 		if(objectiveSet)
 		{
@@ -452,6 +495,42 @@ public class DesignState extends GameState
 
 		// Draw description box
 		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 635, 300, 405, null);
+
+		// Draw description text
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 32));
+		fontMetrics = g.getFontMetrics();
+		String title;
+		String[] words;
+		int word = 0;
+		if(hoverValue == -1)
+		{
+			title = "Description";
+			words = descriptionText.get(toolTypes.get(selectedTool)[selectedToolType]).split(" ");
+		}
+		else
+		{
+			title = tools.get(hoverValue);
+			words = descriptionText.get(tools.get(hoverValue)).split(" ");
+		}
+		g.drawString(title, 1730 - fontMetrics.stringWidth(title) / 2, 655 + fontMetrics.getHeight() / 2);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		fontMetrics = g.getFontMetrics();
+		int lineY = 700 + fontMetrics.getHeight() / 2;
+		while(word < words.length)
+		{
+			String line = "";
+			int lineWidth = 0;
+
+			while(word < words.length && lineWidth + fontMetrics.stringWidth(" " + words[word]) < 280)
+			{
+				line += " " + words[word];
+				lineWidth = fontMetrics.stringWidth(line);
+				word++;
+			}
+
+			g.drawString(line, 1590, lineY);
+			lineY += fontMetrics.getHeight() / 2 + 10;
+		}
 
 		// Draw confirm button
 		if(confirmBox)
@@ -698,7 +777,8 @@ public class DesignState extends GameState
 
 	public void selectTool(int tool)
 	{
-		if(selectedTool == SET_OBJECTIVE && !objectiveSet) // TODO May or may not be temporary
+		// TODO May or may not be temporary
+		if(selectedTool == SET_OBJECTIVE && !objectiveSet)
 		{
 			return;
 		}
