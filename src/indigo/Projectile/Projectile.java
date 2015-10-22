@@ -76,6 +76,44 @@ public abstract class Projectile implements Respawnable
 		animation = new Animation();
 	}
 
+	public Projectile(Stage stage, double x, double y, double velX, double velY, int dmg)
+	{
+		this.stage = getStage();
+
+		this.x = x;
+		this.y = y;
+		this.velX = velX;
+		this.velY = velY;
+
+		prevX = x - velX;
+		prevY = y - velY;
+		travel = new Line2D.Double(prevX, prevY, x, y);
+
+		facingRight = (velX > 0);
+
+		if(velX < -Stage.TERMINAL_VELOCITY)
+		{
+			velX = -Stage.TERMINAL_VELOCITY;
+		}
+		else if(velX > Stage.TERMINAL_VELOCITY)
+		{
+			velX = Stage.TERMINAL_VELOCITY;
+		}
+
+		damage = dmg; // TODO Modify based on player level
+
+		if(creator != null)
+		{
+			friendly = creator.isFriendly();
+		}
+		else
+		{
+			friendly = false;
+		}
+
+		animation = new Animation();
+	}
+
 	protected void setAnimation(int count, BufferedImage[] images, int delay)
 	{
 		currentAnimation = count;
@@ -168,6 +206,7 @@ public abstract class Projectile implements Respawnable
 		return creator;
 	}
 
+	// Override if using second constructor
 	public String getName()
 	{
 		return creator.getName();

@@ -100,7 +100,7 @@ public class Game extends JPanel implements Runnable
 				skips++;
 				if((ticks + skips) == FPS)
 				{
-					System.out.println("FPS: " + ticks);
+					System.out.println("Frames Per Second: " + ticks);
 					ticks = skips = 0;
 				}
 			}
@@ -117,7 +117,7 @@ public class Game extends JPanel implements Runnable
 			ticks++;
 			if((ticks + skips) == FPS)
 			{
-				System.out.println("FPS: " + ticks);
+				System.out.println("Frames Per Second: " + ticks);
 				ticks = skips = 0;
 			}
 		}

@@ -63,8 +63,7 @@ public class PlayState extends GameState
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
 
 		// Initialize stage
-		type = data.getStage().get("type") + "";
-		switch(type)
+		switch(data.getStage().get("type") + "")
 		{
 			case "Battle":
 				stage = new BattleStage(this, data.getStage());
@@ -95,7 +94,7 @@ public class PlayState extends GameState
 		player.setPhase(activePhase);
 
 		// Initialize display
-		display = new HUD(this, type);
+		display = new HUD(this, stage);
 		display.setPhase(activePhase);
 
 		// Initialize timer

@@ -38,7 +38,6 @@ public class TravelStage extends Stage
 				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try
 		{
@@ -50,6 +49,7 @@ public class TravelStage extends Stage
 		{
 			e.printStackTrace();
 		}
+		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 
 		int destinationX = (int)(long)json.get("destinationX");
 		int destinationY = (int)(long)json.get("destinationY");
@@ -124,6 +124,16 @@ public class TravelStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+	}
+	
+	public Destination getDestination()
+	{
+		return destination;
+	}
+	
+	public int getTimeLimit()
+	{
+		return timeLimit;
 	}
 
 	public void createLand(JSONObject info)

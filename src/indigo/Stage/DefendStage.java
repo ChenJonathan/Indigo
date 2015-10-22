@@ -24,7 +24,7 @@ public class DefendStage extends Stage
 {
 	private Core core;
 
-	private int survivalTime;
+	private int survivalDuration;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
@@ -38,7 +38,6 @@ public class DefendStage extends Stage
 				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try
 		{
@@ -50,10 +49,11 @@ public class DefendStage extends Stage
 		{
 			e.printStackTrace();
 		}
+		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 
 		core = new Core(this, (int)(long)json.get("coreX"), (int)(long)json.get("coreY"), Core.BASE_HEALTH);
 		entities.add(1, core);
-		survivalTime = (int)(long)json.get("survivalTime");
+		survivalDuration = (int)(long)json.get("survivalDuration");
 
 		// Bounding walls
 		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
@@ -99,7 +99,7 @@ public class DefendStage extends Stage
 			playState.endGame(false);
 		}
 
-		if(playState.getTime() == survivalTime)
+		if(playState.getTime() == survivalDuration)
 		{
 			data.setVictory(true);
 		}
@@ -136,6 +136,21 @@ public class DefendStage extends Stage
 		{
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
+	}
+	
+	public int getCoreHealth()
+	{
+		return core.getHealth();
+	}
+	
+	public int getCoreMaxHealth()
+	{
+		return core.getMaxHealth();
+	}
+	
+	public int getSurvivalDuration()
+	{
+		return survivalDuration;
 	}
 
 	public Entity getPlayer()

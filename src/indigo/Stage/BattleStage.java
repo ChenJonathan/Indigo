@@ -23,8 +23,8 @@ public class BattleStage extends Stage
 {
 	private Entity lastEnemy;
 
-	private int enemiesToKill;
-	private int enemiesKilled = 0;
+	private int enemiesToDefeat;
+	private int enemiesDefeated = 0;
 
 	private Respawnable[] respawnables;
 	private JSONObject[] respawnInfo;
@@ -38,7 +38,6 @@ public class BattleStage extends Stage
 				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try
 		{
@@ -50,8 +49,9 @@ public class BattleStage extends Stage
 		{
 			e.printStackTrace();
 		}
+		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 
-		enemiesToKill = (int)(long)json.get("enemiesToDefeat");
+		enemiesToDefeat = (int)(long)json.get("enemiesToDefeat");
 
 		// Bounding walls
 		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
@@ -126,14 +126,24 @@ public class BattleStage extends Stage
 		}
 		else if(killed.isMarked())
 		{
-			enemiesKilled++;
-			System.out.println("Enemies killed: " + enemiesKilled);
+			enemiesDefeated++;
+			System.out.println("Enemies killed: " + enemiesDefeated);
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
-		if(enemiesKilled >= enemiesToKill)
+		if(enemiesDefeated >= enemiesToDefeat)
 		{
 			lastEnemy = killed;
 		}
+	}
+
+	public int getEnemiesDefeated()
+	{
+		return enemiesDefeated;
+	}
+
+	public int getEnemiesToDefeat()
+	{
+		return enemiesToDefeat;
 	}
 
 	public void createLand(JSONObject info)

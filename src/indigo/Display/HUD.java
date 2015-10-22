@@ -6,7 +6,11 @@ import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Phase.Phase;
+import indigo.Stage.BattleStage;
+import indigo.Stage.DefendStage;
 import indigo.Stage.Stage;
+import indigo.Stage.SurvivalStage;
+import indigo.Stage.TravelStage;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -21,28 +25,36 @@ public class HUD
 	// Retrieve current class and cooldowns from Data
 	// Timer is in ticks
 	private PlayState playState;
-	private String type;
+	private Stage stage;
 	private Data data;
 
 	private Player player;
 	private Phase phase;
 
+	private double health;
+	private double mana;
+	
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = 135;
 
-	public HUD(PlayState playState, String type)
+	public HUD(PlayState playState, Stage stage)
 	{
 		// Gives the HUD access to other information
 		this.playState = playState;
-		this.type = type;
+		this.stage = stage;
 		data = playState.getData();
 
 		player = (Player)playState.getPlayer();
+		
+		health = player.getHealth();
+		mana = player.getMana();
 	}
 
 	public void update()
 	{
-		// Consider doing Zeno's Paradox stuff for cool heal/mana effect
+		// Updates health and mana at a gradual rate for visual effect
+		health = (health * 2 + player.getHealth()) / 3;
+		mana = (mana * 2 + player.getMana()) / 3;
 	}
 
 	public void render(Graphics2D g)
@@ -53,9 +65,9 @@ public class HUD
 		g.setColor(Color.BLACK);
 		g.fill(new Rectangle2D.Double(0, Game.HEIGHT - HEIGHT, WIDTH, HEIGHT));
 		g.setColor(Color.RED);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, player.getHealth(), 11));
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, health, 11));
 		g.setColor(Color.BLUE);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, player.getMana(), 11));
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, mana, 11));
 
 		// TODO Draw the experience bar
 
@@ -119,22 +131,33 @@ public class HUD
 
 		// Draw stage specific information
 		g.setColor(Color.WHITE);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 		g.setStroke(new BasicStroke(4));
-		if(type.equals("Battle"))
+		if(stage instanceof BattleStage)
 		{
-			g.drawString("Enemies defeated: ", Game.WIDTH - 200, Game.HEIGHT - 10);
+			BattleStage battleStage = (BattleStage)stage;
+			g.drawString("Enemies defeated: " + battleStage.getEnemiesDefeated(), Game.WIDTH - 250, Game.HEIGHT - 70);
+			g.drawString("Enemies to defeat: " + battleStage.getEnemiesToDefeat(), Game.WIDTH - 250, Game.HEIGHT - 40);
 		}
-		else if(type.equals("Defend"))
+		else if(stage instanceof DefendStage)
 		{
-			
+			DefendStage defendStage = (DefendStage)stage;
+			g.drawString("Core health: " + defendStage.getCoreHealth() + " / " + defendStage.getCoreMaxHealth(),
+					Game.WIDTH - 250, Game.HEIGHT - 70);
+			g.drawString("Time remaining: " + ((defendStage.getSurvivalDuration() - playState.getTime()) / 30),
+					Game.WIDTH - 250, Game.HEIGHT - 40);
 		}
-		else if(type.equals("Survival"))
+		else if(stage instanceof SurvivalStage)
 		{
-			
+			SurvivalStage survivalStage = (SurvivalStage)stage;
+			g.drawString("Time remaining: " + ((survivalStage.getSurvivalDuration() - playState.getTime()) / 30),
+					Game.WIDTH - 250, Game.HEIGHT - 40);
 		}
-		else if(type.equals("Travel"))
+		else if(stage instanceof TravelStage)
 		{
-			
+			TravelStage travelStage = (TravelStage)stage;
+			g.drawString("Time remaining: " + ((travelStage.getTimeLimit() - playState.getTime()) / 30),
+					Game.WIDTH - 250, Game.HEIGHT - 40);
 		}
 	}
 

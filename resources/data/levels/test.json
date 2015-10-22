@@ -1,0 +1,31 @@
+{
+    "name":"Test",
+    "type":"Battle",
+
+    "mapX":12000,
+    "mapY":8000,
+
+    "startingX":4800,
+    "startingY":3700,
+
+    "enemiesToDefeat":25,
+
+    "landscape":[
+        {"type":"Wall", "x1":3700, "y1":4200, "x2":5500, "y2":3900}
+        {"type":"Wall", "x1":5500, "y1":3900, "x2":7700, "y2":2400}
+        {"type":"Wall", "x1":7700, "y1":2400, "x2":9900, "y2":3700}
+        {"type":"Wall", "x1":9900, "y1":3700, "x2":10600, "y2":3000}
+        {"type":"Platform", "x1":11700, "y1":4200, "x2":9600, "y2":4600}
+        {"type":"Platform", "x1":9600, "y1":4600, "x2":7800, "y2":3800}
+        {"type":"Platform", "x1":7800, "y1":3800, "x2":5800, "y2":5300}
+        {"type":"Platform", "x1":5800, "y1":5300, "x2":4200, "y2":5200}
+        {"type":"Platform", "x1":4200, "y1":5200, "x2":2400, "y2":4600}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Turret", "x":7800, "y":3600, "respawnTime":200}
+        {"category":"Projectile", "type":"Steel Beam", "x":5000, "y":3200, "respawnTime":1}
+        {"category":"Projectile", "type":"Steel Beam", "x":5100, "y":3200, "respawnTime":1}
+        {"category":"Projectile", "type":"Steel Beam", "x":5200, "y":3200, "respawnTime":1}
+    ]
+}

@@ -35,7 +35,6 @@ public class SurvivalStage extends Stage
 				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
-		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try
 		{
@@ -47,6 +46,7 @@ public class SurvivalStage extends Stage
 		{
 			e.printStackTrace();
 		}
+		setOffsets((int)(long)json.get("mapX"), (int)(long)json.get("mapY"));
 
 		survivalDuration = (int)(long)json.get("survivalDuration");
 
@@ -113,6 +113,11 @@ public class SurvivalStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+	}
+	
+	public int getSurvivalDuration()
+	{
+		return survivalDuration;
 	}
 
 	public void createLand(JSONObject info)

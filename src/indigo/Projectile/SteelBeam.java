@@ -6,6 +6,7 @@ import java.awt.geom.Rectangle2D;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
+import indigo.Stage.Stage;
 
 public class SteelBeam extends Projectile
 {
@@ -16,10 +17,15 @@ public class SteelBeam extends Projectile
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 50;
-
-	public SteelBeam(Entity entity, double x, double y, double velX, double velY, int dmg)
+	
+	public SteelBeam(Stage stage, double x, double y)
 	{
-		super(entity, x, y, velX, velY, dmg);
+		this(stage, x, y, 0, 0, DAMAGE);
+	}
+	
+	public SteelBeam(Stage stage, double x, double y, double velX, double velY, int dmg)
+	{
+		super(stage, x, y, velX, velY, dmg);
 		width = WIDTH;
 		height = HEIGHT;
 		solid = true;
@@ -35,6 +41,7 @@ public class SteelBeam extends Projectile
 	public void render(Graphics2D g)
 	{
 		// TODO: Animation stuff
+		g.fillRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight());
 	}
 	
 	public Shape getHitbox()
@@ -63,13 +70,5 @@ public class SteelBeam extends Projectile
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH; // TODO: Fix if more animations are added
-	}
-	
-	public void die()
-	{
-		setVelX(0);
-		setVelY(0);
-		
-		// TODO: Animation stuff
 	}
 }

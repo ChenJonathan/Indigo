@@ -1,0 +1,19 @@
+{
+    "name":"Map",
+    "type":"Defend",
+
+    "mapX":1200,
+    "mapY":800,
+
+    "startingX":600,
+    "startingY":300,
+
+    "coreX":800,
+    "coreY":400,
+
+    "survivalDuration":25,
+
+    "landscape":null,
+
+    "spawns":null
+}

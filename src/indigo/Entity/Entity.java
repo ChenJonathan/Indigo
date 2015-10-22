@@ -234,7 +234,7 @@ public abstract class Entity implements Respawnable
 		{
 			intersects = wall.getLine().ptSegDist(getX(), getY()) < getHeight() / 2;
 		}
-		
+
 		// In case entities are spawned directly on top of walls
 		if(stage.getTime() != 0)
 		{
@@ -267,7 +267,7 @@ public abstract class Entity implements Respawnable
 	}
 
 	// Used for entity-platform collision - Utilizes previous entity feet position
-	public boolean feetIsAbovePlatform(Platform platform)
+	public boolean feetAbovePlatform(Platform platform)
 	{
 		double deltaX = platform.getLine().getP2().getX() - platform.getLine().getP1().getX();
 		// Formula to calculate if a point is located above the platform.getLine()

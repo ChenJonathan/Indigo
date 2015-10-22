@@ -14,6 +14,7 @@ import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -211,7 +212,7 @@ public abstract class Stage
 				{
 					if(inProximity(ent, plat))
 					{
-						if(feetTravel.intersectsLine(plat.getLine()) && ent.feetIsAbovePlatform(plat))
+						if(feetTravel.intersectsLine(plat.getLine()) && ent.feetAbovePlatform(plat))
 						{
 							ground = plat;
 							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
@@ -284,7 +285,7 @@ public abstract class Stage
 								}
 							}
 							// Upward collision into wall
-							else
+							else if(!ent.isGrounded())
 							{
 								while(ent.intersects(intersectedWall))
 								{
@@ -598,8 +599,8 @@ public abstract class Stage
 		maxOffsetY = mapY - (Game.HEIGHT - HUD.HEIGHT);
 		minOffsetX = 0;
 		minOffsetY = 0;
-		this.backX = Game.WIDTH + (maxOffsetX - minOffsetX) / 10;
-		this.backY = Game.HEIGHT + (maxOffsetY - minOffsetY) / 10;
+		backX = Game.WIDTH + (maxOffsetX - minOffsetX) / 10;
+		backY = Game.HEIGHT + (maxOffsetY - minOffsetY) / 10;
 
 		camForeX = (int)player.getX() - Game.WIDTH / 2;
 		camForeY = (int)player.getY() - Game.HEIGHT / 2;
@@ -621,6 +622,15 @@ public abstract class Stage
 		}
 		camBackX = (int)(((double)backX - Game.WIDTH) * camForeX / maxOffsetX);
 		camBackY = (int)(((double)backY - Game.HEIGHT) * camForeY / maxOffsetY);
+
+		// TODO Reconsider
+		// Scales background image based on map size
+		BufferedImage scaledBackground = new BufferedImage(backX, backY, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics2D = scaledBackground.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(background, 0, 0, backX, backY, null);
+		background = scaledBackground;
+
 	}
 
 	public void toggleCam()
