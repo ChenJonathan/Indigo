@@ -97,6 +97,9 @@ public class ContentManager
 	public static AnimationData WATER_BOLT = new AnimationData("/images/projectiles/water_bolt/default.png", 80, 73, 2);
 
 	// Sprites
+	public static ImageData FLYING_BOT_CANNON = new ImageData("/images/sprites/flying_bot/cannon.png", 18, 11);
+	public static AnimationData FLYING_BOT_DEATH = new AnimationData("/images/sprites/flying_bot/death.png", 60, 60, 6);
+	public static AnimationData FLYING_BOT_IDLE = new AnimationData("/images/sprites/flying_bot/idle.png", 60, 60, 4);
 	public static AnimationData PLAYER_BLOCK_LEFT = new AnimationData("/images/sprites/player/block_left.png", 68, 111,
 			1);
 	public static AnimationData PLAYER_BLOCK_RIGHT = new AnimationData("/images/sprites/player/block_right.png", 68,
@@ -139,11 +142,10 @@ public class ContentManager
 			8);
 	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
-	public static ImageData BOT_CANNON = new ImageData("/images/sprites/bot/cannon.png", 18, 11);
-	public static AnimationData BOT_DEATH = new AnimationData("/images/sprites/bot/death.png", 60, 60, 6);
-	public static AnimationData BOT_IDLE = new AnimationData("/images/sprites/bot/idle.png", 60, 60, 4);
-	public static AnimationData TURRET_DEATH = new AnimationData("/images/sprites/turret_death.png", 100, 130, 31);
-	public static AnimationData TURRET_IDLE = new AnimationData("/images/sprites/turret_idle.png", 100, 130, 1);
+	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130, 110, 7);
+	public static AnimationData TURRET_BASE_DEFAULT = new AnimationData("/images/sprites/turret/base_default.png", 130, 110, 1);
+	public static AnimationData TURRET_CANNON_DEATH = new AnimationData("/images/sprites/turret/cannon_death.png", 130, 130, 7);
+	public static AnimationData TURRET_CANNON_DEFAULT = new AnimationData("/images/sprites/turret/cannon_default.png", 130, 130, 1);
 
 	// Stages
 	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);

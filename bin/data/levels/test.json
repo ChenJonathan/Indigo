@@ -1,0 +1,30 @@
+{
+    "name":"Test",
+    "type":"Battle",
+
+    "mapX":6000,
+    "mapY":4000,
+
+    "startingX":3100,
+    "startingY":1800,
+
+    "enemiesToDefeat":25,
+
+    "landscape":[
+        {"type":"Wall", "x1":2700, "y1":1500, "x2":2700, "y2":2100}
+        {"type":"Wall", "x1":2700, "y1":2100, "x2":3400, "y2":2100}
+        {"type":"Wall", "x1":3400, "y1":2100, "x2":3400, "y2":1500}
+        {"type":"Platform", "x1":2700, "y1":1500, "x2":3400, "y2":1500}
+        {"type":"Wall", "x1":3900, "y1":2000, "x2":3500, "y2":2400}
+        {"type":"Wall", "x1":3300, "y1":2400, "x2":2700, "y2":2400}
+        {"type":"Wall", "x1":2400, "y1":2300, "x2":1800, "y2":1800}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Turret", "x":2000, "y":2100, "respawnTime":50}
+        {"category":"Entity", "type":"Turret", "x":1700, "y":1700, "respawnTime":50}
+        {"category":"Entity", "type":"Turret", "x":2600, "y":1700, "respawnTime":50}
+        {"category":"Entity", "type":"Turret", "x":3000, "y":2300, "respawnTime":50}
+        {"category":"Entity", "type":"Turret", "x":3500, "y":2200, "respawnTime":50}
+    ]
+}

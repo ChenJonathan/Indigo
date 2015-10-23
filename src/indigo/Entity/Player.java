@@ -64,7 +64,7 @@ public class Player extends Entity
 	// Stamina costs - Crouch stamina is the minimum stamina required to start crouching
 	public static final int CROUCH_STAMINA_COST = 1;
 	public static final int CROUCH_STAMINA_REQUIREMENT = 25;
-	public static final int SHIFT_STAMINA_COST = 25;
+	public static final int SHIFT_STAMINA_COST = 33;
 
 	// Amount regenerated
 	public static final int HEALTH_REGEN = 1;

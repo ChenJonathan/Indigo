@@ -172,7 +172,7 @@ public class IceChainHook extends Projectile
 						if(!intersectedWall.isHorizontal())
 						{
 							// Leftward collision into wall
-							if(attached.isRightOfWall(intersectedWall))
+							if(attached.isRightOfLand(intersectedWall))
 							{
 								while(attached.intersects(intersectedWall))
 								{
@@ -193,7 +193,7 @@ public class IceChainHook extends Projectile
 						else
 						{
 							// Downward collision into wall
-							if(attached.isAboveWall(intersectedWall))
+							if(attached.isAboveLand(intersectedWall))
 							{
 								while(attached.intersects(intersectedWall))
 								{

@@ -26,7 +26,8 @@ public class Game extends JPanel implements Runnable
 	public static final int CURSOR_WIDTH = 32;
 	public static final int CURSOR_HEIGHT = 32;
 
-	public final int FPS = 30;
+	public static final int FPS = 30;
+	
 	private final int TARGET_TIME = 1000 / FPS;
 	private Thread thread;
 	private boolean running = false;
@@ -100,7 +101,7 @@ public class Game extends JPanel implements Runnable
 				skips++;
 				if((ticks + skips) == FPS)
 				{
-					System.out.println("Frames Per Second: " + ticks);
+					System.out.println("FPS: " + ticks);
 					ticks = skips = 0;
 				}
 			}
@@ -117,7 +118,7 @@ public class Game extends JPanel implements Runnable
 			ticks++;
 			if((ticks + skips) == FPS)
 			{
-				System.out.println("Frames Per Second: " + ticks);
+				System.out.println("FPS: " + ticks);
 				ticks = skips = 0;
 			}
 		}

@@ -21,7 +21,8 @@ public class IceSword extends Weapon
 	private double swordAngle;
 	private double angleOffset;
 	private boolean slashMode = false;
-	private final double slashAngle = 120.0;
+
+	private final double SLASH_ANGLE = 120.0;
 
 	private int beginSwordX = 0;
 	private int beginSwordY = 0;
@@ -151,11 +152,11 @@ public class IceSword extends Weapon
 			if((swordAngle >= 0 && swordAngle < (Math.PI / 2))
 					|| (swordAngle > Math.PI && swordAngle < (3 * Math.PI) / 2))
 			{
-				angleOffset = (slashAngle / 2) - (slashAngle * attackTime) / SLASH_DURATION;
+				angleOffset = (SLASH_ANGLE / 2) - (SLASH_ANGLE * attackTime) / SLASH_DURATION;
 			}
 			else
 			{
-				angleOffset = -(slashAngle / 2) + (slashAngle * attackTime) / SLASH_DURATION;
+				angleOffset = -(SLASH_ANGLE / 2) + (SLASH_ANGLE * attackTime) / SLASH_DURATION;
 			}
 			angleOffset = Math.toRadians(angleOffset);
 		}
@@ -173,7 +174,7 @@ public class IceSword extends Weapon
 		double renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
 				|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
 				% Math.PI + Math.PI;
-		
+
 		// If Ice Chains is active but mouse is on other side of player
 		if(!attacking && user.isFacingRight() != stage.getMouseX() > user.getX())
 		{

@@ -1,27 +1,39 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
+import indigo.Landscape.Wall;
+import indigo.Manager.Animation;
 import indigo.Manager.ContentManager;
 import indigo.Projectile.Mortar;
 import indigo.Stage.Stage;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class Turret extends Entity
 {
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
+	private int timer;
+
 	private double angle;
+	private double groundAngle;
+
+	private boolean hide;
+
+	private Animation animationCannon;
 
 	public static final double TURRET_WIDTH = 100;
 	public static final double TURRET_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;
-	
+	public static final int FIRE_RATE = 60;
+
 	public Turret(Stage stage, double x, double y)
 	{
 		this(stage, x, y, BASE_HEALTH);
@@ -36,14 +48,66 @@ public class Turret extends Entity
 		height = TURRET_HEIGHT;
 
 		pushability = 0;
-		flying = false;
+		flying = true;
 		frictionless = false;
 
 		friendly = false;
 
+		timer = 0;
+
 		angle = Math.PI / 2;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_IDLE), -1);
+		animationCannon = new Animation();
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
+		setAnimationCannon(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_CANNON_DEFAULT), -1);
+
+		// Finding closest wall
+		double minDistance = 500;
+		Land closestLand = null;
+		for(Wall wall : stage.getWalls())
+		{
+			double distance = wall.getLine().ptSegDist(x, y);
+			if(distance < minDistance)
+			{
+				minDistance = distance;
+				closestLand = wall;
+			}
+		}
+		for(Platform plat : stage.getPlatforms())
+		{
+			double distance = plat.getLine().ptSegDist(x, y);
+			if(distance < minDistance)
+			{
+				minDistance = distance;
+				closestLand = plat;
+			}
+		}
+
+		if(closestLand == null)
+		{
+			hide = true;
+		}
+		else
+		{
+			groundAngle = Math.atan(-1 / closestLand.getSlope());
+			if(closestLand.getLine().ptSegDist(x + Math.cos(groundAngle), y + Math.sin(groundAngle)) > minDistance)
+			{
+				groundAngle += Math.PI;
+			}
+
+			Point2D.Double intersection = closestLand.getIntersection(new Line2D.Double(getX(), getY(), getX()
+					+ (minDistance + getHeight()) * Math.cos(groundAngle), getY() + (minDistance + getHeight())
+					* Math.sin(groundAngle)));
+
+			setX(intersection.getX() - Math.cos(groundAngle) * getHeight() / 2);
+			setY(intersection.getY() - Math.sin(groundAngle) * getHeight() / 2);
+
+			// Check if turret is on wall
+			if(closestLand.getLine().ptSegDist(intersection) > 1)
+			{
+				hide = true;
+			}
+		}
 	}
 
 	public void update()
@@ -51,6 +115,7 @@ public class Turret extends Entity
 		if(currentAnimation == DEATH)
 		{
 			super.update();
+			animationCannon.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;
@@ -58,17 +123,28 @@ public class Turret extends Entity
 			return;
 		}
 
+		if(hide)
+		{
+			stage.getEntities().remove(this);
+		}
+
+		timer = (timer == 0)? 0 : timer - 1;
+
 		super.update();
+		animationCannon.update();
 
 		if(canAttack() && inRange())
 		{
 			double optimalAngle = getOptimalAngle();
 			double deltaAngle = optimalAngle - angle;
 
-			if(Math.abs(deltaAngle) <= Math.PI / 18)
+			if(Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
 			{
 				angle = optimalAngle;
-				attack();
+				if(Math.random() < 0.4)
+				{
+					attack();
+				}
 			}
 			else
 			{
@@ -98,19 +174,31 @@ public class Turret extends Entity
 
 	public void render(Graphics2D g)
 	{
+		// Rotation breaks if x is negative
+		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)(getWidth()), (int)(getHeight()), null);
+				(int)getWidth(), (int)getHeight(), null);
+		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
 
-		// Draws a simple line representing the turret arm // TODO Temporary
-		g.setColor(Color.RED);
-		g.setStroke(new BasicStroke(3));
-		g.drawLine((int)getX(), (int)getY(), (int)(getX() + 50 * Math.cos(angle)), (int)(getY() - 50 * Math.sin(angle)));
+		// Drawing cannon
+		if(getX() > 0 && getX() < stage.getMapX())
+		{
+			g.rotate(-angle + Math.PI / 2, getX(), getY());
+			if(currentAnimation == DEATH)
+			{
+				g.drawImage(animationCannon.getImage(), (int)(getX() - 65), (int)(getY() - 65), 130, 130, null);
+			}
+			else
+			{
+				g.drawImage(animationCannon.getImage(), (int)(getX() - 65), (int)(getY() - 65), 130, 130, null);
+			}
+			g.rotate(angle - Math.PI / 2, getX(), getY());
+		}
 	}
 
 	public void attack()
 	{
-		if(stage.getTime() % 50 == 0) // TODO Change to be more similar to
-										// player firing
+		if(stage.getTime() % 50 == 0) // TODO Change to be more similar to player firing
 		{
 			double velX = Mortar.SPEED * Math.cos(angle);
 			double velY = Mortar.SPEED * -Math.sin(angle);
@@ -190,14 +278,9 @@ public class Turret extends Entity
 		return optimalAngle;
 	}
 
-	public double getAngle()
-	{
-		return angle;
-	}
-
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - 32, getY() - 32, 64, 64);
 	}
 
 	public boolean isActive()
@@ -205,23 +288,19 @@ public class Turret extends Entity
 		return currentAnimation != DEATH;
 	}
 
-	public void setGround(Land ground)
-	{
-		super.setGround(ground);
-		canAttack(true);
-	}
-
-	public void removeGround()
-	{
-		super.removeGround();
-		canAttack(false);
-	}
-
 	public void die()
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_DEATH), 2);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEATH), 1);
+			setAnimationCannon(DEATH, ContentManager.getAnimation(ContentManager.TURRET_CANNON_DEATH), 1);
 		}
+	}
+
+	// Method used to change animation
+	private void setAnimationCannon(int count, BufferedImage[] images, int delay)
+	{
+		animationCannon.setFrames(images);
+		animationCannon.setDelay(delay);
 	}
 }

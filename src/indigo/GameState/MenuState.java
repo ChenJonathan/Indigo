@@ -178,7 +178,7 @@ public class MenuState extends GameState implements ActionListener
 				{
 					JSONObject index = ContentManager.load("/index.json");
 					String[] levels = (String[])index.keySet().toArray(new String[0]);
-					JComboBox levelSelect = new JComboBox(levels);
+					JComboBox<String> levelSelect = new JComboBox<String>(levels);
 					levelSelect.addActionListener(this);
 					
 					frame = new JFrame("");
@@ -269,7 +269,7 @@ public class MenuState extends GameState implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		JComboBox levelSelect = (JComboBox)e.getSource();
+		JComboBox<String> levelSelect = (JComboBox<String>)e.getSource();
 		String level = (String)levelSelect.getSelectedItem();
 		level = level.replace(" ","_").toLowerCase();
 		if(!level.equals(""))

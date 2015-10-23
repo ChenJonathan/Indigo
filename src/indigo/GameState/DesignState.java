@@ -73,6 +73,7 @@ public class DesignState extends GameState
 	private int selectedPointRadius; // Radius of selected point
 	private int spawnRadius; // Radius of respawnable visual
 
+	// Map margins
 	private int xMargin = 50;
 	private int yMargin = 50;
 
@@ -152,7 +153,7 @@ public class DesignState extends GameState
 		tools.put(CLEAR, "Reset / Clear Map");
 		tools.put(SAVE, "Save Map");
 		tools.put(LOAD, "Load Map");
-		tools.put(EXIT, "Exit Level Editor");
+		tools.put(EXIT, "Exit");
 
 		// Initialize tool types
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
@@ -166,7 +167,7 @@ public class DesignState extends GameState
 		toolTypes.put(CLEAR, new String[] {"Reset Map", "Clear Map"});
 		toolTypes.put(SAVE, new String[] {"Save Map"});
 		toolTypes.put(LOAD, new String[] {"Load Map"});
-		toolTypes.put(EXIT, new String[] {"Exit Level Editor"});
+		toolTypes.put(EXIT, new String[] {"Exit"});
 
 		// Initialize tool hover description text
 		descriptionText.put("Set Player", "Set the player's starting location.");
@@ -180,7 +181,7 @@ public class DesignState extends GameState
 		descriptionText.put("Reset / Clear Map", "Reset or clear the level.");
 		descriptionText.put("Save Map", "Save the level.");
 		descriptionText.put("Load Map", "Load a level.");
-		descriptionText.put("Exit Level Editor", "Exit to the main menu.");
+		descriptionText.put("Exit", "Exit to the main menu.");
 
 		// Initialize tool type description text
 		descriptionText.put("Player", "The player's starting location.");
@@ -192,7 +193,8 @@ public class DesignState extends GameState
 		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
 		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on.");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
-		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target.");
+		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target. "
+				+ "Attaches itself to the nearest wall or platform upon map creation.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
@@ -335,7 +337,7 @@ public class DesignState extends GameState
 			this.x2 = x2;
 			this.y2 = y2;
 
-			slope = (x2 - x1 == 0)? 999999 : (y2 - y1) / (x2 - x1);
+			slope = (y2 - y1) / ((x2 - x1) == 0? 0.0000001 : (x2 - x1));
 			horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 		}
 	}
@@ -694,7 +696,7 @@ public class DesignState extends GameState
 		}
 		else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 		{
-			int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In frames):"));
+			int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In seconds):")) * Game.FPS;
 			String category = "";
 			switch(selectedTool)
 			{
@@ -812,17 +814,18 @@ public class DesignState extends GameState
 						break;
 					case "Defend":
 						int survivalDuration = Integer.parseInt(JOptionPane
-								.showInputDialog("Survival duration (In frames):"));
+								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
 						json.put("survivalDuration", survivalDuration);
 						break;
 					case "Survival":
 						survivalDuration = Integer.parseInt(JOptionPane
-								.showInputDialog("Survival duration (In frames):"));
+								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
 						json.put("survivalDuration", survivalDuration);
 						objectiveSet = true;
 						break;
 					case "Travel":
-						int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In frames):"));
+						int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In seconds):"))
+								* Game.FPS;
 						json.put("timeLimit", timeLimit);
 						break;
 				}

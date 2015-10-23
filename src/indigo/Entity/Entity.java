@@ -2,7 +2,6 @@ package indigo.Entity;
 
 import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
-import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
@@ -245,36 +244,36 @@ public abstract class Entity implements Respawnable
 	}
 
 	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isRightOfWall(Wall wall)
+	public boolean isRightOfLand(Land land)
 	{
-		double deltaY = wall.getLine().getP2().getY() - wall.getLine().getP1().getY();
+		double deltaY = land.getLine().getP2().getY() - land.getLine().getP1().getY();
 		// Formula to calculate if a point is located on the right or left side of a wall.getLine()
-		double value = (wall.getLine().getP2().getX() - wall.getLine().getP1().getX())
-				* (getPrevY() - wall.getLine().getP1().getY()) - (getPrevX() - wall.getLine().getP1().getX())
-				* (wall.getLine().getP2().getY() - wall.getLine().getP1().getY());
+		double value = (land.getLine().getP2().getX() - land.getLine().getP1().getX())
+				* (getPrevY() - land.getLine().getP1().getY()) - (getPrevX() - land.getLine().getP1().getX())
+				* (land.getLine().getP2().getY() - land.getLine().getP1().getY());
 		return value * deltaY < 0;
 	}
 
 	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isAboveWall(Wall wall)
+	public boolean isAboveLand(Land land)
 	{
-		double deltaX = wall.getLine().getP2().getX() - wall.getLine().getP1().getX();
+		double deltaX = land.getLine().getP2().getX() - land.getLine().getP1().getX();
 		// Formula to calculate if a point is located above the wall.getLine()
-		double value = (wall.getLine().getP2().getY() - wall.getLine().getP1().getY())
-				* (getPrevX() - wall.getLine().getP1().getX()) - (getPrevY() - wall.getLine().getP1().getY())
-				* (wall.getLine().getP2().getX() - wall.getLine().getP1().getX());
+		double value = (land.getLine().getP2().getY() - land.getLine().getP1().getY())
+				* (getPrevX() - land.getLine().getP1().getX()) - (getPrevY() - land.getLine().getP1().getY())
+				* (land.getLine().getP2().getX() - land.getLine().getP1().getX());
 		return value * deltaX > 0;
 	}
 
 	// Used for entity-platform collision - Utilizes previous entity feet position
-	public boolean feetAbovePlatform(Platform platform)
+	public boolean feetAboveLand(Land land)
 	{
-		double deltaX = platform.getLine().getP2().getX() - platform.getLine().getP1().getX();
+		double deltaX = land.getLine().getP2().getX() - land.getLine().getP1().getX();
 		// Formula to calculate if a point is located above the platform.getLine()
-		double value = (platform.getLine().getP2().getY() - platform.getLine().getP1().getY())
-				* (getPrevX() - platform.getLine().getP1().getX())
-				- (getPrevY() + getHeight() / 2 - platform.getLine().getP1().getY())
-				* (platform.getLine().getP2().getX() - platform.getLine().getP1().getX());
+		double value = (land.getLine().getP2().getY() - land.getLine().getP1().getY())
+				* (getPrevX() - land.getLine().getP1().getX())
+				- (getPrevY() + getHeight() / 2 - land.getLine().getP1().getY())
+				* (land.getLine().getP2().getX() - land.getLine().getP1().getX());
 		return value * deltaX > 0;
 	}
 

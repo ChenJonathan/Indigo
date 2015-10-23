@@ -127,7 +127,6 @@ public class BattleStage extends Stage
 		else if(killed.isMarked())
 		{
 			enemiesDefeated++;
-			System.out.println("Enemies killed: " + enemiesDefeated);
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
 		if(enemiesDefeated >= enemiesToDefeat)

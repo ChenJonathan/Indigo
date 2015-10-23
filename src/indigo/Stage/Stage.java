@@ -16,6 +16,7 @@ import indigo.Projectile.Projectile;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -196,14 +197,12 @@ public abstract class Stage
 			if(ent.isGrounded())
 			{
 				Land prevGround = ent.getGround();
-				if(ent.getX() >= prevGround.getMinX() && ent.getX() <= prevGround.getMaxX())
+				if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
+						&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
 				{
 					ground = prevGround;
 				}
 			}
-
-			Line2D.Double feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2,
-					ent.getX(), ent.getY() + ent.getHeight() / 2);
 
 			// Entity-platform: Landing on platforms
 			if(!ent.isFlying())
@@ -212,7 +211,7 @@ public abstract class Stage
 				{
 					if(inProximity(ent, plat))
 					{
-						if(feetTravel.intersectsLine(plat.getLine()) && ent.feetAbovePlatform(plat))
+						if(intersectsFeet(ent, plat) && ent.feetAboveLand(plat))
 						{
 							ground = plat;
 							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
@@ -245,7 +244,7 @@ public abstract class Stage
 					{
 						if(!intersectedWall.isHorizontal())
 						{
-							if(ent.isRightOfWall(intersectedWall))
+							if(ent.isRightOfLand(intersectedWall))
 							{
 								while(ent.intersects(intersectedWall))
 								{
@@ -268,7 +267,7 @@ public abstract class Stage
 							// Downward collision into wall
 							// Only the closest qualified wall is set as ground
 							// Other downward collision walls afterwards are ignored to an extent
-							if(ent.isAboveWall(intersectedWall))
+							if(ent.isAboveLand(intersectedWall))
 							{
 								if(ent.isFlying())
 								{
@@ -278,7 +277,7 @@ public abstract class Stage
 										ent.setVelY(Math.min(ent.getVelY(), 0));
 									}
 								}
-								else if(feetTravel.intersectsLine(intersectedWall.getLine()))
+								else if(intersectsFeet(ent, intersectedWall))
 								{
 									ground = intersectedWall;
 									ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
@@ -295,9 +294,6 @@ public abstract class Stage
 							}
 						}
 					}
-
-					feetTravel = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(),
-							ent.getY() + ent.getHeight() / 2);
 				}
 			}
 
@@ -349,27 +345,11 @@ public abstract class Stage
 						if((proj.isSolid() && wall.blocksSolidProjectiles())
 								|| (!proj.isSolid() && wall.blocksNonsolidProjectiles()))
 						{
-							double xInt = 0;
-							double yInt = 0;
+							Point2D.Double intersection = wall.getIntersection(new Line2D.Double(proj.getPrevX(), proj
+									.getPrevY(), proj.getX(), proj.getY()));
 
-							// Calculate intersection point
-							if(proj.getPrevX() != proj.getX())
-							{
-								double slope = (proj.getY() - proj.getPrevY()) / (proj.getX() - proj.getPrevX());
-								double wallYInt = wall.getSlope() * -wall.getLine().getX1() + wall.getLine().getY1();
-								double projYInt = -proj.getX() * slope + proj.getY();
-								xInt = -(wallYInt - projYInt) / (wall.getSlope() - slope);
-								yInt = xInt * slope + projYInt;
-							}
-							else
-							{
-								xInt = proj.getX();
-								yInt = wall.getSlope() * (proj.getX() - wall.getLine().getX1())
-										+ wall.getLine().getY1();
-							}
-
-							proj.setX(xInt);
-							proj.setY(yInt);
+							proj.setX(intersection.getX());
+							proj.setY(intersection.getY());
 							proj.collide(wall);
 							collided = true;
 						}
@@ -467,6 +447,29 @@ public abstract class Stage
 					walls.set(current, temp);
 				}
 			}
+		}
+	}
+
+	public boolean intersectsFeet(Entity ent, Land land)
+	{
+		if(ent.getVelY() <= 0)
+		{
+			Line2D.Double feetCenter = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2,
+					ent.getX(), ent.getY() + ent.getHeight() / 2);
+
+			return land.getLine().intersectsLine(feetCenter);
+		}
+		else
+		{
+			Line2D.Double feet = new Line2D.Double(ent.getX() - ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2,
+					ent.getX() + ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
+			Line2D.Double feetLeft = new Line2D.Double(ent.getPrevX() - ent.getWidth() / 2, ent.getPrevY()
+					+ ent.getHeight() / 2, ent.getX() - ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
+			Line2D.Double feetRight = new Line2D.Double(ent.getPrevX() + ent.getWidth() / 2, ent.getPrevY()
+					+ ent.getHeight() / 2, ent.getX() + ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
+
+			return land.getLine().intersectsLine(feet) || land.getLine().intersectsLine(feetLeft)
+					|| land.getLine().intersectsLine(feetRight);
 		}
 	}
 

@@ -30,7 +30,7 @@ public class Core extends Entity
 
 		friendly = true;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_IDLE), -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
 	}
 
 	public void update()
@@ -68,7 +68,7 @@ public class Core extends Entity
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_DEATH), 2);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEATH), 2);
 		}
 	}
 }
