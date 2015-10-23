@@ -176,9 +176,8 @@ public class IceSword extends Weapon
 				% Math.PI + Math.PI;
 
 		// If Ice Chains is active but mouse is on other side of player
-		if(!attacking && user.isFacingRight() != stage.getMouseX() > user.getX())
+		if(!user.canTurn() && user.isFacingRight() != stage.getMouseX() >= user.getX())
 		{
-			// TODO Fix last tick
 			renderAngle = -renderAngle;
 		}
 
@@ -195,13 +194,6 @@ public class IceSword extends Weapon
 			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 138, 146,
 					null);
 			g.rotate(-renderAngle, user.getX() + xOffset + 118, user.getY() + yOffset + 75);
-		}
-
-		if(attacking)
-		{
-			// Draws a simple line representing the sword // TODO Temporary
-			// g.setColor(Color.BLUE);
-			// g.drawLine(beginSwordX, beginSwordY, endSwordX, endSwordY);
 		}
 	}
 
@@ -285,7 +277,7 @@ public class IceSword extends Weapon
 	 * 
 	 * @param xCoord The X Coordinate of the Mouse
 	 * @param yCoord The Y Coordinate of the Mouse
-	 * @return The angle (0 to 360) of the mouse coordinates to the player (radians)
+	 * @return The angle (0 to 360) of the mouse coordinates to the player (Radians)
 	 */
 	public double determineMouseAngle(double xCoord, double yCoord)
 	{

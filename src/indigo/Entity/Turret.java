@@ -29,6 +29,8 @@ public class Turret extends Entity
 
 	private Animation animationCannon;
 
+	public final double TURRET_ANGLE = Math.PI / 4;
+
 	public static final double TURRET_WIDTH = 100;
 	public static final double TURRET_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;
@@ -54,9 +56,6 @@ public class Turret extends Entity
 		friendly = false;
 
 		timer = 0;
-
-		angle = Math.PI / 2;
-		groundAngle = Math.PI * 3 / 2;
 
 		animationCannon = new Animation();
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
@@ -103,6 +102,8 @@ public class Turret extends Entity
 			setX(intersection.getX() - Math.cos(groundAngle) * getHeight() / 2);
 			setY(intersection.getY() - Math.sin(groundAngle) * getHeight() / 2);
 
+			angle = groundAngle;
+
 			// Check if turret is on wall
 			if(closestLand.getLine().ptSegDist(intersection) > 1)
 			{
@@ -141,7 +142,7 @@ public class Turret extends Entity
 
 			if(Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
 			{
-				// angle = optimalAngle;
+				angle = optimalAngle;
 				if(Math.random() < 0.4)
 				{
 					attack();
@@ -153,20 +154,26 @@ public class Turret extends Entity
 				{
 					deltaAngle += 2 * Math.PI;
 				}
-				if(deltaAngle < Math.PI)
+				if(angle >= 2 * Math.PI)
 				{
-					angle += Math.PI / 90;
-					if(angle >= 2 * Math.PI)
+					angle -= 2 * Math.PI;
+				}
+				else if(angle < 0)
+				{
+					angle += 2 * Math.PI;
+				}
+				if(checkArc(angle, optimalAngle))
+				{
+					if(isLegal(angle + Math.PI / 90))
 					{
-						angle -= 2 * Math.PI;
+						angle += Math.PI / 90;
 					}
 				}
 				else
 				{
-					angle -= Math.PI / 90;
-					if(angle < 0)
+					if(isLegal(angle - Math.PI / 90))
 					{
-						angle += 2 * Math.PI;
+						angle -= Math.PI / 90;
 					}
 				}
 			}
@@ -175,13 +182,13 @@ public class Turret extends Entity
 
 	public void render(Graphics2D g)
 	{
-		// Drawing turret base
+		// Rotation breaks if x is negative
 		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
 
-		// Drawing turret cannon
+		// Drawing cannon
 		if(getX() > 0 && getX() < stage.getMapX())
 		{
 			g.rotate(-angle + Math.PI / 2, getX(), getY());
@@ -277,6 +284,57 @@ public class Turret extends Entity
 			}
 		}
 		return optimalAngle;
+	}
+
+	public boolean isLegal(double testAngle)
+	{
+		boolean legal = false;
+
+		double leftBound = groundAngle + Math.PI - TURRET_ANGLE;
+		if(leftBound < 0)
+		{
+			leftBound += Math.PI * 2;
+		}
+		double rightBound = (groundAngle + Math.PI + TURRET_ANGLE) % (Math.PI * 2);
+
+		// System.out.println(leftBound + ", " + testAngle + "," + rightBound); debugging tool
+		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
+		{
+			legal = true;
+		}
+		else if(rightBound < leftBound && testAngle > rightBound && testAngle < leftBound)
+		{
+			legal = true;
+		}
+		return legal;
+	}
+
+	public boolean checkArc(double startAngle, double endAngle)
+	{
+		boolean canReachCCW = true;
+		startAngle = (startAngle > Math.PI)? -1 * (Math.PI * 2 - startAngle) : startAngle;
+		endAngle = (endAngle > Math.PI)? -1 * (Math.PI * 2 - endAngle) : endAngle;
+
+		double leftBound = groundAngle + Math.PI - TURRET_ANGLE;
+		double rightBound = (groundAngle + Math.PI + TURRET_ANGLE) % (Math.PI * 2);
+		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
+		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
+
+		// System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
+		if(startAngle > endAngle)
+		{
+			canReachCCW = (endAngle < leftBound)? true : false;
+			// System.out.println(canReachCCW);
+		}
+		else
+		{
+			canReachCCW = (startAngle < leftBound && endAngle > rightBound)? false : true;
+		}
+		if(endAngle > leftBound && endAngle < rightBound)
+		{
+			canReachCCW = (endAngle < (leftBound + rightBound) / 2)? true : false;
+		}
+		return canReachCCW;
 	}
 
 	public Shape getHitbox()

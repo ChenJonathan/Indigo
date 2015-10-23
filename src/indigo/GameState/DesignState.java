@@ -191,10 +191,12 @@ public class DesignState extends GameState
 		descriptionText.put("Travel", "Reach a specified destination.");
 		descriptionText.put("Wall", "An unpassable wall.");
 		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
-		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on.");
+		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on. "
+				+ "Must be horizontal or the platform will be ignored");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
 		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target. "
-				+ "Attaches itself to the nearest wall or platform upon map creation.");
+				+ "Attaches itself to the nearest wall or platform upon map creation. "
+				+ "Cannot aim towards its base.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
