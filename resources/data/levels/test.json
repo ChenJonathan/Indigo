@@ -57,6 +57,10 @@
         {"type":"Wall", "x1":3500, "y1":2000, "x2":3800, "y2":2100}
         {"type":"Wall", "x1":3800, "y1":2100, "x2":4000, "y2":2200}
         {"type":"Wall", "x1":4000, "y1":2200, "x2":4100, "y2":2400}
+        {"type":"Wall", "x1":1100, "y1":2000, "x2":1100, "y2":2200}
+        {"type":"Wall", "x1":1100, "y1":2200, "x2":1300, "y2":2200}
+        {"type":"Wall", "x1":1300, "y1":2200, "x2":1300, "y2":2000}
+        {"type":"Wall", "x1":1300, "y1":2000, "x2":1100, "y2":2000}
     ],
 
     "spawns":[
@@ -73,5 +77,9 @@
         {"category":"Entity", "type":"Flying Bot", "x":900, "y":2100, "respawnTime":60}
         {"category":"Entity", "type":"Flying Bot", "x":900, "y":1700, "respawnTime":60}
         {"category":"Entity", "type":"Turret", "x":3300, "y":2800, "respawnTime":100}
+        {"category":"Entity", "type":"Turret", "x":1200, "y":1900, "respawnTime":1500}
+        {"category":"Entity", "type":"Turret", "x":1000, "y":2100, "respawnTime":1500}
+        {"category":"Entity", "type":"Turret", "x":1200, "y":2300, "respawnTime":1500}
+        {"category":"Entity", "type":"Turret", "x":1400, "y":2100, "respawnTime":1500}
     ]
 }

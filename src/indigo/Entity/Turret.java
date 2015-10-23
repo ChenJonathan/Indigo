@@ -151,31 +151,25 @@ public class Turret extends Entity
 			else
 			{
 				if(deltaAngle < 0)
-				{
-					deltaAngle += 2 * Math.PI;
-				}
-				if(angle >= 2 * Math.PI)
-				{
-					angle -= 2 * Math.PI;
-				}
-				else if(angle < 0)
-				{
-					angle += 2 * Math.PI;
-				}
-				if(checkArc(angle, optimalAngle))
-				{
-					if(isLegal(angle + Math.PI / 90))
-					{
-						angle += Math.PI / 90;
-					}
-				}
-				else
-				{
-					if(isLegal(angle - Math.PI / 90))
-					{
-						angle -= Math.PI / 90;
-					}
-				}
+ 				{
+ 					deltaAngle += 2 * Math.PI;
+ 				}
+ 				if(deltaAngle < Math.PI)
+ 				{
+ 					angle += Math.PI / 90;
+ 					if(angle >= 2 * Math.PI)
+ 					{
+ 						angle -= 2 * Math.PI;
+ 					}
+ 				}
+ 				else
+ 				{
+ 					angle -= Math.PI / 90;
+ 					if(angle < 0)
+ 					{
+ 						angle += 2 * Math.PI;
+ 					}
+ 				}
 			}
 		}
 	}
@@ -284,57 +278,6 @@ public class Turret extends Entity
 			}
 		}
 		return optimalAngle;
-	}
-
-	public boolean isLegal(double testAngle)
-	{
-		boolean legal = false;
-
-		double leftBound = groundAngle + Math.PI - TURRET_ANGLE;
-		if(leftBound < 0)
-		{
-			leftBound += Math.PI * 2;
-		}
-		double rightBound = (groundAngle + Math.PI + TURRET_ANGLE) % (Math.PI * 2);
-
-		// System.out.println(leftBound + ", " + testAngle + "," + rightBound); debugging tool
-		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
-		{
-			legal = true;
-		}
-		else if(rightBound < leftBound && testAngle > rightBound && testAngle < leftBound)
-		{
-			legal = true;
-		}
-		return legal;
-	}
-
-	public boolean checkArc(double startAngle, double endAngle)
-	{
-		boolean canReachCCW = true;
-		startAngle = (startAngle > Math.PI)? -1 * (Math.PI * 2 - startAngle) : startAngle;
-		endAngle = (endAngle > Math.PI)? -1 * (Math.PI * 2 - endAngle) : endAngle;
-
-		double leftBound = groundAngle + Math.PI - TURRET_ANGLE;
-		double rightBound = (groundAngle + Math.PI + TURRET_ANGLE) % (Math.PI * 2);
-		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
-		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
-
-		// System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
-		if(startAngle > endAngle)
-		{
-			canReachCCW = (endAngle < leftBound)? true : false;
-			// System.out.println(canReachCCW);
-		}
-		else
-		{
-			canReachCCW = (startAngle < leftBound && endAngle > rightBound)? false : true;
-		}
-		if(endAngle > leftBound && endAngle < rightBound)
-		{
-			canReachCCW = (endAngle < (leftBound + rightBound) / 2)? true : false;
-		}
-		return canReachCCW;
 	}
 
 	public Shape getHitbox()

@@ -19,6 +19,7 @@ public class IceSword extends Weapon
 	private boolean attacking = false; // TODO Replace with animation check
 
 	private double swordAngle;
+	private double renderAngle;
 	private double angleOffset;
 	private boolean slashMode = false;
 
@@ -165,21 +166,28 @@ public class IceSword extends Weapon
 		beginSwordY = (int)(user.getY() + verticalOffset - (radialOffset * Math.sin(swordAngle + angleOffset)));
 		endSwordX = (int)(beginSwordX + (length * Math.cos(swordAngle + angleOffset)));
 		endSwordY = (int)(beginSwordY - (length * Math.sin(swordAngle + angleOffset)));
-	}
 
-	public void render(Graphics2D g)
-	{
-		double xOffset = ((Player)user).getWeaponXOffset();
-		double yOffset = ((Player)user).getWeaponYOffset();
-		double renderAngle = (swordAngle >= 0 && swordAngle < (Math.PI / 2))
-				|| (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2)? -swordAngle % Math.PI : -swordAngle
-				% Math.PI + Math.PI;
+		// Calculating render angle - Placing this in render causes input lag issues
+		if((swordAngle >= 0 && swordAngle < (Math.PI / 2)) || (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2))
+		{
+			renderAngle = -swordAngle % Math.PI;
+		}
+		else
+		{
+			renderAngle = -swordAngle % Math.PI + Math.PI;
+		}
 
 		// If Ice Chains is active but mouse is on other side of player
 		if(!user.canTurn() && user.isFacingRight() != stage.getMouseX() >= user.getX())
 		{
 			renderAngle = -renderAngle;
 		}
+	}
+
+	public void render(Graphics2D g)
+	{
+		double xOffset = ((Player)user).getWeaponXOffset();
+		double yOffset = ((Player)user).getWeaponYOffset();
 
 		if(user.isFacingRight())
 		{
@@ -230,6 +238,7 @@ public class IceSword extends Weapon
 
 		swordAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
 
+		user.setDirection(stage.getMouseX() > user.getX());
 		if(user.isFacingRight())
 		{
 			if(swordAngle <= Math.PI)
@@ -262,6 +271,7 @@ public class IceSword extends Weapon
 
 		swordAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
 
+		user.setDirection(stage.getMouseX() > user.getX());
 		if(user.isFacingRight())
 		{
 			setAnimation(STAB_RIGHT, ContentManager.getAnimation(ContentManager.ICE_SWORD_STAB_RIGHT), 2);

@@ -2,56 +2,76 @@
     "name":"Test",
     "type":"Battle",
 
-<<<<<<< HEAD
     "mapX":6000,
     "mapY":4000,
 
-    "startingX":3100,
-    "startingY":1800,
-=======
-    "mapX":12000,
-    "mapY":8000,
-
-    "startingX":4800,
-    "startingY":3700,
->>>>>>> 7c1de194202e2f1d0692fe43e6107d7a5988b26d
+    "startingX":1000,
+    "startingY":2500,
 
     "enemiesToDefeat":25,
 
     "landscape":[
-<<<<<<< HEAD
-        {"type":"Wall", "x1":2700, "y1":1500, "x2":2700, "y2":2100}
-        {"type":"Wall", "x1":2700, "y1":2100, "x2":3400, "y2":2100}
-        {"type":"Wall", "x1":3400, "y1":2100, "x2":3400, "y2":1500}
-        {"type":"Platform", "x1":2700, "y1":1500, "x2":3400, "y2":1500}
-        {"type":"Wall", "x1":3900, "y1":2000, "x2":3500, "y2":2400}
-        {"type":"Wall", "x1":3300, "y1":2400, "x2":2700, "y2":2400}
-        {"type":"Wall", "x1":2400, "y1":2300, "x2":1800, "y2":1800}
+        {"type":"Wall", "x1":700, "y1":2600, "x2":1200, "y2":2600}
+        {"type":"Wall", "x1":1200, "y1":2600, "x2":1600, "y2":2500}
+        {"type":"Wall", "x1":1600, "y1":2500, "x2":1800, "y2":2400}
+        {"type":"Wall", "x1":1800, "y1":2400, "x2":2000, "y2":2200}
+        {"type":"Wall", "x1":2000, "y1":2200, "x2":2200, "y2":2100}
+        {"type":"Wall", "x1":2200, "y1":2100, "x2":2600, "y2":2000}
+        {"type":"Wall", "x1":2600, "y1":2000, "x2":3100, "y2":2000}
+        {"type":"Wall", "x1":3100, "y1":2000, "x2":3100, "y2":1600}
+        {"type":"Wall", "x1":3500, "y1":1600, "x2":3500, "y2":2000}
+        {"type":"Platform", "x1":2800, "y1":1800, "x2":3000, "y2":1800}
+        {"type":"Platform", "x1":2800, "y1":1600, "x2":3000, "y2":1600}
+        {"type":"Platform", "x1":3600, "y1":1600, "x2":3800, "y2":1600}
+        {"type":"Platform", "x1":3600, "y1":1800, "x2":3800, "y2":1800}
+        {"type":"Wall", "x1":3500, "y1":2000, "x2":4300, "y2":2000}
+        {"type":"Wall", "x1":4300, "y1":2000, "x2":4700, "y2":2100}
+        {"type":"Wall", "x1":4700, "y1":2100, "x2":5000, "y2":2200}
+        {"type":"Wall", "x1":5000, "y1":2200, "x2":5200, "y2":2400}
+        {"type":"Wall", "x1":5200, "y1":2400, "x2":5300, "y2":2700}
+        {"type":"Wall", "x1":5300, "y1":2700, "x2":5400, "y2":3400}
+        {"type":"Wall", "x1":5400, "y1":3400, "x2":5400, "y2":4000}
+        {"type":"Spike Pit", "x1":5400, "y1":4000, "x2":6000, "y2":4000}
+        {"type":"Wall", "x1":700, "y1":2600, "x2":300, "y2":2500}
+        {"type":"Wall", "x1":300, "y1":2500, "x2":0, "y2":2300}
+        {"type":"Platform", "x1":3100, "y1":1600, "x2":3500, "y2":1600}
+        {"type":"Platform", "x1":3200, "y1":1800, "x2":3400, "y2":1800}
+        {"type":"Platform", "x1":3200, "y1":2000, "x2":3400, "y2":2000}
+        {"type":"Platform", "x1":3200, "y1":2200, "x2":3400, "y2":2200}
+        {"type":"Platform", "x1":3200, "y1":2400, "x2":3400, "y2":2400}
+        {"type":"Platform", "x1":3200, "y1":2600, "x2":3400, "y2":2600}
+        {"type":"Platform", "x1":3200, "y1":2800, "x2":3400, "y2":2800}
+        {"type":"Wall", "x1":2600, "y1":2800, "x2":2900, "y2":3100}
+        {"type":"Wall", "x1":3700, "y1":3100, "x2":4000, "y2":2800}
+        {"type":"Wall", "x1":2900, "y1":3100, "x2":3100, "y2":3200}
+        {"type":"Wall", "x1":3700, "y1":3100, "x2":3500, "y2":3200}
+        {"type":"Wall", "x1":3100, "y1":3200, "x2":3500, "y2":3200}
+        {"type":"Wall", "x1":4000, "y1":2800, "x2":4100, "y2":2400}
+        {"type":"Wall", "x1":2600, "y1":2800, "x2":2500, "y2":2400}
+        {"type":"Wall", "x1":2500, "y1":2400, "x2":2400, "y2":2200}
+        {"type":"Wall", "x1":2400, "y1":2200, "x2":2200, "y2":2100}
+        {"type":"Wall", "x1":4100, "y1":2400, "x2":4300, "y2":2000}
+        {"type":"Wall", "x1":2500, "y1":2400, "x2":2600, "y2":2200}
+        {"type":"Wall", "x1":2600, "y1":2200, "x2":2800, "y2":2100}
+        {"type":"Wall", "x1":2800, "y1":2100, "x2":3100, "y2":2000}
+        {"type":"Wall", "x1":3500, "y1":2000, "x2":3800, "y2":2100}
+        {"type":"Wall", "x1":3800, "y1":2100, "x2":4000, "y2":2200}
+        {"type":"Wall", "x1":4000, "y1":2200, "x2":4100, "y2":2400}
     ],
 
     "spawns":[
-        {"category":"Entity", "type":"Turret", "x":2000, "y":2100, "respawnTime":50}
-        {"category":"Entity", "type":"Turret", "x":1700, "y":1700, "respawnTime":50}
-        {"category":"Entity", "type":"Turret", "x":2600, "y":1700, "respawnTime":50}
-        {"category":"Entity", "type":"Turret", "x":3000, "y":2300, "respawnTime":50}
-        {"category":"Entity", "type":"Turret", "x":3500, "y":2200, "respawnTime":50}
-=======
-        {"type":"Wall", "x1":3700, "y1":4200, "x2":5500, "y2":3900}
-        {"type":"Wall", "x1":5500, "y1":3900, "x2":7700, "y2":2400}
-        {"type":"Wall", "x1":7700, "y1":2400, "x2":9900, "y2":3700}
-        {"type":"Wall", "x1":9900, "y1":3700, "x2":10600, "y2":3000}
-        {"type":"Platform", "x1":11700, "y1":4200, "x2":9600, "y2":4600}
-        {"type":"Platform", "x1":9600, "y1":4600, "x2":7800, "y2":3800}
-        {"type":"Platform", "x1":7800, "y1":3800, "x2":5800, "y2":5300}
-        {"type":"Platform", "x1":5800, "y1":5300, "x2":4200, "y2":5200}
-        {"type":"Platform", "x1":4200, "y1":5200, "x2":2400, "y2":4600}
-    ],
-
-    "spawns":[
-        {"category":"Entity", "type":"Turret", "x":7800, "y":3600, "respawnTime":200}
-        {"category":"Projectile", "type":"Steel Beam", "x":5000, "y":3200, "respawnTime":1}
-        {"category":"Projectile", "type":"Steel Beam", "x":5100, "y":3200, "respawnTime":1}
-        {"category":"Projectile", "type":"Steel Beam", "x":5200, "y":3200, "respawnTime":1}
->>>>>>> 7c1de194202e2f1d0692fe43e6107d7a5988b26d
+        {"category":"Entity", "type":"Turret", "x":2900, "y":1700, "respawnTime":300}
+        {"category":"Entity", "type":"Turret", "x":3700, "y":1700, "respawnTime":300}
+        {"category":"Entity", "type":"Turret", "x":3300, "y":1500, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":4400, "y":1500, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":3700, "y":1300, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":3200, "y":1200, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":2800, "y":1300, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":2000, "y":1500, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":1600, "y":1900, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":1400, "y":2300, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":900, "y":2100, "respawnTime":60}
+        {"category":"Entity", "type":"Flying Bot", "x":900, "y":1700, "respawnTime":60}
+        {"category":"Entity", "type":"Turret", "x":3300, "y":2800, "respawnTime":100}
     ]
 }

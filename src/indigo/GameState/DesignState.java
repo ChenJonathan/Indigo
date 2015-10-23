@@ -390,7 +390,18 @@ public class DesignState extends GameState
 		g.setStroke(new BasicStroke((int)(scale * 1.5)));
 		for(LandData land : landscape)
 		{
-			g.setColor(land.type.equals("Platform")? Color.GREEN : Color.BLUE);
+			switch(land.type)
+			{
+				case "Platform":
+					g.setColor(Color.GREEN);
+					break;
+				case "Spike Pit":
+					g.setColor(Color.RED);
+					break;
+				default:
+					g.setColor(Color.BLUE);
+					break;
+			}
 			int x1 = (int)(xMargin + scale(land.x1));
 			int y1 = (int)(yMargin + scale(land.y1));
 			int x2 = (int)(xMargin + scale(land.x2));
