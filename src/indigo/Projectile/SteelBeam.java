@@ -1,5 +1,6 @@
 package indigo.Projectile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -15,7 +16,7 @@ public class SteelBeam extends Projectile
 
 	public static final int DAMAGE = 15;
 	public static final int WIDTH = 50;
-	public static final int HEIGHT = 50;
+	public static final int HEIGHT = 100;
 	public static final double SPEED = 50;
 	
 	public SteelBeam(Stage stage, double x, double y)
@@ -41,6 +42,7 @@ public class SteelBeam extends Projectile
 	public void render(Graphics2D g)
 	{
 		// TODO: Animation stuff
+		g.setColor(Color.GRAY);
 		g.fillRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight());
 	}
 	
@@ -70,5 +72,10 @@ public class SteelBeam extends Projectile
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH; // TODO: Fix if more animations are added
+	}
+	
+	public String getName()
+	{
+		return "a steel beam";
 	}
 }

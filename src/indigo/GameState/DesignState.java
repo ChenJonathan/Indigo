@@ -227,13 +227,13 @@ public class DesignState extends GameState
 				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (1200 to 12000):"));
 				mapX = mapX / GRID_SCALE * GRID_SCALE;
 			}
-			while(mapX < 1200 || mapX > 12000);
+			while(mapX < 2400 || mapX > 12000);
 			do
 			{
 				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (800 to 8000):"));
 				mapY = mapY / GRID_SCALE * GRID_SCALE;
 			}
-			while(mapY < 800 || mapY > 8000);
+			while(mapY < 1600 || mapY > 8000);
 			json.put("mapX", mapX);
 			json.put("mapY", mapY);
 
@@ -243,7 +243,8 @@ public class DesignState extends GameState
 		}
 		else
 		{
-			json = ContentManager.load("/levels/" + name + ".json");
+			String fileName = name.replace(" ", "_").toLowerCase();
+			json = ContentManager.load("/levels/" + fileName + ".json");
 
 			if(json.get("type") != null)
 			{
@@ -439,9 +440,9 @@ public class DesignState extends GameState
 		}
 
 		// Draw objectives
-		g.setColor(Color.PINK);
 		if(objectiveSet)
 		{
+			g.setColor(Color.PINK);
 			if(type.equals("Defend"))
 			{
 				int x = (int)(xMargin + scale(Integer.parseInt(json.get("coreX") + "")));
@@ -1567,7 +1568,18 @@ public class DesignState extends GameState
 			// Draw landscape
 			for(LandData land : landscape)
 			{
-				stageGraphics.setColor(land.type.equals("Platform")? Color.GREEN : Color.BLUE);
+				switch(land.type)
+				{
+					case "Platform":
+						stageGraphics.setColor(Color.GREEN);
+						break;
+					case "Spike Pit":
+						stageGraphics.setColor(Color.RED);
+						break;
+					default:
+						stageGraphics.setColor(Color.BLUE);
+						break;
+				}
 				int x1 = (int)land.x1;
 				int y1 = (int)land.y1;
 				int x2 = (int)land.x2;

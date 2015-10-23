@@ -7,6 +7,8 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 import indigo.Entity.Entity;
+import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
@@ -146,35 +148,36 @@ public class IceChainHook extends Projectile
 
 			attached.removeGround();
 
-			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-
-			// Entity-wall: Colliding with and landing on walls
-			for(Wall wall : stage.getWalls())
+			// Entity-land: Colliding with and landing on land
+			ArrayList<Land> intersectedLand = new ArrayList<Land>();
+			for(Land land : stage.getLandscape())
 			{
-				if(attached.intersects(wall) || (attached.isGrounded() && attached.getGround().equals(wall)))
+				if(land instanceof Wall)
 				{
-					intersectedWalls.add(wall);
+					if(stage.inProximity(attached, (Wall)land) && attached.intersects((Wall)land))
+					{
+						intersectedLand.add(land);
+					}
 				}
 			}
-			if(intersectedWalls.size() > 0)
+			if(intersectedLand.size() > 0)
 			{
-				stage.sortWallsByDistance(attached, intersectedWalls);
+				stage.sortLandByDistance(attached, intersectedLand);
 
-				for(Wall intersectedWall : intersectedWalls)
+				for(Land land : intersectedLand)
 				{
-					if(intersectedWall.killsEntities() && attached.isActive())
+					if(((Wall)land).killsEntities() && attached.isActive())
 					{
 						attached.die();
-						stage.trackDeath(intersectedWall.getName(), attached);
+						stage.trackDeath(((Wall)land).getName(), attached);
 					}
-					if(intersectedWall.blocksEntities())
+					if(((Wall)land).blocksEntities())
 					{
-						if(!intersectedWall.isHorizontal())
+						if(!land.isHorizontal())
 						{
-							// Leftward collision into wall
-							if(attached.isRightOfLand(intersectedWall))
+							if(attached.isRightOfLand(land))
 							{
-								while(attached.intersects(intersectedWall))
+								while(attached.intersects((Wall)land))
 								{
 									attached.setX(attached.getX() + Stage.PUSH_AMOUNT);
 									attached.setVelX(Math.max(attached.getVelX(), 0));
@@ -183,7 +186,7 @@ public class IceChainHook extends Projectile
 							// Rightward collision into wall
 							else
 							{
-								while(attached.intersects(intersectedWall))
+								while(attached.intersects((Wall)land))
 								{
 									attached.setX(attached.getX() - Stage.PUSH_AMOUNT);
 									attached.setVelX(Math.min(attached.getVelX(), 0));
@@ -193,18 +196,18 @@ public class IceChainHook extends Projectile
 						else
 						{
 							// Downward collision into wall
-							if(attached.isAboveLand(intersectedWall))
+							if(attached.isAboveLand(land))
 							{
-								while(attached.intersects(intersectedWall))
+								while(attached.intersects((Wall)land))
 								{
 									attached.setY(attached.getY() - Stage.PUSH_AMOUNT);
 									attached.setVelY(Math.min(attached.getVelY(), 0));
 								}
 							}
 							// Upward collision into wall
-							else
+							else if(!attached.isGrounded())
 							{
-								while(attached.intersects(intersectedWall))
+								while(attached.intersects((Wall)land))
 								{
 									attached.setY(attached.getY() + Stage.PUSH_AMOUNT);
 									attached.setVelY(Math.max(attached.getVelY(), 0));

@@ -11,7 +11,6 @@ import indigo.GameState.PlayState;
 import indigo.Interactive.Destination;
 import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
-import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
@@ -58,9 +57,9 @@ public class TravelStage extends Stage
 		timeLimit = (int)(long)json.get("timeLimit");
 
 		// Bounding walls
-		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
-		walls.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
-		walls.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
+		landscape.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
+		landscape.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
+		landscape.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
 
 		JSONArray array = (JSONArray)json.get("landscape");
 		if(array == null)
@@ -158,14 +157,7 @@ public class TravelStage extends Stage
 			e.printStackTrace();
 		}
 
-		if(object instanceof Platform)
-		{
-			platforms.add((Platform)object);
-		}
-		else
-		{
-			walls.add((Wall)object);
-		}
+		landscape.add(object);
 	}
 
 	public Respawnable spawnObject(JSONObject info)

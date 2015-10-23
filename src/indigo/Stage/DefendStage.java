@@ -11,7 +11,6 @@ import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
-import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
@@ -56,9 +55,9 @@ public class DefendStage extends Stage
 		survivalDuration = (int)(long)json.get("survivalDuration");
 
 		// Bounding walls
-		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
-		walls.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
-		walls.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
+		landscape.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
+		landscape.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
+		landscape.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
 
 		JSONArray array = (JSONArray)json.get("landscape");
 		if(array == null)
@@ -101,7 +100,7 @@ public class DefendStage extends Stage
 
 		if(playState.getTime() == survivalDuration)
 		{
-			data.setVictory(true);
+			playState.endGame(true);
 		}
 
 		// Check for dead respawnables and respawn them when time is up
@@ -137,17 +136,17 @@ public class DefendStage extends Stage
 			// TODO Gain experienced - Add experience variable to Entity class
 		}
 	}
-	
+
 	public int getCoreHealth()
 	{
 		return core.getHealth();
 	}
-	
+
 	public int getCoreMaxHealth()
 	{
 		return core.getMaxHealth();
 	}
-	
+
 	public int getSurvivalDuration()
 	{
 		return survivalDuration;
@@ -180,14 +179,7 @@ public class DefendStage extends Stage
 			e.printStackTrace();
 		}
 
-		if(object instanceof Platform)
-		{
-			platforms.add((Platform)object);
-		}
-		else
-		{
-			walls.add((Wall)object);
-		}
+		landscape.add(object);
 	}
 
 	public Respawnable spawnObject(JSONObject info)

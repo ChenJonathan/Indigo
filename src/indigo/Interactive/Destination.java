@@ -13,9 +13,8 @@ public class Destination extends Interactive
 	private final int IDLE = 0;
 	private final int DEATH = 1;
 
-	public final static int HEALTH = 100;
-	public final static int WIDTH = 50;
-	public final static int HEIGHT = 50;
+	public final static int WIDTH = 100;
+	public final static int HEIGHT = 100;
 	public final static double SPEED = 0;
 
 	public Destination(Stage stage, double x, double y)
@@ -61,6 +60,6 @@ public class Destination extends Interactive
 
 	public void die()
 	{
-		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_DEATH), 2);
+		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_DEATH), 3);
 	}
 }

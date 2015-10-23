@@ -54,8 +54,7 @@ public abstract class Stage
 	protected ArrayList<Entity> entities;
 	protected ArrayList<Interactive> interactives;
 	protected ArrayList<Projectile> projectiles;
-	protected ArrayList<Platform> platforms;
-	protected ArrayList<Wall> walls;
+	protected ArrayList<Land> landscape;
 
 	// Distance that entities are pushed when they collide with things - Fairly arbitrary
 	public static final double PUSH_AMOUNT = 0.5;
@@ -79,8 +78,7 @@ public abstract class Stage
 		entities = new ArrayList<Entity>();
 		interactives = new ArrayList<Interactive>();
 		projectiles = new ArrayList<Projectile>();
-		platforms = new ArrayList<Platform>();
-		walls = new ArrayList<Wall>();
+		landscape = new ArrayList<Land>();
 	}
 
 	public void update()
@@ -121,7 +119,7 @@ public abstract class Stage
 				{
 					Entity otherEnt = entities.get(entCount);
 
-					if((otherEnt).isActive() && inProximity(ent, otherEnt))
+					if((otherEnt).isActive() && ent.isFriendly() != otherEnt.isFriendly() && inProximity(ent, otherEnt))
 					{
 						if(ent.intersects(otherEnt))
 						{
@@ -204,49 +202,43 @@ public abstract class Stage
 				}
 			}
 
-			// Entity-platform: Landing on platforms
-			if(!ent.isFlying())
+			// Entity-land: Colliding with and landing on land
+			ArrayList<Land> intersectedLand = new ArrayList<Land>();
+			for(Land land : landscape)
 			{
-				for(Platform plat : platforms)
+				if(land instanceof Wall)
 				{
-					if(inProximity(ent, plat))
+					if(inProximity(ent, (Wall)land) && ent.intersects((Wall)land))
 					{
-						if(intersectsFeet(ent, plat) && ent.feetAboveLand(plat))
-						{
-							ground = plat;
-							ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
-						}
+						intersectedLand.add(land);
+					}
+				}
+				else if(land instanceof Platform)
+				{
+					if(!ent.isFlying() && inProximity(ent, (Platform)land) && intersectsFeet(ent, land) && ent.feetAboveLand(land))
+					{
+						intersectedLand.add(land);
 					}
 				}
 			}
-
-			// Entity-wall: Colliding with and landing on walls
-			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-			for(Wall wall : walls)
+			if(intersectedLand.size() > 0)
 			{
-				if(inProximity(ent, wall) && ent.intersects(wall))
-				{
-					intersectedWalls.add(wall);
-				}
-			}
-			if(intersectedWalls.size() > 0)
-			{
-				sortWallsByDistance(ent, intersectedWalls);
+				sortLandByDistance(ent, intersectedLand);
 
-				for(Wall intersectedWall : intersectedWalls)
+				for(Land land : intersectedLand)
 				{
-					if(intersectedWall.killsEntities() && ent.isActive())
+					if(land instanceof Wall && ((Wall)land).killsEntities() && ent.isActive())
 					{
 						ent.die();
-						trackDeath(intersectedWall.getName(), ent);
+						trackDeath(((Wall)land).getName(), ent);
 					}
-					if(intersectedWall.blocksEntities())
+					if(land instanceof Platform || ((Wall)land).blocksEntities())
 					{
-						if(!intersectedWall.isHorizontal())
+						if(land instanceof Wall && !land.isHorizontal())
 						{
-							if(ent.isRightOfLand(intersectedWall))
+							if(ent.isRightOfLand(land))
 							{
-								while(ent.intersects(intersectedWall))
+								while(ent.intersects((Wall)land))
 								{
 									ent.setX(ent.getX() + PUSH_AMOUNT);
 									ent.setVelX(Math.max(ent.getVelX(), 0));
@@ -255,7 +247,7 @@ public abstract class Stage
 							// Rightward collision into wall
 							else
 							{
-								while(ent.intersects(intersectedWall))
+								while(ent.intersects((Wall)land))
 								{
 									ent.setX(ent.getX() - PUSH_AMOUNT);
 									ent.setVelX(Math.min(ent.getVelX(), 0));
@@ -267,26 +259,26 @@ public abstract class Stage
 							// Downward collision into wall
 							// Only the closest qualified wall is set as ground
 							// Other downward collision walls afterwards are ignored to an extent
-							if(ent.isAboveLand(intersectedWall))
+							if(land instanceof Platform || ent.isAboveLand(land))
 							{
 								if(ent.isFlying())
 								{
-									while(ent.intersects(intersectedWall))
+									while(ent.intersects((Wall)land))
 									{
 										ent.setY(ent.getY() - PUSH_AMOUNT);
 										ent.setVelY(Math.min(ent.getVelY(), 0));
 									}
 								}
-								else if(intersectsFeet(ent, intersectedWall))
+								else if(intersectsFeet(ent, land))
 								{
-									ground = intersectedWall;
-									ent.setY(intersectedWall.getSurface(ent.getX()) - ent.getHeight() / 2);
+									ground = land;
+									ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
 								}
 							}
 							// Upward collision into wall
 							else if(!ent.isGrounded())
 							{
-								while(ent.intersects(intersectedWall))
+								while(ent.intersects((Wall)land))
 								{
 									ent.setY(ent.getY() + PUSH_AMOUNT);
 									ent.setVelY(Math.max(ent.getVelY(), 0));
@@ -326,11 +318,11 @@ public abstract class Stage
 
 			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
 			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-			for(Wall wall : walls)
+			for(Land land : landscape)
 			{
-				if(inProximity(proj, wall) && proj.intersects(wall))
+				if(land instanceof Wall && inProximity(proj, land) && proj.intersects((Wall)land))
 				{
-					intersectedWalls.add(wall);
+					intersectedWalls.add((Wall)land);
 				}
 			}
 			if(intersectedWalls.size() > 0)
@@ -387,40 +379,35 @@ public abstract class Stage
 		return Math.sqrt(Math.pow(ent.getX() - proj.getX(), 2) + Math.pow(ent.getY() - proj.getY(), 2)) < COLLISION_PROXIMITY;
 	}
 
-	public boolean inProximity(Entity ent, Platform plat)
+	public boolean inProximity(Entity ent, Land land)
 	{
-		return plat.getLine().ptSegDist(ent.getX(), ent.getY()) < COLLISION_PROXIMITY;
+		return land.getLine().ptSegDist(ent.getX(), ent.getY()) < COLLISION_PROXIMITY;
 	}
 
-	public boolean inProximity(Entity ent, Wall wall)
+	public boolean inProximity(Projectile proj, Land land)
 	{
-		return wall.getLine().ptSegDist(ent.getX(), ent.getY()) < COLLISION_PROXIMITY;
-	}
-
-	public boolean inProximity(Projectile proj, Wall wall)
-	{
-		return wall.getLine().ptSegDist(proj.getX(), proj.getY()) < COLLISION_PROXIMITY;
+		return land.getLine().ptSegDist(proj.getX(), proj.getY()) < COLLISION_PROXIMITY;
 	}
 
 	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)
-	public void sortWallsByDistance(Entity ent, ArrayList<Wall> walls)
+	public void sortLandByDistance(Entity ent, ArrayList<Land> landscape)
 	{
-		if(walls.size() < 2)
+		if(landscape.size() <= 1)
 		{
 			return;
 		}
 
-		for(int count = 0; count < walls.size(); count++)
+		for(int count = 0; count < landscape.size(); count++)
 		{
-			double length = walls.get(count).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY());
+			double length = landscape.get(count).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY());
 
-			for(int current = count + 1; current < walls.size(); current++)
+			for(int current = count + 1; current < landscape.size(); current++)
 			{
-				if(walls.get(current).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY()) < length)
+				if(landscape.get(current).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY()) < length)
 				{
-					Wall temp = walls.get(count);
-					walls.set(count, walls.get(current));
-					walls.set(current, temp);
+					Land temp = landscape.get(count);
+					landscape.set(count, landscape.get(current));
+					landscape.set(current, temp);
 				}
 			}
 		}
@@ -503,12 +490,11 @@ public abstract class Stage
 		{
 			item.render(g);
 		}
-		for(Entity ent : entities)
+		for(int count = entities.size() - 1; count >= 0; count--)
 		{
-			ent.render(g);
+			// Render player last
+			entities.get(count).render(g);
 		}
-		// Render player on top
-		player.render(g); // TODO Don't render player twice
 		g.translate(camForeX, camForeY);
 	}
 
@@ -661,14 +647,9 @@ public abstract class Stage
 		return projectiles;
 	}
 
-	public ArrayList<Platform> getPlatforms()
+	public ArrayList<Land> getLandscape()
 	{
-		return platforms;
-	}
-
-	public ArrayList<Wall> getWalls()
-	{
-		return walls;
+		return landscape;
 	}
 
 	public int getTime()

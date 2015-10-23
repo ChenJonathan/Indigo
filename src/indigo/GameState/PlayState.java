@@ -4,8 +4,7 @@ import indigo.Display.HUD;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.Interactive.Interactive;
-import indigo.Landscape.Platform;
-import indigo.Landscape.Wall;
+import indigo.Landscape.Land;
 import indigo.Manager.ContentManager;
 import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
@@ -39,8 +38,7 @@ public class PlayState extends GameState
 	private ArrayList<Entity> entities;
 	private ArrayList<Interactive> items;
 	private ArrayList<Projectile> projectiles;
-	private ArrayList<Platform> platforms;
-	private ArrayList<Wall> walls;
+	private ArrayList<Land> landscape;
 
 	private int time;
 
@@ -84,8 +82,7 @@ public class PlayState extends GameState
 		entities = stage.getEntities();
 		items = stage.getItems();
 		projectiles = stage.getProjectiles();
-		platforms = stage.getPlatforms();
-		walls = stage.getWalls();
+		landscape = stage.getLandscape();
 		player = (Player)getPlayer();
 
 		// Initialize phases
@@ -394,19 +391,11 @@ public class PlayState extends GameState
 	}
 
 	/**
-	 * @return A list of the platforms in play.
+	 * @return A list of the walls and platforms in play.
 	 */
-	public ArrayList<Platform> getPlatforms()
+	public ArrayList<Land> getLandscape()
 	{
-		return platforms;
-	}
-
-	/**
-	 * @return A list of the walls in play.
-	 */
-	public ArrayList<Wall> getWalls()
-	{
-		return walls;
+		return landscape;
 	}
 
 	/**

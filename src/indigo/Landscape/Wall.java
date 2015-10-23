@@ -9,8 +9,6 @@ public class Wall extends Land
 {
 	protected String name;
 
-	private boolean horizontal;
-
 	// Blocks movement for entities; triggers collide method for projectiles
 	protected boolean blocksEntities;
 	protected boolean blocksNonsolidProjectiles;
@@ -26,9 +24,6 @@ public class Wall extends Land
 		super(stage, x1, y1, x2, y2);
 		
 		name = "a wall";
-
-		// Checks if angle is greater or less than 45 degrees
-		horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 
 		blocksEntities = true;
 		blocksNonsolidProjectiles = false;
@@ -48,11 +43,6 @@ public class Wall extends Land
 	public String getName()
 	{
 		return name;
-	}
-
-	public boolean isHorizontal()
-	{
-		return horizontal;
 	}
 
 	public boolean blocksEntities()

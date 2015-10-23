@@ -1,8 +1,6 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
-import indigo.Landscape.Platform;
-import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Manager.ContentManager;
 import indigo.Projectile.Mortar;
@@ -64,22 +62,13 @@ public class Turret extends Entity
 		// Finding closest wall
 		double minDistance = 500;
 		Land closestLand = null;
-		for(Wall wall : stage.getWalls())
+		for(Land land : stage.getLandscape())
 		{
-			double distance = wall.getLine().ptSegDist(x, y);
+			double distance = land.getLine().ptSegDist(x, y);
 			if(distance < minDistance)
 			{
 				minDistance = distance;
-				closestLand = wall;
-			}
-		}
-		for(Platform plat : stage.getPlatforms())
-		{
-			double distance = plat.getLine().ptSegDist(x, y);
-			if(distance < minDistance)
-			{
-				minDistance = distance;
-				closestLand = plat;
+				closestLand = land;
 			}
 		}
 

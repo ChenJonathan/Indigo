@@ -11,7 +11,9 @@ public abstract class Land
 
 	protected Line2D.Double line;
 
+	protected boolean horizontal;
 	protected double slope;
+	
 	protected double minX;
 	protected double maxX;
 
@@ -21,6 +23,7 @@ public abstract class Land
 
 		line = new Line2D.Double(x1, y1, x2, y2);
 
+		horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 		slope = (y2 - y1) / ((x2 - x1) == 0? 0.0000001 : (x2 - x1));
 		minX = Math.min(x1, x2);
 		maxX = Math.max(x1, x2);
@@ -54,6 +57,11 @@ public abstract class Land
 	public double getDeltaY()
 	{
 		return Math.abs(line.getY1() - line.getY2());
+	}
+
+	public boolean isHorizontal()
+	{
+		return horizontal;
 	}
 
 	public double getLength()
