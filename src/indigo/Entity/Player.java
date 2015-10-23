@@ -57,7 +57,7 @@ public class Player extends Entity
 	public static final int PLAYER_WIDTH = 68;
 	public static final int PLAYER_HEIGHT = 111;
 
-	public static final int BASE_HEALTH = 200;
+	public static final int BASE_HEALTH = 200000;
 	public static final int BASE_MANA = 150;
 	public static final int BASE_STAMINA = 100;
 

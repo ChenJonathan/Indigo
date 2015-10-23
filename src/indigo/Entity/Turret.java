@@ -56,6 +56,7 @@ public class Turret extends Entity
 		timer = 0;
 
 		angle = Math.PI / 2;
+		groundAngle = Math.PI * 3 / 2;
 
 		animationCannon = new Animation();
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
@@ -140,7 +141,7 @@ public class Turret extends Entity
 
 			if(Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
 			{
-				angle = optimalAngle;
+				// angle = optimalAngle;
 				if(Math.random() < 0.4)
 				{
 					attack();
@@ -174,13 +175,13 @@ public class Turret extends Entity
 
 	public void render(Graphics2D g)
 	{
-		// Rotation breaks if x is negative
+		// Drawing turret base
 		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
 
-		// Drawing cannon
+		// Drawing turret cannon
 		if(getX() > 0 && getX() < stage.getMapX())
 		{
 			g.rotate(-angle + Math.PI / 2, getX(), getY());
