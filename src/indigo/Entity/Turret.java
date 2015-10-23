@@ -17,11 +17,14 @@ public class Turret extends Entity
 	private final int DEATH = 1;
 
 	private double angle;
+	private double groundAngle;
+	boolean ccw;
 
 	public static final double TURRET_WIDTH = 100;
 	public static final double TURRET_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250;
-	
+	public final double TURRETANGLE = Math.PI / 4;
+
 	public Turret(Stage stage, double x, double y)
 	{
 		this(stage, x, y, BASE_HEALTH);
@@ -42,6 +45,8 @@ public class Turret extends Entity
 		friendly = false;
 
 		angle = Math.PI / 2;
+		groundAngle = Math.PI * 3 / 2;
+		ccw = false;
 
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_IDLE), -1);
 	}
@@ -67,7 +72,7 @@ public class Turret extends Entity
 
 			if(Math.abs(deltaAngle) <= Math.PI / 18)
 			{
-				angle = optimalAngle;
+				// angle = optimalAngle; breaks my code :(
 				attack();
 			}
 			else
@@ -76,21 +81,28 @@ public class Turret extends Entity
 				{
 					deltaAngle += 2 * Math.PI;
 				}
-				if(deltaAngle < Math.PI)
+				if(angle >= 2 * Math.PI)
+				{
+					angle -= 2 * Math.PI;
+				}
+				else if(angle < 0)
+				{
+					angle += 2 * Math.PI;
+				}
+				if(checkArc(angle, optimalAngle)) {
+					ccw = true;
+				}
+				else {
+					ccw = false;
+				}
+				//System.out.println(reverse);
+				if(ccw && isLegal(angle + Math.PI / 90))
 				{
 					angle += Math.PI / 90;
-					if(angle >= 2 * Math.PI)
-					{
-						angle -= 2 * Math.PI;
-					}
 				}
-				else
+				else if(!ccw && isLegal(angle - Math.PI / 90)) 
 				{
 					angle -= Math.PI / 90;
-					if(angle < 0)
-					{
-						angle += 2 * Math.PI;
-					}
 				}
 			}
 		}
@@ -110,7 +122,7 @@ public class Turret extends Entity
 	public void attack()
 	{
 		if(stage.getTime() % 50 == 0) // TODO Change to be more similar to
-										// player firing
+			// player firing
 		{
 			double velX = Mortar.SPEED * Math.cos(angle);
 			double velY = Mortar.SPEED * -Math.sin(angle);
@@ -188,6 +200,50 @@ public class Turret extends Entity
 			}
 		}
 		return optimalAngle;
+	}
+
+	// hopefully to be replaced
+	public boolean isLegal(double testAngle) {
+		boolean legal = false;
+
+		double leftBound = groundAngle - TURRETANGLE;
+		if(leftBound < 0) {
+			leftBound += Math.PI * 2;
+		}
+		double rightBound = (groundAngle + TURRETANGLE) % (Math.PI * 2);
+
+		// System.out.println(leftBound + ", " + testAngle + "," + rightBound); debugging tool
+		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound)) {
+			legal = true;
+		}
+		else if(rightBound < leftBound && testAngle > rightBound && testAngle < leftBound){
+			legal = true;
+		}
+		return legal;
+	} 
+
+	public boolean checkArc(double startAngle, double endAngle) {
+		boolean canReachCCW = true;
+		startAngle = (startAngle > Math.PI)? -1 * (Math.PI * 2 - startAngle) : startAngle;
+		endAngle = (endAngle > Math.PI)? -1 * (Math.PI * 2 - endAngle) : endAngle;
+
+		double leftBound = groundAngle - TURRETANGLE;
+		double rightBound = (groundAngle + TURRETANGLE) % (Math.PI * 2);
+		leftBound = (leftBound > Math.PI) ? -1 * (Math.PI * 2 - leftBound) : leftBound;
+		rightBound = (rightBound > Math.PI) ? -1 * (Math.PI * 2 - rightBound) : rightBound;
+		
+		//System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
+		if(startAngle > endAngle) {
+			canReachCCW = (endAngle < leftBound)? true : false;
+			//System.out.println(canReachCCW);
+		}
+		else {
+			canReachCCW = (startAngle < leftBound && endAngle > rightBound)? false : true;
+		}
+		if(endAngle > leftBound && endAngle < rightBound) {
+			canReachCCW = (endAngle < (leftBound + rightBound) / 2)? true : false;
+		}
+		return canReachCCW;
 	}
 
 	public double getAngle()
