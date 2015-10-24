@@ -52,7 +52,7 @@ public class ContentManager
 	public static ImageData ARROW_RIGHT_ACTIVE = new ImageData("/images/menus/arrow_right_active.png", 60, 110);
 	public static ImageData ARROW_RIGHT_INACTIVE = new ImageData("/images/menus/arrow_right_inactive.png", 60, 110);
 	public static ImageData BACK_BUTTON = new ImageData("/images/menus/back_button.png", 200, 60);
-	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 175, 70);
+	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 175, 50);
 	public static ImageData CREDITS_BACKGROUND = new ImageData("/images/menus/credits_background.png", 1920, 1080);
 	public static ImageData CREDITS_BUTTON = new ImageData("/images/menus/credits.png", 250, 100);
 	public static ImageData CREDITS_BUTTON_HOVER = new ImageData("/images/menus/credits_hover.png", 250, 100);
@@ -76,7 +76,7 @@ public class ContentManager
 			1080);
 	public static ImageData TALENTS_BACKGROUND = new ImageData("/images/menus/talents.png", 1920, 1080);
 	public static ImageData TITLE = new ImageData("/images/menus/title.png", 800, 382);
-	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 300, 405);
+	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 302, 402);
 
 	// Projectiles
 	public static AnimationData ELECTRIC_BALL = new AnimationData("/images/projectiles/electric_ball.png", 100, 100, 1);
@@ -88,8 +88,8 @@ public class ContentManager
 	public static AnimationData ICICLE = new AnimationData("/images/projectiles/icicle/default.png", 160, 73, 1);
 	public static AnimationData MORTAR_DEATH = new AnimationData("/images/projectiles/mortar_death.png", 100, 100, 9);
 	public static AnimationData MORTAR = new AnimationData("/images/projectiles/mortar.png", 50, 50, 1);
-	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100,
-			100, 1);
+	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100, 100,
+			1);
 	public static AnimationData WATER_BOLT_DEATH = new AnimationData("/images/projectiles/water_bolt/death.png", 80,
 			73, 2);
 	public static AnimationData WATER_BOLT_DEATH_WALL = new AnimationData(
@@ -142,10 +142,14 @@ public class ContentManager
 			8);
 	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
-	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130, 110, 7);
-	public static AnimationData TURRET_BASE_DEFAULT = new AnimationData("/images/sprites/turret/base_default.png", 130, 110, 1);
-	public static AnimationData TURRET_CANNON_DEATH = new AnimationData("/images/sprites/turret/cannon_death.png", 130, 130, 7);
-	public static AnimationData TURRET_CANNON_DEFAULT = new AnimationData("/images/sprites/turret/cannon_default.png", 130, 130, 1);
+	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130,
+			110, 7);
+	public static AnimationData TURRET_BASE_DEFAULT = new AnimationData("/images/sprites/turret/base_default.png", 130,
+			110, 1);
+	public static AnimationData TURRET_CANNON_DEATH = new AnimationData("/images/sprites/turret/cannon_death.png", 130,
+			130, 7);
+	public static AnimationData TURRET_CANNON_DEFAULT = new AnimationData("/images/sprites/turret/cannon_default.png",
+			130, 130, 1);
 
 	// Stages
 	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);

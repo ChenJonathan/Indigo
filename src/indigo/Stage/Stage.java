@@ -60,7 +60,7 @@ public abstract class Stage
 	public static final double PUSH_AMOUNT = 0.5;
 
 	// Speed at which camera moves when unlocked
-	public static final int CAMERA_SPEED = 60;
+	public static final int CAMERA_SPEED = 80;
 
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
@@ -96,7 +96,7 @@ public abstract class Stage
 				{
 					for(int itemCount = 0; itemCount < interactives.size(); itemCount++)
 					{
-						Interactive item = interactives.get(count);
+						Interactive item = interactives.get(itemCount);
 						item.update();
 
 						if(item.isActive() && inProximity(ent, item) && ent.intersects(item))
@@ -486,9 +486,9 @@ public abstract class Stage
 		{
 			proj.render(g);
 		}
-		for(Interactive item : interactives)
+		for(Interactive interactive : interactives)
 		{
-			item.render(g);
+			interactive.render(g);
 		}
 		for(int count = entities.size() - 1; count >= 0; count--)
 		{

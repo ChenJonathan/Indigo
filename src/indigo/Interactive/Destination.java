@@ -13,8 +13,8 @@ public class Destination extends Interactive
 	private final int IDLE = 0;
 	private final int DEATH = 1;
 
-	public final static int WIDTH = 100;
-	public final static int HEIGHT = 100;
+	public final static int WIDTH = 110;
+	public final static int HEIGHT = 130;
 	public final static double SPEED = 0;
 
 	public Destination(Stage stage, double x, double y)
@@ -49,7 +49,6 @@ public class Destination extends Interactive
 
 	public void activate(Player player)
 	{
-		// TODO Set death animation
 		die();
 	}
 

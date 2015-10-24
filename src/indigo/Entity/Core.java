@@ -12,7 +12,7 @@ public class Core extends Entity
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
-	public static final double CORE_WIDTH = 100;
+	public static final double CORE_WIDTH = 110;
 	public static final double CORE_HEIGHT = 130;
 	public static final int BASE_HEALTH = 2000;
 

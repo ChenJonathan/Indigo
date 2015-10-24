@@ -1,6 +1,6 @@
 {
     "name":"Test",
-    "type":"Defend",
+    "type":"Travel",
 
     "mapX":6000,
     "mapY":4000,
@@ -8,24 +8,55 @@
     "startingX":1300,
     "startingY":1000,
 
-    "coreX":1900,
-    "coreY":1300,
+    "destinationX":5800,
+    "destinationY":800,
 
-    "survivalDuration":600,
+    "timeLimit":18000,
 
     "landscape":[
-        {"type":"Wall", "x1":1700, "y1":1500, "x2":2300, "y2":1500}
         {"type":"Wall", "x1":1700, "y1":1500, "x2":1200, "y2":1400}
         {"type":"Wall", "x1":1200, "y1":1400, "x2":600, "y2":1000}
         {"type":"Wall", "x1":600, "y1":1000, "x2":0, "y2":900}
         {"type":"Platform", "x1":2300, "y1":1500, "x2":3400, "y2":1500}
         {"type":"Platform", "x1":3400, "y1":1500, "x2":4600, "y2":1200}
         {"type":"Platform", "x1":4600, "y1":1200, "x2":5400, "y2":900}
-        {"type":"Wall", "x1":2300, "y1":1500, "x2":2300, "y2":3400}
         {"type":"Wall", "x1":5400, "y1":900, "x2":6000, "y2":900}
-        {"type":"Wall", "x1":2300, "y1":3400, "x2":2300, "y2":4000}
         {"type":"Wall", "x1":5400, "y1":900, "x2":5400, "y2":4000}
         {"type":"Spike Pit", "x1":2300, "y1":4000, "x2":5400, "y2":4000}
+        {"type":"Wall", "x1":2300, "y1":1000, "x2":2900, "y2":1000}
+        {"type":"Wall", "x1":2900, "y1":1000, "x2":3400, "y2":600}
+        {"type":"Wall", "x1":3400, "y1":600, "x2":3900, "y2":600}
+        {"type":"Wall", "x1":2300, "y1":1000, "x2":2300, "y2":900}
+        {"type":"Wall", "x1":2300, "y1":900, "x2":2800, "y2":900}
+        {"type":"Wall", "x1":2800, "y1":900, "x2":3300, "y2":500}
+        {"type":"Wall", "x1":3300, "y1":500, "x2":3900, "y2":500}
+        {"type":"Wall", "x1":3900, "y1":500, "x2":3900, "y2":600}
+        {"type":"Wall", "x1":2300, "y1":1500, "x2":2300, "y2":3700}
+        {"type":"Wall", "x1":2300, "y1":4000, "x2":2000, "y2":4000}
+        {"type":"Wall", "x1":2000, "y1":4000, "x2":1500, "y2":3900}
+        {"type":"Wall", "x1":1500, "y1":3900, "x2":1200, "y2":3700}
+        {"type":"Wall", "x1":1200, "y1":3700, "x2":1000, "y2":3400}
+        {"type":"Wall", "x1":1000, "y1":3400, "x2":900, "y2":3100}
+        {"type":"Wall", "x1":2300, "y1":1500, "x2":2000, "y2":1500}
+        {"type":"Platform", "x1":2000, "y1":1500, "x2":1700, "y2":1500}
+        {"type":"Platform", "x1":1600, "y1":1800, "x2":1900, "y2":1800}
+        {"type":"Platform", "x1":1500, "y1":2100, "x2":1800, "y2":2100}
+        {"type":"Platform", "x1":1400, "y1":2400, "x2":1700, "y2":2400}
+        {"type":"Platform", "x1":1300, "y1":2700, "x2":1600, "y2":2700}
+        {"type":"Wall", "x1":900, "y1":3100, "x2":900, "y2":2700}
+        {"type":"Wall", "x1":900, "y1":2700, "x2":1300, "y2":2700}
+        {"type":"Wall", "x1":1600, "y1":2700, "x2":2300, "y2":2700}
+        {"type":"Wall", "x1":2000, "y1":1500, "x2":1600, "y2":2700}
+        {"type":"Wall", "x1":1700, "y1":1500, "x2":1300, "y2":2700}
+        {"type":"Platform", "x1":1100, "y1":2900, "x2":1400, "y2":3000}
+        {"type":"Platform", "x1":1800, "y1":3000, "x2":2100, "y2":2900}
+        {"type":"Platform", "x1":1700, "y1":3200, "x2":2000, "y2":3300}
+        {"type":"Platform", "x1":1100, "y1":3200, "x2":1300, "y2":3300}
+        {"type":"Platform", "x1":1400, "y1":3200, "x2":1600, "y2":3100}
+        {"type":"Platform", "x1":1500, "y1":3500, "x2":1800, "y2":3400}
+        {"type":"Platform", "x1":1600, "y1":3700, "x2":2000, "y2":3700}
+        {"type":"Platform", "x1":1800, "y1":3800, "x2":2100, "y2":3900}
+        {"type":"Platform", "x1":2000, "y1":3600, "x2":2300, "y2":3500}
     ],
 
     "spawns":[
@@ -41,5 +72,15 @@
         {"category":"Projectile", "type":"Steel Beam", "x":4800, "y":200, "respawnTime":0}
         {"category":"Interactive", "type":"Health Pickup", "x":500, "y":900, "respawnTime":1500}
         {"category":"Entity", "type":"Flying Bot", "x":4800, "y":1900, "respawnTime":1500}
+        {"category":"Entity", "type":"Turret", "x":1200, "y":3000, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":2000, "y":3000, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1500, "y":3200, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1200, "y":3300, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1800, "y":3300, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1700, "y":3500, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":2200, "y":3600, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1900, "y":3900, "respawnTime":0}
+        {"category":"Entity", "type":"Turret", "x":1700, "y":3800, "respawnTime":0}
+        {"category":"Interactive", "type":"Health Pickup", "x":2400, "y":800, "respawnTime":1500}
     ]
 }

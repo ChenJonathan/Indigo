@@ -29,8 +29,8 @@ public class Turret extends Entity
 
 	public final double TURRET_ANGLE = Math.PI / 4;
 
-	public static final double TURRET_WIDTH = 100;
-	public static final double TURRET_HEIGHT = 130;
+	public static final double TURRET_WIDTH = 130;
+	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int FIRE_RATE = 60;
 
@@ -91,7 +91,7 @@ public class Turret extends Entity
 			setX(intersection.getX() - Math.cos(groundAngle) * getHeight() / 2);
 			setY(intersection.getY() - Math.sin(groundAngle) * getHeight() / 2);
 
-			angle = groundAngle;
+			angle = Math.PI - groundAngle;
 
 			// Check if turret is on wall
 			if(closestLand.getLine().ptSegDist(intersection) > 1)
@@ -129,10 +129,10 @@ public class Turret extends Entity
 			double optimalAngle = getOptimalAngle();
 			double deltaAngle = optimalAngle - angle;
 
-			if(Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
+			if(isLegal(optimalAngle) && Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
 			{
 				angle = optimalAngle;
-				if(Math.random() < 0.4)
+				if(Math.random() < 0.5)
 				{
 					attack();
 				}
@@ -140,25 +140,31 @@ public class Turret extends Entity
 			else
 			{
 				if(deltaAngle < 0)
- 				{
- 					deltaAngle += 2 * Math.PI;
- 				}
- 				if(deltaAngle < Math.PI)
- 				{
- 					angle += Math.PI / 90;
- 					if(angle >= 2 * Math.PI)
- 					{
- 						angle -= 2 * Math.PI;
- 					}
- 				}
- 				else
- 				{
- 					angle -= Math.PI / 90;
- 					if(angle < 0)
- 					{
- 						angle += 2 * Math.PI;
- 					}
- 				}
+				{
+					deltaAngle += 2 * Math.PI;
+				}
+				if(angle >= 2 * Math.PI)
+				{
+					angle -= 2 * Math.PI;
+				}
+				else if(angle < 0)
+				{
+					angle += 2 * Math.PI;
+				}
+				if(checkArc(angle, optimalAngle))
+				{
+					if(isLegal(angle + Math.PI / 90))
+					{
+						angle += Math.PI / 90;
+					}
+				}
+				else
+				{
+					if(isLegal(angle - Math.PI / 90))
+					{
+						angle -= Math.PI / 90;
+					}
+				}
 			}
 		}
 	}
@@ -267,6 +273,59 @@ public class Turret extends Entity
 			}
 		}
 		return optimalAngle;
+	}
+
+	public boolean isLegal(double testAngle)
+	{
+		boolean legal = false;
+
+		double leftBound = (Math.PI * 2 - groundAngle) - TURRET_ANGLE;
+		if(leftBound < 0)
+		{
+			leftBound += Math.PI * 2;
+		}
+		leftBound %= Math.PI * 2;
+		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
+
+		//System.out.println(leftBound + ", " + testAngle + "," + rightBound);
+		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
+		{
+			legal = true;
+		}
+		else if(rightBound < leftBound && (testAngle > rightBound && testAngle < leftBound))
+		{
+			legal = true;
+		}
+		return legal;
+	}
+
+	public boolean checkArc(double startAngle, double endAngle)
+	{
+		boolean canReachCCW = true;
+		startAngle = (startAngle > Math.PI)? -1 * (Math.PI * 2 - startAngle) : startAngle;
+		endAngle = (endAngle > Math.PI)? -1 * (Math.PI * 2 - endAngle) : endAngle;
+
+		double leftBound = (Math.PI * 2 - groundAngle) - TURRET_ANGLE;
+		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
+		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
+		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
+		//System.out.println(leftBound + ", " + rightBound);
+
+		//System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
+		if(startAngle > endAngle)
+		{
+			canReachCCW = (endAngle < leftBound && startAngle > leftBound)? true : false;
+			// System.out.println(canReachCCW);
+		}
+		else
+		{
+			canReachCCW = (startAngle < leftBound && endAngle > leftBound)? false : true;
+		}
+		if(endAngle > leftBound && endAngle < rightBound)
+		{
+			canReachCCW = (endAngle < (leftBound + rightBound) / 2)? true : false;
+		}
+		return canReachCCW;
 	}
 
 	public Shape getHitbox()

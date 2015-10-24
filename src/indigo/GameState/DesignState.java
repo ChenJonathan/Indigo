@@ -468,38 +468,38 @@ public class DesignState extends GameState
 		}
 
 		// Draw toolbar
-		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1580, 40, 300, 405, null);
+		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1579, 39, 302, 402, null);
 
 		// Draw hover box
 		if(hoverValue != -1)
 		{
 			g.setColor(Color.GRAY);
 			g.setStroke(new BasicStroke(6));
-			g.drawRect(1580 + (hoverValue % 3) * 105, 40 + (hoverValue / 3) * 105, 90, 90);
+			g.drawRect(1585 + (hoverValue % 3) * 100, 45 + (hoverValue / 3) * 100, 92, 92);
 		}
 
 		// Draw tool selection box
 		g.setColor(Color.YELLOW);
 		g.setStroke(new BasicStroke(6));
-		g.drawRect(1580 + (selectedTool % 3) * 105, 40 + (selectedTool / 3) * 105, 90, 90);
+		g.drawRect(1585 + (selectedTool % 3) * 100, 45 + (selectedTool / 3) * 100, 92, 92);
 
 		// Draw selection box
-		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 485, 300, 110, null);
+		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 480, 300, 110, null);
 		if(arrowLeft)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 485, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 480, 60, 110, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 485, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 480, 60, 110, null);
 		}
 		if(arrowRight)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 485, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 480, 60, 110, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 485, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 480, 60, 110, null);
 		}
 
 		// Draw tool type text
@@ -507,10 +507,10 @@ public class DesignState extends GameState
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		FontMetrics fontMetrics = g.getFontMetrics();
 		String text = toolTypes.get(selectedTool)[selectedToolType];
-		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 540 + fontMetrics.getHeight() / 4);
+		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 535 + fontMetrics.getHeight() / 4);
 
 		// Draw description box
-		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 635, 300, 405, null);
+		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 630, 300, 410, null);
 
 		// Draw description text
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 32));
@@ -528,10 +528,10 @@ public class DesignState extends GameState
 			title = tools.get(hoverValue);
 			words = descriptionText.get(tools.get(hoverValue)).split(" ");
 		}
-		g.drawString(title, 1730 - fontMetrics.stringWidth(title) / 2, 655 + fontMetrics.getHeight() / 2);
+		g.drawString(title, 1730 - fontMetrics.stringWidth(title) / 2, 650 + fontMetrics.getHeight() / 2);
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		fontMetrics = g.getFontMetrics();
-		int lineY = 700 + fontMetrics.getHeight() / 2;
+		int lineY = 695 + fontMetrics.getHeight() / 2;
 		while(word < words.length)
 		{
 			String line = "";
@@ -551,7 +551,7 @@ public class DesignState extends GameState
 		// Draw confirm button
 		if(confirmBox)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.CONFIRM_BUTTON), 1642, 940, 175, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.CONFIRM_BUTTON), 1642, 970, 175, 50, null);
 		}
 
 		// Draw hover tooltip
