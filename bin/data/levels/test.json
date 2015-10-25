@@ -8,7 +8,7 @@
     "startingX":1300,
     "startingY":1000,
 
-    "destinationX":5900,
+    "destinationX":5800,
     "destinationY":800,
 
     "timeLimit":18000,
@@ -81,5 +81,6 @@
         {"category":"Entity", "type":"Turret", "x":2200, "y":3600, "respawnTime":0}
         {"category":"Entity", "type":"Turret", "x":1900, "y":3900, "respawnTime":0}
         {"category":"Entity", "type":"Turret", "x":1700, "y":3800, "respawnTime":0}
+        {"category":"Interactive", "type":"Health Pickup", "x":2400, "y":800, "respawnTime":1500}
     ]
 }
