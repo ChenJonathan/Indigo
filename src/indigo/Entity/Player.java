@@ -112,6 +112,7 @@ public class Player extends Entity
 	public void update()
 	{
 		// Animation related activities
+		//System.out.println(getX()+" "+getY());
 		if(currentAnimation == MIST)
 		{
 			if(animation.hasPlayedOnce())
