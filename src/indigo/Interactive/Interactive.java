@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 public abstract class Interactive implements Respawnable
 {
 	protected Stage stage;
+	protected Player player;
 
 	private double x, y;
 
@@ -28,6 +29,7 @@ public abstract class Interactive implements Respawnable
 	public Interactive(Stage stage, double x, double y)
 	{
 		this.stage = stage;
+		player = (Player)stage.getEntities().get(0);
 
 		this.x = x;
 		this.y = y;

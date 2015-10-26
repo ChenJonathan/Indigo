@@ -100,6 +100,7 @@ public class TravelStage extends Stage
 		}
 		else if(playState.getTime() == timeLimit)
 		{
+			data.setDeathMessage("You ran out of time!");
 			playState.endGame(false);
 		}
 
