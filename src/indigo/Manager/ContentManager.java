@@ -37,14 +37,16 @@ public class ContentManager
 	public static ImageData PLAYER_HUD = new ImageData("/images/hud/player_hud.png", 350, 100);
 	public static ImageData POINTER = new ImageData("/images/hud/pointer.png", 100, 7);
 
-	// Items
-	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/items/health_pickup/death.png", 110,
-			110, 5);
-	public static AnimationData HEALTH_PICKUP_IDLE = new AnimationData("/images/items/health_pickup/idle.png", 110,
-			110, 4);
-	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/items/health_pickup/spawn.png", 110,
-			110, 5);
-	public static AnimationData MANA_PICKUP = new AnimationData("/images/items/mana_pickup.png", 100, 100, 1);
+	// Interactives
+	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/interactives/health_pickup/death.png",
+			110, 110, 5);
+	public static AnimationData HEALTH_PICKUP_IDLE = new AnimationData("/images/interactives/health_pickup/idle.png",
+			110, 110, 4);
+	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/interactives/health_pickup/spawn.png",
+			110, 110, 5);
+	public static AnimationData MANA_PICKUP = new AnimationData("/images/interactives/mana_pickup.png", 100, 100, 1);
+	public static AnimationData BRANCH_DEFAULT = new AnimationData("/images/interactives/branch/default.png", 250, 50,
+			1);
 
 	// Menus
 	public static ImageData ARROW_LEFT_ACTIVE = new ImageData("/images/menus/arrow_left_active.png", 60, 110);
@@ -142,6 +144,7 @@ public class ContentManager
 			8);
 	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
+	public static AnimationData TREE_DEFAULT = new AnimationData("/images/sprites/tree/default.png", 150, 600, 1);
 	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130,
 			110, 7);
 	public static AnimationData TURRET_BASE_DEFAULT = new AnimationData("/images/sprites/turret/base_default.png", 130,

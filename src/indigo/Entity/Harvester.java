@@ -5,6 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 import indigo.Landscape.Land;
+import indigo.Manager.ContentManager;
 import indigo.Projectile.HarvestSaw;
 import indigo.Projectile.WaterBolt;
 import indigo.Stage.Stage;
@@ -21,6 +22,11 @@ public class Harvester extends Entity
 	public static final int BASE_HEALTH = 250;// TODO: Change to harvester's stats
 	public static final int RANGE = 50;// TODO: Balancing
 
+	public Harvester(Stage stage, double x, double y)
+	{
+		this(stage, x, y, BASE_HEALTH);
+	}
+
 	public Harvester(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
@@ -30,12 +36,13 @@ public class Harvester extends Entity
 		height = HARVESTER_HEIGHT;
 
 		pushability = 5;
+		solid = true;
 		flying = false;
 		frictionless = false;
 
 		friendly = false;
 
-		// TODO: setAnimation(DEFAULT, ContentManger.getAnimation)
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.FLYING_BOT_IDLE), -1);
 	}
 
 	public void update()
@@ -43,43 +50,45 @@ public class Harvester extends Entity
 		super.update();
 
 		// Look for nearest tree
-		if(TREE == null || TREE.isDead())
+		if(tree == null || tree.isDead())
 		{
 			for(int count = 0; count < stage.getEntities().size(); count++)
 			{
 				if(stage.getEntities().get(count) instanceof Tree)
 				{
-					Tree temp = stage.getEntities().get(count);
+					Tree temp = (Tree)stage.getEntities().get(count);
 					// check if closer than current tree
-					if(TREE == null)
+					if(tree == null)
 					{
-						TREE = stage.getEntities().get(count);
+						tree = (Tree)stage.getEntities().get(count);
 					}
 					else
 					{
-						double currentDist = Math
-								.sqrt(Math.pow(TREE.getX() - this.getX(), 2) + Math.pow(TREE.getY() - this.getY(), 2));
-						double newDist = Math
-								.sqrt(Math.pow(temp.getX() - this.getX(), 2) + Math.pow(temp.getY() - this.getY(), 2));
+						double currentDist = Math.sqrt(Math.pow(tree.getX() - this.getX(), 2)
+								+ Math.pow(tree.getY() - this.getY(), 2));
+						double newDist = Math.sqrt(Math.pow(temp.getX() - this.getX(), 2)
+								+ Math.pow(temp.getY() - this.getY(), 2));
 						if(newDist < currentDist)
 						{
-							TREE = temp;
+							tree = temp;
 						}
 					}
 				}
 			}
-		} // finished looking for nearest tree
+		}
+		// Finished looking for nearest tree
 
 		if(!inRange())
 		{
-			double scale = Math.sqrt(Math.pow(TREE.getY() - this.getY(), 2) + Math.pow(TREE.getX() - this.getY(), 2));
-			double velX = WaterBolt.SPEED * (TREE.getX() - this.getX()) / scale;
-			double velY = WaterBolt.SPEED * (TREE.getY() - this.getY()) / scale;
+			double scale = Math.sqrt(Math.pow(tree.getY() - this.getY(), 2) + Math.pow(tree.getX() - this.getY(), 2));
+			double velX = WaterBolt.SPEED * (tree.getX() - this.getX()) / scale;
+			double velY = WaterBolt.SPEED * (tree.getY() - this.getY()) / scale;
 
 			this.setVelX(velX);
 			this.setVelY(velY);
 		}
-		else // in range
+		else
+		// In range
 		{
 			this.setVelX(0);
 			this.setVelY(0);
@@ -87,24 +96,27 @@ public class Harvester extends Entity
 		// If tree found, initiate attacking procedure
 		if(inRange() && canAttack())
 		{
-			if(TREE.getY() > this.getY()) // if tree is on the right
+			if(tree.getY() > this.getY()) // if tree is on the right
 			{
 				if(this.isFacingRight()) // harvester is facing right
 				{
 					attack();
 				}
-				else // harvester is facing left
+				else
+				// harvester is facing left
 				{
 					this.setDirection(true);
 				}
 			}
-			else // tree is on the left
+			else
+			// tree is on the left
 			{
 				if(this.isFacingRight()) // harvester is facing right
 				{
 					this.setDirection(false);
 				}
-				else // harvester is facing left
+				else
+				// harvester is facing left
 				{
 					attack();
 				}
@@ -120,9 +132,9 @@ public class Harvester extends Entity
 
 	public boolean inRange()
 	{ // in range is if harvester is within attacking range (distance) of tree on both x and y.
-		boolean xInRange = Math.abs(TREE.getX() - getX()) <= RANGE;
-		boolean yInRange = (getY() - HARVESTER_HEIGHT >= TREE.getY() - TREE.HEIGHT)
-				&& (getY() + HARVESTER_HEIGHT <= TREE.getY() + TREE.HEIGHT);
+		boolean xInRange = Math.abs(tree.getX() - getX()) <= RANGE;
+		boolean yInRange = (getY() - HARVESTER_HEIGHT >= tree.getY() - tree.getHeight())
+				&& (getY() + HARVESTER_HEIGHT <= tree.getY() + tree.getHeight());
 		return xInRange && yInRange;
 	}
 
@@ -132,8 +144,8 @@ public class Harvester extends Entity
 		if(stage.getTime() % 5 == 0)
 		{
 			// Summon projectile, it should never move, disappear after time
-			stage.getProjectiles().add(new HarvestSaw(this, this.getX() + this.getWidth() / 2, this.getY(), 0,
-					0, HarvestSaw.DAMAGE));
+			stage.getProjectiles().add(
+					new HarvestSaw(this, this.getX() + this.getWidth() / 2, this.getY(), 0, 0, HarvestSaw.DAMAGE));
 		}
 	}
 

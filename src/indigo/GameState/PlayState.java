@@ -80,7 +80,7 @@ public class PlayState extends GameState
 
 		// Initialize stage objects
 		entities = stage.getEntities();
-		items = stage.getItems();
+		items = stage.getInteractives();
 		projectiles = stage.getProjectiles();
 		landscape = stage.getLandscape();
 		player = (Player)getPlayer();

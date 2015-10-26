@@ -32,6 +32,7 @@ public class SteamVent extends Entity
 		canTurn(false);
 		canAttack(true);
 
+		solid = false;
 		flying = false;
 		frictionless = false;
 		friendly = false;

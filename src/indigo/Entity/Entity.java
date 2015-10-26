@@ -45,6 +45,7 @@ public abstract class Entity implements Respawnable
 	private boolean canMove;
 	private boolean canTurn;
 
+	protected boolean solid;
 	protected boolean flying;
 	protected boolean frictionless;
 
@@ -507,14 +508,19 @@ public abstract class Entity implements Respawnable
 		this.canTurn = canTurn;
 	}
 
-	public boolean isFriendly()
+	public boolean isSolid()
 	{
-		return friendly;
+		return solid;
 	}
 
 	public boolean isFlying()
 	{
 		return flying;
+	}
+
+	public boolean isFriendly()
+	{
+		return friendly;
 	}
 
 	public boolean isBlocking(boolean projDirection)

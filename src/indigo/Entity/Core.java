@@ -25,6 +25,7 @@ public class Core extends Entity
 		height = CORE_HEIGHT;
 
 		pushability = 0;
+		solid = true;
 		flying = false;
 		frictionless = false;
 

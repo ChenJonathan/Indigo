@@ -42,6 +42,7 @@ public class FlyingBot extends Entity
 		height = FLYING_BOT_HEIGHT;
 
 		pushability = 5;
+		solid = true;
 		flying = true;
 		frictionless = false;
 

@@ -158,8 +158,8 @@ public class DesignState extends GameState
 		// Initialize tool types
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
 		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
-		toolTypes.put(SET_LAND, new String[] {"Wall", "Spike Pit", "Platform"});
-		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret"});
+		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Pit", "Force Field"});
+		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret", "Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
 		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
@@ -189,14 +189,21 @@ public class DesignState extends GameState
 		descriptionText.put("Defend", "Defend a core from enemy attack for a specified duration.");
 		descriptionText.put("Survival", "Survive for a specified duration.");
 		descriptionText.put("Travel", "Reach a specified destination.");
-		descriptionText.put("Wall", "An unpassable wall.");
-		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
 		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on. "
-				+ "Must be horizontal or the platform will be ignored");
+				+ "Must be more horizontal than vertical or the platform will not be created.");
+		descriptionText.put("Wall", "An impassable wall.");
+		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
+		descriptionText.put("Force Field", "A wall that lets entities through but destroys all projectiles.");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
 		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target. "
 				+ "Attaches itself to the nearest wall or platform upon map creation. "
 				+ "Cannot aim towards its base.");
+		descriptionText.put("Harvester", "A tree harvesting robot. "
+				+ "Moves towards the nearest tree and attempts to saw it down");
+		descriptionText.put("Tree", "A tree that spawns branches which can be jumped on. "
+				+ "Branches break after a short duration."
+				+ "Attaches itself to the nearest perfectly horizontal wall or platform upon map creation. "
+				+ "The tree is vulnerable to enemy attack and its size is around 1.5 by 6 grid spaces.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
@@ -224,13 +231,13 @@ public class DesignState extends GameState
 
 			do
 			{
-				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (1200 to 12000):"));
+				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (2400 to 12000):"));
 				mapX = mapX / GRID_SCALE * GRID_SCALE;
 			}
 			while(mapX < 2400 || mapX > 12000);
 			do
 			{
-				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (800 to 8000):"));
+				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (1600 to 8000):"));
 				mapY = mapY / GRID_SCALE * GRID_SCALE;
 			}
 			while(mapY < 1600 || mapY > 8000);
@@ -399,6 +406,9 @@ public class DesignState extends GameState
 				case "Spike Pit":
 					g.setColor(Color.RED);
 					break;
+				case "Force Field":
+					g.setColor(Color.CYAN);
+					break;
 				default:
 					g.setColor(Color.BLUE);
 					break;
@@ -442,7 +452,7 @@ public class DesignState extends GameState
 		// Draw objectives
 		if(objectiveSet)
 		{
-			g.setColor(Color.PINK);
+			g.setColor(Color.CYAN);
 			if(type.equals("Defend"))
 			{
 				int x = (int)(xMargin + scale(Integer.parseInt(json.get("coreX") + "")));
@@ -560,7 +570,7 @@ public class DesignState extends GameState
 			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 			fontMetrics = g.getFontMetrics();
 			String typeText = "Type: " + hoverSpawn.type;
-			String respawnText = "Respawn time: " + hoverSpawn.respawnTime;
+			String respawnText = "Respawn time: " + (hoverSpawn.respawnTime / 30) + "s";
 			int stringWidth = Math.max(fontMetrics.stringWidth(typeText), fontMetrics.stringWidth(respawnText));
 			int stringHeight = fontMetrics.getHeight();
 			int tooltipX = Manager.input.mouseX() + 20;
@@ -703,7 +713,10 @@ public class DesignState extends GameState
 					int x2 = x * GRID_SCALE;
 					int y2 = y * GRID_SCALE;
 					LandData land = new LandData(toolTypes.get(SET_LAND)[selectedToolType], x1, y1, x2, y2);
-					addToList(land);
+					if(!land.type.equals("Platform") || land.horizontal)
+					{
+						addToList(land);
+					}
 				}
 				selectedPoint = null;
 			}
@@ -1562,8 +1575,8 @@ public class DesignState extends GameState
 		BufferedImage stage = new BufferedImage(mapX, mapY, BufferedImage.TYPE_INT_ARGB);
 		try
 		{
-			Graphics2D stageGraphics = stage.createGraphics();
-			stageGraphics.setStroke(new BasicStroke(10));
+			Graphics2D g = stage.createGraphics();
+			g.setStroke(new BasicStroke(10));
 
 			// Draw landscape
 			for(LandData land : landscape)
@@ -1571,20 +1584,23 @@ public class DesignState extends GameState
 				switch(land.type)
 				{
 					case "Platform":
-						stageGraphics.setColor(Color.GREEN);
+						g.setColor(Color.GREEN);
 						break;
 					case "Spike Pit":
-						stageGraphics.setColor(Color.RED);
+						g.setColor(Color.RED);
+						break;
+					case "Force Field":
+						g.setColor(Color.CYAN);
 						break;
 					default:
-						stageGraphics.setColor(Color.BLUE);
+						g.setColor(Color.BLUE);
 						break;
 				}
 				int x1 = (int)land.x1;
 				int y1 = (int)land.y1;
 				int x2 = (int)land.x2;
 				int y2 = (int)land.y2;
-				stageGraphics.drawLine(x1, y1, x2, y2);
+				g.drawLine(x1, y1, x2, y2);
 			}
 		}
 		catch(Exception e)

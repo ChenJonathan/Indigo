@@ -95,6 +95,7 @@ public class Player extends Entity
 		healthRegenTime = manaRegenTime = staminaRegenTime = -1;
 
 		pushability = 5;
+		solid = true;
 		flying = false;
 		frictionless = false;
 

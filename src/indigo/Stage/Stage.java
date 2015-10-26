@@ -121,7 +121,7 @@ public abstract class Stage
 
 					if((otherEnt).isActive() && ent.isFriendly() != otherEnt.isFriendly() && inProximity(ent, otherEnt))
 					{
-						if(ent.intersects(otherEnt))
+						if(ent.isSolid() && otherEnt.isSolid() && ent.intersects(otherEnt))
 						{
 							// Entities are pushed horizontally when colliding with each other
 							if(ent.getX() < otherEnt.getX())
@@ -191,111 +191,115 @@ public abstract class Stage
 				}
 			}
 
-			Land ground = null;
-			if(ent.isGrounded())
-			{
-				Land prevGround = ent.getGround();
-				if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
-						&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
-				{
-					ground = prevGround;
-				}
-			}
-
 			// Entity-land: Colliding with and landing on land
-			ArrayList<Land> intersectedLand = new ArrayList<Land>();
-			for(Land land : landscape)
+			if(ent.isSolid())
 			{
-				if(land instanceof Wall)
+				Land ground = null;
+				if(ent.isGrounded())
 				{
-					if(inProximity(ent, (Wall)land) && ent.intersects((Wall)land))
+					Land prevGround = ent.getGround();
+					if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
+							&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
 					{
-						intersectedLand.add(land);
+						ground = prevGround;
 					}
 				}
-				else if(land instanceof Platform)
-				{
-					if(!ent.isFlying() && inProximity(ent, (Platform)land) && intersectsFeet(ent, land) && ent.feetAboveLand(land))
-					{
-						intersectedLand.add(land);
-					}
-				}
-			}
-			if(intersectedLand.size() > 0)
-			{
-				sortLandByDistance(ent, intersectedLand);
 
-				for(Land land : intersectedLand)
+				ArrayList<Land> intersectedLand = new ArrayList<Land>();
+				for(Land land : landscape)
 				{
-					if(land instanceof Wall && ((Wall)land).killsEntities() && ent.isActive())
+					if(land instanceof Wall)
 					{
-						ent.die();
-						trackDeath(((Wall)land).getName(), ent);
-					}
-					if(land instanceof Platform || ((Wall)land).blocksEntities())
-					{
-						if(land instanceof Wall && !land.isHorizontal())
+						if(inProximity(ent, (Wall)land) && ent.intersects((Wall)land))
 						{
-							if(ent.isRightOfLand(land))
-							{
-								while(ent.intersects((Wall)land))
-								{
-									ent.setX(ent.getX() + PUSH_AMOUNT);
-									ent.setVelX(Math.max(ent.getVelX(), 0));
-								}
-							}
-							// Rightward collision into wall
-							else
-							{
-								while(ent.intersects((Wall)land))
-								{
-									ent.setX(ent.getX() - PUSH_AMOUNT);
-									ent.setVelX(Math.min(ent.getVelX(), 0));
-								}
-							}
+							intersectedLand.add(land);
 						}
-						else
+					}
+					else if(land instanceof Platform)
+					{
+						if(!ent.isFlying() && inProximity(ent, (Platform)land) && intersectsFeet(ent, land)
+								&& ent.feetAboveLand(land))
 						{
-							// Downward collision into wall
-							// Only the closest qualified wall is set as ground
-							// Other downward collision walls afterwards are ignored to an extent
-							if(land instanceof Platform || ent.isAboveLand(land))
+							intersectedLand.add(land);
+						}
+					}
+				}
+				if(intersectedLand.size() > 0)
+				{
+					sortLandByDistance(ent, intersectedLand);
+
+					for(Land land : intersectedLand)
+					{
+						if(land instanceof Wall && ((Wall)land).killsEntities() && ent.isActive())
+						{
+							ent.die();
+							trackDeath(((Wall)land).getName(), ent);
+						}
+						if(land instanceof Platform || ((Wall)land).blocksEntities())
+						{
+							if(land instanceof Wall && !land.isHorizontal())
 							{
-								if(ent.isFlying())
+								if(ent.isRightOfLand(land))
 								{
 									while(ent.intersects((Wall)land))
 									{
-										ent.setY(ent.getY() - PUSH_AMOUNT);
-										ent.setVelY(Math.min(ent.getVelY(), 0));
+										ent.setX(ent.getX() + PUSH_AMOUNT);
+										ent.setVelX(Math.max(ent.getVelX(), 0));
 									}
 								}
-								else if(intersectsFeet(ent, land))
+								// Rightward collision into wall
+								else
 								{
-									ground = land;
-									ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
+									while(ent.intersects((Wall)land))
+									{
+										ent.setX(ent.getX() - PUSH_AMOUNT);
+										ent.setVelX(Math.min(ent.getVelX(), 0));
+									}
 								}
 							}
-							// Upward collision into wall
-							else if(!ent.isGrounded())
+							else
 							{
-								while(ent.intersects((Wall)land))
+								// Downward collision into wall
+								// Only the closest qualified wall is set as ground
+								// Other downward collision walls afterwards are ignored to an extent
+								if(land instanceof Platform || ent.isAboveLand(land))
 								{
-									ent.setY(ent.getY() + PUSH_AMOUNT);
-									ent.setVelY(Math.max(ent.getVelY(), 0));
+									if(ent.isFlying())
+									{
+										while(ent.intersects((Wall)land))
+										{
+											ent.setY(ent.getY() - PUSH_AMOUNT);
+											ent.setVelY(Math.min(ent.getVelY(), 0));
+										}
+									}
+									else if(intersectsFeet(ent, land))
+									{
+										ground = land;
+										ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
+									}
+								}
+								// Upward collision into wall
+								else if(!ent.isGrounded())
+								{
+									while(ent.intersects((Wall)land))
+									{
+										ent.setY(ent.getY() + PUSH_AMOUNT);
+										ent.setVelY(Math.max(ent.getVelY(), 0));
+									}
 								}
 							}
 						}
 					}
 				}
-			}
 
-			if(ground != null)
-			{
-				ent.setGround(ground);
-			}
-			else
-			{
-				ent.removeGround();
+				if(ground != null)
+				{
+					ent.setGround(ground);
+				}
+				else
+				{
+					ent.removeGround();
+				}
 			}
 
 			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT
@@ -637,7 +641,7 @@ public abstract class Stage
 		return entities;
 	}
 
-	public ArrayList<Interactive> getItems()
+	public ArrayList<Interactive> getInteractives()
 	{
 		return interactives;
 	}

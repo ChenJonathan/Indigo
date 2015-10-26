@@ -48,6 +48,7 @@ public class Turret extends Entity
 		height = TURRET_HEIGHT;
 
 		pushability = 0;
+		solid = true;
 		flying = true;
 		frictionless = false;
 
@@ -93,7 +94,7 @@ public class Turret extends Entity
 
 			angle = Math.PI - groundAngle;
 
-			// Check if turret is on wall
+			// Check if turret is on land
 			if(closestLand.getLine().ptSegDist(intersection) > 1)
 			{
 				hide = true;
