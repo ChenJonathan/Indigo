@@ -173,6 +173,6 @@ public class Harvester extends Entity
 
 	public void die()
 	{
-		// TODO
+		dead = true;
 	}
 }

@@ -91,5 +91,6 @@
         {"category":"Interactive", "type":"Health Pickup", "x":2400, "y":800, "respawnTime":1500}
         {"category":"Entity", "type":"Tree", "x":3300, "y":1400, "respawnTime":1800}
         {"category":"Entity", "type":"Tree", "x":3700, "y":700, "respawnTime":1800}
+        {"category":"Entity", "type":"Harvester", "x":800, "y":1000, "respawnTime":1500}
     ]
 }

@@ -68,7 +68,7 @@ public class SteamVent extends Entity
 
 	public void render(Graphics2D g)
 	{
-
+		g.drawRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight());
 	}
 
 	public Shape getHitbox()
@@ -85,5 +85,4 @@ public class SteamVent extends Entity
 	{
 		dead = true;
 	}
-
 }
