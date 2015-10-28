@@ -8,10 +8,10 @@
     "startingX":200,
     "startingY":800,
 
+    "timeLimit":900,
+
     "destinationX":2100,
     "destinationY":800,
-
-    "timeLimit":900,
 
     "landscape":[
         {"type":"Wall", "x1":100, "y1":600, "x2":100, "y2":900}
@@ -37,5 +37,5 @@
         {"category":"Entity", "type":"Flying Bot", "x":1800, "y":700, "respawnTime":30}
         {"category":"Entity", "type":"Flying Bot", "x":1900, "y":700, "respawnTime":30}
         {"category":"Entity", "type":"Flying Bot", "x":2000, "y":700, "respawnTime":30}
-    ]
+    ],
 }

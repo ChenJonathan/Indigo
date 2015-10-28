@@ -5,7 +5,7 @@
     "mapX":6400,
     "mapY":1200,
 
-    "startingX":600,
+    "startingX":150,
     "startingY":900,
 
     "enemiesToDefeat":25,
@@ -49,7 +49,5 @@
         {"category":"Entity", "type":"Turret", "x":6335, "y":285, "respawnTime":200}
         {"category":"Entity", "type":"Flying Bot", "x":3470, "y":500, "respawnTime":60}
         {"category":"Interactive", "type":"Health Pickup", "x":2000, "y":920, "respawnTime":200}
-        {"category":"Entity", "type":"Flying Bot", "x":4200, "y":300, "respawnTime":200}
-        {"category":"Entity", "type":"Flying Bot", "x":2100, "y":400, "respawnTime":20}
-    ]
+    ],
 }

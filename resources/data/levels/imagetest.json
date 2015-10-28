@@ -27,5 +27,6 @@
         {"type":"Platform", "x1":1600, "y1":1500, "x2":2100, "y2":1300}
     ],
 
-    "spawns":null
+    "spawns":[
+    ],
 }

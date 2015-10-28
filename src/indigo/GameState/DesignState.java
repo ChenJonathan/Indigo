@@ -12,13 +12,14 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -32,9 +33,6 @@ import org.json.simple.JSONObject;
  */
 public class DesignState extends GameState
 {
-	private JSONObject index;
-	private JSONObject json;
-
 	private ArrayList<LandData> landscape;
 	private ArrayList<SpawnData> spawns;
 
@@ -58,8 +56,10 @@ public class DesignState extends GameState
 	LandData[][][][] landscapeGrid;
 	SpawnData[][] spawnsGrid;
 
+	// Basic map info
 	private String name = "";
 	private String type = "";
+	private LinkedHashMap<String, String> typeArgs = new LinkedHashMap<>();
 
 	// Map size - Measured in actual size
 	private int mapX;
@@ -87,7 +87,7 @@ public class DesignState extends GameState
 
 	// Toolbar item or spawn object that the mouse is hovering over
 	private int hoverValue;
-	private SpawnData hoverSpawn;
+	private MapData hoverTooltip;
 
 	// Whether certain UI features should be shown or not
 	private boolean confirmBox = false;
@@ -101,15 +101,6 @@ public class DesignState extends GameState
 	private HashMap<Integer, String> tools = new HashMap<Integer, String>();
 	private HashMap<Integer, String[]> toolTypes = new HashMap<Integer, String[]>();
 	private HashMap<String, String> descriptionText = new HashMap<String, String>();
-
-	// Used to format the JSON String
-	private String[] formatMaster = {"name", "type", "", "mapX", "mapY", "", "startingX", "startingY", "",
-			"objectives", "", "landscape", "", "spawns"};
-	private String[][] formatObjective = { {"enemiesToDefeat"}, {"coreX", "coreY", "", "survivalDuration"},
-			{"survivalDuration"}, {"destinationX", "destinationY", "", "timeLimit"}};
-	private String[] formatLand = {"type", "x1", "y1", "x2", "y2"};
-	private String[] formatSpawn = {"category", "type", "x", "y", "respawnTime"};
-	private String[] formatIndex = {};
 
 	private static final int GRID_SPACE = 10; // Visual pixels per grid square
 	private static final int GRID_SCALE = 100; // Actual pixels per grid square
@@ -223,12 +214,9 @@ public class DesignState extends GameState
 		creationOrder = new ArrayList<MapData>();
 		deletionOrder = new ArrayList<MapData>();
 
-		index = ContentManager.load("/index.json");
+		JSONObject index = ContentManager.load("/index.json");
 		if(index.get(name) == null)
 		{
-			json = new JSONObject();
-			json.put("name", name);
-
 			do
 			{
 				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (2400 to 12000):"));
@@ -241,8 +229,6 @@ public class DesignState extends GameState
 				mapY = mapY / GRID_SCALE * GRID_SCALE;
 			}
 			while(mapY < 1600 || mapY > 8000);
-			json.put("mapX", mapX);
-			json.put("mapY", mapY);
 
 			landscapeGrid = new LandData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1][mapX / GRID_SCALE + 1][mapY
 					/ GRID_SCALE + 1];
@@ -251,12 +237,34 @@ public class DesignState extends GameState
 		else
 		{
 			String fileName = name.replace(" ", "_").toLowerCase();
-			json = ContentManager.load("/levels/" + fileName + ".json");
+			JSONObject json = ContentManager.load("/levels/" + fileName + ".json");
 
 			if(json.get("type") != null)
 			{
 				type = (String)json.get("type");
 				objectiveSet = true;
+				
+				switch(type)
+				{
+					case "Battle":
+						typeArgs.put("enemiesToDefeat", json.get("enemiesToDefeat") + "");
+						break;
+					case "Defend":
+						typeArgs.put("survivalDuration", json.get("survivalDuration") + "");
+						typeArgs.put("blank", "");
+						typeArgs.put("coreX", json.get("coreX") + "");
+						typeArgs.put("coreY", json.get("coreY") + "");
+						break;
+					case "Survival":
+						typeArgs.put("survivalDuration", json.get("survivalDuration") + "");
+						break;
+					case "Travel":
+						typeArgs.put("timeLimit", json.get("timeLimit") + "");
+						typeArgs.put("blank", "");
+						typeArgs.put("destinationX", json.get("destinationX") + "");
+						typeArgs.put("destinationY", json.get("destinationY") + "");
+						break;
+				}
 			}
 
 			if(json.get("startingX") != null && json.get("startingY") != null)
@@ -322,10 +330,14 @@ public class DesignState extends GameState
 		protected String category;
 		protected String type;
 
-		private MapData(String category, String type)
+		protected String[] typeArgs;
+
+		private MapData(String category, String type, String... typeArgs)
 		{
 			this.category = category;
 			this.type = type;
+
+			this.typeArgs = typeArgs;
 		}
 	}
 
@@ -340,9 +352,9 @@ public class DesignState extends GameState
 		private double slope;
 		private boolean horizontal;
 
-		private LandData(String type, int x1, int y1, int x2, int y2)
+		private LandData(String type, int x1, int y1, int x2, int y2, String... typeArgs)
 		{
-			super("Land", type);
+			super("Land", type, typeArgs);
 			this.x1 = x1;
 			this.y1 = y1;
 			this.x2 = x2;
@@ -360,9 +372,9 @@ public class DesignState extends GameState
 		private int y;
 		private int respawnTime;
 
-		private SpawnData(String category, String type, int x, int y, int respawnTime)
+		private SpawnData(String category, String type, int x, int y, int respawnTime, String... typeArgs)
 		{
-			super(category, type);
+			super(category, type, typeArgs);
 			this.x = x;
 			this.y = y;
 			this.respawnTime = respawnTime;
@@ -457,14 +469,14 @@ public class DesignState extends GameState
 			g.setColor(Color.CYAN);
 			if(type.equals("Defend"))
 			{
-				int x = (int)(xMargin + scale(Integer.parseInt(json.get("coreX") + "")));
-				int y = (int)(yMargin + scale(Integer.parseInt(json.get("coreY") + "")));
+				int x = (int)(xMargin + scale(Integer.parseInt(typeArgs.get("coreX"))));
+				int y = (int)(yMargin + scale(Integer.parseInt(typeArgs.get("coreY"))));
 				g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 			}
 			else if(type.equals("Travel"))
 			{
-				int x = (int)(xMargin + scale(Integer.parseInt(json.get("destinationX") + "")));
-				int y = (int)(yMargin + scale(Integer.parseInt(json.get("destinationY") + "")));
+				int x = (int)(xMargin + scale(Integer.parseInt(typeArgs.get("destinationX"))));
+				int y = (int)(yMargin + scale(Integer.parseInt(typeArgs.get("destinationY"))));
 				g.fill(new Ellipse2D.Double(x - spawnRadius, y - spawnRadius, spawnRadius * 2, spawnRadius * 2));
 			}
 		}
@@ -567,43 +579,69 @@ public class DesignState extends GameState
 		}
 
 		// Draw hover tooltip
-		if(hoverSpawn != null)
+		if(hoverTooltip != null)
 		{
 			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 			fontMetrics = g.getFontMetrics();
-			String typeText = "Type: " + hoverSpawn.type;
-			String respawnText = "Respawn time: " + (hoverSpawn.respawnTime / 30) + "s";
-			int stringWidth = Math.max(fontMetrics.stringWidth(typeText), fontMetrics.stringWidth(respawnText));
-			int stringHeight = fontMetrics.getHeight();
+
+			String[] tooltipText = new String[0];
 			int tooltipX = Manager.input.mouseX() + 20;
 			int tooltipY = Manager.input.mouseY();
+			int tooltipWidth = 20;
+			int tooltipHeight = 10;
+
+			if(hoverTooltip instanceof LandData)
+			{
+				LandData landTooltip = (LandData)hoverTooltip;
+				tooltipText = new String[2];
+				tooltipText[0] = "Type: " + landTooltip.type;
+				tooltipText[1] = "Coordinates: (" + landTooltip.x1 + ", " + landTooltip.y1 + ") to (" + landTooltip.x2
+						+ ", " + landTooltip.y2 + ")";
+			}
+			else if(hoverTooltip instanceof SpawnData)
+			{
+				SpawnData spawnTooltip = (SpawnData)hoverTooltip;
+				tooltipText = new String[3];
+				tooltipText[0] = "Type: " + hoverTooltip.type;
+				tooltipText[1] = "Respawn time: " + (spawnTooltip.respawnTime / 30) + "s";
+				tooltipText[2] = "Coordinates: (" + spawnTooltip.x + ", " + spawnTooltip.y + ")";
+			}
+
+			for(String line : tooltipText)
+			{
+				tooltipWidth = Math.max(tooltipWidth, fontMetrics.stringWidth(line) + 20);
+				tooltipHeight += fontMetrics.getHeight() / 2 + 10;
+			}
 
 			if(tooltipX < xMargin)
 			{
 				tooltipX = xMargin;
 			}
-			else if(tooltipX + stringWidth + 20 > xMargin + scale(mapX))
+			else if(tooltipX + tooltipWidth + 20 > xMargin + scale(mapX))
 			{
-				tooltipX = (int)(xMargin + scale(mapX)) - (stringWidth + 20);
+				tooltipX = (int)(xMargin + scale(mapX)) - tooltipWidth;
 			}
 			if(tooltipY < yMargin)
 			{
 				tooltipY = yMargin;
 			}
-			else if(tooltipY + stringHeight + 30 > yMargin + scale(mapY))
+			else if(tooltipY + tooltipHeight + 30 > yMargin + scale(mapY))
 			{
-				tooltipY = (int)(yMargin + scale(mapY)) - (stringHeight + 30);
+				tooltipY = (int)(yMargin + scale(mapY)) - tooltipHeight;
 			}
 
 			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(tooltipX, tooltipY, stringWidth + 20, stringHeight + 30);
+			g.fillRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
 			g.setStroke(new BasicStroke(3));
 			g.setColor(Color.GRAY);
-			g.drawRect(tooltipX, tooltipY, stringWidth + 20, stringHeight + 30);
+			g.drawRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
 
 			g.setColor(Color.BLACK);
-			g.drawString(typeText, tooltipX + 10, tooltipY + fontMetrics.getHeight() / 2 + 10);
-			g.drawString(respawnText, tooltipX + 10, tooltipY + fontMetrics.getHeight() + 20);
+			for(int count = 0; count < tooltipText.length; count++)
+			{
+				String line = tooltipText[count];
+				g.drawString(line, tooltipX + 10, tooltipY + (fontMetrics.getHeight() / 2 + 10) * (count + 1));
+			}
 		}
 	}
 
@@ -617,7 +655,7 @@ public class DesignState extends GameState
 		}
 
 		// Mouse clicking and hovering
-		hoverSpawn = null;
+		hoverTooltip = null;
 		if(Manager.input.mouseInRect(xMargin - GRID_SPACE * scale / 2, yMargin - GRID_SPACE * scale / 2, scale(mapX)
 				+ GRID_SPACE * scale, scale(mapY) + GRID_SPACE * scale))
 		{
@@ -629,7 +667,7 @@ public class DesignState extends GameState
 			}
 
 			double minDistance = spawnRadius;
-			SpawnData minDistanceSpawn = null;
+			MapData minDistanceObject = null;
 			for(SpawnData spawn : spawns)
 			{
 				double distance = Math.sqrt(Math.pow(Manager.input.mouseX() - (xMargin + scale(spawn.x)), 2)
@@ -637,10 +675,27 @@ public class DesignState extends GameState
 				if(distance < minDistance)
 				{
 					minDistance = distance;
-					minDistanceSpawn = spawn;
+					minDistanceObject = spawn;
 				}
 			}
-			hoverSpawn = minDistance < 50? minDistanceSpawn : null;
+			hoverTooltip = minDistance < 50? minDistanceObject : null;
+
+			if(hoverTooltip == null)
+			{
+				minDistanceObject = null;
+				for(LandData land : landscape)
+				{
+					double distance = new Line2D.Double(xMargin + scale(land.x1), xMargin + scale(land.y1), xMargin
+							+ scale(land.x2), xMargin + scale(land.y2)).ptSegDist(Manager.input.mouseX(),
+							Manager.input.mouseY());
+					if(distance < minDistance)
+					{
+						minDistance = distance;
+						minDistanceObject = land;
+					}
+				}
+				hoverTooltip = minDistance < 50? minDistanceObject : null;
+			}
 		}
 		else if(Manager.input.mouseInRect(1580, 485, 300, 110))
 		{
@@ -781,8 +836,6 @@ public class DesignState extends GameState
 		{
 			startingX = x * GRID_SCALE;
 			startingY = y * GRID_SCALE;
-			json.put("startingX", startingX);
-			json.put("startingY", startingY);
 			playerSet = true;
 		}
 		else if(selectedTool == SET_OBJECTIVE)
@@ -791,16 +844,16 @@ public class DesignState extends GameState
 			{
 				int coreX = x * GRID_SCALE;
 				int coreY = y * GRID_SCALE;
-				json.put("coreX", coreX);
-				json.put("coreY", coreY);
+				typeArgs.put("coreX", coreX + "");
+				typeArgs.put("coreY", coreY + "");
 				objectiveSet = true;
 			}
 			else if(type.equals("Travel"))
 			{
 				int destinationX = x * GRID_SCALE;
 				int destinationY = y * GRID_SCALE;
-				json.put("destinationX", destinationX);
-				json.put("destinationY", destinationY);
+				typeArgs.put("destinationX", destinationX + "");
+				typeArgs.put("destinationY", destinationY + "");
 				objectiveSet = true;
 			}
 		}
@@ -831,31 +884,33 @@ public class DesignState extends GameState
 		{
 			case SET_OBJECTIVE:
 				type = toolTypes.get(SET_OBJECTIVE)[selectedToolType];
-				json.put("type", type);
+				typeArgs.clear();
 				objectiveSet = false;
 				switch(type)
 				{
 					case "Battle":
 						int enemiesToDefeat = Integer.parseInt(JOptionPane
 								.showInputDialog("Number of enemies to defeat:"));
-						json.put("enemiesToDefeat", enemiesToDefeat);
+						typeArgs.put("enemiesToDefeat", enemiesToDefeat + "");
 						objectiveSet = true;
 						break;
 					case "Defend":
 						int survivalDuration = Integer.parseInt(JOptionPane
 								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
-						json.put("survivalDuration", survivalDuration);
+						typeArgs.put("survivalDuration", survivalDuration + "");
+						typeArgs.put("blank", "");
 						break;
 					case "Survival":
 						survivalDuration = Integer.parseInt(JOptionPane
 								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
-						json.put("survivalDuration", survivalDuration);
+						typeArgs.put("survivalDuration", survivalDuration + "");
 						objectiveSet = true;
 						break;
 					case "Travel":
 						int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In seconds):"))
 								* Game.FPS;
-						json.put("timeLimit", timeLimit);
+						typeArgs.put("timeLimit", timeLimit + "");
+						typeArgs.put("blank", "");
 						break;
 				}
 				break;
@@ -1072,6 +1127,7 @@ public class DesignState extends GameState
 			clearFile = JOptionPane.showInputDialog("Delete the level permanently? (Y / N):");
 			if(clearFile.equals("Y"))
 			{
+				JSONObject index = ContentManager.load("/index.json");
 				if(index.get(name) == null)
 				{
 					JOptionPane.showMessageDialog(new JFrame(), "Level was not saved yet.");
@@ -1093,7 +1149,7 @@ public class DesignState extends GameState
 						}
 						FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath()
 								+ "/resources/data/index.json");
-						indexWriter.write(toJSONString(index, formatIndex));
+						indexWriter.write(getIndexJSONString());
 						indexWriter.flush();
 						indexWriter.close();
 
@@ -1156,28 +1212,16 @@ public class DesignState extends GameState
 			{
 				index.put(name, index.size());
 				FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
-				indexWriter.write(toJSONString(index, formatIndex));
+				indexWriter.write(getIndexJSONString());
 				indexWriter.flush();
 				indexWriter.close();
-			}
-
-			// Packing objects into JSONObject
-			json.remove("landscape");
-			json.remove("spawns");
-			for(LandData land : landscape)
-			{
-				addToJSON(land);
-			}
-			for(SpawnData spawn : spawns)
-			{
-				addToJSON(spawn);
 			}
 
 			// Saving and exiting
 			String fileName = name.replace(" ", "_").toLowerCase();
 			String filePath = new File("").getAbsolutePath() + "/resources/data/levels/" + fileName + ".json";
 			FileWriter fileWriter = new FileWriter(filePath);
-			fileWriter.write(toJSONString(json, formatMaster));
+			fileWriter.write(getLevelJSONString());
 			fileWriter.flush();
 			fileWriter.close();
 
@@ -1433,143 +1477,99 @@ public class DesignState extends GameState
 	}
 
 	/**
-	 * Adds the LandData object to the JSON.
+	 * Returns a formatted JSON String representing the index file.
 	 * 
-	 * @param land The object to be added.
+	 * @param index The index file
+	 * 
+	 * @return The formatted JSON String.
 	 */
-	public void addToJSON(LandData land)
-	{
-		JSONArray landscape = (JSONArray)json.get("landscape");
-		if(landscape == null)
-		{
-			landscape = new JSONArray();
-			json.put("landscape", landscape);
-		}
-		JSONObject obj = new JSONObject();
-		obj.put("type", land.type);
-		obj.put("x1", land.x1);
-		obj.put("y1", land.y1);
-		obj.put("x2", land.x2);
-		obj.put("y2", land.y2);
-		landscape.add(obj);
-	}
-
-	/**
-	 * Adds the SpawnData object to the JSON.
-	 * 
-	 * @param spawn The object to be added.
-	 */
-	public void addToJSON(SpawnData spawn)
-	{
-		JSONArray spawns = (JSONArray)json.get("spawns");
-		if(spawns == null)
-		{
-			spawns = new JSONArray();
-			json.put("spawns", spawns);
-		}
-		JSONObject obj = new JSONObject();
-		obj.put("category", spawn.category);
-		obj.put("type", spawn.type);
-		obj.put("x", spawn.x);
-		obj.put("y", spawn.y);
-		obj.put("respawnTime", spawn.respawnTime);
-		spawns.add(obj);
-	}
-
-	/**
-	 * Formats the JSON String to be more readable. Do yourself a favor and don't look through this.
-	 * 
-	 * @param obj The JSON object to be formatted.
-	 * @param format The format to be used.
-	 * 
-	 * @return The formatted String.
-	 */
-	public String toJSONString(JSONObject obj, String[] format)
+	public String getIndexJSONString()
 	{
 		String string = "";
 
-		// Index does not require recursion
-		if(format.equals(formatIndex))
+		JSONObject index = ContentManager.load("/index.json");
+		for(int count = 0; count < index.size(); count++)
 		{
-			for(int count = 0; count < obj.size(); count++)
+			for(Object name : index.entrySet())
 			{
-				for(Object name : obj.entrySet())
+				String[] pair = (name + "").split("=");
+				int id = Integer.parseInt(pair[1]);
+				if(id == count)
 				{
-					String[] pair = (name + "").split("=");
-					int id = Integer.parseInt(pair[1]);
-					if(id == count)
-					{
-						string += "    \"" + pair[0] + "\":" + id + ",\n";
-					}
+					string += "    \"" + pair[0] + "\":" + id + ",\n";
 				}
-			}
-
-			return "{\n" + string.substring(0, string.length() - 2) + "\n}";
-		}
-
-		for(String line : format)
-		{
-			if(!line.equals(""))
-			{
-				if(line.equals("objectives"))
-				{
-					int objective = Arrays.asList(toolTypes.get(SET_OBJECTIVE)).indexOf(type);
-					string += toJSONString(obj, formatObjective[objective]);
-				}
-				else if(obj.get(line) instanceof JSONArray)
-				{
-					string += "    \"" + line + "\":[\n";
-
-					JSONArray array = (JSONArray)obj.get(line);
-					String[] subFormat = null;
-					switch(line)
-					{
-						case "landscape":
-							subFormat = formatLand;
-							break;
-						case "spawns":
-							subFormat = formatSpawn;
-							break;
-					}
-					for(Object subObj : array)
-					{
-						string += "        " + toJSONString((JSONObject)subObj, subFormat) + "\n";
-					}
-
-					string += "    ],";
-				}
-				else
-				{
-					if(!format.equals(formatLand) && !format.equals(formatSpawn))
-					{
-						string += "    ";
-					}
-					string += "\"" + line + "\":";
-					string += obj.get(line) instanceof String? "\"" + obj.get(line) + "\"" : obj.get(line);
-					string += ",";
-				}
-			}
-			if(format.equals(formatLand) || format.equals(formatSpawn))
-			{
-				string += " ";
-			}
-			else if(!line.equals("objectives"))
-			{
-				string += "\n";
 			}
 		}
 
-		// Remove last comma
-		if(format.equals(formatMaster))
+		return "{\n" + string.substring(0, string.length() - 2) + "\n}";
+	}
+
+	/**
+	 * Returns a formatted JSON String representing the level file.
+	 * 
+	 * @return The formatted JSON String.
+	 */
+	public String getLevelJSONString()
+	{
+		String string = "";
+
+		string += "    \"name\":\"" + name + "\",\n";
+		string += "    \"type\":\"" + type + "\",\n\n";
+
+		string += "    \"mapX\":" + mapX + ",\n";
+		string += "    \"mapY\":" + mapY + ",\n\n";
+
+		string += "    \"startingX\":" + startingX + ",\n";
+		string += "    \"startingY\":" + startingY + ",\n\n";
+
+		for(String line : typeArgs.keySet())
 		{
-			string = "{\n" + string.substring(0, string.length() - 2) + "\n}";
-		}
-		else if(format.equals(formatLand) || format.equals(formatSpawn))
-		{
-			string = "{" + string.substring(0, string.length() - 2) + "}";
+			string += typeArgs.get(line).equals("")? "\n" : "    \"" + line + "\":" + typeArgs.get(line) + ",\n";
 		}
 
-		return string;
+		string += "\n    \"landscape\":[\n";
+
+		for(LandData land : landscape)
+		{
+			string += "        {";
+			string += "\"type\":\"" + land.type + "\"";
+			string += ", \"x1\":" + land.x1;
+			string += ", \"y1\":" + land.y1;
+			string += ", \"x2\":" + land.x2;
+			string += ", \"y2\":" + land.y2;
+
+			for(String arg : land.typeArgs)
+			{
+				string += ", " + arg;
+			}
+
+			string += "}\n";
+		}
+
+		string += "    ],\n\n";
+
+		string += "    \"spawns\":[\n";
+
+		for(SpawnData spawn : spawns)
+		{
+			string += "        {";
+			string += "\"category\":\"" + spawn.category + "\"";
+			string += ", \"type\":\"" + spawn.type + "\"";
+			string += ", \"x\":" + spawn.x;
+			string += ", \"y\":" + spawn.y;
+			string += ", \"respawnTime\":" + spawn.respawnTime;
+
+			for(String arg : spawn.typeArgs)
+			{
+				string += ", " + arg;
+			}
+
+			string += "}\n";
+		}
+
+		string += "    ],";
+
+		return "{\n" + string + "\n}";
 	}
 
 	public BufferedImage createImage()

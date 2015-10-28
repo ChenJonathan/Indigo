@@ -201,7 +201,7 @@ public class Data
 	 */
 	public String getDeathMessage()
 	{
-		if(killer.equals(""))
+		if(killer.equals("") && deathMessage.contains("_"))
 		{
 			return "You were vaporized instantly"; // Default death message
 		}
