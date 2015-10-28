@@ -31,6 +31,12 @@ public class ContentManager
 {
 	// Cursor
 	public static ImageData CURSOR = new ImageData("/images/cursor/crosshair.png", 32, 32);
+	
+	// Elements
+	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 300, 100);
+	public static ImageData STONE_TILE_LEFT = new ImageData("/images/elements/stone_tile_left.png", 100, 30);
+	public static ImageData STONE_TILE_CENTER = new ImageData("/images/elements/stone_tile_center.png", 100, 30);
+	public static ImageData STONE_TILE_RIGHT = new ImageData("/images/elements/stone_tile_right.png", 100, 30);
 
 	// HUD
 	public static ImageData INDICATOR = new ImageData("/images/hud/indicator.png", 100, 100);

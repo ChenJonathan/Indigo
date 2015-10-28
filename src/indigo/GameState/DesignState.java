@@ -336,6 +336,7 @@ public class DesignState extends GameState
 		private int x2;
 		private int y2;
 
+		private double length;
 		private double slope;
 		private boolean horizontal;
 
@@ -347,6 +348,7 @@ public class DesignState extends GameState
 			this.x2 = x2;
 			this.y2 = y2;
 
+			length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 			slope = (y2 - y1) / ((x2 - x1) == 0? 0.0000001 : (x2 - x1));
 			horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 		}
@@ -1581,6 +1583,7 @@ public class DesignState extends GameState
 			// Draw landscape
 			for(LandData land : landscape)
 			{
+				// Draw temporary line for verification of correct terrain placement
 				switch(land.type)
 				{
 					case "Platform":
@@ -1600,7 +1603,114 @@ public class DesignState extends GameState
 				int y1 = (int)land.y1;
 				int x2 = (int)land.x2;
 				int y2 = (int)land.y2;
-				g.drawLine(x1, y1, x2, y2);
+
+				double angle = Math.atan(land.slope);
+				double scale = 0;
+				
+				if(x2 < x1) {
+					int temp = 0;
+					temp = x2;
+					x2 = x1;
+					x1 = temp;
+					temp = y2;
+					y2 = y1;
+					y1 = temp;
+				}
+				
+				// Draw image version of terrain; tiles as many images as possible and stretches the result
+				if(land.type.equals("Wall")) {
+					
+					int centerTiles = 0;
+					centerTiles = (int)((land.length + 5)/ 100) - 2;
+					centerTiles = Math.max(0, centerTiles); // if no center tiles, then set to 0
+					
+					scale = (land.length) / (centerTiles * 100 + 200);
+					
+					if(land.horizontal) {
+						x1 -= 5;
+						// Draw leftmost piece
+						g.translate(x1, y1);
+						g.rotate(angle);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0, (int)(100 * (scale + .1)), 30, null);
+						g.rotate(-angle);
+						g.translate(-x1, -y1);
+						
+						// Draw center pieces, if any
+						for(int i = 1; i <= centerTiles; i++) {
+							g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+							g.rotate(angle);
+							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0, (int)(100 * (scale + .1)), 30, null);
+							g.rotate(-angle);
+							g.translate(-(x1 + 100 * i * scale * Math.cos(angle)), -(y1 + 100 * i * scale * Math.sin(angle)));
+						}
+						
+						// Draw rightmost piece
+						g.translate(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle));
+						g.rotate(angle);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0, (int)(100 * (scale + .1)), 30, null);
+						g.rotate(-angle);
+						g.translate(-(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle)), -(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
+						x1 += 5;
+					}
+					else if(!land.horizontal) {
+						int heightOffset = (y1 > y2)? 5 : -5;
+						y1 += heightOffset;
+						int centerOffset = 0;
+						if (Math.abs(land.slope) > 999) {
+							centerOffset = (y1 > y2)? -15 : 15; // centers perfectly vertical walls
+						}
+						// Draw top-most piece
+						g.translate(x1 + centerOffset, y1);
+						g.rotate(angle);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0, (int)(100 * (scale + .1)), 30, null);
+						g.rotate(-angle);
+						g.translate(-(x1 + centerOffset), -y1);
+						
+						// Draw center pieces, if any
+						for(int i = 1; i <= centerTiles; i++) {
+							g.translate(x1 + centerOffset + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+							g.rotate(angle);
+							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0, (int)(100 * (scale + .1)), 30, null);
+							g.rotate(-angle);
+							g.translate(-(x1 + centerOffset + 100 * i * scale * Math.cos(angle)), -(y1 + 100 * i * scale * Math.sin(angle)));
+						}
+						
+						// Draw bottom-most piece
+						g.translate(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle));
+						g.rotate(angle);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0, (int)(100 * (scale + .1)), 30, null);
+						g.rotate(-angle);
+						g.translate(-(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle)), -(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
+						y1 -= heightOffset;
+					}
+					g.drawLine(x1, y1, x2, y2);
+				}
+				if(land.type.equals("Platform")) {
+					int tiles = 0;
+					tiles = (int)((land.length)/ 300);
+					tiles = Math.max(1, tiles); // Ensures at least one tile
+					
+					scale = (land.length) / (tiles * 300);
+					int lateralOffset = 0;
+					lateralOffset = (land.slope > 0 && land.slope != 0)? lateralOffset - 4: lateralOffset - 23;
+					lateralOffset = (land.slope == 0)? lateralOffset + 7 : lateralOffset;
+					x1 += lateralOffset;
+					int heightOffset = 0;
+					heightOffset = (land.slope > 0 && land.slope != 0)? heightOffset - 25: heightOffset - 11;
+					heightOffset = (land.slope == 0)? heightOffset - 8 : heightOffset;
+					y1 += heightOffset;
+					
+					for(int i = 0; i < tiles; i++) {
+						g.translate(x1 + 300 * i * scale * Math.cos(angle), y1 + 300 * i * scale * Math.sin(angle));
+						g.rotate(angle);
+						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM), 0, 0, (int)(300 * (scale + .1)), 100, null);
+						g.rotate(-angle);
+						g.translate(-(x1 + 300 * i * scale * Math.cos(angle)), -(y1 + 300 * i * scale * Math.sin(angle)));
+					}
+					x1 -= lateralOffset;
+					y1 -= heightOffset;
+					g.drawLine(x1, y1, x2, y2);
+				}
 			}
 		}
 		catch(Exception e)
