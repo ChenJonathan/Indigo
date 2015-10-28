@@ -46,6 +46,11 @@ public class SteelBeam extends Projectile
 		g.fillRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight());
 	}
 	
+	public String getName()
+	{
+		return "a steel beam";
+	}
+	
 	public Shape getHitbox()
 	{
 		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
@@ -72,10 +77,5 @@ public class SteelBeam extends Projectile
 	public boolean isActive()
 	{
 		return currentAnimation != DEATH; // TODO: Fix if more animations are added
-	}
-	
-	public String getName()
-	{
-		return "a steel beam";
 	}
 }

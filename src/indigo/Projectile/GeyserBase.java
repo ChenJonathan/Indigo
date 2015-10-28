@@ -66,6 +66,11 @@ public class GeyserBase extends Projectile
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 	}
+	
+	public String getName()
+	{
+		return creator.getName();
+	}
 
 	public Shape getHitbox()
 	{

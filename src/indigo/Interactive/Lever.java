@@ -1,6 +1,5 @@
 package indigo.Interactive;
 
-import indigo.Entity.Player;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
@@ -56,13 +55,18 @@ public class Lever extends Interactive
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 	}
+	
+	public String getName()
+	{
+		return "a lever";
+	}
 
 	public Shape getHitbox()
 	{
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void activate(Player player)
+	public void activate()
 	{
 		if(recentlyActivated)
 		{
@@ -72,16 +76,16 @@ public class Lever extends Interactive
 		{
 			activated = !activated;
 			recentlyActivated = true;
-		}
-		
-		for(Interactive interactive : stage.getInteractives())
-		{
-			if(interactive instanceof Gate)
+			
+			for(Interactive interactive : stage.getInteractives())
 			{
-				Gate gate = (Gate)interactive;
-				if(gate.id() == id)
+				if(interactive instanceof Gate)
 				{
-					gate.toggle();
+					Gate gate = (Gate)interactive;
+					if(gate.id() == id)
+					{
+						gate.toggle();
+					}
 				}
 			}
 		}

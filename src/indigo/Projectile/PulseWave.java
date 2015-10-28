@@ -53,6 +53,11 @@ public class PulseWave extends Projectile
 				(int)(getWidth() * (1 - (double)timer / DURATION)),
 				(int)(getHeight() * (1 - (double)timer / DURATION)), null);
 	}
+	
+	public String getName()
+	{
+		return creator.getName();
+	}
 
 	public Shape getHitbox()
 	{

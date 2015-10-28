@@ -1,8 +1,7 @@
 package indigo.Interactive;
 
-import indigo.Entity.Player;
+import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
-import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -16,11 +15,11 @@ public class Gate extends Interactive
 
 	private Wall wall;
 
-	private final int IDLE = 0;
-	private final int SPAWN = 1;
-	private final int DEATH = 2;
+	private final int CLOSED = 0;
+	private final int CLOSING = 1;
+	private final int OPEN = 2;
+	private final int OPENING = 3;
 
-	public final static int HEALTH = 100;
 	public final static int WIDTH = 30;
 	public final static int HEIGHT = 200;
 
@@ -34,27 +33,12 @@ public class Gate extends Interactive
 		this.open = open;
 
 		wall = new Wall(stage, x, y - getHeight() / 2, x, y + getHeight() / 2);
-		stage.getLandscape().add(wall);
+		stage.getWalls().add(wall);
 	}
 
 	public void update()
 	{
 		super.update();
-
-		if(currentAnimation == SPAWN)
-		{
-			if(animation.hasPlayedOnce())
-			{
-				setAnimation(IDLE, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_IDLE), 6);
-			}
-		}
-		else if(currentAnimation == DEATH)
-		{
-			if(animation.hasPlayedOnce())
-			{
-				dead = true;
-			}
-		}
 	}
 
 	public void render(Graphics2D g)
@@ -72,12 +56,24 @@ public class Gate extends Interactive
 		open = !open;
 		if(!open)
 		{
-			stage.getLandscape().remove(wall);
+			stage.getWalls().remove(wall);
+			for(Entity ent : stage.getEntities())
+			{
+				if(ent.isGrounded() && ent.getGround().equals(wall))
+				{
+					ent.removeGround();
+				}
+			}
 		}
 		else
 		{
-			stage.getLandscape().add(wall);
+			stage.getWalls().add(wall);
 		}
+	}
+	
+	public String getName()
+	{
+		return "a gate";
 	}
 
 	public Shape getHitbox()
@@ -86,7 +82,7 @@ public class Gate extends Interactive
 	}
 
 	// Not used
-	public void activate(Player player)
+	public void activate()
 	{
 
 	}

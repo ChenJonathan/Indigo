@@ -3,6 +3,7 @@ package indigo.Projectile;
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
+import indigo.Stage.Named;
 import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 
@@ -12,10 +13,10 @@ import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Projectile implements Respawnable
+public abstract class Projectile implements Respawnable, Named
 {
 	protected Stage stage;
-	protected Entity creator;
+	protected Named creator;
 
 	private double x, y;
 	private double velX, velY;
@@ -37,48 +38,24 @@ public abstract class Projectile implements Respawnable
 	protected boolean dead;
 
 	// Subclasses - Initialize solid and flying
-	public Projectile(Entity entity, double x, double y, double velX, double velY, int dmg)
+	public Projectile(Named creator, double x, double y, double velX, double velY, int dmg)
 	{
-		this.stage = entity.getStage();
-		creator = entity;
-
-		this.x = x;
-		this.y = y;
-		this.velX = velX;
-		this.velY = velY;
-
-		prevX = x - velX;
-		prevY = y - velY;
-		travel = new Line2D.Double(prevX, prevY, x, y);
-
-		facingRight = (velX > 0);
-
-		if(velX < -Stage.TERMINAL_VELOCITY)
+		this(creator.getStage(), x, y, velX, velY, dmg);
+		this.creator = creator;
+		
+		if(creator instanceof Entity)
 		{
-			velX = -Stage.TERMINAL_VELOCITY;
+			friendly = ((Entity)creator).isFriendly();
 		}
-		else if(velX > Stage.TERMINAL_VELOCITY)
+		else if(creator instanceof Projectile)
 		{
-			velX = Stage.TERMINAL_VELOCITY;
+			friendly = ((Projectile)creator).isFriendly();
 		}
-
-		damage = dmg; // TODO Modify based on player level
-
-		if(creator != null)
-		{
-			friendly = creator.isFriendly();
-		}
-		else
-		{
-			friendly = false;
-		}
-
-		animation = new Animation();
 	}
 
 	public Projectile(Stage stage, double x, double y, double velX, double velY, int dmg)
 	{
-		this.stage = getStage();
+		this.stage = stage;
 
 		this.x = x;
 		this.y = y;
@@ -102,14 +79,7 @@ public abstract class Projectile implements Respawnable
 
 		damage = dmg; // TODO Modify based on player level
 
-		if(creator != null)
-		{
-			friendly = creator.isFriendly();
-		}
-		else
-		{
-			friendly = false;
-		}
+		friendly = false;
 
 		animation = new Animation();
 	}
@@ -201,16 +171,12 @@ public abstract class Projectile implements Respawnable
 		return value * deltaX > 0;
 	}
 
-	public Entity getCreator()
+	public Named getCreator()
 	{
 		return creator;
 	}
 
-	// Override if using second constructor
-	public String getName()
-	{
-		return creator.getName();
-	}
+	public abstract String getName();
 
 	public double getX()
 	{

@@ -1,6 +1,5 @@
 package indigo.Interactive;
 
-import indigo.Entity.Player;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
@@ -52,13 +51,18 @@ public class HealthPickup extends Interactive
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 	}
+	
+	public String getName()
+	{
+		return "a health pickup";
+	}
 
 	public Shape getHitbox()
 	{
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void activate(Player player)
+	public void activate()
 	{
 		if(player.getHealth() < player.getMaxHealth())
 		{

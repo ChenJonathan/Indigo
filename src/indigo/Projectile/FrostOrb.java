@@ -64,6 +64,11 @@ public class FrostOrb extends Projectile
 			g.rotate(-angle, getX(), getY());
 		}
 	}
+	
+	public String getName()
+	{
+		return creator.getName();
+	}
 
 	public Shape getHitbox()
 	{

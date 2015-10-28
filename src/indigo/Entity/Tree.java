@@ -2,6 +2,8 @@ package indigo.Entity;
 
 import indigo.Interactive.Branch;
 import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
+import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
@@ -42,13 +44,22 @@ public class Tree extends Entity
 		// Finding closest wall
 		double minDistance = 500;
 		Land closestLand = null;
-		for(Land land : stage.getLandscape())
+		for(Wall wall : stage.getWalls())
 		{
-			double distance = land.getLine().ptSegDist(x, y + getHeight() / 2);
-			if(distance < minDistance && land.getSlope() == 0)
+			double distance = wall.getLine().ptSegDist(x, y);
+			if(distance < minDistance && wall.getSlope() == 0)
 			{
 				minDistance = distance;
-				closestLand = land;
+				closestLand = wall;
+			}
+		}
+		for(Platform plat : stage.getPlatforms())
+		{
+			double distance = plat.getLine().ptSegDist(x, y);
+			if(distance < minDistance && plat.getSlope() == 0)
+			{
+				minDistance = distance;
+				closestLand = plat;
 			}
 		}
 
@@ -62,14 +73,7 @@ public class Tree extends Entity
 					+ minDistance + getHeight()));
 
 			// Move tree to ground
-			double deltaY = intersection.getY() - (y + getHeight() / 2);
 			setY(intersection.getY() - getHeight() / 2);
-
-			// Move branches down
-			for(int i = 0; i < branchData.length; i++)
-			{
-				branchData[i][1] += deltaY;
-			}
 
 			// Check if tree is on land
 			if(closestLand.getLine().ptSegDist(intersection) > 1)
@@ -84,7 +88,7 @@ public class Tree extends Entity
 			branchPosition = branchData;
 			for(int i = 0; i < branches.length; i++)
 			{
-				branches[i] = new Branch(stage, x + branchData[i][0], y + branchData[i][1]);
+				branches[i] = new Branch(stage, getX() + branchData[i][0], getY() + branchData[i][1]);
 				stage.getInteractives().add(branches[i]);
 				branchPosition[i][0] = branches[i].getX();
 				branchPosition[i][1] = branches[i].getY();
@@ -135,6 +139,11 @@ public class Tree extends Entity
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)(getWidth()), (int)(getHeight()), null);
+	}
+	
+	public String getName()
+	{
+		return "a tree";
 	}
 
 	public Shape getHitbox()

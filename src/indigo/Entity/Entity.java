@@ -5,6 +5,7 @@ import indigo.Landscape.Land;
 import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Projectile.Projectile;
+import indigo.Stage.Named;
 import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 import indigo.Weapon.Weapon;
@@ -17,10 +18,9 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-public abstract class Entity implements Respawnable
+public abstract class Entity implements Respawnable, Named
 {
 	protected Stage stage;
-	protected String name; // Used upon defeat to show who killed you
 
 	private double x, y;
 	private double velX, velY;
@@ -60,7 +60,6 @@ public abstract class Entity implements Respawnable
 	public Entity(Stage stage, double x, double y, int health)
 	{
 		this.stage = stage;
-		name = "";
 
 		velX = velY = 0;
 
@@ -286,10 +285,7 @@ public abstract class Entity implements Respawnable
 		return !entArea.isEmpty();
 	}
 
-	public String getName()
-	{
-		return name;
-	}
+	public abstract String getName();
 
 	public double getX()
 	{

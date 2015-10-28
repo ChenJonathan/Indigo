@@ -30,7 +30,6 @@ public class Harvester extends Entity
 	public Harvester(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
-		name = "a harvester";
 
 		width = HARVESTER_WIDTH;
 		height = HARVESTER_HEIGHT;
@@ -147,6 +146,11 @@ public class Harvester extends Entity
 			stage.getProjectiles().add(
 					new HarvestSaw(this, this.getX() + this.getWidth() / 2, this.getY(), 0, 0, HarvestSaw.DAMAGE));
 		}
+	}
+	
+	public String getName()
+	{
+		return "a harvester";
 	}
 
 	public Shape getHitbox()

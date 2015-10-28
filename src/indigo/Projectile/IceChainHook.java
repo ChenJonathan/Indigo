@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Land;
-import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
@@ -150,14 +149,11 @@ public class IceChainHook extends Projectile
 
 			// Entity-land: Colliding with and landing on land
 			ArrayList<Land> intersectedLand = new ArrayList<Land>();
-			for(Land land : stage.getLandscape())
+			for(Wall wall : stage.getWalls())
 			{
-				if(land instanceof Wall)
+				if(stage.inProximity(attached, wall) && attached.intersects(wall))
 				{
-					if(stage.inProximity(attached, (Wall)land) && attached.intersects((Wall)land))
-					{
-						intersectedLand.add(land);
-					}
+					intersectedLand.add(wall);
 				}
 			}
 			if(intersectedLand.size() > 0)
@@ -242,6 +238,11 @@ public class IceChainHook extends Projectile
 					(int)getWidth(), (int)getHeight(), null);
 			g.rotate(-angle, getX(), getY());
 		}
+	}
+	
+	public String getName()
+	{
+		return creator.getName();
 	}
 
 	public Shape getHitbox()

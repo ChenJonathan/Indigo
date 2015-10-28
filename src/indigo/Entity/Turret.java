@@ -1,6 +1,8 @@
 package indigo.Entity;
 
 import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
+import indigo.Landscape.Wall;
 import indigo.Manager.Animation;
 import indigo.Manager.ContentManager;
 import indigo.Projectile.Mortar;
@@ -23,8 +25,6 @@ public class Turret extends Entity
 	private double angle;
 	private double groundAngle;
 
-	private boolean hide;
-
 	private Animation animationCannon;
 
 	public final double TURRET_ANGLE = Math.PI / 4;
@@ -42,7 +42,6 @@ public class Turret extends Entity
 	public Turret(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
-		name = "a turret";
 
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
@@ -63,19 +62,28 @@ public class Turret extends Entity
 		// Finding closest wall
 		double minDistance = 500;
 		Land closestLand = null;
-		for(Land land : stage.getLandscape())
+		for(Wall wall : stage.getWalls())
 		{
-			double distance = land.getLine().ptSegDist(x, y);
+			double distance = wall.getLine().ptSegDist(x, y);
 			if(distance < minDistance)
 			{
 				minDistance = distance;
-				closestLand = land;
+				closestLand = wall;
+			}
+		}
+		for(Platform plat : stage.getPlatforms())
+		{
+			double distance = plat.getLine().ptSegDist(x, y);
+			if(distance < minDistance)
+			{
+				minDistance = distance;
+				closestLand = plat;
 			}
 		}
 
 		if(closestLand == null)
 		{
-			hide = true;
+			dead = true;
 		}
 		else
 		{
@@ -97,7 +105,7 @@ public class Turret extends Entity
 			// Check if turret is on land
 			if(closestLand.getLine().ptSegDist(intersection) > 1)
 			{
-				hide = true;
+				dead = true;
 			}
 		}
 	}
@@ -113,11 +121,6 @@ public class Turret extends Entity
 				dead = true;
 			}
 			return;
-		}
-
-		if(hide)
-		{
-			stage.getEntities().remove(this);
 		}
 
 		timer = (timer == 0)? 0 : timer - 1;
@@ -327,6 +330,11 @@ public class Turret extends Entity
 			canReachCCW = (endAngle < (leftBound + rightBound) / 2)? true : false;
 		}
 		return canReachCCW;
+	}
+	
+	public String getName()
+	{
+		return "a turret";
 	}
 
 	public Shape getHitbox()

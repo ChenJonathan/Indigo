@@ -54,7 +54,8 @@ public abstract class Stage
 	protected ArrayList<Entity> entities;
 	protected ArrayList<Interactive> interactives;
 	protected ArrayList<Projectile> projectiles;
-	protected ArrayList<Land> landscape;
+	protected ArrayList<Wall> walls;
+	protected ArrayList<Platform> platforms;
 
 	// Distance that entities are pushed when they collide with things - Fairly arbitrary
 	public static final double PUSH_AMOUNT = 0.5;
@@ -78,7 +79,8 @@ public abstract class Stage
 		entities = new ArrayList<Entity>();
 		interactives = new ArrayList<Interactive>();
 		projectiles = new ArrayList<Projectile>();
-		landscape = new ArrayList<Land>();
+		walls = new ArrayList<Wall>();
+		platforms = new ArrayList<Platform>();
 	}
 
 	public void update()
@@ -101,7 +103,7 @@ public abstract class Stage
 
 						if(item.isActive() && inProximity(ent, item) && ent.intersects(item))
 						{
-							item.activate(player);
+							item.activate();
 						}
 
 						if(item.isDead() || item.getX() < 0 || item.getX() > getMapX() || item.getY() < SKY_LIMIT
@@ -206,22 +208,19 @@ public abstract class Stage
 				}
 
 				ArrayList<Land> intersectedLand = new ArrayList<Land>();
-				for(Land land : landscape)
+				for(Wall wall : walls)
 				{
-					if(land instanceof Wall)
+					if(inProximity(ent, wall) && ent.intersects(wall))
 					{
-						if(inProximity(ent, (Wall)land) && ent.intersects((Wall)land))
-						{
-							intersectedLand.add(land);
-						}
+						intersectedLand.add(wall);
 					}
-					else if(land instanceof Platform)
+				}
+				for(Platform plat : platforms)
+				{
+					if(!ent.isFlying() && inProximity(ent, plat) && intersectsFeet(ent, plat)
+							&& ent.feetAboveLand(plat))
 					{
-						if(!ent.isFlying() && inProximity(ent, (Platform)land) && intersectsFeet(ent, land)
-								&& ent.feetAboveLand(land))
-						{
-							intersectedLand.add(land);
-						}
+						intersectedLand.add(plat);
 					}
 				}
 				if(intersectedLand.size() > 0)
@@ -322,11 +321,11 @@ public abstract class Stage
 
 			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
 			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-			for(Land land : landscape)
+			for(Wall wall : walls)
 			{
-				if(land instanceof Wall && inProximity(proj, land) && proj.intersects((Wall)land))
+				if(inProximity(proj, wall) && proj.intersects(wall))
 				{
-					intersectedWalls.add((Wall)land);
+					intersectedWalls.add(wall);
 				}
 			}
 			if(intersectedWalls.size() > 0)
@@ -486,10 +485,6 @@ public abstract class Stage
 		g.drawImage(foregroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT, null);
 
 		g.translate(-camForeX, -camForeY);
-		for(Projectile proj : projectiles)
-		{
-			proj.render(g);
-		}
 		for(Interactive interactive : interactives)
 		{
 			interactive.render(g);
@@ -498,6 +493,10 @@ public abstract class Stage
 		{
 			// Render player last
 			entities.get(count).render(g);
+		}
+		for(Projectile proj : projectiles)
+		{
+			proj.render(g);
 		}
 		g.translate(camForeX, camForeY);
 	}
@@ -651,9 +650,14 @@ public abstract class Stage
 		return projectiles;
 	}
 
-	public ArrayList<Land> getLandscape()
+	public ArrayList<Wall> getWalls()
 	{
-		return landscape;
+		return walls;
+	}
+
+	public ArrayList<Platform> getPlatforms()
+	{
+		return platforms;
 	}
 
 	public int getTime()

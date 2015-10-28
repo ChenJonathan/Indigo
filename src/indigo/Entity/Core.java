@@ -19,7 +19,6 @@ public class Core extends Entity
 	public Core(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
-		name = "the core";
 
 		width = CORE_WIDTH;
 		height = CORE_HEIGHT;
@@ -53,6 +52,11 @@ public class Core extends Entity
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)(getWidth()), (int)(getHeight()), null);
+	}
+	
+	public String getName()
+	{
+		return "the core";
 	}
 
 	public Shape getHitbox()

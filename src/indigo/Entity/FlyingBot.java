@@ -36,7 +36,6 @@ public class FlyingBot extends Entity
 	public FlyingBot(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
-		name = "a small bot";
 
 		width = FLYING_BOT_WIDTH;
 		height = FLYING_BOT_HEIGHT;
@@ -106,6 +105,11 @@ public class FlyingBot extends Entity
 			g.drawImage(ContentManager.getImage(ContentManager.FLYING_BOT_CANNON), (int)(getX() + 15), (int)(getY() - 5.5), 18, 11, null);
 			g.rotate(-angle, getX(), getY());
 		}
+	}
+	
+	public String getName()
+	{
+		return "a flying bot";
 	}
 
 	public Shape getHitbox()

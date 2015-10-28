@@ -36,29 +36,23 @@ public class DesignState extends GameState
 	private ArrayList<LandData> landscape;
 	private ArrayList<SpawnData> spawns;
 
+	// Tracks the order in which objects were created / deleted - Used for undo / redo
+	private ArrayList<Action> actionOrder;
+	private ArrayList<MapData> objectOrder;
+	private int actionIndex = -1;
+
 	private enum Action
 	{
 		ADD, REMOVE, OVERWRITE
 	}
-
-	// Tracks the order in which objects were created / deleted
-	private ArrayList<Action> actionOrder;
-	private ArrayList<MapData> creationOrder;
-	private ArrayList<MapData> deletionOrder;
-
-	// Tracks position in above arrays - Used for undo / redo
-	private int[] indices = {-1, -1, -1};
-	private int ACTION = 0;
-	private int CREATION = 1;
-	private int DELETION = 2;
 
 	// Grids of objects
 	LandData[][][][] landscapeGrid;
 	SpawnData[][] spawnsGrid;
 
 	// Basic map info
-	private String name = "";
-	private String type = "";
+	private String name;
+	private String type;
 	private LinkedHashMap<String, String> typeArgs = new LinkedHashMap<>();
 
 	// Map size - Measured in actual size
@@ -152,7 +146,7 @@ public class DesignState extends GameState
 		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Pit", "Force Field"});
 		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret", "Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
-		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup"});
+		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
 		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
 		toolTypes.put(CLEAR, new String[] {"Reset Map", "Clear Map"});
@@ -197,6 +191,8 @@ public class DesignState extends GameState
 				+ "The tree is vulnerable to enemy attack and its size is around 1.5 by 6 grid spaces.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
+		descriptionText.put("Steam Vent", "Periodically creates clouds of steam that damage the player. "
+				+ "Attaches itself to the nearest wall or platform upon map creation.");
 		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
 		descriptionText.put("Redo", "Reverts the last undo.");
 		descriptionText.put("Delete Land", "Deletes a wall or platform from the map.");
@@ -205,28 +201,51 @@ public class DesignState extends GameState
 		descriptionText.put("Clear Map", "Deletes the map from the index and returns to the main menu. "
 				+ "The file still exists but the program will overwrite it automatically.");
 
-		name = JOptionPane.showInputDialog("Map name:");
+		do
+		{
+			name = JOptionPane.showInputDialog("Map name:");
+			if(name == null)
+			{
+				return;
+			}
+		}
+		while(name == null || name.equals(""));
 
 		landscape = new ArrayList<LandData>();
 		spawns = new ArrayList<SpawnData>();
 
 		actionOrder = new ArrayList<Action>();
-		creationOrder = new ArrayList<MapData>();
-		deletionOrder = new ArrayList<MapData>();
+		objectOrder = new ArrayList<MapData>();
 
 		JSONObject index = ContentManager.load("/index.json");
 		if(index.get(name) == null)
 		{
 			do
 			{
-				mapX = Integer.parseInt(JOptionPane.showInputDialog("Map width (2400 to 12000):"));
-				mapX = mapX / GRID_SCALE * GRID_SCALE;
+				String mapXString = JOptionPane.showInputDialog("Map width (2400 to 12000):");
+				if(isInteger(mapXString))
+				{
+					mapX = Integer.parseInt(mapXString);
+					mapX = mapX / GRID_SCALE * GRID_SCALE;
+				}
+				else
+				{
+					return;
+				}
 			}
 			while(mapX < 2400 || mapX > 12000);
 			do
 			{
-				mapY = Integer.parseInt(JOptionPane.showInputDialog("Map height (1600 to 8000):"));
-				mapY = mapY / GRID_SCALE * GRID_SCALE;
+				String mapYString = JOptionPane.showInputDialog("Map height (1600 to 8000):");
+				if(isInteger(mapYString))
+				{
+					mapY = Integer.parseInt(mapYString);
+					mapY = mapY / GRID_SCALE * GRID_SCALE;
+				}
+				else
+				{
+					return;
+				}
 			}
 			while(mapY < 1600 || mapY > 8000);
 
@@ -243,7 +262,7 @@ public class DesignState extends GameState
 			{
 				type = (String)json.get("type");
 				objectiveSet = true;
-				
+
 				switch(type)
 				{
 					case "Battle":
@@ -312,9 +331,8 @@ public class DesignState extends GameState
 
 			// Prevents modifying elements from loaded file
 			actionOrder.clear();
-			deletionOrder.clear();
-			creationOrder.clear();
-			indices = new int[] {-1, -1, -1};
+			objectOrder.clear();
+			actionIndex = -1;
 		}
 
 		scale = Math.min(1500.0 / scale(mapX), 1000.0 / scale(mapY));
@@ -348,6 +366,7 @@ public class DesignState extends GameState
 		private int x2;
 		private int y2;
 
+		private double length;
 		private double slope;
 		private boolean horizontal;
 
@@ -359,6 +378,7 @@ public class DesignState extends GameState
 			this.x2 = x2;
 			this.y2 = y2;
 
+			length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 			slope = (y2 - y1) / ((x2 - x1) == 0? 0.0000001 : (x2 - x1));
 			horizontal = (Math.abs(x2 - x1) >= Math.abs(y2 - y1))? true : false;
 		}
@@ -388,6 +408,13 @@ public class DesignState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
+		// Input box null checking TODO Consider placing elsewhere
+		if(name == null || mapX == 0 || mapY == 0)
+		{
+			gsm.setState(GameStateManager.MENU);
+			return;
+		}
+
 		// Draw background
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -778,22 +805,30 @@ public class DesignState extends GameState
 		}
 		else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 		{
-			int respawnTime = Integer.parseInt(JOptionPane.showInputDialog("Respawn time (In seconds):")) * Game.FPS;
-			String category = "";
-			switch(selectedTool)
+			String respawnTimeString = JOptionPane.showInputDialog("Respawn time (In seconds):");
+			if(isInteger(respawnTimeString))
 			{
-				case SET_ENTITY:
-					category = "Entity";
-					break;
-				case SET_PROJECTILE:
-					category = "Projectile";
-					break;
-				case SET_INTERACTIVE:
-					category = "Interactive";
-					break;
+				int respawnTime = Integer.parseInt(respawnTimeString) * Game.FPS;
+				String category = "";
+				switch(selectedTool)
+				{
+					case SET_ENTITY:
+						category = "Entity";
+						break;
+					case SET_PROJECTILE:
+						category = "Projectile";
+						break;
+					case SET_INTERACTIVE:
+						category = "Interactive";
+						break;
+				}
+				addToList(new SpawnData(category, toolTypes.get(selectedTool)[selectedToolType], x * GRID_SCALE, y
+						* GRID_SCALE, respawnTime));
 			}
-			addToList(new SpawnData(category, toolTypes.get(selectedTool)[selectedToolType], x * GRID_SCALE, y
-					* GRID_SCALE, respawnTime));
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Invalid respawn time. Object creation cancelled.");
+			}
 		}
 		else if(selectedTool == DELETE)
 		{
@@ -807,7 +842,6 @@ public class DesignState extends GameState
 				{
 					if(x != selectedPoint.getX() || y != selectedPoint.getY()) // Length > 0
 					{
-						System.out.println("gg");
 						LandData land = landscapeGrid[(int)selectedPoint.getX()][(int)selectedPoint.getY()][x][y];
 						if(land == null)
 						{
@@ -887,28 +921,59 @@ public class DesignState extends GameState
 				switch(type)
 				{
 					case "Battle":
-						int enemiesToDefeat = Integer.parseInt(JOptionPane
-								.showInputDialog("Number of enemies to defeat:"));
-						typeArgs.put("enemiesToDefeat", enemiesToDefeat + "");
-						objectiveSet = true;
+						String enemiesToDefeatString = JOptionPane.showInputDialog("Number of enemies to defeat:");
+						if(isInteger(enemiesToDefeatString))
+						{
+							int enemiesToDefeat = Integer.parseInt(enemiesToDefeatString);
+							typeArgs.put("enemiesToDefeat", enemiesToDefeat + "");
+							objectiveSet = true;
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
+						}
 						break;
 					case "Defend":
-						int survivalDuration = Integer.parseInt(JOptionPane
-								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
-						typeArgs.put("survivalDuration", survivalDuration + "");
-						typeArgs.put("blank", "");
+						String survivalDurationString = JOptionPane.showInputDialog("Survival duration (In seconds):");
+						if(isInteger(survivalDurationString))
+						{
+							int survivalDuration = Integer.parseInt(survivalDurationString) * Game.FPS;
+							typeArgs.put("survivalDuration", survivalDuration + "");
+							typeArgs.put("blank", "");
+							JOptionPane.showMessageDialog(null, "Please select a core location on the map.");
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
+						}
 						break;
 					case "Survival":
-						survivalDuration = Integer.parseInt(JOptionPane
-								.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
-						typeArgs.put("survivalDuration", survivalDuration + "");
-						objectiveSet = true;
+						survivalDurationString = JOptionPane.showInputDialog("Survival duration (In seconds):");
+						if(isInteger(survivalDurationString))
+						{
+							int survivalDuration = Integer.parseInt(JOptionPane
+									.showInputDialog("Survival duration (In seconds):")) * Game.FPS;
+							typeArgs.put("survivalDuration", survivalDuration + "");
+							objectiveSet = true;
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
+						}
 						break;
 					case "Travel":
-						int timeLimit = Integer.parseInt(JOptionPane.showInputDialog("Time limit (In seconds):"))
-								* Game.FPS;
-						typeArgs.put("timeLimit", timeLimit + "");
-						typeArgs.put("blank", "");
+						String timeLimitString = JOptionPane.showInputDialog("Time limit (In seconds):");
+						if(isInteger(timeLimitString))
+						{
+							int timeLimit = Integer.parseInt(timeLimitString) * Game.FPS;
+							typeArgs.put("timeLimit", timeLimit + "");
+							typeArgs.put("blank", "");
+							JOptionPane.showMessageDialog(null, "Please select a destination on the map.");
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
+						}
 						break;
 				}
 				break;
@@ -956,6 +1021,44 @@ public class DesignState extends GameState
 	public double scale(double value)
 	{
 		return value / GRID_SCALE * GRID_SPACE * scale;
+	}
+
+	/**
+	 * Checks if a String can be converted to an integer.
+	 * 
+	 * @param str String to be checked.
+	 * 
+	 * @return Whether the String can be converted or not.
+	 */
+	public static boolean isInteger(String str)
+	{
+		if(str == null)
+		{
+			return false;
+		}
+		int length = str.length();
+		if(length == 0)
+		{
+			return false;
+		}
+		int i = 0;
+		if(str.charAt(0) == '-')
+		{
+			if(length == 1)
+			{
+				return false;
+			}
+			i = 1;
+		}
+		for(; i < length; i++)
+		{
+			char c = str.charAt(i);
+			if(c < '0' || c > '9')
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -1035,22 +1138,22 @@ public class DesignState extends GameState
 	public void undo()
 	{
 		selectedPoint = null;
-		if(actionOrder.isEmpty() || indices[ACTION] == -1)
+		if(actionIndex == -1)
 		{
 			return;
 		}
 
-		Action action = actionOrder.get(indices[ACTION]);
+		Action action = actionOrder.get(actionIndex);
 		switch(action)
 		{
 			case ADD:
-				removeFromList(creationOrder.get(indices[CREATION]));
+				removeFromList(objectOrder.get(actionIndex));
 				break;
 			case REMOVE:
-				addToList(deletionOrder.get(indices[DELETION]));
+				addToList(objectOrder.get(actionIndex));
 				break;
 			case OVERWRITE:
-				overwriteToList(deletionOrder.get(indices[DELETION]), creationOrder.get(indices[CREATION]));
+				overwriteToList(objectOrder.get(actionIndex), objectOrder.get(actionIndex - 1));
 				break;
 
 		}
@@ -1062,22 +1165,22 @@ public class DesignState extends GameState
 	public void redo()
 	{
 		selectedPoint = null;
-		if(actionOrder.isEmpty() || indices[ACTION] + 1 == actionOrder.size())
+		if(actionIndex + 1 == actionOrder.size())
 		{
 			return;
 		}
 
-		Action action = actionOrder.get(indices[ACTION] + 1);
+		Action action = actionOrder.get(actionIndex + 1);
 		switch(action)
 		{
 			case ADD:
-				addToList(creationOrder.get(indices[CREATION] + 1));
+				addToList(objectOrder.get(actionIndex + 1));
 				break;
 			case REMOVE:
-				removeFromList(deletionOrder.get(indices[DELETION] + 1));
+				removeFromList(objectOrder.get(actionIndex + 1));
 				break;
 			case OVERWRITE:
-				overwriteToList(creationOrder.get(indices[CREATION] + 1), deletionOrder.get(indices[DELETION] + 1));
+				overwriteToList(objectOrder.get(actionIndex + 1), objectOrder.get(actionIndex + 2));
 				break;
 		}
 	}
@@ -1087,31 +1190,26 @@ public class DesignState extends GameState
 	 */
 	public void reset()
 	{
-		String resetLevel;
-		do
+		int option = JOptionPane.showConfirmDialog(null, "Reset the level?", "Indigo Level Editor",
+				JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION)
 		{
-			resetLevel = JOptionPane.showInputDialog("Reset the level? (Y / N):");
-			if(resetLevel.equals("Y"))
-			{
-				landscape.clear();
-				spawns.clear();
+			landscape.clear();
+			spawns.clear();
 
-				actionOrder.clear();
-				creationOrder.clear();
-				deletionOrder.clear();
-				indices = new int[] {-1, -1, -1};
+			actionOrder.clear();
+			objectOrder.clear();
+			actionIndex = -1;
 
-				landscapeGrid = new LandData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1][mapX / GRID_SCALE + 1][mapY
-						/ GRID_SCALE + 1];
-				spawnsGrid = new SpawnData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1];
+			landscapeGrid = new LandData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1][mapX / GRID_SCALE + 1][mapY
+					/ GRID_SCALE + 1];
+			spawnsGrid = new SpawnData[mapX / GRID_SCALE + 1][mapY / GRID_SCALE + 1];
 
-				playerSet = false;
-				objectiveSet = false;
+			playerSet = false;
+			objectiveSet = false;
 
-				selectedPoint = null;
-			}
+			selectedPoint = null;
 		}
-		while(!resetLevel.equals("Y") && !resetLevel.equals("N"));
 	}
 
 	/**
@@ -1119,68 +1217,60 @@ public class DesignState extends GameState
 	 */
 	public void clear()
 	{
-		String clearFile;
-		do
+		int option = JOptionPane.showConfirmDialog(null, "Delete the level permanently?", "Indigo Level Editor",
+				JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION)
 		{
-			clearFile = JOptionPane.showInputDialog("Delete the level permanently? (Y / N):");
-			if(clearFile.equals("Y"))
+			JSONObject index = ContentManager.load("/index.json");
+			if(index.get(name) == null)
 			{
-				JSONObject index = ContentManager.load("/index.json");
-				if(index.get(name) == null)
+				JOptionPane.showMessageDialog(null, "Level was not saved yet.");
+			}
+			else
+			{
+				try
 				{
-					JOptionPane.showMessageDialog(new JFrame(), "Level was not saved yet.");
+					int currentId = Integer.parseInt(index.get(name) + "");
+					index.remove(name);
+					for(Object level : index.entrySet())
+					{
+						String[] pair = (level + "").split("=");
+						int id = Integer.parseInt(pair[1]);
+						if(id > currentId)
+						{
+							index.put(pair[0], id - 1);
+						}
+					}
+					FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath()
+							+ "/resources/data/index.json");
+					indexWriter.write(getIndexJSONString());
+					indexWriter.flush();
+					indexWriter.close();
+
+					option = JOptionPane.showConfirmDialog(null, "Delete associated image?", "Indigo Level Editor",
+							JOptionPane.YES_NO_OPTION);
+					if(option == JOptionPane.YES_OPTION)
+					{
+						String fileName = name.replace(" ", "_").toLowerCase();
+						String filePath = new File("").getAbsolutePath() + "/resources/images/stages/" + fileName
+								+ ".png";
+						File file = new File(filePath);
+						file.delete();
+						JOptionPane.showMessageDialog(null, "Level data and image deleted!");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Level data deleted!");
+					}
+
+					gsm.setState(GameStateManager.MENU);
 				}
-				else
+				catch(Exception e)
 				{
-					try
-					{
-						int currentId = Integer.parseInt(index.get(name) + "");
-						index.remove(name);
-						for(Object level : index.entrySet())
-						{
-							String[] pair = (level + "").split("=");
-							int id = Integer.parseInt(pair[1]);
-							if(id > currentId)
-							{
-								index.put(pair[0], id - 1);
-							}
-						}
-						FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath()
-								+ "/resources/data/index.json");
-						indexWriter.write(getIndexJSONString());
-						indexWriter.flush();
-						indexWriter.close();
-
-						String clearImage;
-						do
-						{
-							clearImage = JOptionPane.showInputDialog("Delete the associated image? (Y / N):");
-							if(clearImage.equals("Y"))
-							{
-								String fileName = name.replace(" ", "_").toLowerCase();
-								String filePath = new File("").getAbsolutePath() + "/resources/images/stages/"
-										+ fileName + ".png";
-								File file = new File(filePath);
-								file.delete();
-								JOptionPane.showMessageDialog(new JFrame(), "Level data and image deleted!");
-							}
-							else if(clearImage.equals("N"))
-							{
-								JOptionPane.showMessageDialog(new JFrame(), "Level data deleted!");
-							}
-						}
-						while(!clearImage.equals("Y") && !clearImage.equals("N"));
-
-						gsm.setState(GameStateManager.MENU);
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-					}
+					e.printStackTrace();
 				}
 			}
 		}
-		while(!clearFile.equals("Y") && !clearFile.equals("N"));
 	}
 
 	/**
@@ -1192,21 +1282,8 @@ public class DesignState extends GameState
 		{
 			JSONObject index = ContentManager.load("/index.json");
 
-			// Overwrite check
-			if(index.get(name) != null)
-			{
-				String overwrite;
-				do
-				{
-					overwrite = JOptionPane.showInputDialog("Overwrite existing file? (Y / N):");
-					if(overwrite.equals("N"))
-					{
-						return;
-					}
-				}
-				while(!overwrite.equals("Y") && !overwrite.equals("N"));
-			}
-			else
+			// Adding level to index
+			if(index.get(name) == null)
 			{
 				index.put(name, index.size());
 				FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
@@ -1224,19 +1301,15 @@ public class DesignState extends GameState
 			fileWriter.close();
 
 			// Generating image
-			String generate;
-			do
+			int option = JOptionPane.showConfirmDialog(null, "Generate image?", "Indigo Level Editor",
+					JOptionPane.YES_NO_OPTION);
+			if(option == JOptionPane.YES_OPTION)
 			{
-				generate = JOptionPane.showInputDialog("Generate image? (Y / N):");
-				if(generate.equals("Y"))
-				{
-					ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
-							+ "/resources/images/stages/" + fileName + ".png"));
-				}
+				ImageIO.write(createImage(), "PNG", new File(new File("").getAbsolutePath()
+						+ "/resources/images/stages/" + fileName + ".png"));
 			}
-			while(!generate.equals("Y") && !generate.equals("N"));
 
-			JOptionPane.showMessageDialog(new JFrame(), "Level saved!");
+			JOptionPane.showMessageDialog(null, "Level saved!");
 		}
 		catch(Exception e)
 		{
@@ -1249,29 +1322,28 @@ public class DesignState extends GameState
 	 */
 	public void load()
 	{
-		String save;
-		do
+		int option = JOptionPane.showConfirmDialog(null, "Save?", "Indigo Level Editor", JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION)
 		{
-			save = JOptionPane.showInputDialog("Save? (Y / N):");
-			if(save.equals("Y"))
+			if(!playerSet)
 			{
-				if(!playerSet)
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
-					return;
-				}
-				else if(!objectiveSet)
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-					return;
-				}
-				else
-				{
-					save();
-				}
+				JOptionPane.showMessageDialog(null, "Player not set.");
+				return;
+			}
+			else if(!objectiveSet)
+			{
+				JOptionPane.showMessageDialog(null, "Objective not set.");
+				return;
+			}
+			else
+			{
+				save();
 			}
 		}
-		while(!save.equals("Y") && !save.equals("N"));
+		else if(option != JOptionPane.NO_OPTION)
+		{
+			return;
+		}
 		gsm.setState(GameStateManager.DESIGN);
 	}
 
@@ -1280,29 +1352,28 @@ public class DesignState extends GameState
 	 */
 	public void exit()
 	{
-		String save;
-		do
+		int option = JOptionPane.showConfirmDialog(null, "Save?", "Indigo Level Editor", JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION)
 		{
-			save = JOptionPane.showInputDialog("Save? (Y / N):");
-			if(save.equals("Y"))
+			if(!playerSet)
 			{
-				if(!playerSet)
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Player not set.");
-					return;
-				}
-				else if(!objectiveSet)
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Objective not set.");
-					return;
-				}
-				else
-				{
-					save();
-				}
+				JOptionPane.showMessageDialog(null, "Player not set.");
+				return;
+			}
+			else if(!objectiveSet)
+			{
+				JOptionPane.showMessageDialog(null, "Objective not set.");
+				return;
+			}
+			else
+			{
+				save();
 			}
 		}
-		while(!save.equals("Y") && !save.equals("N"));
+		else if(option != JOptionPane.NO_OPTION)
+		{
+			return;
+		}
 		gsm.setState(GameStateManager.MENU);
 	}
 
@@ -1346,23 +1417,20 @@ public class DesignState extends GameState
 		{
 			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
 			{
-				indices[ACTION]--;
-				indices[DELETION]--;
+				actionIndex--;
 			}
 			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
 			{
-				indices[ACTION]++;
-				indices[CREATION]++;
+				actionIndex++;
 			}
 		}
 		else
 		{
-			indices[ACTION]++;
-			indices[CREATION]++;
-			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
-			creationOrder.subList(indices[CREATION], creationOrder.size()).clear();
+			actionIndex++;
+			actionOrder.subList(actionIndex, actionOrder.size()).clear();
+			objectOrder.subList(actionIndex, objectOrder.size()).clear();
 			actionOrder.add(Action.ADD);
-			creationOrder.add(add);
+			objectOrder.add(add);
 		}
 	}
 
@@ -1393,23 +1461,20 @@ public class DesignState extends GameState
 		{
 			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
 			{
-				indices[ACTION]--;
-				indices[CREATION]--;
+				actionIndex--;
 			}
 			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
 			{
-				indices[ACTION]++;
-				indices[DELETION]++;
+				actionIndex++;
 			}
 		}
 		else
 		{
-			indices[ACTION]++;
-			indices[DELETION]++;
-			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
-			deletionOrder.subList(indices[DELETION], deletionOrder.size()).clear();
+			actionIndex++;
+			actionOrder.subList(actionIndex, actionOrder.size()).clear();
+			objectOrder.subList(actionIndex, objectOrder.size()).clear();
 			actionOrder.add(Action.REMOVE);
-			deletionOrder.add(remove);
+			objectOrder.add(remove);
 		}
 	}
 
@@ -1449,28 +1514,22 @@ public class DesignState extends GameState
 		{
 			if(toolTypes.get(selectedTool)[selectedToolType] == "Undo")
 			{
-				indices[ACTION]--;
-				indices[CREATION]--;
-				indices[DELETION]--;
+				actionIndex -= 2;
 			}
 			else if(toolTypes.get(selectedTool)[selectedToolType] == "Redo")
 			{
-				indices[ACTION]++;
-				indices[CREATION]++;
-				indices[DELETION]++;
+				actionIndex += 2;
 			}
 		}
 		else
 		{
-			indices[ACTION]++;
-			indices[CREATION]++;
-			indices[DELETION]++;
-			actionOrder.subList(indices[ACTION], actionOrder.size()).clear();
-			creationOrder.subList(indices[CREATION], creationOrder.size()).clear();
-			deletionOrder.subList(indices[DELETION], deletionOrder.size()).clear();
+			actionIndex += 2;
+			actionOrder.subList(actionIndex - 1, actionOrder.size()).clear();
+			objectOrder.subList(actionIndex - 1, objectOrder.size()).clear();
 			actionOrder.add(Action.OVERWRITE);
-			creationOrder.add(add);
-			deletionOrder.add(remove);
+			actionOrder.add(Action.OVERWRITE);
+			objectOrder.add(add);
+			objectOrder.add(remove);
 		}
 	}
 

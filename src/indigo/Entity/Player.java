@@ -84,7 +84,6 @@ public class Player extends Entity
 	public Player(Stage stage, double x, double y, int health, int mana, int stamina)
 	{
 		super(stage, x, y, health);
-		name = "yourself";
 
 		width = PLAYER_WIDTH;
 		height = PLAYER_HEIGHT;
@@ -416,6 +415,11 @@ public class Player extends Entity
 			}
 		}
 		return phase.id() == Phase.WATER? yOffset : yOffset - 48;
+	}
+	
+	public String getName()
+	{
+		return "yourself";
 	}
 
 	public Shape getHitbox()

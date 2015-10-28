@@ -56,6 +56,11 @@ public class Mortar extends Projectile
 			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 		}
 	}
+	
+	public String getName()
+	{
+		return creator.getName();
+	}
 
 	public Shape getHitbox()
 	{

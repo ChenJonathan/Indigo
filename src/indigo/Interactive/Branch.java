@@ -1,7 +1,6 @@
 package indigo.Interactive;
 
 import indigo.Entity.Entity;
-import indigo.Entity.Player;
 import indigo.Landscape.Platform;
 import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
@@ -31,7 +30,7 @@ public class Branch extends Interactive
 
 		platform = new Platform(this.stage, x - getWidth() / 2, y - getHeight() / 2, x + getWidth() / 2, y
 				- getHeight() / 2);
-		stage.getLandscape().add(platform);
+		stage.getPlatforms().add(platform);
 
 		setAnimation(0, ContentManager.getAnimation(ContentManager.BRANCH_DEFAULT), -1);
 	}
@@ -60,6 +59,11 @@ public class Branch extends Interactive
 				(int)getWidth(), (int)getHeight(), null);
 
 	}
+	
+	public String getName()
+	{
+		return "a branch";
+	}
 
 	public Shape getHitbox()
 	{
@@ -67,7 +71,7 @@ public class Branch extends Interactive
 	}
 
 	// Not used
-	public void activate(Player player)
+	public void activate()
 	{
 
 	}
@@ -84,7 +88,7 @@ public class Branch extends Interactive
 
 	public void die()
 	{
-		stage.getLandscape().remove(platform);
+		stage.getPlatforms().remove(platform);
 		for(Entity i : stage.getEntities())
 		{
 			if(i.isGrounded() && i.getGround().equals(platform))

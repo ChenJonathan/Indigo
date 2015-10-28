@@ -45,6 +45,11 @@ public class HarvestSaw extends Projectile
 	{
 		// TODO: Animation
 	}
+	
+	public String getName()
+	{
+		return creator.getName();
+	}
 
 	public Shape getHitbox()
 	{

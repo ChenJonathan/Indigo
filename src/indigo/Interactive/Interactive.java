@@ -2,6 +2,7 @@ package indigo.Interactive;
 
 import indigo.Entity.Player;
 import indigo.Manager.Animation;
+import indigo.Stage.Named;
 import indigo.Stage.Respawnable;
 import indigo.Stage.Stage;
 
@@ -10,7 +11,7 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 // Interacts with the player only
-public abstract class Interactive implements Respawnable
+public abstract class Interactive implements Respawnable, Named
 {
 	protected Stage stage;
 	protected Player player;
@@ -51,8 +52,10 @@ public abstract class Interactive implements Respawnable
 
 	public abstract void render(Graphics2D g);
 
-	public abstract void activate(Player player); // Does whatever the item is supposed to do upon collision
+	public abstract void activate(); // Does whatever the item is supposed to do upon collision
 
+	public abstract String getName();
+	
 	public abstract Shape getHitbox();
 
 	public abstract boolean isActive(); // Able to activate
@@ -63,10 +66,20 @@ public abstract class Interactive implements Respawnable
 	{
 		return x;
 	}
+	
+	public void setX(double x)
+	{
+		this.x = x;
+	}
 
 	public double getY()
 	{
 		return y;
+	}
+	
+	public void setY(double y)
+	{
+		this.y = y;
 	}
 
 	public double getWidth()
