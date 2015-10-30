@@ -17,7 +17,7 @@ public class SoundManager{
 	//List of currently playing sounds
 	private static ArrayList<Clip> playingSounds = new ArrayList<>();
 	
-	//Current Sound Volume (Between -80f and 6f)
+	//Current Sound Volume (Between -20f and 6f)
 	private static float currVolume = 0.0f;
 	
 	static{
