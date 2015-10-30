@@ -21,8 +21,8 @@
     ],
 
     "spawns":[
-        {"category":"Entity", "type":"Turret", "x":1600, "y":6000, "respawnTime":300}
-        {"category":"Entity", "type":"Turret", "x":3400, "y":6100, "respawnTime":300}
-        {"category":"Entity", "type":"Turret", "x":5800, "y":6100, "respawnTime":300}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1600, "y":6000, "respawnTime":300}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3400, "y":6100, "respawnTime":300}
+        {"category":"Entity", "type":"Incendiary Turret", "x":5800, "y":6100, "respawnTime":300}
     ]
 }

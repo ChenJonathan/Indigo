@@ -144,7 +144,7 @@ public class DesignState extends GameState
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
 		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
 		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Pit", "Force Field"});
-		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Turret", "Harvester", "Tree"});
+		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
 		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
@@ -180,9 +180,14 @@ public class DesignState extends GameState
 		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
 		descriptionText.put("Force Field", "A wall that lets entities through but destroys all projectiles.");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
-		descriptionText.put("Turret", "A stationary turret that can rotate its arm towards its target. "
-				+ "Attaches itself to the nearest wall or platform upon map creation. "
-				+ "Cannot aim towards its base.");
+		descriptionText.put("Gatling Turret",
+				"A stationary turret that can rotate its arm towards its target. "
+						+ "Attaches itself to the nearest wall or platform upon map creation. "
+						+ "Shoots bullets rapidly but cannot aim towards its base.");
+		descriptionText.put("Incendiary Turret",
+				"A stationary turret that can rotate its arm towards its target. "
+						+ "Attaches itself to the nearest wall or platform upon map creation. "
+						+ "Shoots explosive projectiles but cannot aim towards its base.");
 		descriptionText.put("Harvester", "A tree harvesting robot. "
 				+ "Moves towards the nearest tree and attempts to saw it down");
 		descriptionText.put("Tree", "A tree that spawns branches which can be jumped on. "
@@ -1745,7 +1750,7 @@ public class DesignState extends GameState
 						y1 -= heightOffset;
 					}
 				}
-				
+
 				// TODO Temporary
 				switch(land.type)
 				{
@@ -1815,10 +1820,10 @@ public class DesignState extends GameState
 					}
 					x1 -= lateralOffset;
 					y1 -= heightOffset;
-					
+
 					// TODO Temporary
 					g.setColor(Color.GREEN);
-					g.drawLine(x1, y1, x2, y2);
+					// g.drawLine(x1, y1, x2, y2);
 				}
 			}
 		}

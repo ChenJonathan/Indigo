@@ -86,8 +86,6 @@ public class SurvivalStage extends Stage
 
 	public void update()
 	{
-		super.update();
-
 		if(playState.getTime() == survivalDuration)
 		{
 			playState.endGame(true);
@@ -113,6 +111,8 @@ public class SurvivalStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+
+		super.update();
 	}
 	
 	public int getSurvivalDuration()

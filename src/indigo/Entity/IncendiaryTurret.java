@@ -15,7 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-public class Turret extends Entity
+public class IncendiaryTurret extends Entity
 {
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
@@ -25,21 +25,21 @@ public class Turret extends Entity
 	private double angle;
 	private double groundAngle;
 
-	private Animation animationCannon;
+	private Animation animationBarrel;
 
-	public final double TURRET_ANGLE = Math.PI / 4;
+	public final double TURRET_ANGLE = Math.PI / 3;
 
 	public static final double TURRET_WIDTH = 130;
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int FIRE_RATE = 60;
 
-	public Turret(Stage stage, double x, double y)
+	public IncendiaryTurret(Stage stage, double x, double y)
 	{
 		this(stage, x, y, BASE_HEALTH);
 	}
 
-	public Turret(Stage stage, double x, double y, int health)
+	public IncendiaryTurret(Stage stage, double x, double y, int health)
 	{
 		super(stage, x, y, health);
 
@@ -55,9 +55,9 @@ public class Turret extends Entity
 
 		timer = 0;
 
-		animationCannon = new Animation();
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
-		setAnimationCannon(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_CANNON_DEFAULT), -1);
+		animationBarrel = new Animation();
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.INCENDIARY_TURRET_BASE_DEFAULT), -1);
+		setAnimationBarrel(DEFAULT, ContentManager.getAnimation(ContentManager.INCENDIARY_TURRET_BARREL_DEFAULT), -1);
 
 		// Finding closest wall
 		double minDistance = 500;
@@ -115,7 +115,7 @@ public class Turret extends Entity
 		if(currentAnimation == DEATH)
 		{
 			super.update();
-			animationCannon.update();
+			animationBarrel.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;
@@ -126,18 +126,21 @@ public class Turret extends Entity
 		timer = (timer == 0)? 0 : timer - 1;
 
 		super.update();
-		animationCannon.update();
+		animationBarrel.update();
 
 		if(canAttack() && inRange())
 		{
 			double optimalAngle = getOptimalAngle();
 			double deltaAngle = optimalAngle - angle;
 
-			if(isLegal(optimalAngle) && Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
+			if(isLegal(optimalAngle) && Math.abs(deltaAngle) <= Math.PI / 36)
 			{
 				angle = optimalAngle;
-				attack();
-				timer = FIRE_RATE;
+				if(timer == 0)
+				{
+					attack();
+					timer = FIRE_RATE;
+				}
 			}
 			else
 			{
@@ -163,26 +166,30 @@ public class Turret extends Entity
 
 	public void render(Graphics2D g)
 	{
+		// Drawing cannon
+		if(getX() > 0 && getX() < stage.getMapX())
+		{
+			double baseOffsetX = 18 * Math.cos(groundAngle);
+			double baseOffsetY = 18 * Math.sin(groundAngle);
+			g.rotate(-angle + Math.PI / 2, getX() + baseOffsetX, getY() + baseOffsetY);
+			if(currentAnimation == DEATH)
+			{
+				g.drawImage(animationBarrel.getImage(), (int)(getX() - 65 + baseOffsetX),
+						(int)(getY() - 93 + baseOffsetY), 130, 130, null);
+			}
+			else
+			{
+				g.drawImage(animationBarrel.getImage(), (int)(getX() - 65 + baseOffsetX),
+						(int)(getY() - 93 + baseOffsetY), 130, 130, null);
+			}
+			g.rotate(angle - Math.PI / 2, getX() + baseOffsetX, getY() + baseOffsetY);
+		}
+
 		// Rotation breaks if x is negative
 		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 				(int)getWidth(), (int)getHeight(), null);
 		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
-
-		// Drawing cannon
-		if(getX() > 0 && getX() < stage.getMapX())
-		{
-			g.rotate(-angle + Math.PI / 2, getX(), getY());
-			if(currentAnimation == DEATH)
-			{
-				g.drawImage(animationCannon.getImage(), (int)(getX() - 65), (int)(getY() - 65), 130, 130, null);
-			}
-			else
-			{
-				g.drawImage(animationCannon.getImage(), (int)(getX() - 65), (int)(getY() - 65), 130, 130, null);
-			}
-			g.rotate(angle - Math.PI / 2, getX(), getY());
-		}
 	}
 
 	public void attack()
@@ -276,7 +283,7 @@ public class Turret extends Entity
 		leftBound %= Math.PI * 2;
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 
-		//System.out.println(leftBound + ", " + testAngle + "," + rightBound);
+		// System.out.println(leftBound + ", " + testAngle + "," + rightBound);
 		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
 		{
 			legal = true;
@@ -298,9 +305,9 @@ public class Turret extends Entity
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
 		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
-		//System.out.println(leftBound + ", " + rightBound);
+		// System.out.println(leftBound + ", " + rightBound);
 
-		//System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
+		// System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
 		if(startAngle > endAngle)
 		{
 			canReachCCW = (endAngle < leftBound && startAngle > leftBound)? true : false;
@@ -316,7 +323,7 @@ public class Turret extends Entity
 		}
 		return canReachCCW;
 	}
-	
+
 	public String getName()
 	{
 		return "a turret";
@@ -336,15 +343,15 @@ public class Turret extends Entity
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEATH), 1);
-			setAnimationCannon(DEATH, ContentManager.getAnimation(ContentManager.TURRET_CANNON_DEATH), 1);
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.INCENDIARY_TURRET_BASE_DEATH), 1);
+			setAnimationBarrel(DEATH, ContentManager.getAnimation(ContentManager.INCENDIARY_TURRET_BARREL_DEATH), 1);
 		}
 	}
 
 	// Method used to change animation
-	private void setAnimationCannon(int count, BufferedImage[] images, int delay)
+	private void setAnimationBarrel(int count, BufferedImage[] images, int delay)
 	{
-		animationCannon.setFrames(images);
-		animationCannon.setDelay(delay);
+		animationBarrel.setFrames(images);
+		animationBarrel.setDelay(delay);
 	}
 }

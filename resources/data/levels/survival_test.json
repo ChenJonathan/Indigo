@@ -43,16 +43,16 @@
         {"category":"Projectile", "type":"Steel Beam", "x":2200, "y":200, "respawnTime":0}
         {"category":"Projectile", "type":"Steel Beam", "x":2300, "y":300, "respawnTime":0}
         {"category":"Projectile", "type":"Steel Beam", "x":2500, "y":200, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":3900, "y":1100, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":3800, "y":1600, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":3500, "y":2000, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":3800, "y":500, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":3400, "y":200, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1400, "y":500, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":900, "y":900, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":700, "y":1400, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":700, "y":1900, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1100, "y":2200, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3900, "y":1100, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3800, "y":1600, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3500, "y":2000, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3800, "y":500, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":3400, "y":200, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1400, "y":500, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":900, "y":900, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":700, "y":1400, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":700, "y":1900, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1100, "y":2200, "respawnTime":0}
         {"category":"Entity", "type":"Flying Bot", "x":3400, "y":1000, "respawnTime":0}
         {"category":"Entity", "type":"Flying Bot", "x":3400, "y":1500, "respawnTime":0}
         {"category":"Entity", "type":"Flying Bot", "x":3000, "y":1800, "respawnTime":0}

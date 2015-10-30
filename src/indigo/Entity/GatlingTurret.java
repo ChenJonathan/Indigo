@@ -134,11 +134,14 @@ public class GatlingTurret extends Entity
 			double optimalAngle = getOptimalAngle();
 			double deltaAngle = optimalAngle - angle;
 
-			if(isLegal(optimalAngle) && Math.abs(deltaAngle) <= Math.PI / 36 && timer == 0)
+			if(isLegal(optimalAngle) && Math.abs(deltaAngle) <= Math.PI / 36)
 			{
 				angle = optimalAngle;
-				attack();
-				timer = FIRE_RATE;
+				if(timer == 0)
+				{
+					attack();
+					timer = FIRE_RATE;
+				}
 			}
 			else
 			{

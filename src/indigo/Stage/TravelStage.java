@@ -93,8 +93,6 @@ public class TravelStage extends Stage
 
 	public void update()
 	{
-		super.update();
-
 		if(!interactives.contains(destination))
 		{
 			playState.endGame(true);
@@ -125,6 +123,8 @@ public class TravelStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+
+		super.update();
 	}
 	
 	public Destination getDestination()

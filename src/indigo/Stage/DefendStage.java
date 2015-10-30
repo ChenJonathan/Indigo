@@ -91,8 +91,6 @@ public class DefendStage extends Stage
 
 	public void update()
 	{
-		super.update();
-
 		if(!entities.contains(core))
 		{
 			data.setDeathMessage("The core was destroyed by _");
@@ -124,6 +122,8 @@ public class DefendStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+
+		super.update();
 	}
 
 	public void trackDeath(String killer, Entity killed)

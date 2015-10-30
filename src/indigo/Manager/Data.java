@@ -217,4 +217,14 @@ public class Data
 	{
 		deathMessage = message;
 	}
+	
+	/**
+	 * Wrapper function to change the volume of the
+	 * audio clips.
+	 * 
+	 * @param newVolume The new sound volume.
+	 */
+	public void setVolume(int newVolume){
+		SoundManager.changeVolume(newVolume);
+	}
 }

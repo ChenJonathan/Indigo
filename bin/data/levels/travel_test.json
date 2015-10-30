@@ -54,6 +54,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":1700, "y":800, "respawnTime":0}
         {"category":"Entity", "type":"Flying Bot", "x":1000, "y":900, "respawnTime":0}
         {"category":"Entity", "type":"Flying Bot", "x":200, "y":900, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":700, "y":600, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":700, "y":600, "respawnTime":0}
     ]
 }

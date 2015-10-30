@@ -11,6 +11,7 @@ import indigo.Manager.Data;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Ice;
 import indigo.Phase.Phase;
 import indigo.Phase.Water;
@@ -448,6 +449,7 @@ public class PlayState extends GameState
 	 */
 	public void endGame(boolean victory)
 	{
+		SoundManager.stopAll(); // TODO Temporary
 		data.setClearTime(time);
 		data.setVictory(victory);
 		gsm.setState(GameStateManager.CLEAR);

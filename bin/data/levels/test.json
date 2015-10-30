@@ -76,15 +76,15 @@
         {"category":"Projectile", "type":"Steel Beam", "x":4800, "y":200, "respawnTime":0}
         {"category":"Interactive", "type":"Health Pickup", "x":500, "y":900, "respawnTime":1500}
         {"category":"Entity", "type":"Flying Bot", "x":4800, "y":1900, "respawnTime":1500}
-        {"category":"Entity", "type":"Turret", "x":1200, "y":3000, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":2000, "y":3000, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1500, "y":3200, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1200, "y":3300, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1800, "y":3300, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1700, "y":3500, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":2200, "y":3600, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1900, "y":3900, "respawnTime":0}
-        {"category":"Entity", "type":"Turret", "x":1700, "y":3800, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1200, "y":3000, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":2000, "y":3000, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1500, "y":3200, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1200, "y":3300, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1800, "y":3300, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1700, "y":3500, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":2200, "y":3600, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1900, "y":3900, "respawnTime":0}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1700, "y":3800, "respawnTime":0}
         {"category":"Interactive", "type":"Health Pickup", "x":2400, "y":800, "respawnTime":1500}
         {"category":"Entity", "type":"Tree", "x":3300, "y":1400, "respawnTime":1800}
         {"category":"Entity", "type":"Turret", "x":1000, "y":500, "respawnTime":1500}

@@ -14,6 +14,7 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Projectile.Projectile;
 
 import org.json.simple.JSONArray;
@@ -84,13 +85,11 @@ public class BattleStage extends Stage
 			respawnables[count] = spawnObject(object);
 		}
 
-		// SoundManager.play(ContentManager.BACKGROUND_1);
+		SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()
 	{
-		super.update();
-
 		if(lastEnemy != null && !entities.contains(lastEnemy))
 		{
 			playState.endGame(true);
@@ -116,6 +115,8 @@ public class BattleStage extends Stage
 				respawnTimers[count]--;
 			}
 		}
+		
+		super.update();
 	}
 
 	public void trackDeath(String killer, Entity killed)

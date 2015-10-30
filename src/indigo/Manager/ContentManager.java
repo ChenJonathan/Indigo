@@ -31,7 +31,7 @@ public class ContentManager
 {
 	// Cursor
 	public static ImageData CURSOR = new ImageData("/images/cursor/crosshair.png", 32, 32);
-	
+
 	// Elements
 	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 300, 100);
 	public static ImageData STONE_TILE_LEFT = new ImageData("/images/elements/stone_tile_left.png", 100, 30);
@@ -109,6 +109,14 @@ public class ContentManager
 	public static ImageData FLYING_BOT_CANNON = new ImageData("/images/sprites/flying_bot/cannon.png", 18, 11);
 	public static AnimationData FLYING_BOT_DEATH = new AnimationData("/images/sprites/flying_bot/death.png", 60, 60, 6);
 	public static AnimationData FLYING_BOT_IDLE = new AnimationData("/images/sprites/flying_bot/idle.png", 60, 60, 4);
+	public static AnimationData INCENDIARY_TURRET_BASE_DEATH = new AnimationData(
+			"/images/sprites/incendiary_turret/base_death.png", 130, 110, 7);
+	public static AnimationData INCENDIARY_TURRET_BASE_DEFAULT = new AnimationData(
+			"/images/sprites/incendiary_turret/base_default.png", 130, 110, 1);
+	public static AnimationData INCENDIARY_TURRET_BARREL_DEATH = new AnimationData(
+			"/images/sprites/incendiary_turret/barrel_death.png", 130, 130, 7);
+	public static AnimationData INCENDIARY_TURRET_BARREL_DEFAULT = new AnimationData(
+			"/images/sprites/incendiary_turret/barrel_default.png", 130, 130, 1);
 	public static AnimationData PLAYER_BLOCK_LEFT = new AnimationData("/images/sprites/player/block_left.png", 68, 111,
 			1);
 	public static AnimationData PLAYER_BLOCK_RIGHT = new AnimationData("/images/sprites/player/block_right.png", 68,
