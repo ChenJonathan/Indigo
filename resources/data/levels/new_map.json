@@ -1,0 +1,22 @@
+{
+    "name":"New Map",
+    "type":"Defend",
+
+    "mapX":2400,
+    "mapY":1600,
+
+    "startingX":1600,
+    "startingY":700,
+
+    "survivalDuration":900,
+
+    "coreX":1500,
+    "coreY":700,
+
+    "landscape":[
+        {"type":"Platform", "x1":1400, "y1":800, "x2":1700, "y2":800}
+    ],
+
+    "spawns":[
+    ],
+}

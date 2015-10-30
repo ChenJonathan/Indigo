@@ -68,7 +68,7 @@
         {"category":"Entity", "type":"Flying Bot", "x":3300, "y":2300, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":4200, "y":2700, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":3800, "y":2000, "respawnTime":300}
-        {"category":"Entity", "type":"Turret", "x":2400, "y":2100, "respawnTime":300}
+        {"category":"Entity", "type":"Incendiary Turret", "x":2400, "y":2100, "respawnTime":300}
         {"category":"Projectile", "type":"Steel Beam", "x":2400, "y":100, "respawnTime":0}
         {"category":"Projectile", "type":"Steel Beam", "x":2800, "y":100, "respawnTime":0}
         {"category":"Projectile", "type":"Steel Beam", "x":3300, "y":200, "respawnTime":0}
@@ -87,11 +87,12 @@
         {"category":"Entity", "type":"Incendiary Turret", "x":1700, "y":3800, "respawnTime":0}
         {"category":"Interactive", "type":"Health Pickup", "x":2400, "y":800, "respawnTime":1500}
         {"category":"Entity", "type":"Tree", "x":3300, "y":1400, "respawnTime":1800}
-        {"category":"Entity", "type":"Turret", "x":1000, "y":500, "respawnTime":1500}
-        {"category":"Entity", "type":"Turret", "x":1500, "y":500, "respawnTime":1500}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1000, "y":500, "respawnTime":1500}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1500, "y":500, "respawnTime":1500}
         {"category":"Entity", "type":"Tree", "x":3600, "y":400, "respawnTime":0}
         {"category":"Interactive", "type":"Steam Vent", "x":1000, "y":1200, "respawnTime":0}
         {"category":"Interactive", "type":"Steam Vent", "x":1500, "y":1400, "respawnTime":0}
         {"category":"Interactive", "type":"Steam Vent", "x":2700, "y":1100, "respawnTime":0}
+        {"category":"Entity", "type":"Harvester", "x":1200, "y":1300, "respawnTime":1500}
     ],
 }

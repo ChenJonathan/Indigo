@@ -66,7 +66,7 @@ public abstract class Stage
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
 	public static final double TERMINAL_VELOCITY = 100; // Maximum value that x or y velocity can reach
-	public static final double COLLISION_PROXIMITY = 250; // Maximum distance where collision is checked // TODO Revert
+	public static final double COLLISION_PROXIMITY = 800; // Maximum distance where collision is checked // TODO Revert
 	public static final double SKY_LIMIT = -1000; // Upper boundary of the map
 
 	public Stage(PlayState playState)
@@ -170,6 +170,17 @@ public abstract class Stage
 								if(!otherEnt.isActive())
 								{
 									trackDeath(ent.getName(), otherEnt);
+								}
+							}
+						}
+						if(otherEnt.hasWeaponHitbox())
+						{
+							if(ent.intersects(otherEnt.getWeapon()))
+							{
+								otherEnt.getWeapon().collide(ent);
+								if(!ent.isActive())
+								{
+									trackDeath(otherEnt.getName(), ent);
 								}
 							}
 						}

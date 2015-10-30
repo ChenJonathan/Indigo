@@ -1248,7 +1248,7 @@ public class DesignState extends GameState
 					}
 					FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath()
 							+ "/resources/data/index.json");
-					indexWriter.write(getIndexJSONString());
+					indexWriter.write(getIndexJSONString(index));
 					indexWriter.flush();
 					indexWriter.close();
 
@@ -1290,9 +1290,8 @@ public class DesignState extends GameState
 			// Adding level to index
 			if(index.get(name) == null)
 			{
-				index.put(name, index.size());
 				FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
-				indexWriter.write(getIndexJSONString());
+				indexWriter.write(getIndexJSONString(index));
 				indexWriter.flush();
 				indexWriter.close();
 			}
@@ -1545,11 +1544,10 @@ public class DesignState extends GameState
 	 * 
 	 * @return The formatted JSON String.
 	 */
-	public String getIndexJSONString()
+	public String getIndexJSONString(JSONObject index)
 	{
 		String string = "";
 
-		JSONObject index = ContentManager.load("/index.json");
 		for(int count = 0; count < index.size(); count++)
 		{
 			for(Object name : index.entrySet())
@@ -1562,8 +1560,10 @@ public class DesignState extends GameState
 				}
 			}
 		}
+		
+		string += "    \"" + name + "\":" + index.size();
 
-		return "{\n" + string.substring(0, string.length() - 2) + "\n}";
+		return "{\n" + string + "\n}";
 	}
 
 	/**
@@ -1767,7 +1767,7 @@ public class DesignState extends GameState
 						g.setColor(Color.BLUE);
 						break;
 				}
-				g.drawLine(x1, y1, x2, y2);
+				// g.drawLine(x1, y1, x2, y2);
 			}
 
 			// Draw platforms

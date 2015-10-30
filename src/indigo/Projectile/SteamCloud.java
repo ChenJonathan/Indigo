@@ -1,5 +1,6 @@
 package indigo.Projectile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -42,6 +43,7 @@ public class SteamCloud extends Projectile
 
 	public void render(Graphics2D g)
 	{
+		g.setColor(Color.GRAY);
 		g.fill(getHitbox());
 	}
 	

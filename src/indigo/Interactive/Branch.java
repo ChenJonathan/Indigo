@@ -16,6 +16,7 @@ public class Branch extends Interactive
 	public final static int WIDTH = 200;
 	public final static int HEIGHT = 50;
 	public final static double SPEED = 0;
+	public final static int DURATION = 60;
 
 	private int timer = 0;
 	private boolean breaking = false;
@@ -46,7 +47,7 @@ public class Branch extends Interactive
 		{
 			timer++;
 
-			if(timer == 30)
+			if(timer == DURATION)
 			{
 				die();
 			}

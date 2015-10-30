@@ -85,7 +85,7 @@ public class BattleStage extends Stage
 			respawnables[count] = spawnObject(object);
 		}
 
-		SoundManager.play(ContentManager.BACKGROUND_1);
+		// SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()
