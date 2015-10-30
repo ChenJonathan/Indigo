@@ -3,6 +3,7 @@ package indigo.GameState;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 
 import java.awt.Graphics2D;
 

@@ -3,6 +3,7 @@ package indigo.GameState;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -11,6 +12,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.json.simple.JSONObject;
 
@@ -35,6 +39,9 @@ public class MenuState extends GameState implements ActionListener
 	public final int OPTIONS = 2;
 	public final int CREDITS = 3;
 	public final int EXIT = 4;
+	
+	//TEMP SOUND SLIDE VARIABLE
+	public int soundVolume = -37;
 
 	/**
 	 * Sets up the menu and initializes the button states.
@@ -166,6 +173,37 @@ public class MenuState extends GameState implements ActionListener
 		// Main menu button functionality goes here
 		else
 		{
+			//TEMPORARY SOUND CONTROL BUTTON
+			if(Manager.input.mouseX() >= 0 && Manager.input.mouseX() <= 200 && Manager.input.mouseY() >= 0 && Manager.input.mouseY() <= 200 && Manager.input.mouseLeftRelease()){
+				JSlider volumeSlider = new JSlider(-80, 6, soundVolume);
+				volumeSlider.setMajorTickSpacing(10);
+				volumeSlider.setMinorTickSpacing(2);
+				volumeSlider.setPaintTicks(true);
+				volumeSlider.addChangeListener(new ChangeListener(){
+					@Override
+					public void stateChanged(ChangeEvent E)
+					{
+						JSlider Source = (JSlider) E.getSource();
+						soundVolume = Source.getValue();
+						if(!Source.getValueIsAdjusting()){
+							data.setVolume(soundVolume);
+							frame.dispose();
+						}
+					}
+				});
+				
+				frame = new JFrame("");
+		        frame.setSize(new Dimension(500, 100));
+		        frame.setLayout(null);
+		        frame.setResizable(false);
+		        frame.setLocationRelativeTo(null);
+		        frame.setVisible(true);
+		        
+		        volumeSlider.setBounds(10, 10, 480, 50);
+		        frame.add(volumeSlider);
+			}
+			
+			
 			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1385 && Manager.input.mouseY() >= 285 && Manager.input.mouseY() <= 385)
 			{
 				buttonState[PLAY] = HOVER;
@@ -275,6 +313,7 @@ public class MenuState extends GameState implements ActionListener
 		if(!level.equals(""))
 		{
 			data.setStage(ContentManager.load("/levels/" + level + ".json"));
+			SoundManager.play(ContentManager.BACKGROUND_2);
 			frame.dispose();
 			gsm.setState(GameStateManager.PLAY);
 		}
