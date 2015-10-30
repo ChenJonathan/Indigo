@@ -1637,25 +1637,9 @@ public class DesignState extends GameState
 			Graphics2D g = stage.createGraphics();
 			g.setStroke(new BasicStroke(10));
 
-			// Draw landscape
+			// Draw walls
 			for(LandData land : landscape)
 			{
-				// Draw temporary line for verification of correct terrain placement
-				switch(land.type)
-				{
-					case "Platform":
-						g.setColor(Color.GREEN);
-						break;
-					case "Spike Pit":
-						g.setColor(Color.RED);
-						break;
-					case "Force Field":
-						g.setColor(Color.CYAN);
-						break;
-					default:
-						g.setColor(Color.BLUE);
-						break;
-				}
 				int x1 = (int)land.x1;
 				int y1 = (int)land.y1;
 				int x2 = (int)land.x2;
@@ -1760,10 +1744,51 @@ public class DesignState extends GameState
 								-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
 						y1 -= heightOffset;
 					}
-					g.drawLine(x1, y1, x2, y2);
 				}
+				
+				// TODO Temporary
+				switch(land.type)
+				{
+					case "Platform":
+						g.setColor(Color.GREEN);
+						break;
+					case "Spike Pit":
+						g.setColor(Color.RED);
+						break;
+					case "Force Field":
+						g.setColor(Color.CYAN);
+						break;
+					default:
+						g.setColor(Color.BLUE);
+						break;
+				}
+				g.drawLine(x1, y1, x2, y2);
+			}
+
+			// Draw platforms
+			for(LandData land : landscape)
+			{
 				if(land.type.equals("Platform"))
 				{
+					int x1 = (int)land.x1;
+					int y1 = (int)land.y1;
+					int x2 = (int)land.x2;
+					int y2 = (int)land.y2;
+
+					double angle = Math.atan(land.slope);
+					double scale = 0;
+
+					if(x2 < x1)
+					{
+						int temp = 0;
+						temp = x2;
+						x2 = x1;
+						x1 = temp;
+						temp = y2;
+						y2 = y1;
+						y1 = temp;
+					}
+
 					int tiles = 0;
 					tiles = (int)((land.length) / 300);
 					tiles = Math.max(1, tiles); // Ensures at least one tile
@@ -1790,6 +1815,9 @@ public class DesignState extends GameState
 					}
 					x1 -= lateralOffset;
 					y1 -= heightOffset;
+					
+					// TODO Temporary
+					g.setColor(Color.GREEN);
 					g.drawLine(x1, y1, x2, y2);
 				}
 			}

@@ -200,8 +200,7 @@ public abstract class Stage
 				if(ent.isGrounded())
 				{
 					Land prevGround = ent.getGround();
-					if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
-							&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
+					if(ent.getX() >= prevGround.getMinX() && ent.getX() <= prevGround.getMaxX())
 					{
 						ground = prevGround;
 					}
@@ -259,8 +258,7 @@ public abstract class Stage
 							else
 							{
 								// Downward collision into wall
-								// Only the closest qualified wall is set as ground
-								// Other downward collision walls afterwards are ignored to an extent
+								// Also happens to be the reason why I cry myself to sleep every night
 								if(land instanceof Platform || ent.isAboveLand(land))
 								{
 									if(ent.isFlying())
@@ -271,7 +269,9 @@ public abstract class Stage
 											ent.setVelY(Math.min(ent.getVelY(), 0));
 										}
 									}
-									else if(intersectsFeet(ent, land))
+									else if(intersectsFeet(ent, land)
+											|| (ent.getX() >= land.getMinX() && ent.getX() <= land.getMaxX() && land
+													.getSurface(ent.getX()) < ent.getY() + ent.getHeight() / 2))
 									{
 										ground = land;
 										ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
@@ -442,25 +442,10 @@ public abstract class Stage
 
 	public boolean intersectsFeet(Entity ent, Land land)
 	{
-		if(ent.getVelY() <= 0)
-		{
-			Line2D.Double feetCenter = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2,
-					ent.getX(), ent.getY() + ent.getHeight() / 2);
+		Line2D.Double feetCenter = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(),
+				ent.getY() + ent.getHeight() / 2);
 
-			return land.getLine().intersectsLine(feetCenter);
-		}
-		else
-		{
-			Line2D.Double feet = new Line2D.Double(ent.getX() - ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2,
-					ent.getX() + ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
-			Line2D.Double feetLeft = new Line2D.Double(ent.getPrevX() - ent.getWidth() / 2, ent.getPrevY()
-					+ ent.getHeight() / 2, ent.getX() - ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
-			Line2D.Double feetRight = new Line2D.Double(ent.getPrevX() + ent.getWidth() / 2, ent.getPrevY()
-					+ ent.getHeight() / 2, ent.getX() + ent.getWidth() / 2, ent.getY() + ent.getHeight() / 2);
-
-			return land.getLine().intersectsLine(feet) || land.getLine().intersectsLine(feetLeft)
-					|| land.getLine().intersectsLine(feetRight);
-		}
+		return land.getLine().intersectsLine(feetCenter);
 	}
 
 	public void trackDeath(String killer, Entity killed)

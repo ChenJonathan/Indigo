@@ -16,13 +16,14 @@ public class GeyserParticle extends Projectile
 	public static final int DAMAGE = 2;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 50;
-	public static final double SPEED = 40;
+	public static final double SPEED = 50;
 
 	public GeyserParticle(Entity entity, double x, double y, double velX, double velY, int dmg)
 	{
 		super(entity, x, y, velX, velY, dmg);
 		width = WIDTH;
 		height = HEIGHT;
+
 		solid = false;
 		flying = true;
 

@@ -13,8 +13,6 @@ import indigo.Stage.Stage;
 
 public class SteamCloud extends Projectile
 {
-	private ArrayList<Entity> collidedEntities;
-	
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
@@ -31,8 +29,6 @@ public class SteamCloud extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = true;
-
-		collidedEntities = new ArrayList<Entity>();
 		
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
 	}
@@ -41,7 +37,7 @@ public class SteamCloud extends Projectile
 	{
 		super.update();
 
-		setVelY(getVelY() - Stage.GRAVITY);
+		setVelY(Math.max(getVelY() - Stage.GRAVITY, -75));
 	}
 
 	public void render(Graphics2D g)
@@ -61,11 +57,7 @@ public class SteamCloud extends Projectile
 
 	public void collide(Entity ent)
 	{
-		if(!collidedEntities.contains(ent) && ent.getVelY() > -50)
-		{
-			collidedEntities.add(ent);
-			ent.setVelY(Math.max(ent.getVelY() - ent.getPushability() * 10, -50));
-		}
+		ent.setVelY(Math.max(ent.getVelY() - ent.getPushability() * 3, -40));
 	}
 
 	public void collide(Wall wall)

@@ -104,6 +104,13 @@ public abstract class Entity implements Respawnable, Named
 		{
 			velY = Stage.TERMINAL_VELOCITY;
 		}
+		
+		// If the entity is grounded, take the y position corresponding to the ground
+		if(ground != null)
+		{
+			y = ground.getSurface(x) - getHeight() / 2;
+			velY = 0;
+		}
 
 		prevX = x;
 		prevY = y;
@@ -165,18 +172,17 @@ public abstract class Entity implements Respawnable, Named
 			{
 				velY += Stage.GRAVITY;
 			}
-			// If the entity is grounded, take the y position corresponding to the ground - Important for slanted
-			// surfaces
-			else
-			{
-				y = ground.getSurface(x) - getHeight() / 2;
-				velY = 0;
-			}
 		}
 
 		updateTravelLine();
 
 		animation.update();
+
+		// Update weapon
+		if(hasWeapon())
+		{
+			weapon.update();
+		}
 	}
 
 	public abstract void render(Graphics2D g); // Draws the entity

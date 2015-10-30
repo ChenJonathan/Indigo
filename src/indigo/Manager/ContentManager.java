@@ -87,6 +87,7 @@ public class ContentManager
 	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 302, 402);
 
 	// Projectiles
+	public static AnimationData BULLET = new AnimationData("/images/projectiles/bullet/default.png", 30, 10, 1);
 	public static AnimationData ELECTRIC_BALL = new AnimationData("/images/projectiles/electric_ball.png", 100, 100, 1);
 	public static AnimationData ELECTRIC_SPARK = new AnimationData("/images/projectiles/electric_spark.png", 100, 100,
 			1);

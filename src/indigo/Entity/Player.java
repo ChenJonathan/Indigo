@@ -148,12 +148,6 @@ public class Player extends Entity
 
 		super.update();
 
-		// Update weapon
-		if(hasWeapon())
-		{
-			weapon.update();
-		}
-
 		// Variable jump height counter
 		if(jumpTime > 0)
 		{
