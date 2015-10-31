@@ -3,10 +3,12 @@ package indigo.Skill;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Phase.Phase;
+import indigo.Stage.Stage;
 
 public abstract class Skill
 {
 	protected PlayState playState;
+	protected Stage stage;
 	protected Phase phase;
 
 	protected Player player;
@@ -17,17 +19,17 @@ public abstract class Skill
 	protected boolean castOnSelect;
 
 	public static final int EMPTY = 0;
-	public static final int GEYSER = 1;
-	public static final int PULSE = 2;
-	public static final int CHANNEL = 3;
+	public static final int MIST = 1;
+	public static final int GEYSER = 2;
+	public static final int PULSE = 3;
 	public static final int WHIRLWIND = 4;
 	public static final int CHAINS = 5;
 	public static final int ARMOR = 6;
-	public static final int BLIZZARD = 7;
 
 	public Skill(Phase phase, int position)
 	{
 		playState = phase.getPlayState();
+		stage = playState.getStage();
 		this.phase = phase;
 		player = phase.getPlayer();
 

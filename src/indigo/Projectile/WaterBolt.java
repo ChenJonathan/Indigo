@@ -17,7 +17,7 @@ public class WaterBolt extends Projectile
 	private final int DEATH = 1;
 	private final int DEATH_WALL = 2;
 
-	public static final int DAMAGE = 10;
+	public static final int DAMAGE = 15;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 73;
 	public static final double SPEED = 60;
@@ -112,28 +112,6 @@ public class WaterBolt extends Projectile
 		{
 			angle += Math.PI;
 		}
-		/*
-		if(Math.abs(slopeAngle) < 0.0001)
-		{
-			// For completely vertical walls
-			angle = getVelX() > 0? 0 : Math.PI;
-		}
-		else
-		{
-			slopeAngle = slopeAngle >= 0? slopeAngle : slopeAngle + Math.PI;
-			if(Math.abs(slopeAngle - angle) < Math.abs(slopeAngle + Math.PI - angle))
-			{
-				angle = slopeAngle;
-			}
-			else if(Math.abs(slopeAngle + 2 * Math.PI - angle) < Math.abs(slopeAngle + Math.PI - angle))
-			{
-				angle = slopeAngle;
-			}
-			else
-			{
-				angle = Math.PI + slopeAngle;
-			}
-		}*/
 
 		setAnimation(DEATH_WALL, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH_WALL), 5);
 		die();

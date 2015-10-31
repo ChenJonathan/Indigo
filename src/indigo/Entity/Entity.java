@@ -179,12 +179,6 @@ public abstract class Entity implements Respawnable, Named
 		updateTravelLine();
 
 		animation.update();
-
-		// Update weapon
-		if(hasWeapon())
-		{
-			weapon.update();
-		}
 	}
 
 	public abstract void render(Graphics2D g); // Draws the entity

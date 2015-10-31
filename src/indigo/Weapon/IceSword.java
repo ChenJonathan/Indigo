@@ -78,6 +78,11 @@ public class IceSword extends Weapon
 				attacking = false;
 				attackTime = -1;
 				entitiesHit.clear();
+				swordAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
+				if(user.canTurn())
+				{
+					user.setDirection(stage.getMouseX() > user.getX());
+				}
 			}
 
 			if(user.isFacingRight())
@@ -177,7 +182,7 @@ public class IceSword extends Weapon
 			renderAngle = -swordAngle % Math.PI + Math.PI;
 		}
 
-		// If Ice Chains is active but mouse is on other side of player
+		// If mouse is on other side of player
 		if(!user.canTurn() && user.isFacingRight() != stage.getMouseX() >= user.getX())
 		{
 			renderAngle = -renderAngle;

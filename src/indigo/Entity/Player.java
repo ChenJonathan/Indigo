@@ -111,42 +111,51 @@ public class Player extends Entity
 
 	public void update()
 	{
+		super.update();
+		
+		// Set direction
+		if(canTurn() && !hasWeaponHitbox())
+		{
+			setDirection(stage.getMouseX() > this.getX());
+		}
+
+		// Update weapon
+		if(hasWeapon())
+		{
+			weapon.update();
+		}
+		
 		// Animation related activities
-		//System.out.println(getX()+" "+getY());
 		if(currentAnimation == MIST)
 		{
-			if(animation.hasPlayedOnce())
+			if(animation.hasPlayed(1))
 			{
-				flying = false;
-				frictionless = false;
-				dodging = false;
-
+				animation.setReverse(true);
+				while(animation.getFrame() == 0)
+				{
+					animation.update();
+				}
+			}
+			else if(animation.hasPlayed(3))
+			{
 				canAttack(true);
 				canMove(true);
-
-				setVelX(0);
-				setVelY(0);
-
-				phase.resetAttackTimer();
+				canTurn(true);
+				
+				dodging = false;
+				flying = false;
+				frictionless = false;
+				solid = true;
 			}
 		}
 		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
 		{
-			super.update();
 			if(animation.hasPlayedOnce())
 			{
 				dead = true;
 			}
 			return;
 		}
-
-		// Set direction
-		if(canTurn() && !hasWeaponHitbox() && currentAnimation != DEATH_LEFT && currentAnimation != DEATH_RIGHT)
-		{
-			setDirection(stage.getMouseX() > this.getX());
-		}
-
-		super.update();
 
 		// Variable jump height counter
 		if(jumpTime > 0)
@@ -444,14 +453,16 @@ public class Player extends Entity
 			stage.getProjectiles().add(new WaterBolt(this, staffX, staffY, velX, velY, WaterBolt.DAMAGE));
 
 			((Staff)weapon).attack();
+
+			phase.setAttackTimer(isCrouching()? 3 : 6);
 		}
 		else
 		{
 			// Ice phase attack
 			((IceSword)weapon).slash();
-		}
 
-		phase.resetAttackTimer();
+			phase.setAttackTimer(10);
+		}
 	}
 
 	public void attackAlt()
@@ -469,14 +480,16 @@ public class Player extends Entity
 			stage.getProjectiles().add(new FrostOrb(this, staffX, staffY, velX, velY, FrostOrb.DAMAGE));
 
 			((Staff)weapon).attack();
+
+			phase.setAttackTimer(isCrouching()? 20 : 40);
 		}
 		else
 		{
 			// Ice phase attack
 			((IceSword)weapon).stab();
-		}
 
-		phase.resetAttackTimer();
+			phase.setAttackTimer(20);
+		}
 	}
 
 	public void left()
@@ -568,7 +581,7 @@ public class Player extends Entity
 
 	public boolean canCrouch()
 	{
-		return canMove() && !isCrouching() && isGrounded() && stamina >= CROUCH_STAMINA_REQUIREMENT;
+		return canMove() && !isCrouching() && stamina >= CROUCH_STAMINA_REQUIREMENT;
 	}
 
 	public void crouch()
@@ -583,29 +596,42 @@ public class Player extends Entity
 		this.blocking = false;
 	}
 
-	public void shift(double x, double y) // Parameters represent player direction
+	public void shift()
 	{
 		if(phase.id() == Phase.WATER)
 		{
-			setAnimation(MIST, ContentManager.getAnimation(ContentManager.PLAYER_MIST), 1);
-
-			setVelX(x * 90);
-			setVelY(y * 90);
-			
-			removeGround();
-
-			flying = true;
-			frictionless = true;
-			dodging = true;
-
 			canAttack(false);
 			canMove(false);
-
-			setStamina(stamina - SHIFT_STAMINA_COST);
+			canTurn(false);
+			
+			setVelX(0);
+			setVelY(0);
+			
+			removeGround();
+			
+			dodging = true;
+			flying = true;
+			frictionless = true;
+			solid = false;
+			
+			setAnimation(MIST, ContentManager.getAnimation(ContentManager.PLAYER_MIST), 1);
+		}
+		else if(phase.id() == Phase.ICE)
+		{
+			// TODO Ice whirlwind
+		}
+	}
+	
+	public boolean shifted()
+	{
+		if(phase.id() == Phase.WATER)
+		{
+			return currentAnimation == MIST && animation.hasPlayed(2);
 		}
 		else
 		{
-			// TODO Ice charge
+			return true;
+			// TODO Ice whirlwind
 		}
 	}
 
@@ -618,6 +644,10 @@ public class Player extends Entity
 	{
 		uncrouch();
 		removeWeapon();
+		
+		canAttack(false);
+		canMove(false);
+		canTurn(false);
 
 		if(isFacingRight())
 		{

@@ -19,7 +19,7 @@ public class Bullet extends Projectile
 	public static final int DAMAGE = 1;
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 10;
-	public static final double SPEED = 75;
+	public static final double SPEED = 70;
 	public static final int DURATION = 25;
 
 	public Bullet(Entity entity, double x, double y, double velX, double velY, int dmg)

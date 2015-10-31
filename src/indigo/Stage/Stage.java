@@ -168,7 +168,7 @@ public abstract class Stage
 						// Entity-melee: Melee weapon interactions
 						if(ent.hasWeaponHitbox())
 						{
-							if(otherEnt.intersects(ent.getWeapon()))
+							if(!otherEnt.isDodging() && otherEnt.intersects(ent.getWeapon()))
 							{
 								ent.getWeapon().collide(otherEnt);
 								if(!otherEnt.isActive())
@@ -179,7 +179,7 @@ public abstract class Stage
 						}
 						if(otherEnt.hasWeaponHitbox())
 						{
-							if(ent.intersects(otherEnt.getWeapon()))
+							if(!ent.isDodging() && ent.intersects(otherEnt.getWeapon()))
 							{
 								otherEnt.getWeapon().collide(ent);
 								if(!ent.isActive())
@@ -231,10 +231,10 @@ public abstract class Stage
 				}
 				for(Platform plat : platforms)
 				{
-					if(!ent.isFlying() && inProximity(ent, plat) && intersectsFeet(ent, plat)
-							&& ent.feetAboveLand(plat))
+					if(!ent.isFlying() && inProximity(ent, plat) && intersectsFeet(ent, plat))
 					{
-						intersectedLand.add(plat);
+						ground = plat;
+						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
 					}
 				}
 				if(intersectedLand.size() > 0)
@@ -243,6 +243,8 @@ public abstract class Stage
 
 					for(Land land : intersectedLand)
 					{
+						ent.updateTravelLine();
+
 						if(land instanceof Wall && ((Wall)land).killsEntities() && ent.isActive())
 						{
 							ent.die();
@@ -273,7 +275,6 @@ public abstract class Stage
 							else
 							{
 								// Downward collision into wall
-								// Also happens to be the reason why I cry myself to sleep every night
 								if(land instanceof Platform || ent.isAboveLand(land))
 								{
 									if(ent.isFlying())
@@ -284,9 +285,7 @@ public abstract class Stage
 											ent.setVelY(Math.min(ent.getVelY(), 0));
 										}
 									}
-									else if(intersectsFeet(ent, land)
-											|| (ent.getX() >= land.getMinX() && ent.getX() <= land.getMaxX() && land
-													.getSurface(ent.getX()) < ent.getY() + ent.getHeight() / 2))
+									else if(land instanceof Platform || intersectsFeet(ent, land))
 									{
 										ground = land;
 										ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
@@ -460,7 +459,11 @@ public abstract class Stage
 		Line2D.Double feetCenter = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(),
 				ent.getY() + ent.getHeight() / 2);
 
-		return land.getLine().intersectsLine(feetCenter);
+		boolean intersects = land.getLine().intersectsLine(feetCenter)
+				|| (ent.getX() >= land.getMinX() && ent.getX() <= land.getMaxX() && land.getSurface(ent.getX()) < ent
+						.getY() + ent.getHeight() / 2);
+
+		return intersects && ent.feetAboveLand(land);
 	}
 
 	public void trackDeath(String killer, Entity killed)
@@ -613,15 +616,15 @@ public abstract class Stage
 		}
 		camBackX = (int)(((double)backX - Game.WIDTH) * camForeX / maxOffsetX);
 		camBackY = (int)(((double)backY - Game.HEIGHT) * camForeY / maxOffsetY);
-		
+
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsDevice device = env.getDefaultScreenDevice();
-	    GraphicsConfiguration config = device.getDefaultConfiguration();
-	    BufferedImage scaledBackground = config.createCompatibleImage(backX, backY, Transparency.TRANSLUCENT);
+		GraphicsDevice device = env.getDefaultScreenDevice();
+		GraphicsConfiguration config = device.getDefaultConfiguration();
+		BufferedImage scaledBackground = config.createCompatibleImage(backX, backY, Transparency.TRANSLUCENT);
 		Graphics2D graphics2D = scaledBackground.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2D.drawImage(background, 0, 0, backX, backY, null);
-	    background = scaledBackground;
+		background = scaledBackground;
 	}
 
 	public void toggleCam()

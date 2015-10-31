@@ -176,37 +176,6 @@ public class PlayState extends GameState
 			{
 				player.right();
 			}
-			if(Manager.input.keyPress(InputManager.SPACE) && activePhase.canShift())
-			{
-				double x = 0;
-				double y = 0;
-
-				if(Manager.input.keyDown(InputManager.W))
-				{
-					y -= 1;
-				}
-				if(Manager.input.keyDown(InputManager.S))
-				{
-					y += 1;
-				}
-				if(Manager.input.keyDown(InputManager.A))
-				{
-					x -= 1;
-				}
-				if(Manager.input.keyDown(InputManager.D))
-				{
-					x += 1;
-				}
-
-				if(x != 0 && y != 0)
-				{
-					x *= Math.sqrt(2) / 2;
-					y *= Math.sqrt(2) / 2;
-				}
-
-				// Parameters represent player direction
-				player.shift(x, y);
-			}
 
 			// Combat
 			if(Manager.input.mousePress())
@@ -273,18 +242,9 @@ public class PlayState extends GameState
 				gsm.setPaused(true);
 			}
 		}
-		else if(Manager.input.keyPress(InputManager.E))
-		{
-			if(activePhase.id() == Phase.WATER)
-			{
-				((Water)activePhase).attackDelay = 6 / ((Water)activePhase).attackDelay;
-			}
-
-			// gsm.setTalents(true);
-		}
 
 		// Miscellaneous
-		if(Manager.input.keyPress(InputManager.SHIFT))
+		if(Manager.input.keyPress(InputManager.SPACE))
 		{
 			stage.toggleCam();
 		}
@@ -355,6 +315,14 @@ public class PlayState extends GameState
 	public Entity getPlayer()
 	{
 		return entities.get(0);
+	}
+	
+	/**
+	 * @return The stage containing objects in play.
+	 */
+	public Stage getStage()
+	{
+		return stage;
 	}
 
 	/**

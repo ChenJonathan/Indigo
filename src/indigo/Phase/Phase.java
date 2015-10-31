@@ -13,7 +13,7 @@ public abstract class Phase
 	protected Player player;
 	protected int id;
 
-	protected int attackStartTime = 0; // Time when last attack was initiated
+	protected int nextAttackTime = 0; // Time when last attack was initiated
 
 	protected int selectedSkill; // Only one skill can be selected at a time
 	protected int[] skillStates;
@@ -78,17 +78,12 @@ public abstract class Phase
 	{
 		skillStates[skill] = IDLE;
 		cooldowns[skill] = maxCooldowns[skill];
-		resetAttackTimer();
+		setAttackTimer(30);
 	}
 
-	public void resetAttackTimer()
+	public void setAttackTimer(int time)
 	{
-		attackStartTime = playState.getTime();
-	}
-
-	public void setAttackTimer(int time) // TODO Append to the start / end of each skillcast
-	{
-		attackStartTime = playState.getTime() + time;
+		nextAttackTime = playState.getTime() + time;
 	}
 
 	public void lowerCooldowns()
@@ -172,8 +167,6 @@ public abstract class Phase
 	}
 
 	public abstract boolean canNormalAttack();
-
-	public abstract boolean canShift();
 
 	public boolean canSwap()
 	{

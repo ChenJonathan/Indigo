@@ -151,7 +151,7 @@ public class ContentManager
 			1);
 	public static AnimationData PLAYER_JUMP_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/jump_right_armor.png", 68, 111, 1);
-	public static AnimationData PLAYER_MIST = new AnimationData("/images/sprites/player/mist.png", 68, 111, 5);
+	public static AnimationData PLAYER_MIST = new AnimationData("/images/sprites/player/mist.png", 68, 111, 4);
 	public static AnimationData PLAYER_MOVE_LEFT = new AnimationData("/images/sprites/player/move_left.png", 68, 111, 8);
 	public static AnimationData PLAYER_MOVE_LEFT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_left_armor.png", 68, 111, 8);

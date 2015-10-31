@@ -10,14 +10,12 @@ import indigo.Weapon.IceSword;
 
 public class Ice extends Phase
 {
-	public int attackDelay = 10;
-
 	public Ice(PlayState playState)
 	{
 		super(playState);
 		id = Phase.ICE;
 
-		maxCooldowns = new int[] { 150, 150, 150, 150 };
+		maxCooldowns = new int[] {150, 150, 150, 150};
 
 		skills[0] = new LockedSkill(this, 0);
 		skills[1] = new LockedSkill(this, 1);
@@ -27,19 +25,13 @@ public class Ice extends Phase
 	@Override
 	public boolean canNormalAttack()
 	{
-		if(player.canAttack() && !((IceSword)player.getWeapon()).isAttacking() && (playState.getTime() - attackStartTime >= attackDelay))
+		if(player.canAttack() && !((IceSword)player.getWeapon()).isAttacking() && playState.getTime() >= nextAttackTime)
 		{
 			return true;
 		}
 		return false;
 	}
 
-	@Override
-	public boolean canShift()
-	{
-		return true; // TODO Finish
-	}
-	
 	@Override
 	public boolean canSwap()
 	{

@@ -57,7 +57,7 @@ public class HUD
 		// Updates health and mana at a gradual rate for visual effect
 		health = (health * 2 + player.getHealth()) / 3;
 		mana = (mana * 2 + player.getMana()) / 3;
-		experience = (experience * 2 + data.getExperience()) / 3;
+		experience = Math.min((experience * 2 + data.getExperience()) / 3, data.getMaxExperience());
 	}
 
 	public void render(Graphics2D g)

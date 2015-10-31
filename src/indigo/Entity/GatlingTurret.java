@@ -34,7 +34,7 @@ public class GatlingTurret extends Entity
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int BASE_EXPERIENCE = 80;
-	public static final int FIRE_RATE = 2;
+	public static final int FIRE_RATE = 3;
 
 	public GatlingTurret(Stage stage, double x, double y)
 	{

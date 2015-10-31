@@ -16,7 +16,7 @@ public class FrostOrb extends Projectile
 	private final int DEATH = 1;
 	private final int DEATH_WALL = 2;
 
-	public static final int DAMAGE = 150;
+	public static final int DAMAGE = 100;
 	public static final int WIDTH = 110;
 	public static final int HEIGHT = 110;
 	public static final double SPEED = 50;

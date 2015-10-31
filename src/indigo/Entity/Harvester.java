@@ -51,6 +51,12 @@ public class Harvester extends Entity
 	{
 		super.update();
 
+		// Update weapon
+		if(hasWeapon())
+		{
+			weapon.update();
+		}
+
 		// Look for nearest tree
 		if(tree == null || tree.isDead())
 		{

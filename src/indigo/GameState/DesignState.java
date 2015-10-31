@@ -935,6 +935,7 @@ public class DesignState extends GameState
 						}
 						else
 						{
+							type = "";
 							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
 						}
 						break;
@@ -949,6 +950,7 @@ public class DesignState extends GameState
 						}
 						else
 						{
+							type = "";
 							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
 						}
 						break;
@@ -963,6 +965,7 @@ public class DesignState extends GameState
 						}
 						else
 						{
+							type = "";
 							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
 						}
 						break;
@@ -977,6 +980,7 @@ public class DesignState extends GameState
 						}
 						else
 						{
+							type = "";
 							JOptionPane.showMessageDialog(null, "Invalid input. Objective deselected.");
 						}
 						break;
