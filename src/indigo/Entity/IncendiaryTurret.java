@@ -32,16 +32,17 @@ public class IncendiaryTurret extends Entity
 	public static final double TURRET_WIDTH = 130;
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
+	public static final int BASE_EXPERIENCE = 70;
 	public static final int FIRE_RATE = 60;
 
 	public IncendiaryTurret(Stage stage, double x, double y)
 	{
-		this(stage, x, y, BASE_HEALTH);
+		this(stage, x, y, BASE_HEALTH, BASE_EXPERIENCE);
 	}
 
-	public IncendiaryTurret(Stage stage, double x, double y, int health)
+	public IncendiaryTurret(Stage stage, double x, double y, int health, int experience)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, experience);
 
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;

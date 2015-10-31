@@ -51,5 +51,5 @@
         {"category":"Entity", "type":"Incendiary Turret", "x":4100, "y":1300, "respawnTime":1500}
         {"category":"Entity", "type":"Incendiary Turret", "x":5800, "y":1800, "respawnTime":1500}
         {"category":"Entity", "type":"Incendiary Turret", "x":200, "y":1800, "respawnTime":1500}
-    ]
+    ],
 }

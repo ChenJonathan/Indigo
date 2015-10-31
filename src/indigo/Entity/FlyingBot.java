@@ -26,16 +26,17 @@ public class FlyingBot extends Entity
 	public static final double FLYING_BOT_WIDTH = 60;
 	public static final double FLYING_BOT_HEIGHT = 60;
 	public static final int BASE_HEALTH = 50;
+	public static final int BASE_EXPERIENCE = 20;
 	public static final int DEFAULT_TIMER = 30;
 
 	public FlyingBot(Stage stage, double x, double y)
 	{
-		this(stage, x, y, BASE_HEALTH);
+		this(stage, x, y, BASE_HEALTH, BASE_EXPERIENCE);
 	}
 	
-	public FlyingBot(Stage stage, double x, double y, int health)
+	public FlyingBot(Stage stage, double x, double y, int health, int experience)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, experience);
 
 		width = FLYING_BOT_WIDTH;
 		height = FLYING_BOT_HEIGHT;

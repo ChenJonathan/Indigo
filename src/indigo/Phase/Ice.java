@@ -3,7 +3,6 @@ package indigo.Phase;
 import indigo.GameState.PlayState;
 import indigo.Manager.Data;
 import indigo.Skill.LockedSkill;
-import indigo.Skill.Geyser;
 import indigo.Skill.IceArmor;
 import indigo.Skill.IceChains;
 import indigo.Skill.Skill;
@@ -21,10 +20,8 @@ public class Ice extends Phase
 		maxCooldowns = new int[] { 150, 150, 150, 150 };
 
 		skills[0] = new LockedSkill(this, 0);
-		skills[1] = new IceChains(this, 1);
-		skills[2] = new IceArmor(this, 2);
-		skills[3] = new LockedSkill(this, 3);
-		// TODO Implement locked skills
+		skills[1] = new LockedSkill(this, 1);
+		skills[2] = new LockedSkill(this, 2);
 	}
 
 	@Override
@@ -62,21 +59,17 @@ public class Ice extends Phase
 	@Override
 	public void unlockSkill()
 	{
-		if(skills[0].id() == Skill.EMPTY) // TODO Add in other skills
+		if(skills[0].id() == Skill.EMPTY)
 		{
-			skills[0] = new Geyser(this, 0);
+			skills[0] = new IceChains(this, 0);
 		}
-		else if(skills[1].id() == Skill.EMPTY) // TODO Add in other skills
+		else if(skills[1].id() == Skill.EMPTY)
 		{
-			skills[1] = new Geyser(this, 1);
+			skills[1] = new IceChains(this, 1);
 		}
-		else if(skills[2].id() == Skill.EMPTY) // TODO Add in other skills
+		else if(skills[2].id() == Skill.EMPTY)
 		{
-			skills[2] = new Geyser(this, 2);
-		}
-		else if(skills[3].id() == Skill.EMPTY) // TODO Add in other skills
-		{
-			skills[3] = new Geyser(this, 3);
+			skills[2] = new IceArmor(this, 2);
 		}
 	}
 

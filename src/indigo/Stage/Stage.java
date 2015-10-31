@@ -14,7 +14,11 @@ import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -467,8 +471,7 @@ public abstract class Stage
 		}
 		else if(killed.isMarked())
 		{
-			// TODO Gain experience - Add experience variable to Entity class
-			// Consider doing after death animation
+			data.setExperience(data.getExperience() + killed.getExperience());
 		}
 	}
 
@@ -610,15 +613,15 @@ public abstract class Stage
 		}
 		camBackX = (int)(((double)backX - Game.WIDTH) * camForeX / maxOffsetX);
 		camBackY = (int)(((double)backY - Game.HEIGHT) * camForeY / maxOffsetY);
-
-		// TODO Reconsider
-		// Scales background image based on map size
-		BufferedImage scaledBackground = new BufferedImage(backX, backY, BufferedImage.TYPE_INT_ARGB);
+		
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice device = env.getDefaultScreenDevice();
+	    GraphicsConfiguration config = device.getDefaultConfiguration();
+	    BufferedImage scaledBackground = config.createCompatibleImage(backX, backY, Transparency.TRANSLUCENT);
 		Graphics2D graphics2D = scaledBackground.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2D.drawImage(background, 0, 0, backX, backY, null);
-		background = scaledBackground;
-
+	    background = scaledBackground;
 	}
 
 	public void toggleCam()

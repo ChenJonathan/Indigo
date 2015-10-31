@@ -33,16 +33,17 @@ public class GatlingTurret extends Entity
 	public static final double TURRET_WIDTH = 130;
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
+	public static final int BASE_EXPERIENCE = 80;
 	public static final int FIRE_RATE = 2;
 
 	public GatlingTurret(Stage stage, double x, double y)
 	{
-		this(stage, x, y, BASE_HEALTH);
+		this(stage, x, y, BASE_HEALTH, BASE_EXPERIENCE);
 	}
 
-	public GatlingTurret(Stage stage, double x, double y, int health)
+	public GatlingTurret(Stage stage, double x, double y, int health, int experience)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, experience);
 
 		width = TURRET_WIDTH;
 		height = TURRET_HEIGHT;
@@ -224,7 +225,6 @@ public class GatlingTurret extends Entity
 		leftBound %= Math.PI * 2;
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 
-		// System.out.println(leftBound + ", " + testAngle + "," + rightBound);
 		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
 		{
 			legal = true;

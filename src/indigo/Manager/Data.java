@@ -24,7 +24,7 @@ public class Data
 
 	public static final int NUM_STAGES = 10;
 	public static final int NUM_PHASES = 2;
-	public static final int NUM_SKILLS = 4;
+	public static final int NUM_SKILLS = 3;
 	public static final int NUM_TALENTS = 5;
 
 	/**

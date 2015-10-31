@@ -119,6 +119,14 @@ public class PlayState extends GameState
 
 		stage.update();
 		display.update();
+
+		if(data.getExperience() > data.getMaxExperience())
+		{
+			data.setLevel(data.getLevel() + 1);
+			data.setExperience(data.getExperience() - data.getMaxExperience());
+			data.setMaxExperience(data.getLevel() * 100);
+			levelUp();
+		}
 	}
 
 	@Override
@@ -249,10 +257,6 @@ public class PlayState extends GameState
 				{
 					activePhase.selectSkill(2);
 				}
-				else if(Manager.input.keyPress(InputManager.K4) && activePhase.canSelect(3))
-				{
-					activePhase.selectSkill(3);
-				}
 			}
 		}
 
@@ -292,23 +296,6 @@ public class PlayState extends GameState
 	public int getTime()
 	{
 		return time;
-	}
-
-	/**
-	 * Adds experience to the player's total.
-	 * 
-	 * @param experience The amount of experience to be added.
-	 */
-	public void addExperience(int experience)
-	{
-		data.setExperience(data.getExperience() + experience);
-		if(data.getExperience() > data.getMaxExperience())
-		{
-			data.setLevel(data.getLevel() + 1);
-			data.setExperience(data.getExperience() - data.getMaxExperience());
-			data.setMaxExperience((int)Math.pow(2, data.getLevel() - 1) * 100);
-			levelUp();
-		}
 	}
 
 	/**

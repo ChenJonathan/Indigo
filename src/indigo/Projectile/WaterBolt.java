@@ -105,7 +105,14 @@ public class WaterBolt extends Projectile
 
 	public void collide(Wall wall)
 	{
-		double slopeAngle = Math.atan(-1 / wall.getSlope());
+		angle = Math.atan(-1 / wall.getSlope());
+		double distance = wall.getLine().ptSegDist(getPrevX(), getPrevY());
+		double newDistance = wall.getLine().ptSegDist(getPrevX() + Math.cos(angle), getPrevY() + Math.sin(angle));
+		if(newDistance > distance)
+		{
+			angle += Math.PI;
+		}
+		/*
 		if(Math.abs(slopeAngle) < 0.0001)
 		{
 			// For completely vertical walls
@@ -126,7 +133,7 @@ public class WaterBolt extends Projectile
 			{
 				angle = Math.PI + slopeAngle;
 			}
-		}
+		}*/
 
 		setAnimation(DEATH_WALL, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH_WALL), 5);
 		die();

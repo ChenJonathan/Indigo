@@ -40,7 +40,7 @@ public class MenuState extends GameState implements ActionListener
 	public final int CREDITS = 3;
 	public final int EXIT = 4;
 	
-	//TEMP SOUND SLIDE VARIABLE
+	// TEMP SOUND SLIDE VARIABLE
 	public int soundVolume = 0;
 
 	/**
@@ -173,9 +173,9 @@ public class MenuState extends GameState implements ActionListener
 		// Main menu button functionality goes here
 		else
 		{
-			//TEMPORARY SOUND CONTROL BUTTON
+			// TEMPORARY SOUND CONTROL BUTTON
 			if(Manager.input.mouseX() >= 0 && Manager.input.mouseX() <= 200 && Manager.input.mouseY() >= 0 && Manager.input.mouseY() <= 200 && Manager.input.mouseLeftRelease()){
-				JSlider volumeSlider = new JSlider(-6, 6, soundVolume);
+				JSlider volumeSlider = new JSlider(-50, 10, soundVolume);
 				volumeSlider.setMajorTickSpacing(10);
 				volumeSlider.setMinorTickSpacing(1);
 				volumeSlider.setPaintTicks(true);

@@ -171,7 +171,7 @@ public class ContentManager
 
 	// Stages
 	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);
-	public static ImageData BACKGROUND = new ImageData("/images/stages/forest_background.png", 1280, 540);
+	public static ImageData BACKGROUND = new ImageData("/images/stages/forest_background.png", 640, 270);
 
 	// Weapons
 	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/images/weapon/ice_sword/idle_left.png", 138,

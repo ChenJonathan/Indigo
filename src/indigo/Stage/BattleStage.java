@@ -14,7 +14,6 @@ import indigo.Landscape.Platform;
 import indigo.Landscape.SkyBounds;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;
-import indigo.Manager.SoundManager;
 import indigo.Projectile.Projectile;
 
 import org.json.simple.JSONArray;
@@ -84,8 +83,6 @@ public class BattleStage extends Stage
 			respawnInfo[count] = object;
 			respawnables[count] = spawnObject(object);
 		}
-
-		// SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()
@@ -127,8 +124,8 @@ public class BattleStage extends Stage
 		}
 		else if(killed.isMarked())
 		{
+			data.setExperience(data.getExperience() + killed.getExperience());
 			enemiesDefeated++;
-			// TODO Gain experienced - Add experience variable to Entity class
 		}
 		if(enemiesDefeated >= enemiesToDefeat)
 		{

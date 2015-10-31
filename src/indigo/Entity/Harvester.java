@@ -19,17 +19,18 @@ public class Harvester extends Entity
 	public static final double HARVESTER_WIDTH = 100;
 	public static final double HARVESTER_HEIGHT = 130;
 	public static final int BASE_HEALTH = 250; // TODO: Change to harvester's stats
+	public static final int BASE_EXPERIENCE = 30;
 	public static final int RANGE = 100; // TODO: Balancing
 	public static final int SPEED = 5;
 
 	public Harvester(Stage stage, double x, double y)
 	{
-		this(stage, x, y, BASE_HEALTH);
+		this(stage, x, y, BASE_HEALTH, BASE_EXPERIENCE);
 	}
 
-	public Harvester(Stage stage, double x, double y, int health)
+	public Harvester(Stage stage, double x, double y, int health, int experience)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, experience);
 
 		width = HARVESTER_WIDTH;
 		height = HARVESTER_HEIGHT;
@@ -152,7 +153,7 @@ public class Harvester extends Entity
 
 	public boolean isActive()
 	{
-		return currentAnimation != DEATH;
+		return currentAnimation != DEATH && dead == false;
 	}
 
 	public void setGround(Land ground)

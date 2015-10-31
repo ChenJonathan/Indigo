@@ -33,7 +33,7 @@ public class Tree extends Entity
 
 	public Tree(Stage stage, double x, double y, int health, double[][] branchData)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, 0);
 		width = TREE_WIDTH;
 		height = TREE_HEIGHT;
 

@@ -18,7 +18,7 @@ public class Core extends Entity
 
 	public Core(Stage stage, double x, double y, int health)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, 0);
 
 		width = CORE_WIDTH;
 		height = CORE_HEIGHT;

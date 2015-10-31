@@ -32,6 +32,7 @@ public abstract class Entity implements Respawnable, Named
 	protected double pushability; // How much an entity moves when pushed
 
 	private int health, maxHealth;
+	private int experience;
 
 	protected boolean facingRight;
 
@@ -57,7 +58,7 @@ public abstract class Entity implements Respawnable, Named
 	protected int currentAnimation; // Current animation frame for the entity
 
 	// Subclasses - Initialize name, width, height, solid, flying, frictionless, pushability, move speed, jump speed
-	public Entity(Stage stage, double x, double y, int health)
+	public Entity(Stage stage, double x, double y, int health, int experience)
 	{
 		this.stage = stage;
 
@@ -68,6 +69,7 @@ public abstract class Entity implements Respawnable, Named
 		travel = new Line2D.Double(prevX, prevY, x, y); // Line formed by previous and current position
 
 		maxHealth = this.health = health; // TODO Modify based on player level
+		this.experience = experience;
 
 		canAttack = canMove = canTurn = true;
 
@@ -418,6 +420,11 @@ public abstract class Entity implements Respawnable, Named
 			this.health = 0;
 			die();
 		}
+	}
+	
+	public int getExperience()
+	{
+		return experience;
 	}
 
 	public boolean isFacingRight()

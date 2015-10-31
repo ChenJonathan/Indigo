@@ -4,8 +4,8 @@ import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
-import indigo.Skill.LockedSkill;
 import indigo.Skill.Geyser;
+import indigo.Skill.LockedSkill;
 import indigo.Skill.ManaChannelling;
 import indigo.Skill.Pulse;
 import indigo.Skill.Skill;
@@ -22,11 +22,9 @@ public class Water extends Phase
 
 		maxCooldowns = new int[] { 150, 150, 150, 150 };
 
-		skills[0] = new Geyser(this, 0);
-		skills[1] = new Pulse(this, 1);
-		skills[2] = new ManaChannelling(this, 2);
-		skills[3] = new LockedSkill(this, 3);
-		// TODO Implement locked skills
+		skills[0] = new LockedSkill(this, 0);
+		skills[1] = new LockedSkill(this, 1);
+		skills[2] = new LockedSkill(this, 2);
 	}
 
 	@Override
@@ -63,17 +61,13 @@ public class Water extends Phase
 		{
 			skills[0] = new Geyser(this, 0);
 		}
-		else if(skills[1].id() == Skill.EMPTY) // TODO Add in other skills
+		else if(skills[1].id() == Skill.EMPTY)
 		{
-			skills[1] = new Geyser(this, 1);
+			skills[1] = new Pulse(this, 1);
 		}
-		else if(skills[2].id() == Skill.EMPTY) // TODO Add in other skills
+		else if(skills[2].id() == Skill.EMPTY)
 		{
-			skills[2] = new Geyser(this, 2);
-		}
-		else if(skills[3].id() == Skill.EMPTY) // TODO Add in other skills
-		{
-			skills[3] = new Geyser(this, 3);
+			skills[2] = new ManaChannelling(this, 2);
 		}
 	}
 }

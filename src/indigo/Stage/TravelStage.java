@@ -87,8 +87,6 @@ public class TravelStage extends Stage
 			respawnInfo[count] = object;
 			respawnables[count] = spawnObject(object);
 		}
-
-		// SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()

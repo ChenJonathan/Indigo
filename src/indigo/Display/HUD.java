@@ -33,7 +33,8 @@ public class HUD
 
 	private double health;
 	private double mana;
-	
+	private double experience;
+
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = 135;
 
@@ -45,9 +46,10 @@ public class HUD
 		data = playState.getData();
 
 		player = (Player)playState.getPlayer();
-		
+
 		health = player.getHealth();
 		mana = player.getMana();
+		experience = data.getExperience();
 	}
 
 	public void update()
@@ -55,11 +57,12 @@ public class HUD
 		// Updates health and mana at a gradual rate for visual effect
 		health = (health * 2 + player.getHealth()) / 3;
 		mana = (mana * 2 + player.getMana()) / 3;
+		experience = (experience * 2 + data.getExperience()) / 3;
 	}
 
 	public void render(Graphics2D g)
 	{
-		// Draws health and mana bars
+		// Draws health, mana, and experience bars
 		int anchorX = 230;
 		int anchorY = 1020;
 		g.setColor(Color.BLACK);
@@ -68,8 +71,8 @@ public class HUD
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, health, 11));
 		g.setColor(Color.BLUE);
 		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, mana, 11));
-
-		// TODO Draw the experience bar
+		g.setColor(Color.YELLOW);
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY + 1, 200 * experience / data.getMaxExperience(), 11));
 
 		// Draws the decorative indicator on the left
 		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);
@@ -89,7 +92,7 @@ public class HUD
 		g.drawString(data.getLevel() + "", anchorX + 25 + 2, anchorY + 35);
 
 		// Draw skill icons and cooldowns
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < Data.NUM_SKILLS; i++)
 		{
 			if(phase.getSkillState(i) == Phase.SELECT)
 			{

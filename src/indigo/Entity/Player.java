@@ -83,7 +83,7 @@ public class Player extends Entity
 
 	public Player(Stage stage, double x, double y, int health, int mana, int stamina)
 	{
-		super(stage, x, y, health);
+		super(stage, x, y, health, 0);
 
 		width = PLAYER_WIDTH;
 		height = PLAYER_HEIGHT;

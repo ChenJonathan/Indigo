@@ -85,8 +85,6 @@ public class DefendStage extends Stage
 			respawnInfo[count] = object;
 			respawnables[count] = spawnObject(object);
 		}
-
-		// SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	public void update()
@@ -134,7 +132,7 @@ public class DefendStage extends Stage
 		}
 		else if(killed.isMarked())
 		{
-			// TODO Gain experienced - Add experience variable to Entity class
+			data.setExperience(data.getExperience() + killed.getExperience());
 		}
 	}
 
