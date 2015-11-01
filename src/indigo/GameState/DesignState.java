@@ -193,7 +193,7 @@ public class DesignState extends GameState
 		descriptionText.put("Harvester", "A tree harvesting robot. "
 				+ "Moves towards the nearest tree and attempts to saw it down");
 		descriptionText.put("Tree", "A tree that spawns branches which can be jumped on. "
-				+ "Branches break after a short duration."
+				+ "Branches break after a short duration. "
 				+ "Attaches itself to the nearest perfectly horizontal wall or platform upon map creation. "
 				+ "The tree is vulnerable to enemy attack and its size is 1.5 by 6 grid spaces.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
@@ -540,33 +540,33 @@ public class DesignState extends GameState
 		g.drawRect(1585 + (selectedTool % 3) * 100, 45 + (selectedTool / 3) * 100, 92, 92);
 
 		// Draw selection box
-		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 480, 300, 110, null);
+		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 480, 300, 75, null);
 		if(arrowLeft)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 480, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 480, 60, 75, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 480, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 480, 60, 75, null);
 		}
 		if(arrowRight)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 480, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 480, 60, 75, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 480, 60, 110, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 480, 60, 75, null);
 		}
 
 		// Draw tool type text
 		g.setColor(Color.BLACK);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		FontMetrics fontMetrics = g.getFontMetrics();
 		String text = toolTypes.get(selectedTool)[selectedToolType];
-		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 535 + fontMetrics.getHeight() / 4);
+		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 520 + fontMetrics.getHeight() / 4);
 
 		// Draw description box
-		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 630, 300, 410, null);
+		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 595, 300, 440, null);
 
 		// Draw description text
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 32));
@@ -584,10 +584,10 @@ public class DesignState extends GameState
 			title = tools.get(hoverValue);
 			words = descriptionText.get(tools.get(hoverValue)).split(" ");
 		}
-		g.drawString(title, 1730 - fontMetrics.stringWidth(title) / 2, 650 + fontMetrics.getHeight() / 2);
+		g.drawString(title, 1730 - fontMetrics.stringWidth(title) / 2, 615 + fontMetrics.getHeight() / 2);
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		fontMetrics = g.getFontMetrics();
-		int lineY = 695 + fontMetrics.getHeight() / 2;
+		int lineY = 660 + fontMetrics.getHeight() / 2;
 		while(word < words.length)
 		{
 			String line = "";
@@ -717,8 +717,8 @@ public class DesignState extends GameState
 				minDistanceObject = null;
 				for(LandData land : landscape)
 				{
-					double distance = new Line2D.Double(xMargin + scale(land.x1), xMargin + scale(land.y1), xMargin
-							+ scale(land.x2), xMargin + scale(land.y2)).ptSegDist(Manager.input.mouseX(),
+					double distance = new Line2D.Double(xMargin + scale(land.x1), yMargin + scale(land.y1), xMargin
+							+ scale(land.x2), yMargin + scale(land.y2)).ptSegDist(Manager.input.mouseX(),
 							Manager.input.mouseY());
 					if(distance < minDistance)
 					{
@@ -1780,7 +1780,7 @@ public class DesignState extends GameState
 						g.setColor(Color.BLUE);
 						break;
 				}
-				// g.drawLine(x1, y1, x2, y2);
+				g.drawLine(x1, y1, x2, y2);
 			}
 
 			// Draw platforms
@@ -1833,10 +1833,6 @@ public class DesignState extends GameState
 					}
 					x1 -= lateralOffset;
 					y1 -= heightOffset;
-
-					// TODO Temporary
-					g.setColor(Color.GREEN);
-					// g.drawLine(x1, y1, x2, y2);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package indigo.Projectile;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -171,7 +172,7 @@ public class IceChainHook extends Projectile
 					{
 						if(!land.isHorizontal())
 						{
-							if(attached.isRightOfLand(land))
+							if(stage.rightOfLand(attached, land))
 							{
 								while(attached.intersects((Wall)land))
 								{
@@ -192,7 +193,7 @@ public class IceChainHook extends Projectile
 						else
 						{
 							// Downward collision into wall
-							if(attached.isAboveLand(land))
+							if(stage.aboveLand(attached, land))
 							{
 								while(attached.intersects((Wall)land))
 								{
@@ -229,7 +230,9 @@ public class IceChainHook extends Projectile
 	{
 		// Draw ranges from 0 to 1 in intervals of 0.05
 		g.setColor(new Color(0, 255, 255));
+		g.setStroke(new BasicStroke(3));
 		g.drawLine((int)stage.getPlayer().getX(), (int)stage.getPlayer().getY(), (int)getX(), (int)getY());
+
 		if(getX() > 0 && getX() < stage.getMapX())
 		{
 			// Rotation breaks if x is negative
@@ -239,7 +242,7 @@ public class IceChainHook extends Projectile
 			g.rotate(-angle, getX(), getY());
 		}
 	}
-	
+
 	public String getName()
 	{
 		return creator.getName();

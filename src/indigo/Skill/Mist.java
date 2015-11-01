@@ -65,7 +65,7 @@ public class Mist extends Skill
 						{
 							if(!land.isHorizontal())
 							{
-								if(player.isRightOfLand(land))
+								if(stage.rightOfLand(player, land))
 								{
 									while(player.intersects((Wall)land))
 									{
@@ -86,7 +86,7 @@ public class Mist extends Skill
 							else
 							{
 								// Downward collision into wall
-								if(player.isAboveLand(land))
+								if(stage.aboveLand(player, land))
 								{
 									while(player.intersects((Wall)land))
 									{

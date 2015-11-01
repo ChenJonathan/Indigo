@@ -51,7 +51,7 @@ public class SteamVent extends Interactive
 		for(Platform plat : stage.getPlatforms())
 		{
 			double distance = plat.getLine().ptSegDist(x, y);
-			if(distance < minDistance)
+			if(distance < minDistance && stage.aboveLand(this, plat))
 			{
 				minDistance = distance;
 				closestLand = plat;
@@ -65,7 +65,10 @@ public class SteamVent extends Interactive
 		else
 		{
 			groundAngle = Math.atan(-1 / closestLand.getSlope());
-			if(closestLand.getLine().ptSegDist(x + Math.cos(groundAngle), y + Math.sin(groundAngle)) > minDistance)
+			double testX = x + Math.cos(groundAngle);
+			double testY = y + Math.sin(groundAngle);
+			if(closestLand.getLine().ptSegDist(testX, testY) > minDistance
+					&& (closestLand instanceof Wall || groundAngle < 0))
 			{
 				groundAngle += Math.PI;
 			}

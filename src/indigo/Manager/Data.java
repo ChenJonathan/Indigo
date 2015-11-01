@@ -3,8 +3,7 @@ package indigo.Manager;
 import org.json.simple.JSONObject;
 
 /**
- * Stores general persisting information (player statistics, map statistics, etc). Consider doing unlock stage
- * calculation purely in StageSelectState.
+ * Stores general persisting information (player statistics, map statistics, etc).
  */
 public class Data
 {

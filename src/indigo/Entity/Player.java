@@ -23,7 +23,7 @@ public class Player extends Entity
 
 	// Phase related mechanics
 	private Phase phase;
-	private boolean canDoubleJump;
+	private boolean doubleJumpReady;
 	private boolean iceArmor;
 
 	private int healthRegenTime; // Last time when health was regenerated
@@ -99,7 +99,7 @@ public class Player extends Entity
 		frictionless = false;
 
 		jumpTime = 0;
-		canDoubleJump = false;
+		doubleJumpReady = false;
 		iceArmor = false;
 
 		friendly = true;
@@ -558,7 +558,8 @@ public class Player extends Entity
 
 	public boolean canJump()
 	{
-		return canMove() && isGrounded() && currentAnimation != JUMP_LEFT && currentAnimation != JUMP_RIGHT;
+		return canMove() && isGrounded() && !blocking && currentAnimation != JUMP_LEFT
+				&& currentAnimation != JUMP_RIGHT;
 	}
 
 	public void jump()
@@ -796,7 +797,7 @@ public class Player extends Entity
 	public void setGround(Land ground)
 	{
 		super.setGround(ground);
-		canDoubleJump = true;
+		doubleJumpReady = true;
 	}
 
 	public void canMove(boolean canMove)
@@ -815,12 +816,12 @@ public class Player extends Entity
 
 	public boolean canDoubleJump()
 	{
-		return canMove() && phase.id() == Phase.ICE && canDoubleJump;
+		return canMove() && !blocking && phase.id() == Phase.ICE && doubleJumpReady;
 	}
 
 	public void canDoubleJump(boolean canDoubleJump)
 	{
-		this.canDoubleJump = canDoubleJump;
+		doubleJumpReady = canDoubleJump;
 	}
 
 	public boolean getIceArmor()

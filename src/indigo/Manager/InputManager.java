@@ -298,8 +298,8 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	 */
 	public void mouseSet(int x, int y)
 	{
-		mouseX = (int)((double)x / Game.RESOLUTION_WIDTH * 1920);
-		mouseY = (int)((double)y / Game.RESOLUTION_HEIGHT * 1080);
+		mouseX = (int)((double)x / Game.resolutionWidth * 1920);
+		mouseY = (int)((double)y / Game.resolutionHeight * 1080);
 	}
 
 	/**

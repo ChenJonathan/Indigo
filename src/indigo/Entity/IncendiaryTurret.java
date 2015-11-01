@@ -75,7 +75,7 @@ public class IncendiaryTurret extends Entity
 		for(Platform plat : stage.getPlatforms())
 		{
 			double distance = plat.getLine().ptSegDist(x, y);
-			if(distance < minDistance)
+			if(distance < minDistance && stage.aboveLand(this, plat))
 			{
 				minDistance = distance;
 				closestLand = plat;
@@ -89,7 +89,10 @@ public class IncendiaryTurret extends Entity
 		else
 		{
 			groundAngle = Math.atan(-1 / closestLand.getSlope());
-			if(closestLand.getLine().ptSegDist(x + Math.cos(groundAngle), y + Math.sin(groundAngle)) > minDistance)
+			double testX = x + Math.cos(groundAngle);
+			double testY = y + Math.sin(groundAngle);
+			if(closestLand.getLine().ptSegDist(testX, testY) > minDistance
+					&& (closestLand instanceof Wall || groundAngle < 0))
 			{
 				groundAngle += Math.PI;
 			}
@@ -284,7 +287,6 @@ public class IncendiaryTurret extends Entity
 		leftBound %= Math.PI * 2;
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 
-		// System.out.println(leftBound + ", " + testAngle + "," + rightBound);
 		if(rightBound > leftBound && (testAngle > rightBound || testAngle < leftBound))
 		{
 			legal = true;
@@ -306,13 +308,10 @@ public class IncendiaryTurret extends Entity
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
 		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
-		// System.out.println(leftBound + ", " + rightBound);
 
-		// System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
 		if(startAngle > endAngle)
 		{
 			canReachCCW = (endAngle < leftBound && startAngle > leftBound)? true : false;
-			// System.out.println(canReachCCW);
 		}
 		else
 		{

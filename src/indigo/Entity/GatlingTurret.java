@@ -34,7 +34,7 @@ public class GatlingTurret extends Entity
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int BASE_EXPERIENCE = 80;
-	public static final int FIRE_RATE = 3;
+	public static final int FIRE_RATE = 4;
 
 	public GatlingTurret(Stage stage, double x, double y)
 	{
@@ -76,7 +76,7 @@ public class GatlingTurret extends Entity
 		for(Platform plat : stage.getPlatforms())
 		{
 			double distance = plat.getLine().ptSegDist(x, y);
-			if(distance < minDistance)
+			if(distance < minDistance && stage.aboveLand(this, plat))
 			{
 				minDistance = distance;
 				closestLand = plat;
@@ -90,7 +90,10 @@ public class GatlingTurret extends Entity
 		else
 		{
 			groundAngle = Math.atan(-1 / closestLand.getSlope());
-			if(closestLand.getLine().ptSegDist(x + Math.cos(groundAngle), y + Math.sin(groundAngle)) > minDistance)
+			double testX = x + Math.cos(groundAngle);
+			double testY = y + Math.sin(groundAngle);
+			if(closestLand.getLine().ptSegDist(testX, testY) > minDistance
+					&& (closestLand instanceof Wall || groundAngle < 0))
 			{
 				groundAngle += Math.PI;
 			}
@@ -246,13 +249,10 @@ public class GatlingTurret extends Entity
 		double rightBound = ((Math.PI * 2 - groundAngle) + TURRET_ANGLE) % (Math.PI * 2);
 		leftBound = (leftBound > Math.PI)? -1 * (Math.PI * 2 - leftBound) : leftBound;
 		rightBound = (rightBound > Math.PI)? -1 * (Math.PI * 2 - rightBound) : rightBound;
-		// System.out.println(leftBound + ", " + rightBound);
 
-		// System.out.println("startAngle: " + startAngle + " endAngle: " + endAngle);
 		if(startAngle > endAngle)
 		{
 			canReachCCW = (endAngle < leftBound && startAngle > leftBound)? true : false;
-			// System.out.println(canReachCCW);
 		}
 		else
 		{

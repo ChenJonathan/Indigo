@@ -89,6 +89,58 @@ public abstract class Stage
 
 	public void update()
 	{
+		for(int count = 0; count < projectiles.size(); count++)
+		{
+			Projectile proj = projectiles.get(count);
+			proj.update();
+
+			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
+			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
+			for(Wall wall : walls)
+			{
+				if(inProximity(proj, wall) && proj.intersects(wall))
+				{
+					intersectedWalls.add(wall);
+				}
+			}
+			if(intersectedWalls.size() > 0)
+			{
+				sortWallsByDistance(proj, intersectedWalls);
+				boolean collided = false;
+
+				for(Wall wall : intersectedWalls)
+				{
+					if(proj.isActive() && !collided)
+					{
+						if((proj.isSolid() && wall.blocksSolidProjectiles())
+								|| (!proj.isSolid() && wall.blocksNonsolidProjectiles()))
+						{
+							Point2D.Double intersection = wall.getIntersection(new Line2D.Double(proj.getPrevX(), proj
+									.getPrevY(), proj.getX(), proj.getY()));
+
+							proj.setX(intersection.getX());
+							proj.setY(intersection.getY());
+							proj.collide(wall);
+							collided = true;
+						}
+						if((proj.isSolid() && wall.killsSolidProjectiles())
+								|| (!proj.isSolid() && wall.killsNonsolidProjectiles()))
+						{
+							proj.die();
+						}
+					}
+				}
+			}
+
+			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT
+					|| proj.getY() > getMapY())
+			{
+				proj.setDead();
+				projectiles.remove(proj);
+				count--;
+			}
+		}
+
 		for(int count = 0; count < entities.size(); count++)
 		{
 			Entity ent = entities.get(count);
@@ -254,7 +306,7 @@ public abstract class Stage
 						{
 							if(land instanceof Wall && !land.isHorizontal())
 							{
-								if(ent.isRightOfLand(land))
+								if(rightOfLand(ent, land))
 								{
 									while(ent.intersects((Wall)land))
 									{
@@ -275,7 +327,7 @@ public abstract class Stage
 							else
 							{
 								// Downward collision into wall
-								if(land instanceof Platform || ent.isAboveLand(land))
+								if(land instanceof Platform || aboveLand(ent, land))
 								{
 									if(ent.isFlying())
 									{
@@ -324,58 +376,6 @@ public abstract class Stage
 				}
 				ent.setDead();
 				entities.remove(entities.get(count));
-				count--;
-			}
-		}
-
-		for(int count = 0; count < projectiles.size(); count++)
-		{
-			Projectile proj = projectiles.get(count);
-			proj.update();
-
-			// Projectile-wall: Walls may block the projectile, kill the projectile, or both
-			ArrayList<Wall> intersectedWalls = new ArrayList<Wall>();
-			for(Wall wall : walls)
-			{
-				if(inProximity(proj, wall) && proj.intersects(wall))
-				{
-					intersectedWalls.add(wall);
-				}
-			}
-			if(intersectedWalls.size() > 0)
-			{
-				sortWallsByDistance(proj, intersectedWalls);
-				boolean collided = false;
-
-				for(Wall wall : intersectedWalls)
-				{
-					if(proj.isActive() && !collided)
-					{
-						if((proj.isSolid() && wall.blocksSolidProjectiles())
-								|| (!proj.isSolid() && wall.blocksNonsolidProjectiles()))
-						{
-							Point2D.Double intersection = wall.getIntersection(new Line2D.Double(proj.getPrevX(), proj
-									.getPrevY(), proj.getX(), proj.getY()));
-
-							proj.setX(intersection.getX());
-							proj.setY(intersection.getY());
-							proj.collide(wall);
-							collided = true;
-						}
-						if((proj.isSolid() && wall.killsSolidProjectiles())
-								|| (!proj.isSolid() && wall.killsNonsolidProjectiles()))
-						{
-							proj.die();
-						}
-					}
-				}
-			}
-
-			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT
-					|| proj.getY() > getMapY())
-			{
-				proj.setDead();
-				projectiles.remove(proj);
 				count--;
 			}
 		}
@@ -454,6 +454,48 @@ public abstract class Stage
 		}
 	}
 
+	// Used for entity-wall collision - Utilizes previous entity position
+	public boolean aboveLand(Entity ent, Land land)
+	{
+		double deltaX = land.getLine().getP2().getX() - land.getLine().getP1().getX();
+		// Formula to calculate if a point is located above the wall.getLine()
+		double value = (land.getLine().getP2().getY() - land.getLine().getP1().getY())
+				* (ent.getPrevX() - land.getLine().getP1().getX()) - (ent.getPrevY() - land.getLine().getP1().getY())
+				* (land.getLine().getP2().getX() - land.getLine().getP1().getX());
+		return value * deltaX >= 0;
+	}
+
+	public boolean aboveLand(Interactive item, Land land)
+	{
+		double deltaX = land.getLine().getP2().getX() - land.getLine().getP1().getX();
+		// Formula to calculate if a point is located above the wall.getLine()
+		double value = (land.getLine().getP2().getY() - land.getLine().getP1().getY())
+				* (item.getX() - land.getLine().getP1().getX()) - (item.getY() - land.getLine().getP1().getY())
+				* (land.getLine().getP2().getX() - land.getLine().getP1().getX());
+		return value * deltaX >= 0;
+	}
+
+	// Used for entity-wall collision - Utilizes previous entity position
+	public boolean rightOfLand(Entity ent, Land land)
+	{
+		double deltaY = land.getLine().getP2().getY() - land.getLine().getP1().getY();
+		// Formula to calculate if a point is located on the right or left side of a wall.getLine()
+		double value = (land.getLine().getP2().getX() - land.getLine().getP1().getX())
+				* (ent.getPrevY() - land.getLine().getP1().getY()) - (ent.getPrevX() - land.getLine().getP1().getX())
+				* (land.getLine().getP2().getY() - land.getLine().getP1().getY());
+		return value * deltaY <= 0;
+	}
+
+	public boolean rightOfLand(Interactive item, Land land)
+	{
+		double deltaY = land.getLine().getP2().getY() - land.getLine().getP1().getY();
+		// Formula to calculate if a point is located on the right or left side of a wall.getLine()
+		double value = (land.getLine().getP2().getX() - land.getLine().getP1().getX())
+				* (item.getY() - land.getLine().getP1().getY()) - (item.getX() - land.getLine().getP1().getX())
+				* (land.getLine().getP2().getY() - land.getLine().getP1().getY());
+		return value * deltaY <= 0;
+	}
+
 	public boolean intersectsFeet(Entity ent, Land land)
 	{
 		Line2D.Double feetCenter = new Line2D.Double(ent.getPrevX(), ent.getPrevY() + ent.getHeight() / 2, ent.getX(),
@@ -483,6 +525,8 @@ public abstract class Stage
 	{
 		BufferedImage backgroundCrop = background.getSubimage(camBackX, camBackY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
 		g.drawImage(backgroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT, null);
+		// g.setColor(new Color(18, 100, 50));
+		// g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		BufferedImage foregroundCrop = foreground.getSubimage(camForeX, camForeY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
 		g.drawImage(foregroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT, null);
 

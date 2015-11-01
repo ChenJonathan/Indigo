@@ -245,28 +245,6 @@ public abstract class Entity implements Respawnable, Named
 		return intersects;
 	}
 
-	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isRightOfLand(Land land)
-	{
-		double deltaY = land.getLine().getP2().getY() - land.getLine().getP1().getY();
-		// Formula to calculate if a point is located on the right or left side of a wall.getLine()
-		double value = (land.getLine().getP2().getX() - land.getLine().getP1().getX())
-				* (getPrevY() - land.getLine().getP1().getY()) - (getPrevX() - land.getLine().getP1().getX())
-				* (land.getLine().getP2().getY() - land.getLine().getP1().getY());
-		return value * deltaY < 0;
-	}
-
-	// Used for entity-wall collision - Utilizes previous entity position
-	public boolean isAboveLand(Land land)
-	{
-		double deltaX = land.getLine().getP2().getX() - land.getLine().getP1().getX();
-		// Formula to calculate if a point is located above the wall.getLine()
-		double value = (land.getLine().getP2().getY() - land.getLine().getP1().getY())
-				* (getPrevX() - land.getLine().getP1().getX()) - (getPrevY() - land.getLine().getP1().getY())
-				* (land.getLine().getP2().getX() - land.getLine().getP1().getX());
-		return value * deltaX > 0;
-	}
-
 	// Used for entity-platform collision - Utilizes previous entity feet position
 	public boolean feetAboveLand(Land land)
 	{

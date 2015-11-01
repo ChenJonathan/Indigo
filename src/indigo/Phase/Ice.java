@@ -6,7 +6,6 @@ import indigo.Skill.LockedSkill;
 import indigo.Skill.IceArmor;
 import indigo.Skill.IceChains;
 import indigo.Skill.Skill;
-import indigo.Weapon.IceSword;
 
 public class Ice extends Phase
 {
@@ -17,7 +16,7 @@ public class Ice extends Phase
 
 		maxCooldowns = new int[] {150, 150, 150, 150};
 
-		skills[0] = new LockedSkill(this, 0);
+		skills[0] = new IceChains(this, 0);
 		skills[1] = new LockedSkill(this, 1);
 		skills[2] = new LockedSkill(this, 2);
 	}
@@ -25,11 +24,7 @@ public class Ice extends Phase
 	@Override
 	public boolean canNormalAttack()
 	{
-		if(player.canAttack() && !((IceSword)player.getWeapon()).isAttacking() && playState.getTime() >= nextAttackTime)
-		{
-			return true;
-		}
-		return false;
+		return player.canAttack() && !player.hasWeaponHitbox() && playState.getTime() >= nextAttackTime;
 	}
 
 	@Override

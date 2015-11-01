@@ -1,7 +1,9 @@
 package indigo.Main;
 
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -13,14 +15,18 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import org.json.simple.JSONObject;
+
 /**
  * Sets up the application as a game. Mostly does scary swing stuff.
  */
-@SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
 {
-	public static final int RESOLUTION_WIDTH = 1920; // Change this
-	public static final int RESOLUTION_HEIGHT = 1080; // Change this
+	public static int resolutionWidth;
+	public static int resolutionHeight;
+	
+	private static final long serialVersionUID = 1L;
+	
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
 	public static final int CURSOR_WIDTH = 32;
@@ -42,14 +48,19 @@ public class Game extends JPanel implements Runnable
 	 */
 	public Game()
 	{
-		setPreferredSize(new Dimension(RESOLUTION_WIDTH, RESOLUTION_HEIGHT));
+		JSONObject settings = ContentManager.load("/settings.json");
+		resolutionWidth = Integer.parseInt(settings.get("Resolution Width") + "");
+		resolutionHeight = Integer.parseInt(settings.get("Resolution Height") + "");
+		SoundManager.changeVolume(Integer.parseInt(settings.get("Sound Volume") + ""));
+		
+		setPreferredSize(new Dimension(resolutionWidth, resolutionHeight));
 		setFocusable(true);
 		requestFocus();
 
 		running = true;
-		image = new BufferedImage(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, 1);
+		image = new BufferedImage(resolutionWidth, resolutionHeight, 1);
 		g = (Graphics2D)image.getGraphics();
-		g.scale((double)RESOLUTION_WIDTH / WIDTH, (double)RESOLUTION_HEIGHT / HEIGHT);
+		g.scale((double)resolutionWidth / WIDTH, (double)resolutionHeight / HEIGHT);
 		g.clipRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		gsm = new GameStateManager(this);
 	}
@@ -147,7 +158,7 @@ public class Game extends JPanel implements Runnable
 	private void draw()
 	{
 		Graphics g2 = getGraphics();
-		g2.drawImage(image, 0, 0, RESOLUTION_WIDTH, RESOLUTION_HEIGHT, null);
+		g2.drawImage(image, 0, 0, resolutionWidth, resolutionHeight, null);
 		g2.dispose();
 	}
 
