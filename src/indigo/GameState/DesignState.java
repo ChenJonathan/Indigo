@@ -144,7 +144,8 @@ public class DesignState extends GameState
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
 		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
 		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Pit", "Force Field"});
-		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Harvester", "Tree"});
+		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Blockade",
+				"Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
 		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
@@ -180,20 +181,21 @@ public class DesignState extends GameState
 		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
 		descriptionText.put("Force Field", "A wall that lets entities through but destroys all projectiles.");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
-		descriptionText.put("Gatling Turret",
-				"A stationary turret that can rotate its arm towards its target. "
-						+ "Attaches itself to the nearest wall or platform upon map creation. "
-						+ "Shoots bullets rapidly but cannot aim towards its base.");
-		descriptionText.put("Incendiary Turret",
-				"A stationary turret that can rotate its arm towards its target. "
-						+ "Attaches itself to the nearest wall or platform upon map creation. "
-						+ "Shoots explosive projectiles but cannot aim towards its base.");
+		descriptionText.put("Gatling Turret", "A stationary turret that can rotate its arm towards its target. "
+				+ "Attaches itself to the nearest wall or platform upon map creation. "
+				+ "Shoots bullets rapidly but cannot aim towards its base.");
+		descriptionText.put("Incendiary Turret", "A stationary turret that can rotate its arm towards its target. "
+				+ "Attaches itself to the nearest wall or platform upon map creation. "
+				+ "Shoots explosive projectiles but cannot aim towards its base.");
+		descriptionText.put("Blockade", "A blockade that blocks the player's path. "
+				+ "Its size is 2 by 2 grid spaces and the placement point represents its center. "
+				+ "Does not respawn.");
 		descriptionText.put("Harvester", "A tree harvesting robot. "
 				+ "Moves towards the nearest tree and attempts to saw it down");
 		descriptionText.put("Tree", "A tree that spawns branches which can be jumped on. "
 				+ "Branches break after a short duration."
 				+ "Attaches itself to the nearest perfectly horizontal wall or platform upon map creation. "
-				+ "The tree is vulnerable to enemy attack and its size is around 1.5 by 6 grid spaces.");
+				+ "The tree is vulnerable to enemy attack and its size is 1.5 by 6 grid spaces.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Steam Vent", "Periodically creates clouds of steam that damage the player. "
@@ -810,6 +812,13 @@ public class DesignState extends GameState
 		}
 		else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 		{
+			// Exceptions go here
+			if(toolTypes.get(selectedTool)[selectedToolType].equals("Blockade"))
+			{
+				addToList(new SpawnData("Entity", "Blockade", x * GRID_SCALE, y * GRID_SCALE, -1));
+				return;
+			}
+
 			String respawnTimeString = JOptionPane.showInputDialog("Respawn time (In seconds):");
 			if(isInteger(respawnTimeString))
 			{
@@ -1564,7 +1573,7 @@ public class DesignState extends GameState
 				}
 			}
 		}
-		
+
 		string += "    \"" + name + "\":" + index.size();
 
 		return "{\n" + string + "\n}";

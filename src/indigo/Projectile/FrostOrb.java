@@ -10,6 +10,8 @@ import java.awt.geom.Ellipse2D;
 
 public class FrostOrb extends Projectile
 {
+	private int timer;
+
 	private double angle;
 
 	private final int DEFAULT = 0;
@@ -37,6 +39,7 @@ public class FrostOrb extends Projectile
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
 			super.update();
+			timer++;
 		}
 		else
 		{
@@ -52,10 +55,13 @@ public class FrostOrb extends Projectile
 	{
 		if(currentAnimation != DEATH_WALL)
 		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-					(int)getWidth(), (int)getHeight(), null);
+			if(timer > 2 || currentAnimation == DEATH)
+			{
+				g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+						(int)getWidth(), (int)getHeight(), null);
+			}
 		}
-		else if(getX() > 0 && getX() < stage.getMapX() && currentAnimation == DEATH_WALL)
+		else if(getX() > 0 && getX() < stage.getMapX())
 		{
 			// Rotation breaks if x is negative
 			g.rotate(angle, getX(), getY());
@@ -64,7 +70,7 @@ public class FrostOrb extends Projectile
 			g.rotate(-angle, getX(), getY());
 		}
 	}
-	
+
 	public String getName()
 	{
 		return creator.getName();
@@ -121,7 +127,7 @@ public class FrostOrb extends Projectile
 
 		width = 150;
 		height = 150;
-		
+
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
 			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.WATER_BOLT_DEATH), 5);

@@ -82,7 +82,7 @@ public class Gate extends Interactive
 	}
 
 	// Not used
-	public void activate()
+	public void collide()
 	{
 
 	}

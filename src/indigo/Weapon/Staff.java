@@ -9,6 +9,9 @@ import indigo.Manager.ContentManager;
 
 public class Staff extends Weapon
 {
+	private double staffAngle;
+	private double renderAngle;
+
 	// Animations
 	private final int IDLE_LEFT = 0;
 	private final int IDLE_RIGHT = 1;
@@ -36,7 +39,7 @@ public class Staff extends Weapon
 	public void update()
 	{
 		animation.update();
-		
+
 		// Animation checking
 		if(animation.hasPlayedOnce())
 		{
@@ -92,14 +95,44 @@ public class Staff extends Weapon
 				}
 			}
 		}
+
+		// Calculating staff rotation angle
+		staffAngle = determineMouseAngle(stage.getMouseX(), stage.getMouseY());
+		if((staffAngle >= 0 && staffAngle < (Math.PI / 2)) || (staffAngle > Math.PI && staffAngle <= (3 * Math.PI) / 2))
+		{
+			renderAngle = -staffAngle % Math.PI;
+		}
+		else
+		{
+			renderAngle = -staffAngle % Math.PI + Math.PI;
+		}
+		if(currentAnimation == IDLE_LEFT || currentAnimation == IDLE_RIGHT)
+		{
+			renderAngle = renderAngle > Math.PI? renderAngle - Math.PI * 2 : renderAngle;
+			renderAngle = renderAngle < -Math.PI? renderAngle + Math.PI * 2 : renderAngle;
+			renderAngle /= 2;
+		}
 	}
 
 	public void render(Graphics2D g)
 	{
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
-		
-		g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
+
+		if(user.isFacingRight())
+		{
+			g.rotate(renderAngle, user.getX() + xOffset + 26, user.getY() + yOffset + 29);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
+			g.rotate(-renderAngle, user.getX() + xOffset + 26, user.getY() + yOffset + 29);
+		}
+		else
+		{
+			g.rotate(renderAngle, user.getX() + xOffset + 73, user.getY() + yOffset + 29);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
+			g.rotate(-renderAngle, user.getX() + xOffset + 73, user.getY() + yOffset + 29);
+		}
+
+		// g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
 	}
 
 	// Not used
@@ -111,6 +144,22 @@ public class Staff extends Weapon
 	public Line2D.Double getHitbox()
 	{
 		return null;
+	}
+
+	/**
+	 * Determines the current angle of the mouse to the player coordinate, and translates the angle to a unit circle.
+	 * 
+	 * @param xCoord The X Coordinate of the Mouse
+	 * @param yCoord The Y Coordinate of the Mouse
+	 * @return The angle (0 to 360) of the mouse coordinates to the player (Radians)
+	 */
+	public double determineMouseAngle(double xCoord, double yCoord)
+	{
+		double mouseAngle = 0.0;
+		mouseAngle = -Math.atan2((yCoord - user.getY()), (xCoord - user.getX()));
+		mouseAngle = (mouseAngle < 0? mouseAngle + 2 * Math.PI : mouseAngle);
+		mouseAngle = mouseAngle % (2 * Math.PI);
+		return mouseAngle;
 	}
 
 	public void attack()
@@ -136,7 +185,7 @@ public class Staff extends Weapon
 			setAnimation(CAST_LEFT, ContentManager.getAnimation(ContentManager.STAFF_CAST_LEFT), 2);
 		}
 	}
-	
+
 	public void holdCast()
 	{
 		if((currentAnimation == CAST_LEFT || currentAnimation == CAST_RIGHT) && animation.getFrame() == 3)

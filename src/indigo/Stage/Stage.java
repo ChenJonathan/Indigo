@@ -107,7 +107,7 @@ public abstract class Stage
 
 						if(item.isActive() && inProximity(ent, item) && ent.intersects(item))
 						{
-							item.activate();
+							item.collide();
 						}
 
 						if(item.isDead() || item.getX() < 0 || item.getX() > getMapX() || item.getY() < SKY_LIMIT

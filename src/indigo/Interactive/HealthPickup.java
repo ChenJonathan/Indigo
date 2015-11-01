@@ -62,7 +62,7 @@ public class HealthPickup extends Interactive
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
 	}
 
-	public void activate()
+	public void collide()
 	{
 		if(player.getHealth() < player.getMaxHealth())
 		{

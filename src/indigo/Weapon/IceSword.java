@@ -172,7 +172,7 @@ public class IceSword extends Weapon
 		endSwordX = (int)(beginSwordX + (length * Math.cos(swordAngle + angleOffset)));
 		endSwordY = (int)(beginSwordY - (length * Math.sin(swordAngle + angleOffset)));
 
-		// Calculating render angle - Placing this in render causes input lag issues
+		// Calculating render angle - Placing this in render causes input delay issues
 		if((swordAngle >= 0 && swordAngle < (Math.PI / 2)) || (swordAngle > Math.PI && swordAngle <= (3 * Math.PI) / 2))
 		{
 			renderAngle = -swordAngle % Math.PI;
@@ -182,7 +182,7 @@ public class IceSword extends Weapon
 			renderAngle = -swordAngle % Math.PI + Math.PI;
 		}
 
-		// If mouse is on other side of player
+		// If Ice Chains is active and mouse is on other side of player
 		if(!user.canTurn() && user.isFacingRight() != stage.getMouseX() >= user.getX())
 		{
 			renderAngle = -renderAngle;

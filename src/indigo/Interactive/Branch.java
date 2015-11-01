@@ -72,7 +72,7 @@ public class Branch extends Interactive
 	}
 
 	// Not used
-	public void activate()
+	public void collide()
 	{
 
 	}

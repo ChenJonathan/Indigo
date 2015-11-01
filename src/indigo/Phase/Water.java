@@ -16,7 +16,7 @@ public class Water extends Phase
 
 		maxCooldowns = new int[] {50, 150, 150, 150};
 
-		skills[0] = new LockedSkill(this, 0);
+		skills[0] = new Mist(this, 0);
 		skills[1] = new LockedSkill(this, 1);
 		skills[2] = new LockedSkill(this, 2);
 	}

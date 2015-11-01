@@ -18,9 +18,9 @@ public class Harvester extends Entity
 
 	public static final double HARVESTER_WIDTH = 100;
 	public static final double HARVESTER_HEIGHT = 130;
-	public static final int BASE_HEALTH = 250; // TODO: Change to harvester's stats
+	public static final int BASE_HEALTH = 250;
 	public static final int BASE_EXPERIENCE = 30;
-	public static final int RANGE = 100; // TODO: Balancing
+	public static final int RANGE = 100;
 	public static final int SPEED = 5;
 
 	public Harvester(Stage stage, double x, double y)

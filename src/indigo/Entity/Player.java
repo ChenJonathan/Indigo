@@ -112,7 +112,7 @@ public class Player extends Entity
 	public void update()
 	{
 		super.update();
-		
+
 		// Set direction
 		if(canTurn() && !hasWeaponHitbox())
 		{
@@ -124,7 +124,7 @@ public class Player extends Entity
 		{
 			weapon.update();
 		}
-		
+
 		// Animation related activities
 		if(currentAnimation == MIST)
 		{
@@ -141,7 +141,7 @@ public class Player extends Entity
 				canAttack(true);
 				canMove(true);
 				canTurn(true);
-				
+
 				dodging = false;
 				flying = false;
 				frictionless = false;
@@ -419,7 +419,7 @@ public class Player extends Entity
 		}
 		return phase.id() == Phase.WATER? yOffset : yOffset - 48;
 	}
-	
+
 	public String getName()
 	{
 		return "yourself";
@@ -443,14 +443,16 @@ public class Player extends Entity
 		if(phase.id() == Phase.WATER)
 		{
 			// Water phase attack
-			double staffX = isFacingRight()? getX() + 65 : getX() - 65;
-			double staffY = isCrouching()? getY() : getY() - 25;
+			double angle = Math.atan2(stage.getMouseY() - getY(), stage.getMouseX() - getX());
+			angle += isFacingRight()? -Math.PI / 8 : Math.PI / 8;
+			double staffX = getX() + Math.cos(angle) * 69;
+			double staffY = getY() + Math.sin(angle) * 69;
 
 			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
 			double velX = WaterBolt.SPEED * (stage.getMouseX() - staffX) / scale;
 			double velY = WaterBolt.SPEED * (stage.getMouseY() - staffY) / scale;
 
-			stage.getProjectiles().add(new WaterBolt(this, staffX, staffY, velX, velY, WaterBolt.DAMAGE));
+			stage.getProjectiles().add(new WaterBolt(this, staffX - velX, staffY - velY, velX, velY, WaterBolt.DAMAGE));
 
 			((Staff)weapon).attack();
 
@@ -470,14 +472,16 @@ public class Player extends Entity
 		if(phase.id() == Phase.WATER)
 		{
 			// Water phase attack
-			double staffX = isFacingRight()? getX() + 65 : getX() - 65;
-			double staffY = isCrouching()? getY() : getY() - 25;
+			double angle = Math.atan2(stage.getMouseY() - getY(), stage.getMouseX() - getX());
+			angle += isFacingRight()? -Math.PI / 8 : Math.PI / 8;
+			double staffX = getX() + Math.cos(angle) * 69;
+			double staffY = getY() + Math.sin(angle) * 69;
 
 			double scale = Math.sqrt(Math.pow(stage.getMouseY() - staffY, 2) + Math.pow(stage.getMouseX() - staffX, 2));
 			double velX = FrostOrb.SPEED * (stage.getMouseX() - staffX) / scale;
 			double velY = FrostOrb.SPEED * (stage.getMouseY() - staffY) / scale;
 
-			stage.getProjectiles().add(new FrostOrb(this, staffX, staffY, velX, velY, FrostOrb.DAMAGE));
+			stage.getProjectiles().add(new FrostOrb(this, staffX - velX, staffY - velY, velX, velY, FrostOrb.DAMAGE));
 
 			((Staff)weapon).attack();
 
@@ -603,17 +607,17 @@ public class Player extends Entity
 			canAttack(false);
 			canMove(false);
 			canTurn(false);
-			
+
 			setVelX(0);
 			setVelY(0);
-			
+
 			removeGround();
-			
+
 			dodging = true;
 			flying = true;
 			frictionless = true;
 			solid = false;
-			
+
 			setAnimation(MIST, ContentManager.getAnimation(ContentManager.PLAYER_MIST), 1);
 		}
 		else if(phase.id() == Phase.ICE)
@@ -621,7 +625,7 @@ public class Player extends Entity
 			// TODO Ice whirlwind
 		}
 	}
-	
+
 	public boolean shifted()
 	{
 		if(phase.id() == Phase.WATER)
@@ -644,7 +648,7 @@ public class Player extends Entity
 	{
 		uncrouch();
 		removeWeapon();
-		
+
 		canAttack(false);
 		canMove(false);
 		canTurn(false);

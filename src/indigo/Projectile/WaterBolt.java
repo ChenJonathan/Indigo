@@ -10,8 +10,8 @@ import java.awt.geom.Ellipse2D;
 
 public class WaterBolt extends Projectile
 {
-	private double angle;
 	private int timer;
+	private double angle;
 
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
@@ -36,7 +36,7 @@ public class WaterBolt extends Projectile
 		angle = getVelX() >= 0? angle : angle + Math.PI;
 		angle = angle >= 0? angle : angle + 2 * Math.PI;
 
-		timer = DURATION;
+		timer = 0;
 
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.WATER_BOLT), 1);
 	}
@@ -45,13 +45,13 @@ public class WaterBolt extends Projectile
 	{
 		if(currentAnimation != DEATH && currentAnimation != DEATH_WALL)
 		{
-			if(timer == 0)
+			if(timer == DURATION)
 			{
 				dead = true;
 			}
 
 			super.update();
-			timer--;
+			timer++;
 		}
 		else
 		{
@@ -70,7 +70,7 @@ public class WaterBolt extends Projectile
 			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
 					(int)getWidth(), (int)getHeight(), null);
 		}
-		else if(getX() > 0 && getX() < stage.getMapX() && (timer < DURATION || currentAnimation == DEATH_WALL))
+		else if(getX() > 0 && getX() < stage.getMapX() && (timer > 2 || currentAnimation == DEATH_WALL))
 		{
 			// Rotation breaks if x is negative
 			g.rotate(angle, getX(), getY());

@@ -52,7 +52,7 @@ public abstract class Interactive implements Respawnable, Named
 
 	public abstract void render(Graphics2D g);
 
-	public abstract void activate(); // Does whatever the item is supposed to do upon collision
+	public abstract void collide(); // Does whatever the item is supposed to do upon collision
 
 	public abstract String getName();
 	

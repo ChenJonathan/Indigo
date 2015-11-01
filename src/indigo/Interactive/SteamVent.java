@@ -129,7 +129,7 @@ public class SteamVent extends Interactive
 	}
 
 	// Not used
-	public void activate()
+	public void collide()
 	{
 
 	}
