@@ -49,5 +49,5 @@
         {"category":"Entity", "type":"Incendiary Turret", "x":6335, "y":300, "respawnTime":200}
         {"category":"Entity", "type":"Flying Bot", "x":3470, "y":500, "respawnTime":60}
         {"category":"Interactive", "type":"Health Pickup", "x":2000, "y":920, "respawnTime":200}
-    ],
+    ]
 }

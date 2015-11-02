@@ -1700,23 +1700,23 @@ public class DesignState extends GameState
 
 					if(land.horizontal)
 					{
-						x1 -= 5;
+						y1 -= 15;
 						// Draw leftmost piece
 						g.translate(x1, y1);
-						g.rotate(angle);
+						g.rotate(angle, 0, 15);
 						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0,
-								(int)(100 * (scale + .1)), 30, null);
-						g.rotate(-angle);
+								(int)(100 * scale + 1), 30, null);
+						g.rotate(-angle, 0, 15);
 						g.translate(-x1, -y1);
 
 						// Draw center pieces, if any
 						for(int i = 1; i <= centerTiles; i++)
 						{
 							g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
-							g.rotate(angle);
+							g.rotate(angle, 0, 15);
 							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0,
-									(int)(100 * (scale + .1)), 30, null);
-							g.rotate(-angle);
+									(int)(100 * scale + 1), 30, null);
+							g.rotate(-angle, 0, 15);
 							g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
 									-(y1 + 100 * i * scale * Math.sin(angle)));
 						}
@@ -1724,28 +1724,28 @@ public class DesignState extends GameState
 						// Draw rightmost piece
 						g.translate(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100
 								* (centerTiles + 1) * scale * Math.sin(angle));
-						g.rotate(angle);
+						g.rotate(angle, 0, 15);
 						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0,
-								(int)(100 * (scale + .1)), 30, null);
-						g.rotate(-angle);
+								(int)(100 * scale + 1), 30, null);
+						g.rotate(-angle, 0, 15);
 						g.translate(-(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle)), -(y1 + 100
 								* (centerTiles + 1) * scale * Math.sin(angle)));
-						x1 += 5;
+						y1 += 15;
 					}
 					else if(!land.horizontal)
 					{
-						int heightOffset = (y1 > y2)? 5 : -5;
+						int heightOffset = -5;
 						y1 += heightOffset;
-						int centerOffset = 0;
 						if(Math.abs(land.slope) > 999)
 						{
-							centerOffset = (y1 > y2)? -15 : 15; // Centers perfectly vertical walls
+							heightOffset = 0;
 						}
+						int centerOffset = (y1 > y2)? -15 : 15;
 						// Draw top-most piece
 						g.translate(x1 + centerOffset, y1);
 						g.rotate(angle);
 						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0,
-								(int)(100 * (scale + .1)), 30, null);
+								(int)(100 * scale), 30, null);
 						g.rotate(-angle);
 						g.translate(-(x1 + centerOffset), -y1);
 
@@ -1756,7 +1756,7 @@ public class DesignState extends GameState
 									* Math.sin(angle));
 							g.rotate(angle);
 							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0,
-									(int)(100 * (scale + .1)), 30, null);
+									(int)(100 * scale), 30, null);
 							g.rotate(-angle);
 							g.translate(-(x1 + centerOffset + 100 * i * scale * Math.cos(angle)), -(y1 + 100 * i
 									* scale * Math.sin(angle)));
@@ -1767,10 +1767,11 @@ public class DesignState extends GameState
 								* (centerTiles + 1) * scale * Math.sin(angle));
 						g.rotate(angle);
 						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0,
-								(int)(100 * (scale + .1)), 30, null);
+								(int)(100 * scale), 30, null);
 						g.rotate(-angle);
 						g.translate(-(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle)),
 								-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
+						
 						y1 -= heightOffset;
 					}
 				}
@@ -1779,7 +1780,7 @@ public class DesignState extends GameState
 				switch(land.type)
 				{
 					case "Platform":
-						g.setColor(Color.GREEN);
+						g.setColor(Color.BLACK);
 						break;
 					case "Spike Pit":
 						g.setColor(Color.RED);
@@ -1791,6 +1792,7 @@ public class DesignState extends GameState
 						g.setColor(Color.BLUE);
 						break;
 				}
+				g.setStroke(new BasicStroke(1));
 				g.drawLine(x1, y1, x2, y2);
 			}
 
@@ -1824,19 +1826,19 @@ public class DesignState extends GameState
 
 					scale = (land.length) / (tiles * 300);
 					int lateralOffset = 0;
-					lateralOffset = (land.slope > 0 && land.slope != 0)? lateralOffset - 4 : lateralOffset - 23;
-					lateralOffset = (land.slope == 0)? lateralOffset + 7 : lateralOffset;
+					lateralOffset = (land.slope > 0 && land.slope != 0)? lateralOffset - 5 : lateralOffset - 16;
+					lateralOffset = (land.slope == 0)? -10 : lateralOffset;
 					x1 += lateralOffset;
 					int heightOffset = 0;
-					heightOffset = (land.slope > 0 && land.slope != 0)? heightOffset - 25 : heightOffset - 11;
-					heightOffset = (land.slope == 0)? heightOffset - 8 : heightOffset;
+					heightOffset = (land.slope > 0)? heightOffset - 20 : heightOffset - 8;
+					heightOffset = (land.slope == 0)? -12 : heightOffset;
 					y1 += heightOffset;
 
 					for(int i = 0; i < tiles; i++)
 					{
 						g.translate(x1 + 300 * i * scale * Math.cos(angle), y1 + 300 * i * scale * Math.sin(angle));
 						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM), 0, 0, (int)(300 * (scale + .1)),
+						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM), 0, 0, (int)(300 * (scale + .05)),
 								100, null);
 						g.rotate(-angle);
 						g.translate(-(x1 + 300 * i * scale * Math.cos(angle)),
@@ -1844,6 +1846,8 @@ public class DesignState extends GameState
 					}
 					x1 -= lateralOffset;
 					y1 -= heightOffset;
+
+					g.drawLine(x1, y1, x2, y2);
 				}
 			}
 		}
