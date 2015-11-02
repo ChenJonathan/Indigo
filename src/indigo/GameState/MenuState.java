@@ -1,5 +1,7 @@
 package indigo.GameState;
 
+import indigo.Display.HUD;
+import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
@@ -10,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,13 +28,21 @@ import org.json.simple.JSONObject;
 public class MenuState extends GameState implements ActionListener
 {
 	private JFrame frame; // For level selection
-	
+
 	// Whether certain subsections of the main menu are open or not
 	private boolean instructions;
 	private boolean saveLoad;
 	private boolean credits;
 
-	int[] buttonState;
+	private int[] buttonState;
+
+	// TEMP SOUND SLIDE VARIABLE
+	public int soundVolume = 0;
+
+	// TODO Consider replacing
+	private int transitionCount;
+	private int destination;
+	private final int TRANSITION_DURATION = 6;
 
 	public final int NORMAL = 0;
 	public final int HOVER = 1;
@@ -42,9 +53,6 @@ public class MenuState extends GameState implements ActionListener
 	public final int OPTIONS = 2;
 	public final int CREDITS = 3;
 	public final int EXIT = 4;
-	
-	// TEMP SOUND SLIDE VARIABLE
-	public int soundVolume = 0;
 
 	/**
 	 * Sets up the menu and initializes the button states.
@@ -64,11 +72,28 @@ public class MenuState extends GameState implements ActionListener
 		{
 			buttonState[i] = NORMAL;
 		}
+
+		transitionCount = -1;
+		destination = -1;
 	}
 
 	@Override
 	public void update()
 	{
+		if(transitionCount > -1)
+		{
+			if(transitionCount == 0)
+			{
+				if(destination == -1)
+				{
+					System.exit(0);
+				}
+				gsm.setState(destination);
+			}
+			transitionCount--;
+			return;
+		}
+
 		handleInput();
 	}
 
@@ -80,6 +105,13 @@ public class MenuState extends GameState implements ActionListener
 	@Override
 	public void render(Graphics2D g)
 	{
+		if(transitionCount > -1)
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.TRANSITION), (int)((double)Game.WIDTH
+					* transitionCount / TRANSITION_DURATION), 0, Game.WIDTH, Game.HEIGHT, null);
+			return;
+		}
+
 		if(instructions)
 		{
 			// Draw instructions
@@ -167,8 +199,8 @@ public class MenuState extends GameState implements ActionListener
 	{
 		if(instructions)
 		{
-			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
-					&& Manager.input.mouseY() <= 860)
+			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380
+					&& Manager.input.mouseY() >= 800 && Manager.input.mouseY() <= 860)
 			{
 				instructions = false;
 			}
@@ -212,8 +244,8 @@ public class MenuState extends GameState implements ActionListener
 		}
 		else if(credits)
 		{
-			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
-					&& Manager.input.mouseY() <= 860)
+			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380
+					&& Manager.input.mouseY() >= 800 && Manager.input.mouseY() <= 860)
 			{
 				credits = false;
 			}
@@ -221,37 +253,41 @@ public class MenuState extends GameState implements ActionListener
 		else
 		{
 			// TEMPORARY SOUND CONTROL BUTTON
-			if(Manager.input.mouseX() >= 0 && Manager.input.mouseX() <= 200 && Manager.input.mouseY() >= 0 && Manager.input.mouseY() <= 200 && Manager.input.mouseLeftRelease()){
+			if(Manager.input.mouseX() >= 0 && Manager.input.mouseX() <= 200 && Manager.input.mouseY() >= 0
+					&& Manager.input.mouseY() <= 200 && Manager.input.mouseLeftRelease())
+			{
 				JSlider volumeSlider = new JSlider(-50, 10, soundVolume);
 				volumeSlider.setMajorTickSpacing(10);
 				volumeSlider.setMinorTickSpacing(1);
 				volumeSlider.setPaintTicks(true);
-				volumeSlider.addChangeListener(new ChangeListener(){
+				volumeSlider.addChangeListener(new ChangeListener()
+				{
 					@Override
 					public void stateChanged(ChangeEvent E)
 					{
-						JSlider Source = (JSlider) E.getSource();
+						JSlider Source = (JSlider)E.getSource();
 						soundVolume = Source.getValue();
-						if(!Source.getValueIsAdjusting()){
+						if(!Source.getValueIsAdjusting())
+						{
 							data.setVolume(soundVolume);
 							frame.dispose();
 						}
 					}
 				});
-				
+
 				frame = new JFrame("");
-		        frame.setSize(new Dimension(500, 100));
-		        frame.setLayout(null);
-		        frame.setResizable(false);
-		        frame.setLocationRelativeTo(null);
-		        frame.setVisible(true);
-		        
-		        volumeSlider.setBounds(10, 10, 480, 50);
-		        frame.add(volumeSlider);
+				frame.setSize(new Dimension(500, 100));
+				frame.setLayout(null);
+				frame.setResizable(false);
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
+
+				volumeSlider.setBounds(10, 10, 480, 50);
+				frame.add(volumeSlider);
 			}
-			
-			
-			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1385 && Manager.input.mouseY() >= 285 && Manager.input.mouseY() <= 385)
+
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1385 && Manager.input.mouseY() >= 285
+					&& Manager.input.mouseY() <= 385)
 			{
 				buttonState[PLAY] = HOVER;
 
@@ -261,27 +297,33 @@ public class MenuState extends GameState implements ActionListener
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
+					// TODO Go to level select
+					gsm.setState(GameStateManager.SELECT);
+
+					/*
 					JSONObject index = ContentManager.load("/index.json");
 					String[] levels = (String[])index.values().toArray(new String[0]);
 					JComboBox<String> levelSelect = new JComboBox<String>(levels);
 					levelSelect.addActionListener(this);
-					
+
 					frame = new JFrame("");
-			        frame.setSize(new Dimension(120, 100));
-			        frame.setLayout(null);
-			        frame.setResizable(false);
-			        frame.setLocationRelativeTo(null);
-			        frame.setVisible(true);
-			        
-			        levelSelect.setBounds(10, 10, 100, 30);
-			        frame.add(levelSelect);
+					frame.setSize(new Dimension(120, 100));
+					frame.setLayout(null);
+					frame.setResizable(false);
+					frame.setLocationRelativeTo(null);
+					frame.setVisible(true);
+
+					levelSelect.setBounds(10, 10, 100, 30);
+					frame.add(levelSelect);
+					*/
 				}
 			}
 			else
 			{
 				buttonState[PLAY] = NORMAL;
 			}
-			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1395 && Manager.input.mouseY() >= 385 && Manager.input.mouseY() <= 485)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1395 && Manager.input.mouseY() >= 385
+					&& Manager.input.mouseY() <= 485)
 			{
 				buttonState[HELP] = HOVER;
 
@@ -298,7 +340,8 @@ public class MenuState extends GameState implements ActionListener
 			{
 				buttonState[HELP] = NORMAL;
 			}
-			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1515 && Manager.input.mouseY() >= 485 && Manager.input.mouseY() <= 585)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1515 && Manager.input.mouseY() >= 485
+					&& Manager.input.mouseY() <= 585)
 			{
 				buttonState[OPTIONS] = HOVER;
 
@@ -308,7 +351,8 @@ public class MenuState extends GameState implements ActionListener
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					gsm.setState(GameStateManager.DESIGN);
+					transitionCount = TRANSITION_DURATION;
+					destination = GameStateManager.DESIGN;
 				}
 			}
 			else
@@ -319,7 +363,8 @@ public class MenuState extends GameState implements ActionListener
 			{
 				saveLoad = true;
 			}
-			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1485 && Manager.input.mouseY() >= 585 && Manager.input.mouseY() <= 685)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1485 && Manager.input.mouseY() >= 585
+					&& Manager.input.mouseY() <= 685)
 			{
 				buttonState[CREDITS] = HOVER;
 
@@ -336,7 +381,8 @@ public class MenuState extends GameState implements ActionListener
 			{
 				buttonState[CREDITS] = NORMAL;
 			}
-			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1365 && Manager.input.mouseY() >= 685 && Manager.input.mouseY() <= 785)
+			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1365 && Manager.input.mouseY() >= 685
+					&& Manager.input.mouseY() <= 785)
 			{
 				buttonState[EXIT] = HOVER;
 
@@ -346,7 +392,7 @@ public class MenuState extends GameState implements ActionListener
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					System.exit(0);
+					transitionCount = TRANSITION_DURATION;
 				}
 			}
 			else
@@ -355,12 +401,12 @@ public class MenuState extends GameState implements ActionListener
 			}
 		}
 	}
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		JComboBox<String> levelSelect = (JComboBox<String>)e.getSource();
 		String level = (String)levelSelect.getSelectedItem();
-		level = level.replace(" ","_").toLowerCase();
+		level = level.replace(" ", "_").toLowerCase();
 		if(!level.equals(""))
 		{
 			data.setStage(ContentManager.load("/levels/" + level + ".json"));

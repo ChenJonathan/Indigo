@@ -131,7 +131,7 @@ public class Player extends Entity
 			if(animation.hasPlayed(1))
 			{
 				animation.setReverse(true);
-				if(animation.getFrame() == 0)
+				while(animation.getFrame() == 0)
 				{
 					animation.update();
 				}
@@ -169,7 +169,7 @@ public class Player extends Entity
 					setVelY(0);
 
 					animation.setReverse(true);
-					if(animation.getFrame() == 0)
+					while(animation.getFrame() == 0)
 					{
 						animation.update();
 					}
@@ -778,6 +778,11 @@ public class Player extends Entity
 	public int getMaxMana()
 	{
 		return maxMana;
+	}
+	
+	public void setMaxMana(int mana)
+	{
+		maxMana = mana;
 	}
 
 	public int getMana()

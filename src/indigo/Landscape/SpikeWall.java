@@ -2,9 +2,9 @@ package indigo.Landscape;
 
 import indigo.Stage.Stage;
 
-public class SpikePit extends Wall
+public class SpikeWall extends Wall
 {
-	public SpikePit(Stage stage, double x1, double y1, double x2, double y2)
+	public SpikeWall(Stage stage, double x1, double y1, double x2, double y2)
 	{
 		super(stage, x1, y1, x2, y2);
 

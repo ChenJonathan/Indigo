@@ -36,7 +36,9 @@ public class HUD
 	private double experience;
 
 	public static final int WIDTH = Game.WIDTH;
-	public static final int HEIGHT = 135;
+	public static final int HEIGHT = Game.HEIGHT / 8;
+
+	public static final int BAR_LENGTH = 200;
 
 	public HUD(PlayState playState, Stage stage)
 	{
@@ -68,11 +70,11 @@ public class HUD
 		g.setColor(Color.BLACK);
 		g.fill(new Rectangle2D.Double(0, Game.HEIGHT - HEIGHT, WIDTH, HEIGHT));
 		g.setColor(Color.RED);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, health, 11));
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, health / player.getMaxHealth() * BAR_LENGTH, 11));
 		g.setColor(Color.BLUE);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, mana, 11));
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, mana / player.getMaxMana() * BAR_LENGTH, 11));
 		g.setColor(Color.YELLOW);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY + 1, 200 * experience / data.getMaxExperience(), 11));
+		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY + 1, experience / data.getMaxExperience() * BAR_LENGTH, 11));
 
 		// Draws the decorative indicator on the left
 		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "0":" ",
     "1":"Beach",
     "2":"Ryan Map",
@@ -69,4 +70,12 @@
     "67":"imagetest",
     "68":"imagetest",
     "69":"imagetest"
+=======
+    "0":"Beach",
+    "1":"Ryan Map",
+    "2":"Road",
+    "3":"NX Survival Test",
+    "4":"Trees",
+    "5":"Test",
+>>>>>>> d21b1c23a8cf25219fec02bd2367adcb5c9d0f04
 }

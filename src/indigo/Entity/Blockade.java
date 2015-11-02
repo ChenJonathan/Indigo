@@ -34,15 +34,27 @@ public class Blockade extends Entity
 		flying = true;
 		friendly = false;
 
-		walls = new Wall[4];
-		walls[0] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2, getY()
-				- getHeight() / 2);
-		walls[1] = new Wall(stage, getX() - getWidth() / 2, getY() + getHeight() / 2, getX() + getWidth() / 2, getY()
-				+ getHeight() / 2);
-		walls[2] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() - getWidth() / 2, getY()
-				+ getHeight() / 2);
-		walls[3] = new Wall(stage, getX() + getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2, getY()
-				+ getHeight() / 2);
+		Entity player = stage.getPlayer();
+		if(player.getX() + player.getWidth() / 2 > getX() - getWidth() / 2
+				&& player.getX() - player.getWidth() / 2 < getX() + getWidth()
+				&& player.getY() + player.getHeight() / 2 > getY() - getHeight()
+				&& player.getY() - player.getHeight() / 2 < getY() + getHeight())
+		{
+			walls = new Wall[0];
+			dead = true;
+		}
+		else
+		{
+			walls = new Wall[4];
+			walls[0] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2,
+					getY() - getHeight() / 2);
+			walls[1] = new Wall(stage, getX() - getWidth() / 2, getY() + getHeight() / 2, getX() + getWidth() / 2,
+					getY() + getHeight() / 2);
+			walls[2] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() - getWidth() / 2,
+					getY() + getHeight() / 2);
+			walls[3] = new Wall(stage, getX() + getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2,
+					getY() + getHeight() / 2);
+		}
 
 		for(Wall wall : walls)
 		{
@@ -89,10 +101,22 @@ public class Blockade extends Entity
 					ent.removeGround();
 				}
 			}
-			
+
 			stage.getWalls().remove(wall);
 		}
 
 		dead = true;
+	}
+
+	public boolean contains(Wall otherWall)
+	{
+		for(Wall wall : walls)
+		{
+			if(wall.equals(otherWall))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -85,6 +85,7 @@ public class ContentManager
 	public static ImageData TALENTS_BACKGROUND = new ImageData("/images/menus/talents.png", 1920, 1080);
 	public static ImageData TITLE = new ImageData("/images/menus/title.png", 800, 382);
 	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 302, 402);
+	public static ImageData TRANSITION = new ImageData("/images/menus/transition.png", 1920, 1080);
 
 	// Projectiles
 	public static AnimationData BULLET = new AnimationData("/images/projectiles/bullet/default.png", 30, 10, 1);

@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -149,7 +150,9 @@ public class Game extends JPanel implements Runnable
 	 */
 	private void render()
 	{
+		AffineTransform defaultForm = g.getTransform();
 		gsm.render(g);
+		g.setTransform(defaultForm);
 	}
 
 	/**
