@@ -33,7 +33,7 @@ public class PlayState extends GameState
 {
 	public Stage stage;
 	public String type;
-	
+
 	public Player player;
 	public HUD display;
 
@@ -122,9 +122,6 @@ public class PlayState extends GameState
 
 		if(data.getExperience() > data.getMaxExperience())
 		{
-			data.setLevel(data.getLevel() + 1);
-			data.setExperience(data.getExperience() - data.getMaxExperience());
-			data.setMaxExperience(data.getLevel() * 100);
 			levelUp();
 		}
 	}
@@ -255,12 +252,24 @@ public class PlayState extends GameState
 	 */
 	public void levelUp()
 	{
+		data.setLevel(data.getLevel() + 1);
+		data.setExperience(data.getExperience() - data.getMaxExperience());
+		data.setMaxExperience(data.getLevel() * 100);
+
+		double healthRatio = (double)player.getHealth() / player.getMaxHealth();
+		double manaRatio = (double)player.getMana() / player.getMaxMana();
+		player.setMaxHealth(player.getMaxHealth() + 10);
+		player.setMaxMana(player.getMaxMana() + 10);
+		player.setHealth((int)(player.getMaxHealth() * healthRatio));
+		player.setMana((int)(player.getMaxMana() * manaRatio));
+
 		if(data.getLevel() % 5 == 0)
 		{
 			activePhase.unlockSkill();
 			inactivePhase.unlockSkill();
 		}
-		// TODO Finish
+
+		// TODO Add animation
 	}
 
 	/**
@@ -308,7 +317,7 @@ public class PlayState extends GameState
 	{
 		return entities.get(0);
 	}
-	
+
 	/**
 	 * @return The stage containing objects in play.
 	 */

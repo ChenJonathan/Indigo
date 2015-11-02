@@ -33,7 +33,9 @@ public class SurvivalStage extends Stage
 
 		startingX = (int)(long)json.get("startingX");
 		startingY = (int)(long)json.get("startingY");
-		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
+		int health = Player.BASE_HEALTH + (data.getLevel() - 1) * 10;
+		int mana = Player.BASE_MANA + (data.getLevel() - 1) * 10;
+		player = new Player(this, startingX, startingY, health, mana, Player.BASE_STAMINA);
 		entities.add(0, player);
 
 		background = ContentManager.getImage(ContentManager.BACKGROUND);

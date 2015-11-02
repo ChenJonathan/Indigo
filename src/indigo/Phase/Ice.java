@@ -14,12 +14,12 @@ public class Ice extends Phase
 		super(playState);
 		id = Phase.ICE;
 
-		maxCooldowns = new int[] {150, 150, 150, 150};
+		maxCooldowns = new int[] {150, 150, 150};
 
 		int level = playState.getData().getLevel();
 		skills[0] = level >= 5? new IceChains(this, 0) : new LockedSkill(this, 0);
-		skills[1] = level >= 10? new IceChains(this, 0) : new LockedSkill(this, 0);
-		skills[2] = level >= 15? new IceArmor(this, 0) : new LockedSkill(this, 0);
+		skills[1] = level >= 10? new IceChains(this, 1) : new LockedSkill(this, 1);
+		skills[2] = level >= 15? new IceArmor(this, 2) : new LockedSkill(this, 2);
 	}
 
 	@Override

@@ -262,7 +262,19 @@ public abstract class Entity implements Respawnable, Named
 	{
 		Area entArea = new Area(getHitbox());
 		entArea.intersect(new Area(proj.getHitbox()));
-		return !entArea.isEmpty();
+		if(!entArea.isEmpty())
+		{
+			Line2D.Double link = new Line2D.Double(getX(), getY(), proj.getX(), proj.getY());
+			for(Wall wall : stage.getWalls())
+			{
+				if(link.intersectsLine(wall.getLine()))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public abstract String getName();
@@ -373,6 +385,11 @@ public abstract class Entity implements Respawnable, Named
 	public int getMaxHealth()
 	{
 		return maxHealth;
+	}
+	
+	public void setMaxHealth(int health)
+	{
+		maxHealth = health;
 	}
 
 	public int getHealth()

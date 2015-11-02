@@ -2,6 +2,7 @@ package indigo.Landscape;
 
 import indigo.Stage.Stage;
 
+import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
@@ -16,6 +17,8 @@ public abstract class Land
 	
 	protected double minX;
 	protected double maxX;
+	
+	public static final int LAND_THICKNESS = 30;
 
 	public Land(Stage stage, double x1, double y1, double x2, double y2)
 	{
@@ -27,16 +30,6 @@ public abstract class Land
 		slope = (y2 - y1) / ((x2 - x1) == 0? 0.0000001 : (x2 - x1));
 		minX = Math.min(x1, x2);
 		maxX = Math.max(x1, x2);
-	}
-
-	public Line2D.Double getLine()
-	{
-		return line;
-	}
-
-	public double getSlope()
-	{
-		return slope;
 	}
 
 	public double getMinX()
@@ -57,6 +50,16 @@ public abstract class Land
 	public double getDeltaY()
 	{
 		return Math.abs(line.getY1() - line.getY2());
+	}
+
+	public Line2D.Double getLine()
+	{
+		return line;
+	}
+
+	public double getSlope()
+	{
+		return slope;
 	}
 
 	public boolean isHorizontal()

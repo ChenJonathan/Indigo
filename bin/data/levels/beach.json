@@ -27,8 +27,8 @@
         {"type":"Wall", "x1":4025, "y1":961, "x2":4357, "y2":693}
         {"type":"Wall", "x1":4357, "y1":693, "x2":4753, "y2":693}
         {"type":"Wall", "x1":4753, "y1":693, "x2":5280, "y2":961}
-        {"type":"SpikePit", "x1":2116, "y1":1180, "x2":2353, "y2":1180}
-        {"type":"SpikePit", "x1":5651, "y1":1180, "x2":5888, "y2":1180}
+        {"type":"Spike Wall", "x1":2116, "y1":1180, "x2":2353, "y2":1180}
+        {"type":"Spike Wall", "x1":5651, "y1":1180, "x2":5888, "y2":1180}
         {"type":"Platform", "x1":1169, "y1":850, "x2":1420, "y2":850}
         {"type":"Platform", "x1":1398, "y1":736, "x2":1649, "y2":736}
         {"type":"Platform", "x1":1736, "y1":842, "x2":1980, "y2":842}
@@ -49,5 +49,5 @@
         {"category":"Entity", "type":"Incendiary Turret", "x":6335, "y":300, "respawnTime":200}
         {"category":"Entity", "type":"Flying Bot", "x":3470, "y":500, "respawnTime":60}
         {"category":"Interactive", "type":"Health Pickup", "x":2000, "y":920, "respawnTime":200}
-    ],
+    ]
 }

@@ -815,12 +815,7 @@ public class DesignState extends GameState
 		else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 		{
 			// Exceptions go here
-			if(toolTypes.get(selectedTool)[selectedToolType].equals("Blockade"))
-			{
-				addToList(new SpawnData("Entity", "Blockade", x * GRID_SCALE, y * GRID_SCALE, -1));
-				return;
-			}
-			else if(toolTypes.get(selectedTool)[selectedToolType].equals("Checkpoint"))
+			if(toolTypes.get(selectedTool)[selectedToolType].equals("Checkpoint"))
 			{
 				addToList(new SpawnData("Interactive", "Checkpoint", x * GRID_SCALE, y * GRID_SCALE, -1));
 				return;
@@ -1312,7 +1307,7 @@ public class DesignState extends GameState
 			JSONObject index = ContentManager.load("/index.json");
 
 			// Adding level to index
-			if(index.get(name) == null)
+			if(!index.values().contains(name))
 			{
 				FileWriter indexWriter = new FileWriter(new File("").getAbsolutePath() + "/resources/data/index.json");
 				indexWriter.write(getIndexJSONString(index));

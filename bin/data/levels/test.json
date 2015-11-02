@@ -19,7 +19,7 @@
         {"type":"Platform", "x1":4600, "y1":1200, "x2":5400, "y2":900}
         {"type":"Wall", "x1":5400, "y1":900, "x2":6000, "y2":900}
         {"type":"Wall", "x1":5400, "y1":900, "x2":5400, "y2":4000}
-        {"type":"Spike Pit", "x1":2300, "y1":4000, "x2":5400, "y2":4000}
+        {"type":"Spike Wall", "x1":2300, "y1":4000, "x2":5400, "y2":4000}
         {"type":"Wall", "x1":2300, "y1":1000, "x2":2900, "y2":1000}
         {"type":"Wall", "x1":2900, "y1":1000, "x2":3400, "y2":600}
         {"type":"Wall", "x1":3400, "y1":600, "x2":3900, "y2":600}
@@ -96,5 +96,5 @@
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1400, "respawnTime":-1}
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1200, "respawnTime":-1}
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1000, "respawnTime":-1}
-    ],
+    ]
 }

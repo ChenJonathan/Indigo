@@ -5,8 +5,8 @@
     "mapX":8000,
     "mapY":3000,
 
-    "startingX":200,
-    "startingY":2000,
+    "startingX":400,
+    "startingY":1100,
 
     "timeLimit":4500,
 
@@ -40,15 +40,15 @@
         {"type":"Wall", "x1":4400, "y1":200, "x2":4700, "y2":200}
         {"type":"Wall", "x1":3900, "y1":200, "x2":4200, "y2":200}
         {"type":"Wall", "x1":4700, "y1":0, "x2":4700, "y2":2600}
-        {"type":"Spike Pit", "x1":3800, "y1":2600, "x2":3200, "y2":2600}
+        {"type":"Spike Wall", "x1":3800, "y1":2600, "x2":3200, "y2":2600}
         {"type":"Wall", "x1":3500, "y1":800, "x2":3700, "y2":700}
         {"type":"Wall", "x1":3700, "y1":700, "x2":3800, "y2":400}
         {"type":"Wall", "x1":3800, "y1":400, "x2":3900, "y2":400}
         {"type":"Wall", "x1":3900, "y1":400, "x2":3900, "y2":200}
-        {"type":"Spike Pit", "x1":4600, "y1":700, "x2":4200, "y2":700}
-        {"type":"Spike Pit", "x1":4300, "y1":1200, "x2":4600, "y2":1200}
-        {"type":"Spike Pit", "x1":4100, "y1":1200, "x2":3600, "y2":1200}
-        {"type":"Spike Pit", "x1":4700, "y1":2600, "x2":4100, "y2":2600}
+        {"type":"Spike Wall", "x1":4600, "y1":700, "x2":4200, "y2":700}
+        {"type":"Spike Wall", "x1":4300, "y1":1200, "x2":4600, "y2":1200}
+        {"type":"Spike Wall", "x1":4100, "y1":1200, "x2":3600, "y2":1200}
+        {"type":"Spike Wall", "x1":4700, "y1":2600, "x2":4100, "y2":2600}
         {"type":"Force Field", "x1":3800, "y1":2600, "x2":4100, "y2":2600}
         {"type":"Platform", "x1":5300, "y1":2600, "x2":5600, "y2":2600}
         {"type":"Platform", "x1":5300, "y1":2000, "x2":5100, "y2":2000}
@@ -145,5 +145,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":6900, "y":1600, "respawnTime":60}
         {"category":"Entity", "type":"Flying Bot", "x":6100, "y":2300, "respawnTime":60}
         {"category":"Entity", "type":"Flying Bot", "x":6100, "y":2100, "respawnTime":60}
-    ],
+        {"category":"Interactive", "type":"Checkpoint", "x":4500, "y":100, "respawnTime":-1}
+    ]
 }

@@ -1,6 +1,7 @@
 package indigo.Stage;
 
 import indigo.Display.HUD;
+import indigo.Entity.Blockade;
 import indigo.Entity.Entity;
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
@@ -124,6 +125,16 @@ public abstract class Stage
 							proj.setY(intersection.getY());
 							proj.collide(wall);
 							collided = true;
+
+							// Damaging blockades
+							for(Entity ent : getEntities())
+							{
+								if(proj.isFriendly() != ent.isFriendly() && ent instanceof Blockade
+										&& ((Blockade)ent).contains(wall))
+								{
+									proj.collide(ent);
+								}
+							}
 						}
 						if((proj.isSolid() && wall.killsSolidProjectiles())
 								|| (!proj.isSolid() && wall.killsNonsolidProjectiles()))
@@ -134,8 +145,7 @@ public abstract class Stage
 				}
 			}
 
-			if(proj.isDead() || proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT
-					|| proj.getY() > getMapY())
+			if(proj.isDead() || outOfBounds(proj))
 			{
 				proj.setDead();
 				projectiles.remove(proj);
@@ -246,17 +256,20 @@ public abstract class Stage
 				}
 
 				// Entity-projectile: Taking damage and tracking kills
-				for(int projCount = 0; projCount < projectiles.size(); projCount++)
+				if(!(ent instanceof Blockade))
 				{
-					Projectile proj = projectiles.get(projCount);
-					// Consider setting projectile location to intersection
-					if(inProximity(ent, proj) && proj.isFriendly() != ent.isFriendly() && proj.isActive()
-							&& ent.intersects(proj))
+					for(int projCount = 0; projCount < projectiles.size(); projCount++)
 					{
-						proj.collide(ent);
-						if(!ent.isActive())
+						Projectile proj = projectiles.get(projCount);
+						// Consider setting projectile location to intersection
+						if(inProximity(ent, proj) && proj.isFriendly() != ent.isFriendly() && proj.isActive()
+								&& ent.intersects(proj))
 						{
-							trackDeath(proj.getName(), ent);
+							proj.collide(ent);
+							if(!ent.isActive())
+							{
+								trackDeath(proj.getName(), ent);
+							}
 						}
 					}
 				}
@@ -369,16 +382,26 @@ public abstract class Stage
 				}
 			}
 
-			if(ent.isDead() || ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT
-					|| ent.getY() > getMapY())
+			if(ent.isDead() || outOfBounds(ent))
 			{
 				if(count == 0) // Player dies
 				{
-					playState.endGame(false);
+					if(suddenDeath)
+					{
+						playState.endGame(false);
+					}
+					else if(ent.isActive())
+					{
+						ent.setHealth(0);
+						ent.die();
+					}
 				}
-				ent.setDead();
-				entities.remove(entities.get(count));
-				count--;
+				else
+				{
+					ent.setDead();
+					entities.remove(entities.get(count));
+					count--;
+				}
 			}
 		}
 	}
@@ -406,6 +429,16 @@ public abstract class Stage
 	public boolean inProximity(Projectile proj, Land land)
 	{
 		return land.getLine().ptSegDist(proj.getX(), proj.getY()) < COLLISION_PROXIMITY;
+	}
+
+	public boolean outOfBounds(Entity ent)
+	{
+		return ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT || ent.getY() > getMapY();
+	}
+	
+	public boolean outOfBounds(Projectile proj)
+	{
+		return proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY();
 	}
 
 	// Used for entity-wall collision - Sorts walls from closest to furthest (uses previous position)

@@ -17,6 +17,7 @@ public class Pulse extends Skill
 	{
 		super(phase, position);
 		id = Skill.PULSE;
+		castOnSelect = true;
 	}
 
 	public void update()
