@@ -22,12 +22,19 @@ public class Saw extends Weapon
 
 	public void attack()
 	{
-		attackTime = -1;
+		attackTime = 0;
 	}
 
 	public void update()
 	{
-		attackTime++;
+		if(attackTime >= 0)
+		{
+			attackTime++;
+			if(attackTime == DURATION)
+			{
+				attackTime = -1;
+			}
+		}
 		
 		if(user.isFacingRight())
 		{
@@ -60,7 +67,7 @@ public class Saw extends Weapon
 
 	public Line2D.Double getHitbox()
 	{
-		if(attackTime <= DURATION)
+		if(attackTime >= 0)
 		{
 			return new Line2D.Double(beginX, beginY, endX, endY);
 		}

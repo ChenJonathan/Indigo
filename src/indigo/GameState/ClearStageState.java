@@ -22,6 +22,11 @@ public class ClearStageState extends GameState
 	public ClearStageState(GameStateManager gsm)
 	{
 		super(gsm);
+
+		if(data.getAutosave())
+		{
+			data.save(data.getCurrentSlot());
+		}
 	}
 
 	@Override

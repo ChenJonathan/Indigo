@@ -1,12 +1,9 @@
 {
-    "":0,
-    "Beach":1,
-    "Test":2,
-    "umad":3,
-    "umad2":4,
-    "umad3":5,
-    "Trees":6,
-    "Road":7,
-    "Ryan Map":8,
-    "NX Survival Test":9
+    "0":" ",
+    "1":"Beach",
+    "2":"Ryan Map",
+    "3":"Road",
+    "4":"NX Survival Test",
+    "5":"Trees",
+    "6":"Test"
 }

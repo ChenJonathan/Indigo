@@ -1,5 +1,10 @@
 package indigo.Manager;
 
+import java.io.File;
+import java.io.FileWriter;
+
+import javax.swing.JOptionPane;
+
 import org.json.simple.JSONObject;
 
 /**
@@ -7,6 +12,7 @@ import org.json.simple.JSONObject;
  */
 public class Data
 {
+	private String name;
 	private int level;
 	private int experience;
 	private int maxExperience;
@@ -17,9 +23,12 @@ public class Data
 	private int unlockedStages;
 	private int clearTime;
 	private boolean victory = true;
-	
+
 	private String killer;
 	private String deathMessage;
+
+	private int currentSlot;
+	private boolean autosave;
 
 	public static final int NUM_STAGES = 10;
 	public static final int NUM_PHASES = 2;
@@ -40,6 +49,10 @@ public class Data
 
 		killer = "";
 		deathMessage = "You were killed by _";
+
+		JSONObject settings = ContentManager.load("/settings.json");
+		autosave = Boolean.parseBoolean(settings.get("autosave") + "");
+		currentSlot = -1;
 	}
 
 	/**
@@ -50,7 +63,7 @@ public class Data
 		currentStage = null;
 		clearTime = 0;
 		victory = false;
-		
+
 		killer = "";
 		deathMessage = "You were killed by _";
 	}
@@ -206,7 +219,7 @@ public class Data
 		}
 		return deathMessage.replace("_", killer);
 	}
-	
+
 	/**
 	 * Sets a message identifying how the player died.
 	 * 
@@ -216,14 +229,110 @@ public class Data
 	{
 		deathMessage = message;
 	}
-	
+
 	/**
-	 * Wrapper function to change the volume of the
-	 * audio clips.
+	 * Checks if the autosave function is on or off.
+	 * 
+	 * @return Whether autosave is turned on or not.
+	 */
+	public boolean getAutosave()
+	{
+		return autosave;
+	}
+
+	/**
+	 * Turns the autosave function on or off.
+	 * 
+	 * @param autosave Whether autosave will be turned on or not.
+	 */
+	public void setAutosave(boolean autosave)
+	{
+		this.autosave = autosave;
+	}
+
+	/**
+	 * Returns the slot that is being used by the autosave function.
+	 * 
+	 * @return The slot being used.
+	 */
+	public int getCurrentSlot()
+	{
+		return currentSlot;
+	}
+
+	/**
+	 * Wrapper function to change the volume of the audio clips.
 	 * 
 	 * @param newVolume The new sound volume.
 	 */
-	public void setVolume(int newVolume){
+	public void setVolume(int newVolume)
+	{
 		SoundManager.changeVolume(newVolume);
+	}
+
+	/**
+	 * Saves the game in the designated save slot.
+	 * 
+	 * @param slot The save slot.
+	 */
+	public void save(int slot)
+	{
+		if(slot == -1)
+		{
+			return;
+		}
+
+		if(name == null)
+		{
+			name = JOptionPane.showInputDialog("Enter a save name:");
+			if(name == null)
+			{
+				JOptionPane.showMessageDialog(null, "Invalid name.");
+				return;
+			}
+		}
+
+		String string = "";
+		string += "    \"name\":\"" + name + "\",\n";
+		string += "    \"level\":" + level + ",\n";
+		string += "    \"experience\":" + experience;
+		string = "{\n" + string + "\n}";
+
+		try
+		{
+			String fileName = "slot" + slot;
+			String filePath = new File("").getAbsolutePath() + "/resources/data/saves/" + fileName + ".json";
+			FileWriter fileWriter = new FileWriter(filePath);
+			fileWriter.write(string);
+			fileWriter.flush();
+			fileWriter.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		currentSlot = slot;
+	}
+
+	/**
+	 * Loads the game from the designated save slot.
+	 * 
+	 * @param slot The save slot.
+	 */
+	public void load(int slot)
+	{
+		String fileName = "slot" + slot;
+		JSONObject json = ContentManager.load("/saves/" + fileName + ".json");
+
+		if(json != null)
+		{
+			name = json.get("name") + "";
+			level = Integer.parseInt(json.get("level") + "");
+			experience = Integer.parseInt(json.get("experience") + "");
+			maxExperience = level * 100;
+
+			currentSlot = slot;
+		}
 	}
 }

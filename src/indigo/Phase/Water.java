@@ -16,9 +16,10 @@ public class Water extends Phase
 
 		maxCooldowns = new int[] {50, 150, 150, 150};
 
-		skills[0] = new Mist(this, 0);
-		skills[1] = new LockedSkill(this, 1);
-		skills[2] = new LockedSkill(this, 2);
+		int level = playState.getData().getLevel();
+		skills[0] = level >= 5? new Mist(this, 0) : new LockedSkill(this, 0);
+		skills[1] = level >= 10? new Pulse(this, 0) : new LockedSkill(this, 0);
+		skills[2] = level >= 15? new Geyser(this, 0) : new LockedSkill(this, 0);
 	}
 
 	@Override

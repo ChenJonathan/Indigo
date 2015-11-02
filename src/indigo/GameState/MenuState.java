@@ -5,6 +5,7 @@ import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
 import indigo.Manager.SoundManager;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -25,8 +26,10 @@ public class MenuState extends GameState implements ActionListener
 {
 	private JFrame frame; // For level selection
 	
-	private boolean instructions; // Whether the instructions are open or not
-	private boolean credits; // Whether the credits are open or not
+	// Whether certain subsections of the main menu are open or not
+	private boolean instructions;
+	private boolean saveLoad;
+	private boolean credits;
 
 	int[] buttonState;
 
@@ -82,6 +85,16 @@ public class MenuState extends GameState implements ActionListener
 			// Draw instructions
 			g.drawImage(ContentManager.getImage(ContentManager.INSTRUCTIONS_BACKGROUND), 0, 0, 1920, 1080, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BACK_BUTTON), 180, 800, 200, 60, null);
+		}
+		else if(saveLoad)
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.CREDITS_BACKGROUND), 0, 0, 1920, 1080, null);
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(100, 100, 400, 200);
+			g.fillRect(600, 100, 400, 200);
+			g.fillRect(1100, 100, 400, 200);
+			g.setColor(Color.BLACK);
+			g.drawLine(100, 200, 1500, 200);
 		}
 		else if(credits)
 		{
@@ -152,7 +165,6 @@ public class MenuState extends GameState implements ActionListener
 	@Override
 	public void handleInput()
 	{
-		// Instruction button functionality goes here
 		if(instructions)
 		{
 			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
@@ -161,7 +173,40 @@ public class MenuState extends GameState implements ActionListener
 				instructions = false;
 			}
 		}
-		// Credits button functionality goes here
+		else if(saveLoad)
+		{
+			if(Manager.input.mouseLeftRelease())
+			{
+				if(Manager.input.mouseInRect(100, 100, 400, 100))
+				{
+					data.save(1);
+				}
+				else if(Manager.input.mouseInRect(600, 100, 400, 100))
+				{
+					data.save(2);
+				}
+				else if(Manager.input.mouseInRect(1100, 100, 400, 100))
+				{
+					data.save(3);
+				}
+				else if(Manager.input.mouseInRect(100, 200, 400, 100))
+				{
+					data.load(1);
+				}
+				else if(Manager.input.mouseInRect(600, 200, 400, 100))
+				{
+					data.load(2);
+				}
+				else if(Manager.input.mouseInRect(1100, 200, 400, 100))
+				{
+					data.load(3);
+				}
+				else if(Manager.input.mouseInRect(0, 400, 1920, 680))
+				{
+					saveLoad = false;
+				}
+			}
+		}
 		else if(credits)
 		{
 			if(Manager.input.mouseLeftRelease() && Manager.input.mouseX() >= 180 && Manager.input.mouseX() <= 380 && Manager.input.mouseY() >= 800
@@ -170,7 +215,6 @@ public class MenuState extends GameState implements ActionListener
 				credits = false;
 			}
 		}
-		// Main menu button functionality goes here
 		else
 		{
 			// TEMPORARY SOUND CONTROL BUTTON
@@ -215,7 +259,7 @@ public class MenuState extends GameState implements ActionListener
 				if(Manager.input.mouseLeftRelease())
 				{
 					JSONObject index = ContentManager.load("/index.json");
-					String[] levels = (String[])index.keySet().toArray(new String[0]);
+					String[] levels = (String[])index.values().toArray(new String[0]);
 					JComboBox<String> levelSelect = new JComboBox<String>(levels);
 					levelSelect.addActionListener(this);
 					
@@ -267,6 +311,10 @@ public class MenuState extends GameState implements ActionListener
 			else
 			{
 				buttonState[OPTIONS] = NORMAL;
+			}
+			if(Manager.input.mouseInRect(200, 200, 800, 382) && Manager.input.mouseLeftRelease())
+			{
+				saveLoad = true;
 			}
 			if(Manager.input.mouseX() >= 1235 && Manager.input.mouseX() <= 1485 && Manager.input.mouseY() >= 585 && Manager.input.mouseY() <= 685)
 			{

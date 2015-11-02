@@ -85,7 +85,6 @@ public class Harvester extends Entity
 				}
 			}
 		}
-		// Finished looking for nearest tree
 
 		if(tree != null)
 		{
@@ -98,27 +97,27 @@ public class Harvester extends Entity
 			// If tree found, initiate attacking procedure
 			if(inRange() && canAttack())
 			{
-				if(tree.getX() > this.getX()) // if tree is on the right
+				if(tree.getX() > this.getX()) // If tree is on the right
 				{
-					if(this.isFacingRight()) // harvester is facing right
+					if(this.isFacingRight()) // Harvester is facing right
 					{
 						((Saw)weapon).attack();
 					}
 					else
-					// harvester is facing left
+					// Harvester is facing left
 					{
 						this.setDirection(true);
 					}
 				}
 				else
-				// tree is on the left
+				// Tree is on the left
 				{
-					if(this.isFacingRight()) // harvester is facing right
+					if(this.isFacingRight()) // Harvester is facing right
 					{
 						this.setDirection(false);
 					}
 					else
-					// harvester is facing left
+					// Harvester is facing left
 					{
 						((Saw)weapon).attack();
 					}

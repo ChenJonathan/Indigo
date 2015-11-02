@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.json.simple.JSONArray;
@@ -225,7 +224,7 @@ public class DesignState extends GameState
 		objectOrder = new ArrayList<MapData>();
 
 		JSONObject index = ContentManager.load("/index.json");
-		if(index.get(name) == null)
+		if(!index.values().contains(name))
 		{
 			do
 			{
@@ -886,7 +885,11 @@ public class DesignState extends GameState
 		}
 		else if(selectedTool == SET_OBJECTIVE)
 		{
-			if(type.equals("Defend"))
+			if(type == null)
+			{
+				return;
+			}
+			else if(type.equals("Defend"))
 			{
 				int coreX = x * GRID_SCALE;
 				int coreY = y * GRID_SCALE;
@@ -907,9 +910,9 @@ public class DesignState extends GameState
 
 	public void selectTool(int tool)
 	{
-		// TODO May or may not be temporary
 		if(selectedTool == SET_OBJECTIVE && !objectiveSet)
 		{
+			JOptionPane.showMessageDialog(null, "Please select an objective.");
 			return;
 		}
 
@@ -1566,15 +1569,15 @@ public class DesignState extends GameState
 			for(Object name : index.entrySet())
 			{
 				String[] pair = (name + "").split("=");
-				int id = Integer.parseInt(pair[1]);
+				int id = Integer.parseInt(pair[0]);
 				if(id == count)
 				{
-					string += "    \"" + pair[0] + "\":" + id + ",\n";
+					string += "    \"" + id + "\":\"" + pair[1] + "\",\n";
 				}
 			}
 		}
 
-		string += "    \"" + name + "\":" + index.size();
+		string += "    \"" + index.size() + "\":\"" + name + "\"";
 
 		return "{\n" + string + "\n}";
 	}
@@ -1642,7 +1645,7 @@ public class DesignState extends GameState
 			string += "}\n";
 		}
 
-		string += "    ],";
+		string += "    ]";
 
 		return "{\n" + string + "\n}";
 	}

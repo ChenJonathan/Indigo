@@ -178,33 +178,25 @@ public class PlayState extends GameState
 			}
 
 			// Combat
-			if(Manager.input.mousePress())
+			if(Manager.input.mousePress() && activePhase.skillSelected())
 			{
-				if(activePhase.skillSelected())
+				// Cast skill
+				if(activePhase.canCast(activePhase.selectedSkill()))
 				{
-					// Cast skill
-					if(activePhase.canCast(activePhase.selectedSkill()))
-					{
-						activePhase.cast();
-					}
-				}
-				else if(activePhase.canNormalAttack())
-				{
-					// Manual attacking
-					if(Manager.input.mouseLeftPress())
-					{
-						player.attackMain();
-					}
-					else
-					{
-						player.attackAlt();
-					}
+					activePhase.cast();
 				}
 			}
-			else if(Manager.input.mouseLeftDown() && activePhase.canNormalAttack())
+			else if(activePhase.canNormalAttack())
 			{
-				// Automatic attacking
-				player.attackMain();
+				// Normal attacking
+				if(Manager.input.mouseLeftDown())
+				{
+					player.attackMain();
+				}
+				else if(Manager.input.mouseRightDown())
+				{
+					player.attackAlt();
+				}
 			}
 			if(Manager.input.keyPress(InputManager.CONTROL) && activePhase.canSwap() && swapCooldown == 0)
 			{

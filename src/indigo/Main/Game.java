@@ -49,9 +49,9 @@ public class Game extends JPanel implements Runnable
 	public Game()
 	{
 		JSONObject settings = ContentManager.load("/settings.json");
-		resolutionWidth = Integer.parseInt(settings.get("Resolution Width") + "");
-		resolutionHeight = Integer.parseInt(settings.get("Resolution Height") + "");
-		SoundManager.changeVolume(Integer.parseInt(settings.get("Sound Volume") + ""));
+		resolutionWidth = Integer.parseInt(settings.get("resolutionWidth") + "");
+		resolutionHeight = Integer.parseInt(settings.get("resolutionHeight") + "");
+		SoundManager.changeVolume(Integer.parseInt(settings.get("soundVolume") + ""));
 		
 		setPreferredSize(new Dimension(resolutionWidth, resolutionHeight));
 		setFocusable(true);
