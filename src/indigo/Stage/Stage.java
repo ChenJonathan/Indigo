@@ -24,13 +24,21 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-// Shows the map, including platforms, entities, and projectiles
+// Handles the map, including platforms, entities, and projectiles
 public abstract class Stage
 {
 	protected PlayState playState;
 	protected Data data;
 
 	protected Player player;
+
+	protected boolean suddenDeath;
+
+	protected ArrayList<Entity> entities;
+	protected ArrayList<Interactive> interactives;
+	protected ArrayList<Projectile> projectiles;
+	protected ArrayList<Wall> walls;
+	protected ArrayList<Platform> platforms;
 
 	private boolean camUnlocked;
 
@@ -44,8 +52,8 @@ public abstract class Stage
 	private int minOffsetX;
 	private int minOffsetY;
 
-	private double startingX;
-	private double startingY;
+	protected double startingX;
+	protected double startingY;
 
 	protected int mapX;
 	protected int mapY;
@@ -54,12 +62,6 @@ public abstract class Stage
 
 	protected BufferedImage background;
 	protected BufferedImage foreground;
-
-	protected ArrayList<Entity> entities;
-	protected ArrayList<Interactive> interactives;
-	protected ArrayList<Projectile> projectiles;
-	protected ArrayList<Wall> walls;
-	protected ArrayList<Platform> platforms;
 
 	// Distance that entities are pushed when they collide with things - Fairly arbitrary
 	public static final double PUSH_AMOUNT = 0.5;
@@ -512,7 +514,10 @@ public abstract class Stage
 	{
 		if(killed.equals(player))
 		{
-			data.setKiller(killer);
+			if(suddenDeath)
+			{
+				data.setKiller(killer);
+			}
 		}
 		else if(killed.isMarked())
 		{
@@ -671,6 +676,12 @@ public abstract class Stage
 		background = scaledBackground;
 	}
 
+	public void setStartingPosition(int x, int y)
+	{
+		startingX = x;
+		startingY = y;
+	}
+
 	public void toggleCam()
 	{
 		camUnlocked = !camUnlocked;
@@ -729,5 +740,10 @@ public abstract class Stage
 	public double getMapY()
 	{
 		return mapY;
+	}
+
+	public boolean isSuddenDeath()
+	{
+		return suddenDeath;
 	}
 }

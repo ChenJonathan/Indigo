@@ -131,7 +131,7 @@ public class Player extends Entity
 			if(animation.hasPlayed(1))
 			{
 				animation.setReverse(true);
-				while(animation.getFrame() == 0)
+				if(animation.getFrame() == 0)
 				{
 					animation.update();
 				}
@@ -150,11 +150,61 @@ public class Player extends Entity
 		}
 		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
 		{
-			if(animation.hasPlayedOnce())
+			if(animation.hasPlayed(1))
 			{
-				dead = true;
+				if(stage.isSuddenDeath())
+				{
+					dead = true;
+				}
+				else
+				{
+					flying = true;
+					solid = false;
+
+					setX(stage.getStartingX());
+					setY(stage.getStartingY());
+					removeGround();
+
+					setVelX(0);
+					setVelY(0);
+
+					animation.setReverse(true);
+					if(animation.getFrame() == 0)
+					{
+						animation.update();
+					}
+				}
+				return;
 			}
-			return;
+			else if(animation.hasPlayed(3))
+			{
+				if(phase.id() == Phase.WATER)
+				{
+					weapon = new Staff(this, Staff.DAMAGE);
+				}
+				else if(phase.id() == Phase.ICE)
+				{
+					weapon = new IceSword(this, IceSword.DAMAGE);
+				}
+
+				canAttack(true);
+				canMove(true);
+				canTurn(true);
+
+				setHealth(getMaxHealth());
+				setMana(getMaxMana());
+				setStamina(getMaxStamina());
+
+				flying = false;
+				solid = true;
+
+				// Forces animation reset
+				currentAnimation = -1;
+			}
+			else
+			{
+				return;
+			}
 		}
 
 		// Variable jump height counter
@@ -653,6 +703,14 @@ public class Player extends Entity
 		canAttack(false);
 		canMove(false);
 		canTurn(false);
+		
+		if(currentAnimation == MIST)
+		{
+			dodging = false;
+			flying = false;
+			frictionless = false;
+			solid = true;
+		}
 
 		if(isFacingRight())
 		{

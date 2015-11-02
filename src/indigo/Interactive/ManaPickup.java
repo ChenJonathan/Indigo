@@ -9,14 +9,13 @@ import java.awt.geom.Ellipse2D;
 
 public class ManaPickup extends Interactive
 {
-	private final int DEFAULT = 0;
+	private final int IDLE = 0;
+	private final int SPAWN = 1;
+	private final int DEATH = 2;
 
 	public final static int MANA = 100;
 	public final static int WIDTH = 50;
 	public final static int HEIGHT = 50;
-	public final static double SPEED = 0;
-
-	private int timer = 0;
 
 	public ManaPickup(Stage stage, double x, double y)
 	{
@@ -24,54 +23,33 @@ public class ManaPickup extends Interactive
 		width = WIDTH;
 		height = HEIGHT;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MANA_PICKUP), -1);
+		setAnimation(SPAWN, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_SPAWN), 3);
 	}
 
 	public void update()
 	{
 		super.update();
-		
-		timer++;
-		if(timer > 40)
+
+		if(currentAnimation == SPAWN)
 		{
-			timer = 0;
+			if(animation.hasPlayedOnce())
+			{
+				setAnimation(IDLE, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_IDLE), 6);
+			}
+		}
+		else if(currentAnimation == DEATH)
+		{
+			if(animation.hasPlayedOnce())
+			{
+				dead = true;
+			}
 		}
 	}
 
 	public void render(Graphics2D g)
 	{
-		if(timer < 5)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 10)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) + 2, (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 15)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) + 3, (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 20)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) + 2, (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 25)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 30)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) - 2, (int)getWidth(), (int)getHeight(), null);
-		}
-		else if(timer < 35)
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) - 3, (int)getWidth(), (int)getHeight(), null);
-		}
-		else
-		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2) - 2, (int)getWidth(), (int)getHeight(), null);
-		}
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
+				(int)getWidth(), (int)getHeight(), null);
 	}
 	
 	public String getName()
@@ -88,19 +66,18 @@ public class ManaPickup extends Interactive
 	{
 		if(player.getMana() < player.getMaxMana())
 		{
-			player.setMana(player.getMana() + MANA);
+			player.setHealth(player.getMana() + MANA);
 			die();
 		}
 	}
-	
-	public boolean isActive() // TODO Add death animation
+
+	public boolean isActive()
 	{
-		return true;
+		return currentAnimation != DEATH;
 	}
 
-	// TODO Death animation
 	public void die()
 	{
-		dead = true;
+		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_DEATH), 2);
 	}
 }

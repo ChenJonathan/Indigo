@@ -7,32 +7,26 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-public class Destination extends Interactive
+public class Checkpoint extends Interactive
 {
 	private final int DEFAULT = 0;
-	private final int DEATH = 1;
 
-	public final static int WIDTH = 110;
-	public final static int HEIGHT = 130;
+	public final static int WIDTH = 130;
+	public final static int HEIGHT = 110;
 	public final static double SPEED = 0;
 
-	public Destination(Stage stage, double x, double y)
+	public Checkpoint(Stage stage, double x, double y)
 	{
 		super(stage, x, y);
 		width = WIDTH;
 		height = HEIGHT;
-		
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_IDLE), 6);
+
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
 	}
 
 	public void update()
 	{
 		super.update();
-		
-		if(currentAnimation == DEATH && animation.hasPlayedOnce())
-		{
-			dead = true;
-		}
 	}
 
 	public void render(Graphics2D g)
@@ -43,7 +37,7 @@ public class Destination extends Interactive
 	
 	public String getName()
 	{
-		return "the destination";
+		return "a checkpoint";
 	}
 
 	public Shape getHitbox()
@@ -53,16 +47,16 @@ public class Destination extends Interactive
 
 	public void collide()
 	{
-		die();
+		stage.setStartingPosition((int)getX(), (int)getY());
 	}
 
 	public boolean isActive()
 	{
-		return currentAnimation != DEATH;
+		return true;
 	}
 
 	public void die()
 	{
-		setAnimation(DEATH, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_DEATH), 3);
+		dead = true;
 	}
 }

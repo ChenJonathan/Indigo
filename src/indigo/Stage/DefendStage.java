@@ -34,8 +34,9 @@ public class DefendStage extends Stage
 	{
 		super(playState);
 
-		player = new Player(this, (int)(long)json.get("startingX"), (int)(long)json.get("startingY"),
-				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
+		startingX = (int)(long)json.get("startingX");
+		startingY = (int)(long)json.get("startingY");
+		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
@@ -54,6 +55,7 @@ public class DefendStage extends Stage
 		core = new Core(this, (int)(long)json.get("coreX"), (int)(long)json.get("coreY"), Core.BASE_HEALTH);
 		entities.add(1, core);
 		survivalDuration = (int)(long)json.get("survivalDuration");
+		suddenDeath = false;
 
 		// Bounding walls
 		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
@@ -128,7 +130,10 @@ public class DefendStage extends Stage
 	{
 		if(killed.equals(player) || killed.equals(core))
 		{
-			data.setKiller(killer);
+			if(suddenDeath)
+			{
+				data.setKiller(killer);
+			}
 		}
 		else if(killed.isMarked())
 		{

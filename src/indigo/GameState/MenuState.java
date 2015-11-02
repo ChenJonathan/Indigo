@@ -192,14 +192,17 @@ public class MenuState extends GameState implements ActionListener
 				else if(Manager.input.mouseInRect(100, 200, 400, 100))
 				{
 					data.load(1);
+					saveLoad = false;
 				}
 				else if(Manager.input.mouseInRect(600, 200, 400, 100))
 				{
 					data.load(2);
+					saveLoad = false;
 				}
 				else if(Manager.input.mouseInRect(1100, 200, 400, 100))
 				{
 					data.load(3);
+					saveLoad = false;
 				}
 				else if(Manager.input.mouseInRect(0, 400, 1920, 680))
 				{

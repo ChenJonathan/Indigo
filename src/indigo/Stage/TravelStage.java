@@ -34,8 +34,9 @@ public class TravelStage extends Stage
 	{
 		super(playState);
 
-		player = new Player(this, (int)(long)json.get("startingX"), (int)(long)json.get("startingY"),
-				Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
+		startingX = (int)(long)json.get("startingX");
+		startingY = (int)(long)json.get("startingY");
+		player = new Player(this, startingX, startingY, Player.BASE_HEALTH, Player.BASE_MANA, Player.BASE_STAMINA);
 		entities.add(0, player);
 
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
@@ -56,6 +57,7 @@ public class TravelStage extends Stage
 		destination = new Destination(this, destinationX, destinationY);
 		interactives.add(destination);
 		timeLimit = (int)(long)json.get("timeLimit");
+		suddenDeath = false;
 
 		// Bounding walls
 		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));

@@ -5,8 +5,8 @@
     "mapX":8000,
     "mapY":3000,
 
-    "startingX":200,
-    "startingY":2000,
+    "startingX":400,
+    "startingY":1100,
 
     "timeLimit":4500,
 
@@ -145,5 +145,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":6900, "y":1600, "respawnTime":60}
         {"category":"Entity", "type":"Flying Bot", "x":6100, "y":2300, "respawnTime":60}
         {"category":"Entity", "type":"Flying Bot", "x":6100, "y":2100, "respawnTime":60}
-    ],
+        {"category":"Interactive", "type":"Checkpoint", "x":4500, "y":100, "respawnTime":-1}
+    ]
 }

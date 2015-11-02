@@ -111,7 +111,7 @@ public class DesignState extends GameState
 	public static final int SET_INTERACTIVE = 5;
 	public static final int UNDO = 6;
 	public static final int DELETE = 7;
-	public static final int CLEAR = 8;
+	public static final int MODIFY_MAP = 8;
 	public static final int SAVE = 9;
 	public static final int LOAD = 10;
 	public static final int EXIT = 11;
@@ -134,7 +134,7 @@ public class DesignState extends GameState
 		tools.put(SET_INTERACTIVE, "Set Interactive");
 		tools.put(UNDO, "Undo / Redo");
 		tools.put(DELETE, "Delete Tool");
-		tools.put(CLEAR, "Reset / Clear Map");
+		tools.put(MODIFY_MAP, "Modify Map");
 		tools.put(SAVE, "Save Map");
 		tools.put(LOAD, "Load Map");
 		tools.put(EXIT, "Exit");
@@ -146,10 +146,10 @@ public class DesignState extends GameState
 		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Blockade",
 				"Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
-		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent"});
+		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent", "Checkpoint"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
 		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
-		toolTypes.put(CLEAR, new String[] {"Reset Map", "Clear Map"});
+		toolTypes.put(MODIFY_MAP, new String[] {"Clear Map", "Delete Map"});
 		toolTypes.put(SAVE, new String[] {"Save Map"});
 		toolTypes.put(LOAD, new String[] {"Load Map"});
 		toolTypes.put(EXIT, new String[] {"Exit"});
@@ -163,7 +163,7 @@ public class DesignState extends GameState
 		descriptionText.put("Set Interactive", "Create an interactive object spawn point.");
 		descriptionText.put("Undo / Redo", "Undo or redo an action.");
 		descriptionText.put("Delete Tool", "Delete an object.");
-		descriptionText.put("Reset / Clear Map", "Reset or clear the level.");
+		descriptionText.put("Modify Map", "Clear or delete the level.");
 		descriptionText.put("Save Map", "Save the level.");
 		descriptionText.put("Load Map", "Load a level.");
 		descriptionText.put("Exit", "Exit to the main menu.");
@@ -199,12 +199,14 @@ public class DesignState extends GameState
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Steam Vent", "Periodically creates clouds of steam that damage the player. "
 				+ "Attaches itself to the nearest wall or platform upon map creation.");
+		descriptionText.put("Checkpoint", "Changes the player's respawn location. "
+				+ "Only works on maps where sudden death is disabled (Defend and Travel).");
 		descriptionText.put("Undo", "Reverts the last action. Player and objective changes are not reverted.");
 		descriptionText.put("Redo", "Reverts the last undo.");
 		descriptionText.put("Delete Land", "Deletes a wall or platform from the map.");
 		descriptionText.put("Delete Spawn", "Deletes an entity, projectile, or interactive object from the map.");
-		descriptionText.put("Reset Map", "Deletes all contents of the map but does not save or modify the file.");
-		descriptionText.put("Clear Map", "Deletes the map from the index and returns to the main menu. "
+		descriptionText.put("Clear Map", "Deletes all contents of the map but does not save or modify the file.");
+		descriptionText.put("Delete Map", "Deletes the map from the index and returns to the main menu. "
 				+ "The file still exists but the program will overwrite it automatically.");
 
 		do
@@ -634,7 +636,8 @@ public class DesignState extends GameState
 				SpawnData spawnTooltip = (SpawnData)hoverTooltip;
 				tooltipText = new String[3];
 				tooltipText[0] = "Type: " + hoverTooltip.type;
-				tooltipText[1] = "Respawn time: " + (spawnTooltip.respawnTime / 30) + "s";
+				tooltipText[1] = "Respawn time: "
+						+ (spawnTooltip.respawnTime < 0? "N/A" : (spawnTooltip.respawnTime / 30) + "s");
 				tooltipText[2] = "Coordinates: (" + spawnTooltip.x + ", " + spawnTooltip.y + ")";
 			}
 
@@ -815,6 +818,11 @@ public class DesignState extends GameState
 			if(toolTypes.get(selectedTool)[selectedToolType].equals("Blockade"))
 			{
 				addToList(new SpawnData("Entity", "Blockade", x * GRID_SCALE, y * GRID_SCALE, -1));
+				return;
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType].equals("Checkpoint"))
+			{
+				addToList(new SpawnData("Interactive", "Checkpoint", x * GRID_SCALE, y * GRID_SCALE, -1));
 				return;
 			}
 
@@ -1009,14 +1017,14 @@ public class DesignState extends GameState
 						break;
 				}
 				break;
-			case CLEAR:
+			case MODIFY_MAP:
 				switch(selectedToolType)
 				{
 					case 0:
-						reset();
+						clear();
 						break;
 					case 1:
-						clear();
+						delete();
 						break;
 				}
 				break;
@@ -1209,7 +1217,7 @@ public class DesignState extends GameState
 	/**
 	 * Attempts to reset the level.
 	 */
-	public void reset()
+	public void clear()
 	{
 		int option = JOptionPane.showConfirmDialog(null, "Reset the level?", "Indigo Level Editor",
 				JOptionPane.YES_NO_OPTION);
@@ -1236,7 +1244,7 @@ public class DesignState extends GameState
 	/**
 	 * Attempts to delete the level permanently.
 	 */
-	public void clear()
+	public void delete()
 	{
 		int option = JOptionPane.showConfirmDialog(null, "Delete the level permanently?", "Indigo Level Editor",
 				JOptionPane.YES_NO_OPTION);
