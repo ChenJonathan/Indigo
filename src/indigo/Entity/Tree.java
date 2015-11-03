@@ -76,7 +76,7 @@ public class Tree extends Entity
 			setY(intersection.getY() - getHeight() / 2);
 
 			// Check if tree is on land
-			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2)
+			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2 + 1)
 			{
 				dead = true;
 			}

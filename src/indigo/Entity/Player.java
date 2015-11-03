@@ -67,7 +67,7 @@ public class Player extends Entity
 	public static final int SHIFT_STAMINA_COST = 33;
 
 	// Amount regenerated
-	public static final int HEALTH_REGEN = 1;
+	public static final int HEALTH_REGEN = 0;
 	public static final int MANA_REGEN = 1;
 	public static final int STAMINA_REGEN = 1;
 
@@ -703,7 +703,7 @@ public class Player extends Entity
 		canAttack(false);
 		canMove(false);
 		canTurn(false);
-		
+
 		if(currentAnimation == MIST)
 		{
 			dodging = false;
@@ -779,7 +779,7 @@ public class Player extends Entity
 	{
 		return maxMana;
 	}
-	
+
 	public void setMaxMana(int mana)
 	{
 		maxMana = mana;
@@ -850,10 +850,34 @@ public class Player extends Entity
 		{
 			weapon = new Staff(this, Staff.DAMAGE);
 			iceArmor = false;
+
+			if(isCrouching())
+			{
+				if(isFacingRight())
+				{
+					setAnimation(CROUCH_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_RIGHT), -1);
+				}
+				else
+				{
+					setAnimation(CROUCH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_CROUCH_LEFT), -1);
+				}
+			}
 		}
 		else
 		{
 			weapon = new IceSword(this, IceSword.DAMAGE);
+
+			if(isCrouching())
+			{
+				if(isFacingRight())
+				{
+					setAnimation(BLOCK_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_RIGHT), -1);
+				}
+				else
+				{
+					setAnimation(BLOCK_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_BLOCK_LEFT), -1);
+				}
+			}
 		}
 	}
 

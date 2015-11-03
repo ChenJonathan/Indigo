@@ -11,9 +11,9 @@ import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class GatlingTurret extends Entity
@@ -108,9 +108,16 @@ public class GatlingTurret extends Entity
 			angle = Math.PI - groundAngle;
 
 			// Check if turret is on land
-			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2)
+			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2 + 1)
 			{
 				dead = true;
+			}
+			for(Wall wall : stage.getWalls())
+			{
+				if(intersects(wall))
+				{
+					dead = true;
+				}
 			}
 		}
 	}
@@ -272,7 +279,7 @@ public class GatlingTurret extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - 32, getY() - 32, 64, 64);
+		return new Ellipse2D.Double(getX() - 32, getY() - 32, 64, 64);
 	}
 
 	public boolean isActive()

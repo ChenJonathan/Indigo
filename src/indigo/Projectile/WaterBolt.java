@@ -1,6 +1,5 @@
 package indigo.Projectile;
 
-import indigo.Entity.Blockade;
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
 import indigo.Manager.ContentManager;

@@ -814,6 +814,17 @@ public class DesignState extends GameState
 		}
 		else if(selectedTool == SET_ENTITY || selectedTool == SET_PROJECTILE || selectedTool == SET_INTERACTIVE)
 		{
+			for(LandData land : landscape)
+			{
+				Line2D.Double line = new Line2D.Double(land.x1, land.y1, land.x2, land.y2);
+				if(line.ptSegDist(x * GRID_SCALE, y * GRID_SCALE) == 0)
+				{
+					JOptionPane.showMessageDialog(null, "Cannot place object in wall / platform. "
+							+ "Object creation cancelled.");
+					return;
+				}
+			}
+
 			// Exceptions go here
 			if(toolTypes.get(selectedTool)[selectedToolType].equals("Checkpoint"))
 			{
@@ -1739,8 +1750,8 @@ public class DesignState extends GameState
 						// Draw top-most piece
 						g.translate(x1 + centerOffset, y1);
 						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0,
-								(int)(100 * scale), 30, null);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0, (int)(100 * scale),
+								30, null);
 						g.rotate(-angle);
 						g.translate(-(x1 + centerOffset), -y1);
 
@@ -1761,12 +1772,12 @@ public class DesignState extends GameState
 						g.translate(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100
 								* (centerTiles + 1) * scale * Math.sin(angle));
 						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0,
-								(int)(100 * scale), 30, null);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0, (int)(100 * scale),
+								30, null);
 						g.rotate(-angle);
 						g.translate(-(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle)),
 								-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
-						
+
 						y1 -= heightOffset;
 					}
 				}

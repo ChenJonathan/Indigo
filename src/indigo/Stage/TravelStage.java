@@ -61,10 +61,12 @@ public class TravelStage extends Stage
 		timeLimit = (int)(long)json.get("timeLimit");
 		suddenDeath = false;
 
-		// Bounding walls
-		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
-		walls.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
-		walls.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
+		walls.add(new SkyBounds(this, -Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, -Land.THICKNESS / 2, mapY
+				- Land.THICKNESS / 2));
+		walls.add(new SkyBounds(this, mapX + Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, mapX + Land.THICKNESS
+				/ 2, mapY - Land.THICKNESS / 2));
+		walls.add(new SkyBounds(this, -Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, mapX + Land.THICKNESS / 2,
+				SKY_LIMIT - Land.THICKNESS / 2));
 
 		JSONArray array = (JSONArray)json.get("landscape");
 		if(array == null)

@@ -1,31 +1,23 @@
 package indigo.GameState;
 
-import indigo.Display.HUD;
 import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
-import indigo.Manager.SoundManager;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.json.simple.JSONObject;
-
 /**
  * The state where the main menu is displayed. Present at game startup.
  */
-public class MenuState extends GameState implements ActionListener
+public class MenuState extends GameState
 {
 	private JFrame frame; // For level selection
 
@@ -297,25 +289,7 @@ public class MenuState extends GameState implements ActionListener
 				}
 				if(Manager.input.mouseLeftRelease())
 				{
-					// TODO Go to level select
 					gsm.setState(GameStateManager.SELECT);
-
-					/*
-					JSONObject index = ContentManager.load("/index.json");
-					String[] levels = (String[])index.values().toArray(new String[0]);
-					JComboBox<String> levelSelect = new JComboBox<String>(levels);
-					levelSelect.addActionListener(this);
-
-					frame = new JFrame("");
-					frame.setSize(new Dimension(120, 100));
-					frame.setLayout(null);
-					frame.setResizable(false);
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-
-					levelSelect.setBounds(10, 10, 100, 30);
-					frame.add(levelSelect);
-					*/
 				}
 			}
 			else
@@ -399,20 +373,6 @@ public class MenuState extends GameState implements ActionListener
 			{
 				buttonState[EXIT] = NORMAL;
 			}
-		}
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		JComboBox<String> levelSelect = (JComboBox<String>)e.getSource();
-		String level = (String)levelSelect.getSelectedItem();
-		level = level.replace(" ", "_").toLowerCase();
-		if(!level.equals(""))
-		{
-			data.setStage(ContentManager.load("/levels/" + level + ".json"));
-			SoundManager.play(ContentManager.BACKGROUND_2);
-			frame.dispose();
-			gsm.setState(GameStateManager.PLAY);
 		}
 	}
 }

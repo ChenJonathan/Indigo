@@ -58,9 +58,12 @@ public class BattleStage extends Stage
 		suddenDeath = true;
 
 		// Bounding walls
-		walls.add(new Wall(this, 0, SKY_LIMIT, 0, mapY));
-		walls.add(new Wall(this, mapX, SKY_LIMIT, mapX, mapY));
-		walls.add(new SkyBounds(this, 0, SKY_LIMIT, mapX, SKY_LIMIT));
+		walls.add(new SkyBounds(this, -Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, -Land.THICKNESS / 2, mapY
+				- Land.THICKNESS / 2));
+		walls.add(new SkyBounds(this, mapX + Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, mapX + Land.THICKNESS
+				/ 2, mapY - Land.THICKNESS / 2));
+		walls.add(new SkyBounds(this, -Land.THICKNESS / 2, SKY_LIMIT - Land.THICKNESS / 2, mapX + Land.THICKNESS / 2,
+				SKY_LIMIT - Land.THICKNESS / 2));
 
 		JSONArray array = (JSONArray)json.get("landscape");
 		if(array == null)
@@ -93,7 +96,7 @@ public class BattleStage extends Stage
 	{
 		if(lastEnemy != null && !entities.contains(lastEnemy))
 		{
-			playState.endGame(true);
+			//playState.endGame(true);
 		}
 
 		// Check for dead respawnables and respawn them when time is up

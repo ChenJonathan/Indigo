@@ -92,7 +92,6 @@
         {"category":"Interactive", "type":"Steam Vent", "x":1500, "y":1400, "respawnTime":0}
         {"category":"Interactive", "type":"Steam Vent", "x":2700, "y":1100, "respawnTime":0}
         {"category":"Entity", "type":"Harvester", "x":1200, "y":1300, "respawnTime":1500}
-        {"category":"Entity", "type":"Incendiary Turret", "x":1000, "y":500, "respawnTime":0}
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1400, "respawnTime":-1}
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1200, "respawnTime":-1}
         {"category":"Entity", "type":"Blockade", "x":2200, "y":1000, "respawnTime":-1}

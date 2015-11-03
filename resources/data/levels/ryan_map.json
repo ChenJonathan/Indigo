@@ -84,7 +84,6 @@
     ],
 
     "spawns":[
-        {"category":"Entity", "type":"Gatling Turret", "x":600, "y":1500, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":1000, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":1100, "y":1000, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":1200, "y":1000, "respawnTime":9000}
@@ -151,5 +150,6 @@
         {"category":"Entity", "type":"Gatling Turret", "x":6300, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":6500, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":6800, "y":1200, "respawnTime":9000}
+        {"category":"Entity", "type":"Gatling Turret", "x":600, "y":1400, "respawnTime":9000}
     ]
 }

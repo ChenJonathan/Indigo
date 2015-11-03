@@ -14,8 +14,6 @@ import indigo.Manager.Data;
 import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -284,7 +282,8 @@ public abstract class Stage
 				if(ent.isGrounded())
 				{
 					Land prevGround = ent.getGround();
-					if(ent.getX() >= prevGround.getMinX() && ent.getX() <= prevGround.getMaxX())
+					if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
+							&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
 					{
 						ground = prevGround;
 					}
@@ -314,14 +313,14 @@ public abstract class Stage
 					{
 						ent.updateTravelLine();
 
-						if(land instanceof Wall && ((Wall)land).killsEntities() && ent.isActive())
+						if(((Wall)land).killsEntities() && ent.isActive())
 						{
 							ent.die();
 							trackDeath(((Wall)land).getName(), ent);
 						}
-						if(land instanceof Platform || ((Wall)land).blocksEntities())
+						if(((Wall)land).blocksEntities())
 						{
-							if(land instanceof Wall && !land.isHorizontal())
+							if(!land.isHorizontal())
 							{
 								if(rightOfLand(ent, land))
 								{
@@ -354,7 +353,7 @@ public abstract class Stage
 											ent.setVelY(Math.min(ent.getVelY(), 0));
 										}
 									}
-									else if(land instanceof Platform || intersectsFeet(ent, land))
+									else if(intersectsFeet(ent, land))
 									{
 										ground = land;
 										ent.setY(land.getSurface(ent.getX(), true) - ent.getHeight() / 2);

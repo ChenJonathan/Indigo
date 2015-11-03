@@ -227,15 +227,7 @@ public abstract class Entity implements Respawnable, Named
 	{
 		Area entArea = new Area(getHitbox());
 		entArea.intersect(new Area(wall.getHitbox()));
-		boolean intersects = !entArea.isEmpty();
-
-		// In case entities are spawned directly on top of walls
-		if(stage.getTime() != 0)
-		{
-			return intersects || wall.getLine().intersectsLine(travel);
-		}
-
-		return intersects;
+		return !entArea.isEmpty() || wall.getLine().intersectsLine(travel);
 	}
 
 	// Used for entity-platform collision - Utilizes previous entity feet position

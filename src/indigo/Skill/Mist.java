@@ -3,6 +3,7 @@ package indigo.Skill;
 import java.util.ArrayList;
 
 import indigo.Landscape.Land;
+import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
 import indigo.Phase.Phase;
 import indigo.Stage.Stage;
@@ -50,12 +51,28 @@ public class Mist extends Skill
 						intersectedLand.add(wall);
 					}
 				}
+				for(Platform plat : stage.getPlatforms())
+				{
+					if(stage.inProximity(player, plat) && stage.intersectsFeet(player, plat))
+					{
+						intersectedLand.add(plat);
+					}
+				}
 				if(intersectedLand.size() > 0)
 				{
 					stage.sortLandByDistance(player, intersectedLand);
 
 					for(Land land : intersectedLand)
 					{
+						if(land instanceof Platform)
+						{
+							while(stage.intersectsFeet(player, land))
+							{
+								player.setY(player.getY() - Stage.PUSH_AMOUNT);
+								player.setVelY(Math.min(player.getVelY(), 0));
+							}
+							continue;
+						}
 						if(((Wall)land).killsEntities() && player.isActive())
 						{
 							player.die();
