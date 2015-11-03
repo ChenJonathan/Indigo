@@ -14,6 +14,8 @@ import indigo.Manager.Data;
 import indigo.Manager.Manager;
 import indigo.Projectile.Projectile;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -118,7 +120,7 @@ public abstract class Stage
 						if((proj.isSolid() && wall.blocksSolidProjectiles())
 								|| (!proj.isSolid() && wall.blocksNonsolidProjectiles()))
 						{
-							Point2D.Double intersection = wall.getIntersection(new Line2D.Double(proj.getPrevX(), proj
+							Point2D intersection = wall.getHitboxIntersection(new Line2D.Double(proj.getPrevX(), proj
 									.getPrevY(), proj.getX(), proj.getY()));
 
 							proj.setX(intersection.getX());
@@ -301,7 +303,7 @@ public abstract class Stage
 					if(!ent.isFlying() && inProximity(ent, plat) && intersectsFeet(ent, plat))
 					{
 						ground = plat;
-						ent.setY(plat.getSurface(ent.getX()) - ent.getHeight() / 2);
+						ent.setY(plat.getSurface(ent.getX(), true) - ent.getHeight() / 2);
 					}
 				}
 				if(intersectedLand.size() > 0)
@@ -355,7 +357,7 @@ public abstract class Stage
 									else if(land instanceof Platform || intersectsFeet(ent, land))
 									{
 										ground = land;
-										ent.setY(land.getSurface(ent.getX()) - ent.getHeight() / 2);
+										ent.setY(land.getSurface(ent.getX(), true) - ent.getHeight() / 2);
 									}
 								}
 								// Upward collision into wall
@@ -435,7 +437,7 @@ public abstract class Stage
 	{
 		return ent.getX() < 0 || ent.getX() > getMapX() || ent.getY() < SKY_LIMIT || ent.getY() > getMapY();
 	}
-	
+
 	public boolean outOfBounds(Projectile proj)
 	{
 		return proj.getX() < 0 || proj.getX() > getMapX() || proj.getY() < SKY_LIMIT || proj.getY() > getMapY();
@@ -537,7 +539,7 @@ public abstract class Stage
 				ent.getY() + ent.getHeight() / 2);
 
 		boolean intersects = land.getLine().intersectsLine(feetCenter)
-				|| (ent.getX() >= land.getMinX() && ent.getX() <= land.getMaxX() && land.getSurface(ent.getX()) < ent
+				|| (ent.getX() >= land.getMinX() && ent.getX() <= land.getMaxX() && land.getSurface(ent.getX(), true) < ent
 						.getY() + ent.getHeight() / 2);
 
 		return intersects && ent.feetAboveLand(land);

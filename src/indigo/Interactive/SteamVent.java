@@ -73,7 +73,7 @@ public class SteamVent extends Interactive
 				groundAngle += Math.PI;
 			}
 
-			Point2D.Double intersection = closestLand.getIntersection(new Line2D.Double(getX(), getY(), getX()
+			Point2D.Double intersection = closestLand.getLineIntersection(new Line2D.Double(getX(), getY(), getX()
 					+ (minDistance + getHeight()) * Math.cos(groundAngle), getY() + (minDistance + getHeight())
 					* Math.sin(groundAngle)));
 

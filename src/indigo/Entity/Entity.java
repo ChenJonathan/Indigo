@@ -110,7 +110,7 @@ public abstract class Entity implements Respawnable, Named
 		// If the entity is grounded, take the y position corresponding to the ground
 		if(ground != null)
 		{
-			y = ground.getSurface(x) - getHeight() / 2;
+			y = ground.getSurface(x, true) - getHeight() / 2;
 			velY = 0;
 		}
 
@@ -225,21 +225,14 @@ public abstract class Entity implements Respawnable, Named
 	// Used for entity-wall collision - Checks hitbox intersection
 	public boolean intersects(Wall wall)
 	{
-		boolean intersects = false;
-
-		if(getHitbox() instanceof Rectangle2D.Double)
-		{
-			intersects = wall.getLine().intersects((Rectangle2D.Double)getHitbox());
-		}
-		else if(getHitbox() instanceof Ellipse2D.Double)
-		{
-			intersects = wall.getLine().ptSegDist(getX(), getY()) < getHeight() / 2;
-		}
+		Area entArea = new Area(getHitbox());
+		entArea.intersect(new Area(wall.getHitbox()));
+		boolean intersects = !entArea.isEmpty();
 
 		// In case entities are spawned directly on top of walls
 		if(stage.getTime() != 0)
 		{
-			intersects = intersects || wall.getLine().intersectsLine(travel);
+			return intersects || wall.getLine().intersectsLine(travel);
 		}
 
 		return intersects;

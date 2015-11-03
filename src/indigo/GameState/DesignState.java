@@ -1788,7 +1788,7 @@ public class DesignState extends GameState
 						break;
 				}
 				g.setStroke(new BasicStroke(1));
-				g.drawLine(x1, y1, x2, y2);
+				// g.drawLine(x1, y1, x2, y2);
 			}
 
 			// Draw platforms
@@ -1842,7 +1842,7 @@ public class DesignState extends GameState
 					x1 -= lateralOffset;
 					y1 -= heightOffset;
 
-					g.drawLine(x1, y1, x2, y2);
+					// g.drawLine(x1, y1, x2, y2);
 				}
 			}
 		}

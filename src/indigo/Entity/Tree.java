@@ -69,14 +69,14 @@ public class Tree extends Entity
 		}
 		else
 		{
-			Point2D.Double intersection = closestLand.getIntersection(new Line2D.Double(getX(), getY(), getX(), getY()
+			Point2D intersection = closestLand.getHitboxIntersection(new Line2D.Double(getX(), getY(), getX(), getY()
 					+ minDistance + getHeight()));
 
 			// Move tree to ground
 			setY(intersection.getY() - getHeight() / 2);
 
 			// Check if tree is on land
-			if(closestLand.getLine().ptSegDist(intersection) > 1)
+			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2)
 			{
 				dead = true;
 			}

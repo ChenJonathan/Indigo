@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 
 public abstract class Projectile implements Respawnable, Named
@@ -42,7 +43,7 @@ public abstract class Projectile implements Respawnable, Named
 	{
 		this(creator.getStage(), x, y, velX, velY, dmg);
 		this.creator = creator;
-		
+
 		if(creator instanceof Entity)
 		{
 			friendly = ((Entity)creator).isFriendly();
@@ -140,15 +141,53 @@ public abstract class Projectile implements Respawnable, Named
 	// Used for Pulse skill
 	public boolean intersects(Projectile proj)
 	{
-		Area entArea = new Area(getHitbox());
-		entArea.intersect(new Area(proj.getHitbox()));
-		return !entArea.isEmpty();
+		Area projArea = new Area(getHitbox());
+		projArea.intersect(new Area(proj.getHitbox()));
+		return !projArea.isEmpty();
 	}
 
-	// Used for projectile-wall collision - Checks if the projectile passed through the wall completely
+	// Used for projectile-wall collision - Checks if the projectile passed through the wall
 	public boolean intersects(Wall wall)
 	{
-		return wall.getLine().intersectsLine(travel);
+		PathIterator polyIt = wall.getHitbox().getPathIterator(null); // Getting an iterator along the polygon path
+		double[] coords = new double[6]; // Double array with length 6 needed by iterator
+		double[] firstCoords = new double[2]; // First point (needed for closing polygon path)
+		double[] lastCoords = new double[2]; // Previously visited point
+		polyIt.currentSegment(firstCoords); // Getting the first coordinate pair
+		lastCoords[0] = firstCoords[0]; // Priming the previous coordinate pair
+		lastCoords[1] = firstCoords[1];
+		polyIt.next();
+		while(!polyIt.isDone())
+		{
+			int type = polyIt.currentSegment(coords);
+			switch(type)
+			{
+				case PathIterator.SEG_LINETO:
+				{
+					Line2D.Double currentLine = new Line2D.Double(lastCoords[0], lastCoords[1], coords[0], coords[1]);
+					if(currentLine.intersectsLine(travel))
+					{
+						return true;
+					}
+					lastCoords[0] = coords[0];
+					lastCoords[1] = coords[1];
+					break;
+				}
+				case PathIterator.SEG_CLOSE:
+				{
+					Line2D.Double currentLine = new Line2D.Double(coords[0], coords[1], firstCoords[0], firstCoords[1]);
+					if(currentLine.intersectsLine(travel))
+					{
+						return true;
+					}
+					break;
+				}
+			}
+			polyIt.next();
+		}
+		return false;
+
+		// return wall.getLine().intersectsLine(travel);
 	}
 
 	// Used for projectile-wall collision - Utilizes previous projectile position

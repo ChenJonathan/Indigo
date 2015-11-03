@@ -97,7 +97,7 @@ public class IncendiaryTurret extends Entity
 				groundAngle += Math.PI;
 			}
 
-			Point2D.Double intersection = closestLand.getIntersection(new Line2D.Double(getX(), getY(), getX()
+			Point2D intersection = closestLand.getHitboxIntersection(new Line2D.Double(getX(), getY(), getX()
 					+ (minDistance + getHeight()) * Math.cos(groundAngle), getY() + (minDistance + getHeight())
 					* Math.sin(groundAngle)));
 
@@ -107,7 +107,7 @@ public class IncendiaryTurret extends Entity
 			angle = Math.PI - groundAngle;
 
 			// Check if turret is on land
-			if(closestLand.getLine().ptSegDist(intersection) > 1)
+			if(closestLand.getLine().ptSegDist(intersection) > Land.THICKNESS / 2)
 			{
 				dead = true;
 			}

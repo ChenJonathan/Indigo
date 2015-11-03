@@ -1,8 +1,10 @@
 package indigo.Entity;
 
+import indigo.Landscape.Land;
 import indigo.Landscape.Wall;
 import indigo.Stage.Stage;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -46,14 +48,18 @@ public class Blockade extends Entity
 		else
 		{
 			walls = new Wall[4];
-			walls[0] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2,
-					getY() - getHeight() / 2);
-			walls[1] = new Wall(stage, getX() - getWidth() / 2, getY() + getHeight() / 2, getX() + getWidth() / 2,
-					getY() + getHeight() / 2);
-			walls[2] = new Wall(stage, getX() - getWidth() / 2, getY() - getHeight() / 2, getX() - getWidth() / 2,
-					getY() + getHeight() / 2);
-			walls[3] = new Wall(stage, getX() + getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2,
-					getY() + getHeight() / 2);
+			walls[0] = new Wall(stage, getX() - getWidth() / 2 + Land.THICKNESS / 2, getY() - getHeight() / 2
+					+ Land.THICKNESS / 2, getX() + getWidth() / 2 - Land.THICKNESS / 2, getY() - getHeight() / 2
+					+ Land.THICKNESS / 2);
+			walls[1] = new Wall(stage, getX() - getWidth() / 2 + Land.THICKNESS / 2, getY() + getHeight() / 2
+					- Land.THICKNESS / 2, getX() + getWidth() / 2 - Land.THICKNESS / 2, getY() + getHeight() / 2
+					- Land.THICKNESS / 2);
+			walls[2] = new Wall(stage, getX() - getWidth() / 2 + Land.THICKNESS / 2, getY() - getHeight() / 2
+					+ Land.THICKNESS / 2, getX() - getWidth() / 2 + Land.THICKNESS / 2, getY() + getHeight() / 2
+					- Land.THICKNESS / 2);
+			walls[3] = new Wall(stage, getX() + getWidth() / 2 - Land.THICKNESS / 2, getY() - getHeight() / 2
+					+ Land.THICKNESS / 2, getX() + getWidth() / 2 - Land.THICKNESS / 2, getY() + getHeight() / 2
+					- Land.THICKNESS / 2);
 		}
 
 		for(Wall wall : walls)
@@ -69,6 +75,7 @@ public class Blockade extends Entity
 
 	public void render(Graphics2D g)
 	{
+		g.setColor(Color.GRAY);
 		g.fillRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)(getWidth()),
 				(int)(getHeight()));
 		// g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
