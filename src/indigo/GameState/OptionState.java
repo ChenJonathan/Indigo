@@ -1,6 +1,8 @@
 package indigo.GameState;
 
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
+import indigo.Manager.Manager;
 
 import java.awt.Graphics2D;
 
@@ -27,14 +29,15 @@ public class OptionState extends GameState
 	}
 
 	/**
-	 * INCOMPLETE
+	 * Renders the options menu.
 	 * 
 	 * @param g The graphics to be rendered.
 	 */
 	@Override
 	public void render(Graphics2D g)
 	{
-		// Draw things
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
 	}
 
 	/**
@@ -43,8 +46,12 @@ public class OptionState extends GameState
 	@Override
 	public void handleInput()
 	{
-		/*
-		 * Check checkboxes based on selected options Change state on "back"
-		 */
+		if(Manager.input.mouseLeftRelease())
+		{
+			if(Manager.input.mouseInRect(100, 873, 360, 107))
+			{
+				gsm.setOptions(false);
+			}
+		}
 	}
 }

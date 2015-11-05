@@ -88,13 +88,13 @@
         {"category":"Entity", "type":"Flying Bot", "x":1100, "y":1000, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":1200, "y":1000, "respawnTime":9000}
         {"category":"Entity", "type":"Blockade", "x":700, "y":1000, "respawnTime":-1}
-        {"category":"Entity", "type":"Incendiary Turret", "x":300, "y":600, "respawnTime":9000}
+        {"category":"Entity", "type":"Incendiary Turret", "x":300, "y":630, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":100, "y":100, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":200, "y":100, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":300, "y":100, "respawnTime":9000}
         {"category":"Entity", "type":"Blockade", "x":600, "y":100, "respawnTime":-1}
         {"category":"Entity", "type":"Harvester", "x":2200, "y":200, "respawnTime":9000}
-        {"category":"Entity", "type":"Gatling Turret", "x":2500, "y":0, "respawnTime":9000}
+        {"category":"Entity", "type":"Gatling Turret", "x":2500, "y":20, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7800, "y":100, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7900, "y":100, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7800, "y":300, "respawnTime":9000}
@@ -113,7 +113,7 @@
         {"category":"Interactive", "type":"Health Pickup", "x":3400, "y":200, "respawnTime":9000}
         {"category":"Entity", "type":"Incendiary Turret", "x":3800, "y":1400, "respawnTime":9000}
         {"category":"Entity", "type":"Incendiary Turret", "x":4300, "y":1400, "respawnTime":9000}
-        {"category":"Entity", "type":"Incendiary Turret", "x":7400, "y":200, "respawnTime":9000}
+        {"category":"Entity", "type":"Incendiary Turret", "x":7400, "y":230, "respawnTime":9000}
         {"category":"Projectile", "type":"Steel Beam", "x":200, "y":900, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":500, "y":900, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":400, "y":900, "respawnTime":60}
@@ -145,8 +145,8 @@
         {"category":"Entity", "type":"Flying Bot", "x":5400, "y":1100, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":4900, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7200, "y":1300, "respawnTime":9000}
-        {"category":"Entity", "type":"Gatling Turret", "x":400, "y":0, "respawnTime":9000}
-        {"category":"Entity", "type":"Gatling Turret", "x":400, "y":200, "respawnTime":9000}
+        {"category":"Entity", "type":"Gatling Turret", "x":400, "y":30, "respawnTime":9000}
+        {"category":"Entity", "type":"Gatling Turret", "x":400, "y":170, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":6300, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":6500, "y":1200, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":6800, "y":1200, "respawnTime":9000}

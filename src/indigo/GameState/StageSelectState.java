@@ -44,25 +44,26 @@ public class StageSelectState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
-		g.drawImage(ContentManager.getImage(ContentManager.STAGE_SELECT_BACKGROUND), 0, 0, 1920, 1080, null);
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
 
 		// Draw selection box
-		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 100, 100, 300, 75, null);
+		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 600, 100, 300, 75, null);
 		if(levelIndex != 0)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 100, 100, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 600, 100, 60, 75, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 100, 100, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 600, 100, 60, 75, null);
 		}
 		if(levelIndex != levels.length - 1)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 340, 100, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 840, 100, 60, 75, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 340, 100, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 840, 100, 60, 75, null);
 		}
 
 		// Draw tool type text
@@ -70,7 +71,7 @@ public class StageSelectState extends GameState
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		FontMetrics fontMetrics = g.getFontMetrics();
 		String text = levels[levelIndex];
-		g.drawString(text, 250 - fontMetrics.stringWidth(text) / 2, 138 + fontMetrics.getHeight() / 4);
+		g.drawString(text, 750 - fontMetrics.stringWidth(text) / 2, 138 + fontMetrics.getHeight() / 4);
 	}
 
 	/**
@@ -80,19 +81,23 @@ public class StageSelectState extends GameState
 	{
 		if(Manager.input.mouseLeftRelease())
 		{
-			if(Manager.input.mouseInRect(100, 100, 60, 75) && levelIndex != 0)
+			if(Manager.input.mouseInRect(600, 100, 60, 75) && levelIndex != 0)
 			{
 				levelIndex--;
 			}
-			else if(Manager.input.mouseInRect(340, 100, 60, 75) && levelIndex != levels.length - 1)
+			else if(Manager.input.mouseInRect(840, 100, 60, 75) && levelIndex != levels.length - 1)
 			{
 				levelIndex++;
 			}
-			else if(Manager.input.mouseInRect(160, 100, 180, 75))
+			else if(Manager.input.mouseInRect(660, 100, 180, 75))
 			{
 				String levelName = levels[levelIndex].replace(" ", "_").toLowerCase();
 				data.setStage(ContentManager.load("/levels/" + levelName + ".json"));
 				gsm.setState(GameStateManager.PLAY);
+			}
+			else if(Manager.input.mouseInRect(100, 873, 360, 107))
+			{
+				gsm.setState(GameStateManager.MENU);
 			}
 		}
 	}

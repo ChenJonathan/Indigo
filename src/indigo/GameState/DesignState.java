@@ -424,8 +424,7 @@ public class DesignState extends GameState
 		}
 
 		// Draw background
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, Game.WIDTH, Game.HEIGHT, null);
 
 		// Draw grid
 		g.setColor(Color.BLACK);

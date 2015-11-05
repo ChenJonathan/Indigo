@@ -161,7 +161,7 @@ public abstract class Stage
 			// Collision loops
 			if(ent.isActive())
 			{
-				// Entity-item: Allows player to use items
+				// Entity-interactive: Player interacts with interactive objects
 				if(ent.equals(player))
 				{
 					for(int itemCount = 0; itemCount < interactives.size(); itemCount++)
@@ -599,14 +599,6 @@ public abstract class Stage
 			{
 				camForeX -= CAMERA_SPEED;
 			}
-			if(camForeX > (int)(player.getX() - Game.WIDTH * 0.1))
-			{
-				camForeX = (int)(player.getX() - Game.WIDTH * 0.1);
-			}
-			else if(camForeX < (int)(player.getX() - Game.WIDTH * 0.9))
-			{
-				camForeX = (int)(player.getX() - Game.WIDTH * 0.9);
-			}
 
 			if(Manager.input.mouseY() > Game.HEIGHT * 0.9)
 			{
@@ -615,14 +607,6 @@ public abstract class Stage
 			else if(Manager.input.mouseY() < Game.HEIGHT * 0.1)
 			{
 				camForeY -= CAMERA_SPEED;
-			}
-			if(camForeY > (int)(player.getY() - Game.HEIGHT * 0.1))
-			{
-				camForeY = (int)(player.getY() - Game.HEIGHT * 0.1);
-			}
-			else if(camForeY < (int)(player.getY() - Game.HEIGHT * 0.9 + HUD.HEIGHT))
-			{
-				camForeY = (int)(player.getY() - Game.HEIGHT * 0.9 + HUD.HEIGHT);
 			}
 		}
 		else

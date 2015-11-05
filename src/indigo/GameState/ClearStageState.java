@@ -1,5 +1,7 @@
 package indigo.GameState;
 
+import indigo.Main.Game;
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
@@ -38,6 +40,8 @@ public class ClearStageState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, Game.WIDTH, Game.HEIGHT, null);
+		
 		String message = "";
 		if(data.getVictory())
 		{
