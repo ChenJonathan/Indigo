@@ -1709,9 +1709,6 @@ public class DesignState extends GameState
 
 					scale = (land.length) / (centerTiles * 100 + 200);
 
-					//					if(land.horizontal)
-					//					{
-					// Draw leftmost piece
 					g.translate(x1, y1);
 					g.rotate(angle, 0, Land.THICKNESS / 2);
 					g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT),
@@ -1741,49 +1738,6 @@ public class DesignState extends GameState
 					g.rotate(-angle, 0, Land.THICKNESS / 2);
 					g.translate(-(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle)),
 							-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
-					// }
-					//					else if(!land.horizontal)
-					//					{
-					//						int heightOffset = -5;
-					//						y1 += heightOffset;
-					//						if(Math.abs(land.slope) > 999)
-					//						{
-					//							heightOffset = 0;
-					//						}
-					//						int centerOffset = (y1 > y2)? -15 : 15;
-					//						// Draw top-most piece
-					//						g.translate(x1 + centerOffset, y1);
-					//						g.rotate(angle);
-					//						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0, (int)(100 * scale),
-					//								30, null);
-					//						g.rotate(-angle);
-					//						g.translate(-(x1 + centerOffset), -y1);
-					//
-					//						// Draw center pieces, if any
-					//						for(int i = 1; i <= centerTiles; i++)
-					//						{
-					//							g.translate(x1 + centerOffset + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale
-					//									* Math.sin(angle));
-					//							g.rotate(angle);
-					//							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0,
-					//									(int)(100 * scale), 30, null);
-					//							g.rotate(-angle);
-					//							g.translate(-(x1 + centerOffset + 100 * i * scale * Math.cos(angle)), -(y1 + 100 * i
-					//									* scale * Math.sin(angle)));
-					//						}
-					//
-					//						// Draw bottom-most piece
-					//						g.translate(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100
-					//								* (centerTiles + 1) * scale * Math.sin(angle));
-					//						g.rotate(angle);
-					//						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0, (int)(100 * scale),
-					//								30, null);
-					//						g.rotate(-angle);
-					//						g.translate(-(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle)),
-					//								-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
-					//
-					//						y1 -= heightOffset;
-					//					}
 				}
 
 				// TODO Temporary
@@ -1874,6 +1828,45 @@ public class DesignState extends GameState
 						g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
 						g.rotate(angle, 0, Land.THICKNESS / 2);
 						g.drawImage(ContentManager.getImage(ContentManager.FORCE_FIELD),
+								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+						g.rotate(-angle, 0, Land.THICKNESS / 2);
+						g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
+								-(y1 + 100 * i * scale * Math.sin(angle)));
+					}
+					// g.drawLine(x1, y1, x2, y2);
+				}
+			}
+			// Draw spike pits
+			for(LandData land : landscape)
+			{
+				if(land.type.equals("Spike Wall"))
+				{
+					int x1 = (int)land.x1;
+					int y1 = (int)land.y1;
+					int x2 = (int)land.x2;
+					int y2 = (int)land.y2;
+					double angle = Math.atan(land.slope);
+					double scale = 0;
+					if(x2 < x1)
+					{
+						int temp = 0;
+						temp = x2;
+						x2 = x1;
+						x1 = temp;
+						temp = y2;
+						y2 = y1;
+						y1 = temp;
+					}
+					int tiles = 0;
+					tiles = (int)((land.length) / 100);
+					tiles = Math.max(1, tiles); // Ensures at least one tile
+					scale = (land.length) / (tiles * 100);
+					for(int i = 0; i < tiles; i++)
+					{
+						g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+						g.rotate(angle, 0, Land.THICKNESS / 2);
+						g.drawImage(ContentManager.getImage(ContentManager.SPIKE_WALL),
 								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
 								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
 						g.rotate(-angle, 0, Land.THICKNESS / 2);

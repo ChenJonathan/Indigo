@@ -35,6 +35,7 @@ public class ContentManager
 	// Elements
 	public static ImageData FORCE_FIELD = new ImageData("/images/elements/force_field.png", 100, 30);
 	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 290, 70);
+	public static ImageData SPIKE_WALL = new ImageData("/images/elements/spike_wall.png", 100, 30);
 	public static ImageData STONE_TILE_LEFT = new ImageData("/images/elements/stone_tile_left.png", 100, 30);
 	public static ImageData STONE_TILE_CENTER = new ImageData("/images/elements/stone_tile_center.png", 100, 30);
 	public static ImageData STONE_TILE_RIGHT = new ImageData("/images/elements/stone_tile_right.png", 100, 30);
