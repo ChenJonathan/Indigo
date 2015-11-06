@@ -5,13 +5,19 @@ import indigo.Manager.GameStateManager;
 import indigo.Manager.Manager;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+
+import org.json.simple.JSONObject;
 
 /**
  * The state where the main menu is displayed. Present at game startup.
  */
 public class MenuState extends GameState
 {
+	JSONObject[] saves;
+
 	// Whether certain subsections of the main menu are open or not
 	private boolean instructions;
 	private boolean credits;
@@ -39,7 +45,13 @@ public class MenuState extends GameState
 		credits = false;
 		saveLoad = false;
 
-		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
+		// Loading save information
+		saves = new JSONObject[3];
+		for(int slot = 1; slot <= 3; slot++)
+		{
+			String fileName = "slot" + slot;
+			saves[slot - 1] = ContentManager.load("/saves/" + fileName + ".json");
+		}
 	}
 
 	@Override
@@ -77,6 +89,17 @@ public class MenuState extends GameState
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1435, 383, 360, 107, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 1050, 641, 360, 107, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1435, 641, 360, 107, null);
+
+			for(int slot = 0; slot < saves.length; slot++)
+			{
+				if(saves[slot] != null)
+				{
+					g.setColor(Color.BLACK);
+					g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+					FontMetrics fontMetrics = g.getFontMetrics();
+					g.drawString(saves[slot].get("name") + "", 125, 179 + slot * 258 + fontMetrics.getHeight() / 4);
+				}
+			}
 		}
 		else if(credits)
 		{

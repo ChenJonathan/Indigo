@@ -106,7 +106,7 @@ public class Player extends Entity
 
 		weapon = new Staff(this, Staff.DAMAGE);
 
-		setAnimation(GROUND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_IDLE_RIGHT), 15);
+		setAnimation(JUMP_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_JUMP_LEFT), -1);
 	}
 
 	public void update()

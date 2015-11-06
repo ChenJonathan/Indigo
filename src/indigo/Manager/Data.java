@@ -22,7 +22,7 @@ public class Data
 	private JSONObject currentStage;
 	private int unlockedStages;
 	private int clearTime;
-	private boolean victory = true;
+	private boolean victory;
 
 	private String killer;
 	private String deathMessage;
@@ -52,7 +52,7 @@ public class Data
 
 		JSONObject settings = ContentManager.load("/settings.json");
 		autosave = Boolean.parseBoolean(settings.get("autosave") + "");
-		currentSlot = -1;
+		currentSlot = 0;
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class Data
 	 */
 	public void save(int slot)
 	{
-		if(slot == -1)
+		if(slot == 0)
 		{
 			return;
 		}

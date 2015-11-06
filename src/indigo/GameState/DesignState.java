@@ -1,5 +1,6 @@
 package indigo.GameState;
 
+import indigo.Landscape.Land;
 import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
@@ -142,7 +143,7 @@ public class DesignState extends GameState
 		// Initialize tool types
 		toolTypes.put(SET_PLAYER, new String[] {"Player"});
 		toolTypes.put(SET_OBJECTIVE, new String[] {"Battle", "Defend", "Survival", "Travel"});
-		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Pit", "Force Field"});
+		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Wall", "Force Field"});
 		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Blockade",
 				"Harvester", "Tree"});
 		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
@@ -177,7 +178,7 @@ public class DesignState extends GameState
 		descriptionText.put("Platform", "A nonsolid platform that can be both jumped through and landed on. "
 				+ "Must be more horizontal than vertical or the platform will not be created.");
 		descriptionText.put("Wall", "An impassable wall.");
-		descriptionText.put("Spike Pit", "A wall that instantly kills solid entities upon contact.");
+		descriptionText.put("Spike Wall", "A wall that instantly kills solid entities upon contact.");
 		descriptionText.put("Force Field", "A wall that lets entities through but destroys all projectiles.");
 		descriptionText.put("Flying Bot", "A flying robot that can shoot left or right.");
 		descriptionText.put("Gatling Turret", "A stationary turret that can rotate its arm towards its target. "
@@ -449,7 +450,7 @@ public class DesignState extends GameState
 				case "Platform":
 					g.setColor(Color.GREEN);
 					break;
-				case "Spike Pit":
+				case "Spike Wall":
 					g.setColor(Color.RED);
 					break;
 				case "Force Field":
@@ -828,6 +829,11 @@ public class DesignState extends GameState
 			if(toolTypes.get(selectedTool)[selectedToolType].equals("Checkpoint"))
 			{
 				addToList(new SpawnData("Interactive", "Checkpoint", x * GRID_SCALE, y * GRID_SCALE, -1));
+				return;
+			}
+			else if(toolTypes.get(selectedTool)[selectedToolType].equals("Steam Vent"))
+			{
+				addToList(new SpawnData("Interactive", "Steam Vent", x * GRID_SCALE, y * GRID_SCALE, -1));
 				return;
 			}
 
@@ -1787,7 +1793,7 @@ public class DesignState extends GameState
 					case "Platform":
 						g.setColor(Color.BLACK);
 						break;
-					case "Spike Pit":
+					case "Spike Wall":
 						g.setColor(Color.RED);
 						break;
 					case "Force Field":
@@ -1810,10 +1816,8 @@ public class DesignState extends GameState
 					int y1 = (int)land.y1;
 					int x2 = (int)land.x2;
 					int y2 = (int)land.y2;
-
 					double angle = Math.atan(land.slope);
 					double scale = 0;
-
 					if(x2 < x1)
 					{
 						int temp = 0;
@@ -1824,35 +1828,21 @@ public class DesignState extends GameState
 						y2 = y1;
 						y1 = temp;
 					}
-
 					int tiles = 0;
-					tiles = (int)((land.length) / 300);
+					tiles = (int)((land.length) / 290);
 					tiles = Math.max(1, tiles); // Ensures at least one tile
-
-					scale = (land.length) / (tiles * 300);
-					int lateralOffset = 0;
-					lateralOffset = (land.slope > 0 && land.slope != 0)? lateralOffset - 5 : lateralOffset - 16;
-					lateralOffset = (land.slope == 0)? -10 : lateralOffset;
-					x1 += lateralOffset;
-					int heightOffset = 0;
-					heightOffset = (land.slope > 0)? heightOffset - 20 : heightOffset - 8;
-					heightOffset = (land.slope == 0)? -12 : heightOffset;
-					y1 += heightOffset;
-
+					scale = (land.length) / (tiles * 290);
 					for(int i = 0; i < tiles; i++)
 					{
-						g.translate(x1 + 300 * i * scale * Math.cos(angle), y1 + 300 * i * scale * Math.sin(angle));
-						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM), 0, 0, (int)(300 * (scale + .05)),
-								100, null);
-						g.rotate(-angle);
-						g.translate(-(x1 + 300 * i * scale * Math.cos(angle)),
-								-(y1 + 300 * i * scale * Math.sin(angle)));
+						g.translate(x1 + 290 * i * scale * Math.cos(angle), y1 + 270 * i * scale * Math.sin(angle));
+						g.rotate(angle, 0, Land.THICKNESS / 2);
+						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM),
+								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(290 * (scale)), 70, null);
+						g.rotate(-angle, 0, Land.THICKNESS / 2);
+						g.translate(-(x1 + 290 * i * scale * Math.cos(angle)),
+								-(y1 + 290 * i * scale * Math.sin(angle)));
 					}
-					x1 -= lateralOffset;
-					y1 -= heightOffset;
-
-					// g.drawLine(x1, y1, x2, y2);
 				}
 			}
 		}

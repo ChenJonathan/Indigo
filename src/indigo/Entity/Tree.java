@@ -80,6 +80,13 @@ public class Tree extends Entity
 			{
 				dead = true;
 			}
+			for(Wall wall : stage.getWalls())
+			{
+				if(intersects(wall))
+				{
+					dead = true;
+				}
+			}
 		}
 
 		if(!isDead())

@@ -33,7 +33,7 @@ public class ContentManager
 	public static ImageData CURSOR = new ImageData("/images/cursor/crosshair.png", 32, 32);
 
 	// Elements
-	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 300, 100);
+	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 290, 70);
 	public static ImageData STONE_TILE_LEFT = new ImageData("/images/elements/stone_tile_left.png", 100, 30);
 	public static ImageData STONE_TILE_CENTER = new ImageData("/images/elements/stone_tile_center.png", 100, 30);
 	public static ImageData STONE_TILE_RIGHT = new ImageData("/images/elements/stone_tile_right.png", 100, 30);
@@ -380,7 +380,7 @@ public class ContentManager
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("File not found.");
 		}
 		return null;
 	}
