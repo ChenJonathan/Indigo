@@ -18,7 +18,7 @@ public class FrostOrb extends Projectile
 	private final int DEATH = 1;
 	private final int DEATH_WALL = 2;
 
-	public static final int DAMAGE = 100;
+	public static final int DAMAGE = 30;
 	public static final int WIDTH = 110;
 	public static final int HEIGHT = 110;
 	public static final double SPEED = 50;
@@ -83,11 +83,17 @@ public class FrostOrb extends Projectile
 
 	public void collide(Entity ent)
 	{
-		if(!ent.isDodging())
+		if(currentAnimation == DEATH && !ent.isDodging())
+		{
+			if(!ent.isBlocking(ent.getX() > getX()))
+			{
+				ent.setHealth(ent.getHealth() - damage / 5);
+			}
+		}
+		else if(currentAnimation != DEATH && !ent.isDodging())
 		{
 			if(!(ent.isBlocking(isFacingRight())))
 			{
-				ent.mark();
 				ent.setHealth(ent.getHealth() - damage);
 			}
 			die();
@@ -117,7 +123,7 @@ public class FrostOrb extends Projectile
 
 	public boolean isActive()
 	{
-		return currentAnimation != DEATH && currentAnimation != DEATH_WALL;
+		return true;
 	}
 
 	public void die()

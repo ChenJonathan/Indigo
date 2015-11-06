@@ -30,7 +30,7 @@ import org.json.simple.parser.JSONParser;
 public class ContentManager
 {
 	// Cursor
-	public static ImageData CURSOR = new ImageData("/images/cursor/crosshair.png", 32, 32);
+	public static ImageData CURSOR = new ImageData("/images/cursor/cursor.png", 50, 50);
 
 	// Elements
 	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 290, 70);
@@ -151,7 +151,7 @@ public class ContentManager
 			8);
 	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
-	public static AnimationData TREE_DEFAULT = new AnimationData("/images/sprites/tree/default.png", 150, 600, 1);
+	public static AnimationData TREE_DEFAULT = new AnimationData("/images/sprites/tree/default.png", 660, 960, 1);
 	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130,
 			110, 7);
 	public static AnimationData TURRET_BASE_DEFAULT = new AnimationData("/images/sprites/turret/base_default.png", 130,
@@ -193,7 +193,7 @@ public class ContentManager
 
 	// Sounds
 
-	// TEMPORARY BACKGROUND MUSIC
+	// Music
 	public static SoundData BACKGROUND_1 = new SoundData("/sounds/background/Link and Zelda's Duet.mid", true);
 	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda Medley.mid", true);
 	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates of the Caribbean Medley.mid", true);
@@ -221,7 +221,9 @@ public class ContentManager
 	{
 		BufferedImage img = imageMap.get(id);
 		if(img != null)
+		{
 			return img;
+		}
 		img = load(id);
 		imageMap.put(id, img);
 		return img;
@@ -235,7 +237,9 @@ public class ContentManager
 	{
 		BufferedImage[] ani = animationMap.get(ad);
 		if(ani != null)
+		{
 			return ani;
+		}
 		ani = load(ad);
 		animationMap.put(ad, ani);
 		return ani;
@@ -249,7 +253,9 @@ public class ContentManager
 	{
 		byte[] snd = soundMap.get(sd);
 		if(snd != null)
+		{
 			return snd;
+		}
 		snd = load(sd);
 		soundMap.put(sd, snd);
 		return snd;

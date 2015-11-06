@@ -452,11 +452,11 @@ public abstract class Stage
 
 		for(int count = 0; count < landscape.size(); count++)
 		{
-			double length = landscape.get(count).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY());
+			double length = landscape.get(count).getDistance(new Point2D.Double(ent.getPrevX(), ent.getPrevY()));
 
 			for(int current = count + 1; current < landscape.size(); current++)
 			{
-				if(landscape.get(current).getLine().ptSegDist(ent.getPrevX(), ent.getPrevY()) < length)
+				if(landscape.get(current).getDistance(new Point2D.Double(ent.getPrevX(), ent.getPrevY())) < length)
 				{
 					Land temp = landscape.get(count);
 					landscape.set(count, landscape.get(current));
@@ -476,11 +476,11 @@ public abstract class Stage
 
 		for(int count = 0; count < walls.size(); count++)
 		{
-			double length = walls.get(count).getLine().ptSegDist(proj.getPrevX(), proj.getPrevY());
+			double length = walls.get(count).getDistance(new Point2D.Double(proj.getPrevX(), proj.getPrevY()));
 
 			for(int current = count + 1; current < walls.size(); current++)
 			{
-				if(walls.get(current).getLine().ptSegDist(proj.getPrevX(), proj.getPrevY()) < length)
+				if(walls.get(current).getDistance(new Point2D.Double(proj.getPrevX(), proj.getPrevY())) < length)
 				{
 					Wall temp = walls.get(count);
 					walls.set(count, walls.get(current));

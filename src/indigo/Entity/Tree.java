@@ -15,8 +15,8 @@ import java.awt.geom.Rectangle2D;
 
 public class Tree extends Entity
 {
-	public static final double TREE_WIDTH = 150;
-	public static final double TREE_HEIGHT = 600;
+	public static final double TREE_WIDTH = 660;
+	public static final double TREE_HEIGHT = 960;
 	public static final int BASE_HEALTH = 250;
 
 	private static final int DEFAULT = 0;
@@ -155,7 +155,7 @@ public class Tree extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - 30, getY() - 60 / 2, 60, 60 + getHeight() / 2);
 	}
 
 	public boolean isActive()

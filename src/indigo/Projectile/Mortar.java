@@ -10,6 +10,8 @@ import java.awt.geom.Ellipse2D;
 
 public class Mortar extends Projectile
 {
+	private int timer;
+	
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
@@ -25,6 +27,8 @@ public class Mortar extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = false;
+		
+		timer = 0;
 
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
 	}
@@ -42,6 +46,7 @@ public class Mortar extends Projectile
 		else
 		{
 			super.update();
+			timer++;
 		}
 	}
 
@@ -51,7 +56,7 @@ public class Mortar extends Projectile
 		{
 			g.drawImage(animation.getImage(), (int)getX() - WIDTH, (int)getY() - HEIGHT, WIDTH * 2, HEIGHT * 2, null);
 		}
-		else
+		else if(timer > 1)
 		{
 			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
 		}

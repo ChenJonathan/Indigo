@@ -30,8 +30,8 @@ public class Game extends JPanel implements Runnable
 
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
-	public static final int CURSOR_WIDTH = 32;
-	public static final int CURSOR_HEIGHT = 32;
+	public static final int CURSOR_WIDTH = 50;
+	public static final int CURSOR_HEIGHT = 50;
 
 	public static final int FPS = 30;
 
@@ -175,7 +175,7 @@ public class Game extends JPanel implements Runnable
 	public void setCursor(BufferedImage image)
 	{
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Cursor c = toolkit.createCustomCursor(image, new Point(CURSOR_WIDTH / 2, CURSOR_HEIGHT / 2), "Cursor");
+		Cursor c = toolkit.createCustomCursor(image, new Point(0, 0), "Cursor");
 		setCursor(c);
 	}
 }
