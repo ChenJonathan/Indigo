@@ -28,7 +28,7 @@ public class Tree extends Entity
 
 	public Tree(Stage stage, double x, double y)
 	{
-		this(stage, x, y, BASE_HEALTH, new double[][] { {-175, -200}, {175, -200,}, {-175, 50}, {175, 50}});
+		this(stage, x, y, BASE_HEALTH, new double[][] { {-80, 50}, {80, 50,}, {-80, 250}, {80, 250}});
 	}
 
 	public Tree(Stage stage, double x, double y, int health, double[][] branchData)
@@ -95,7 +95,7 @@ public class Tree extends Entity
 			branchPosition = branchData;
 			for(int i = 0; i < branches.length; i++)
 			{
-				branches[i] = new Branch(stage, getX() + branchData[i][0], getY() + branchData[i][1]);
+				branches[i] = new Branch(stage, getX(), getY() + branchData[i][1], branchData[i][0] >= 0);
 				stage.getInteractives().add(branches[i]);
 				branchPosition[i][0] = branches[i].getX();
 				branchPosition[i][1] = branches[i].getY();
@@ -134,7 +134,7 @@ public class Tree extends Entity
 
 			if(branchTimer[i] == 150)
 			{
-				branches[i] = new Branch(stage, branchPosition[i][0], branchPosition[i][1]);
+				branches[i] = new Branch(stage, getX(), branchPosition[i][1], branchPosition[i][0] >= 0);
 				stage.getInteractives().add(branches[i]);
 				branchTimer[i] = 0;
 				branchAlive[i] = true;
@@ -155,7 +155,7 @@ public class Tree extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - 30, getY() - 60 / 2, 60, 60 + getHeight() / 2);
+		return new Rectangle2D.Double(getX() - 20, getY() - 60, 60, 60 + getHeight() / 2);
 	}
 
 	public boolean isActive()

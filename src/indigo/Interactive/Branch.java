@@ -11,29 +11,35 @@ import java.awt.geom.Rectangle2D;
 
 public class Branch extends Interactive
 {
-
-	public final static int HEALTH = 100;
-	public final static int WIDTH = 200;
-	public final static int HEIGHT = 50;
-	public final static double SPEED = 0;
+	public final static int WIDTH = 240;
+	public final static int HEIGHT = 75;
 	public final static int DURATION = 60;
 
 	private int timer = 0;
 	private boolean breaking = false;
 	private Platform platform;
 
-	public Branch(Stage stage, double x, double y)
+	public Branch(Stage stage, double x, double y, boolean direction)
 	{
 		super(stage, x, y);
 
 		width = WIDTH;
 		height = HEIGHT;
 
-		platform = new Platform(this.stage, x - getWidth() / 2, y - getHeight() / 2, x + getWidth() / 2, y
-				- getHeight() / 2);
-		stage.getPlatforms().add(platform);
+		if(direction)
+		{
+			setX(getX() + WIDTH / 2 + 25);
+			setAnimation(0, ContentManager.getAnimation(ContentManager.BRANCH_RIGHT), -1);
+		}
+		else
+		{
+			setX(getX() - WIDTH / 2 - 5);
+			setAnimation(0, ContentManager.getAnimation(ContentManager.BRANCH_LEFT), -1);
+		}
 
-		setAnimation(0, ContentManager.getAnimation(ContentManager.BRANCH_DEFAULT), -1);
+		platform = new Platform(this.stage, getX() - getWidth() / 2, getY() - getHeight() / 2 + 20, getX() + getWidth()
+				/ 2, getY() - getHeight() / 2 + 20);
+		stage.getPlatforms().add(platform);
 	}
 
 	public void update()
@@ -60,7 +66,7 @@ public class Branch extends Interactive
 				(int)getWidth(), (int)getHeight(), null);
 
 	}
-	
+
 	public String getName()
 	{
 		return "a branch";

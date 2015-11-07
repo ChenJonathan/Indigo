@@ -146,7 +146,7 @@ public class DesignState extends GameState
 		toolTypes.put(SET_LAND, new String[] {"Platform", "Wall", "Spike Wall", "Force Field"});
 		toolTypes.put(SET_ENTITY, new String[] {"Flying Bot", "Gatling Turret", "Incendiary Turret", "Blockade",
 				"Harvester", "Tree"});
-		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam"});
+		toolTypes.put(SET_PROJECTILE, new String[] {"Steel Beam", "Steam Cloud"});
 		toolTypes.put(SET_INTERACTIVE, new String[] {"Health Pickup", "Steam Vent", "Checkpoint"});
 		toolTypes.put(UNDO, new String[] {"Undo", "Redo"});
 		toolTypes.put(DELETE, new String[] {"Delete Land", "Delete Spawn"});
@@ -195,8 +195,9 @@ public class DesignState extends GameState
 		descriptionText.put("Tree", "A tree that spawns branches which can be jumped on. "
 				+ "Branches break after a short duration. "
 				+ "Attaches itself to the nearest perfectly horizontal wall or platform upon map creation. "
-				+ "The tree is vulnerable to enemy attack and its size is 1.5 by 6 grid spaces.");
+				+ "The tree is vulnerable to enemy attack and its size is 6.6 by 9.6 grid spaces.");
 		descriptionText.put("Steel Beam", "A falling steel beam that breaks on contact.");
+		descriptionText.put("Steam Cloud", "A cloud of steam that floats up and pushes the player up with it.");
 		descriptionText.put("Health Pickup", "An item that replenishes player health when collected.");
 		descriptionText.put("Steam Vent", "Periodically creates clouds of steam that damage the player. "
 				+ "Attaches itself to the nearest wall or platform upon map creation.");
@@ -1677,6 +1678,44 @@ public class DesignState extends GameState
 			Graphics2D g = stage.createGraphics();
 			g.setStroke(new BasicStroke(10));
 
+			// Draw force fields
+			for(LandData land : landscape)
+			{
+				if(land.type.equals("Force Field"))
+				{
+					int x1 = (int)land.x1;
+					int y1 = (int)land.y1;
+					int x2 = (int)land.x2;
+					int y2 = (int)land.y2;
+					double angle = Math.atan(land.slope);
+					double scale = 0;
+					if(x2 < x1)
+					{
+						int temp = 0;
+						temp = x2;
+						x2 = x1;
+						x1 = temp;
+						temp = y2;
+						y2 = y1;
+						y1 = temp;
+					}
+					int tiles = 0;
+					tiles = (int)((land.length) / 100);
+					tiles = Math.max(1, tiles); // Ensures at least one tile
+					scale = (land.length) / (tiles * 100);
+					for(int i = 0; i < tiles; i++)
+					{
+						g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+						g.rotate(angle, 0, Land.THICKNESS / 2);
+						g.drawImage(ContentManager.getImage(ContentManager.FORCE_FIELD),
+								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+						g.rotate(-angle, 0, Land.THICKNESS / 2);
+						g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
+								-(y1 + 100 * i * scale * Math.sin(angle)));
+					}
+				}
+			}
 			// Draw walls
 			for(LandData land : landscape)
 			{
@@ -1709,104 +1748,76 @@ public class DesignState extends GameState
 
 					scale = (land.length) / (centerTiles * 100 + 200);
 
-					if(land.horizontal)
+					g.translate(x1, y1);
+					g.rotate(angle, 0, Land.THICKNESS / 2);
+					g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT),
+							(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+							(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+					g.rotate(-angle, 0, Land.THICKNESS / 2);
+					g.translate(-x1, -y1);
+
+					// Draw center pieces, if any
+					for(int i = 1; i <= centerTiles; i++)
 					{
-						y1 -= 15;
-						// Draw leftmost piece
-						g.translate(x1, y1);
-						g.rotate(angle, 0, 15);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0,
-								(int)(100 * scale + 1), 30, null);
-						g.rotate(-angle, 0, 15);
-						g.translate(-x1, -y1);
-
-						// Draw center pieces, if any
-						for(int i = 1; i <= centerTiles; i++)
-						{
-							g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
-							g.rotate(angle, 0, 15);
-							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0,
-									(int)(100 * scale + 1), 30, null);
-							g.rotate(-angle, 0, 15);
-							g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
-									-(y1 + 100 * i * scale * Math.sin(angle)));
-						}
-
-						// Draw rightmost piece
-						g.translate(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100
-								* (centerTiles + 1) * scale * Math.sin(angle));
-						g.rotate(angle, 0, 15);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0,
-								(int)(100 * scale + 1), 30, null);
-						g.rotate(-angle, 0, 15);
-						g.translate(-(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle)), -(y1 + 100
-								* (centerTiles + 1) * scale * Math.sin(angle)));
-						y1 += 15;
+						g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+						g.rotate(angle, 0, Land.THICKNESS / 2);
+						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER),
+								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+						g.rotate(-angle, 0, Land.THICKNESS / 2);
+						g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
+								-(y1 + 100 * i * scale * Math.sin(angle)));
 					}
-					else if(!land.horizontal)
-					{
-						int heightOffset = -5;
-						y1 += heightOffset;
-						if(Math.abs(land.slope) > 999)
-						{
-							heightOffset = 0;
-						}
-						int centerOffset = (y1 > y2)? -15 : 15;
-						// Draw top-most piece
-						g.translate(x1 + centerOffset, y1);
-						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_LEFT), 0, 0, (int)(100 * scale),
-								30, null);
-						g.rotate(-angle);
-						g.translate(-(x1 + centerOffset), -y1);
 
-						// Draw center pieces, if any
-						for(int i = 1; i <= centerTiles; i++)
-						{
-							g.translate(x1 + centerOffset + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale
-									* Math.sin(angle));
-							g.rotate(angle);
-							g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_CENTER), 0, 0,
-									(int)(100 * scale), 30, null);
-							g.rotate(-angle);
-							g.translate(-(x1 + centerOffset + 100 * i * scale * Math.cos(angle)), -(y1 + 100 * i
-									* scale * Math.sin(angle)));
-						}
-
-						// Draw bottom-most piece
-						g.translate(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100
-								* (centerTiles + 1) * scale * Math.sin(angle));
-						g.rotate(angle);
-						g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT), 0, 0, (int)(100 * scale),
-								30, null);
-						g.rotate(-angle);
-						g.translate(-(x1 + centerOffset + 100 * (centerTiles + 1) * scale * Math.cos(angle)),
-								-(y1 + 100 * (centerTiles + 1) * scale * Math.sin(angle)));
-
-						y1 -= heightOffset;
-					}
+					g.translate(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle), y1 + 100 * (centerTiles + 1)
+							* scale * Math.sin(angle));
+					g.rotate(angle, 0, Land.THICKNESS / 2);
+					g.drawImage(ContentManager.getImage(ContentManager.STONE_TILE_RIGHT),
+							(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+							(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+					g.rotate(-angle, 0, Land.THICKNESS / 2);
+					g.translate(-(x1 + 100 * (centerTiles + 1) * scale * Math.cos(angle)), -(y1 + 100
+							* (centerTiles + 1) * scale * Math.sin(angle)));
 				}
-
-				// TODO Temporary
-				switch(land.type)
-				{
-					case "Platform":
-						g.setColor(Color.BLACK);
-						break;
-					case "Spike Wall":
-						g.setColor(Color.RED);
-						break;
-					case "Force Field":
-						g.setColor(Color.CYAN);
-						break;
-					default:
-						g.setColor(Color.BLUE);
-						break;
-				}
-				g.setStroke(new BasicStroke(1));
-				// g.drawLine(x1, y1, x2, y2);
 			}
-
+			// Draw spike pits
+			for(LandData land : landscape)
+			{
+				if(land.type.equals("Spike Wall"))
+				{
+					int x1 = (int)land.x1;
+					int y1 = (int)land.y1;
+					int x2 = (int)land.x2;
+					int y2 = (int)land.y2;
+					double angle = Math.atan(land.slope);
+					double scale = 0;
+					if(x2 < x1)
+					{
+						int temp = 0;
+						temp = x2;
+						x2 = x1;
+						x1 = temp;
+						temp = y2;
+						y2 = y1;
+						y1 = temp;
+					}
+					int tiles = 0;
+					tiles = (int)((land.length) / 100);
+					tiles = Math.max(1, tiles); // Ensures at least one tile
+					scale = (land.length) / (tiles * 100);
+					for(int i = 0; i < tiles; i++)
+					{
+						g.translate(x1 + 100 * i * scale * Math.cos(angle), y1 + 100 * i * scale * Math.sin(angle));
+						g.rotate(angle, 0, Land.THICKNESS / 2);
+						g.drawImage(ContentManager.getImage(ContentManager.SPIKE_WALL),
+								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),
+								(int)((-Land.THICKNESS / 2) * Math.cos(angle)), (int)(100 * (scale)), 30, null);
+						g.rotate(-angle, 0, Land.THICKNESS / 2);
+						g.translate(-(x1 + 100 * i * scale * Math.cos(angle)),
+								-(y1 + 100 * i * scale * Math.sin(angle)));
+					}
+				}
+			}
 			// Draw platforms
 			for(LandData land : landscape)
 			{
@@ -1834,7 +1845,7 @@ public class DesignState extends GameState
 					scale = (land.length) / (tiles * 290);
 					for(int i = 0; i < tiles; i++)
 					{
-						g.translate(x1 + 290 * i * scale * Math.cos(angle), y1 + 270 * i * scale * Math.sin(angle));
+						g.translate(x1 + 290 * i * scale * Math.cos(angle), y1 + 290 * i * scale * Math.sin(angle));
 						g.rotate(angle, 0, Land.THICKNESS / 2);
 						g.drawImage(ContentManager.getImage(ContentManager.PLATFORM),
 								(int)((-Land.THICKNESS / 2) * Math.sin(angle)),

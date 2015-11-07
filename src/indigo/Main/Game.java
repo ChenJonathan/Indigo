@@ -30,8 +30,6 @@ public class Game extends JPanel implements Runnable
 
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
-	public static final int CURSOR_WIDTH = 50;
-	public static final int CURSOR_HEIGHT = 50;
 
 	public static final int FPS = 30;
 

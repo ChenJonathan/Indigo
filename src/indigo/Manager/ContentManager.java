@@ -30,10 +30,12 @@ import org.json.simple.parser.JSONParser;
 public class ContentManager
 {
 	// Cursor
-	public static ImageData CURSOR = new ImageData("/images/cursor/cursor.png", 50, 50);
+	public static ImageData CURSOR = new ImageData("/images/cursor/cursor.png", 32, 32);
 
 	// Elements
+	public static ImageData FORCE_FIELD = new ImageData("/images/elements/force_field.png", 100, 30);
 	public static ImageData PLATFORM = new ImageData("/images/elements/platform.png", 290, 70);
+	public static ImageData SPIKE_WALL = new ImageData("/images/elements/spike_wall.png", 100, 30);
 	public static ImageData STONE_TILE_LEFT = new ImageData("/images/elements/stone_tile_left.png", 100, 30);
 	public static ImageData STONE_TILE_CENTER = new ImageData("/images/elements/stone_tile_center.png", 100, 30);
 	public static ImageData STONE_TILE_RIGHT = new ImageData("/images/elements/stone_tile_right.png", 100, 30);
@@ -50,9 +52,10 @@ public class ContentManager
 			110, 110, 4);
 	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/interactives/health_pickup/spawn.png",
 			110, 110, 5);
-	public static AnimationData MANA_PICKUP = new AnimationData("/images/interactives/mana_pickup.png", 100, 100, 1);
-	public static AnimationData BRANCH_DEFAULT = new AnimationData("/images/interactives/branch/default.png", 250, 50,
-			1);
+	public static AnimationData MANA_PICKUP_IDLE = new AnimationData("/images/interactives/mana_pickup/idle.png", 100,
+			100, 1);
+	public static AnimationData BRANCH_LEFT = new AnimationData("/images/interactives/branch/left.png", 240, 75, 1);
+	public static AnimationData BRANCH_RIGHT = new AnimationData("/images/interactives/branch/right.png", 240, 75, 1);
 
 	// Menus
 	public static ImageData ARROW_LEFT_ACTIVE = new ImageData("/images/menus/arrow_left_active.png", 60, 75);
@@ -163,7 +166,7 @@ public class ContentManager
 
 	// Stages
 	public static ImageData STAGE_BEACH = new ImageData("/images/stages/beach.png", 6400, 1200);
-	public static ImageData BACKGROUND = new ImageData("/images/stages/forest_background.png", 640, 270);
+	public static ImageData BACKGROUND = new ImageData("/images/stages/background.png", 640, 270);
 
 	// Weapons
 	public static AnimationData ICE_SWORD_IDLE_LEFT = new AnimationData("/images/weapon/ice_sword/idle_left.png", 138,

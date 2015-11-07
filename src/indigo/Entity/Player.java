@@ -704,13 +704,16 @@ public class Player extends Entity
 		canMove(false);
 		canTurn(false);
 
+		flying = true;
 		if(currentAnimation == MIST)
 		{
 			dodging = false;
-			flying = false;
 			frictionless = false;
 			solid = true;
 		}
+		
+		setVelX(0);
+		setVelY(0);
 
 		if(isFacingRight())
 		{

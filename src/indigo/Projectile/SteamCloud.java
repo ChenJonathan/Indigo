@@ -14,13 +14,24 @@ import indigo.Stage.Stage;
 public class SteamCloud extends Projectile
 {
 	private final int DEFAULT = 0;
-	private final int DEATH = 1;
 
 	public static final int DAMAGE = 0;
 	public static final int WIDTH = 100;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 10;
 
+	public SteamCloud(Stage stage, double x, double y)
+	{
+		super(stage, x, y, 0, 0, DAMAGE);
+
+		width = WIDTH;
+		height = HEIGHT;
+		solid = true;
+		flying = true;
+		
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
+	}
+	
 	public SteamCloud(Interactive interactive, double x, double y, double velX, double velY, int dmg)
 	{
 		super(interactive, x, y, velX, velY, dmg);

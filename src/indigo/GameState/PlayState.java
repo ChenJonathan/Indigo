@@ -159,11 +159,14 @@ public class PlayState extends GameState
 			{
 				player.jumpMore();
 			}
-			if(Manager.input.keyDown(InputManager.S) && player.canCrouch())
+			if(Manager.input.keyDown(InputManager.S))
 			{
-				player.crouch();
+				if(player.canCrouch())
+				{
+					player.crouch();
+				}
 			}
-			else if(Manager.input.keyRelease(InputManager.S))
+			else if(player.isCrouching())
 			{
 				player.uncrouch();
 			}
