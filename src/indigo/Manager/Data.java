@@ -285,7 +285,7 @@ public class Data
 		if(name == null)
 		{
 			name = JOptionPane.showInputDialog("Enter a save name:");
-			if(name == null)
+			if(name == null || name.equals(""))
 			{
 				JOptionPane.showMessageDialog(null, "Invalid name.");
 				return;
@@ -333,6 +333,34 @@ public class Data
 			maxExperience = level * 100;
 
 			currentSlot = slot;
+		}
+	}
+	
+	/**
+	 * Clears a save slot.
+	 * 
+	 * @param slot The save slot.
+	 */
+	public void clear(int slot)
+	{
+		String string = "";
+		string += "    \"name\":\"\",\n";
+		string += "    \"level\":1,\n";
+		string += "    \"experience\":0";
+		string = "{\n" + string + "\n}";
+
+		try
+		{
+			String fileName = "slot" + slot;
+			String filePath = new File("").getAbsolutePath() + "/resources/data/saves/" + fileName + ".json";
+			FileWriter fileWriter = new FileWriter(filePath);
+			fileWriter.write(string);
+			fileWriter.flush();
+			fileWriter.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 }

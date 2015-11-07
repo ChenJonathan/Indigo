@@ -186,8 +186,6 @@ public abstract class Projectile implements Respawnable, Named
 			polyIt.next();
 		}
 		return false;
-
-		// return wall.getLine().intersectsLine(travel);
 	}
 
 	// Used for projectile-wall collision - Utilizes previous projectile position

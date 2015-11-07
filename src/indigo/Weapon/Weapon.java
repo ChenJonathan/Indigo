@@ -45,4 +45,9 @@ public abstract class Weapon
 	public abstract void collide(Entity ent);
 
 	public abstract Line2D.Double getHitbox();
+	
+	public Entity getUser()
+	{
+		return user;
+	}
 }

@@ -72,32 +72,32 @@ public class MenuState extends GameState
 		{
 			// Draw instructions
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
 		}
 		else if(saveLoad)
 		{
 			// Draw save and load menu
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(100, 100, 1720, 158);
-			g.fillRect(100, 358, 1720, 158);
-			g.fillRect(100, 616, 1720, 158);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 1050, 125, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1435, 125, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 1050, 383, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1435, 383, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 1050, 641, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1435, 641, 360, 107, null);
-
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
 			for(int slot = 0; slot < saves.length; slot++)
 			{
+				g.drawImage(ContentManager.getImage(ContentManager.SAVE_LOAD_BAR), 100, 100 + 258 * slot, 1720, 158,
+						null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 920, 126 + 258 * slot, 358, 106, null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1304, 126 + 258 * slot, 358, 106, null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CLEAR), 1688, 126 + 258 * slot, 106, 106,
+						null);
+
 				if(saves[slot] != null)
 				{
-					g.setColor(Color.BLACK);
+					g.setColor(new Color(75, 94, 112));
+					g.setColor(Color.LIGHT_GRAY);
 					g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 					FontMetrics fontMetrics = g.getFontMetrics();
-					g.drawString(saves[slot].get("name") + "", 125, 179 + slot * 258 + fontMetrics.getHeight() / 4);
+					String name = saves[slot].get("name").equals("")? "Empty" : saves[slot].get("name") + "";
+					String level = saves[slot].get("name").equals("")? "" : saves[slot].get("level") + "";
+					g.drawString("Name: " + name, 152, 179 + slot * 258 + fontMetrics.getHeight() / 4);
+					g.drawString("Level: " + level, 620, 179 + slot * 258 + fontMetrics.getHeight() / 4);
 				}
 			}
 		}
@@ -105,18 +105,18 @@ public class MenuState extends GameState
 		{
 			// Draw credits
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
 		}
 		else
 		{
 			// Draw main menu
 			g.drawImage(ContentManager.getImage(ContentManager.TITLE_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 360, 720, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 780, 720, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1193, 720, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 360, 869, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 780, 869, 360, 107, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1193, 869, 360, 107, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 353, 720, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 781, 720, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1209, 720, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 876, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 876, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 876, 358, 106, null);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class MenuState extends GameState
 		{
 			if(Manager.input.mouseLeftRelease())
 			{
-				if(Manager.input.mouseInRect(100, 873, 360, 107))
+				if(Manager.input.mouseInRect(100, 874, 358, 106))
 				{
 					instructions = false;
 				}
@@ -140,34 +140,52 @@ public class MenuState extends GameState
 		{
 			if(Manager.input.mouseLeftRelease())
 			{
-				if(Manager.input.mouseInRect(1050, 125, 360, 107))
+				if(Manager.input.mouseInRect(920, 126, 358, 106))
 				{
 					data.save(1);
+					saves[0] = ContentManager.load("/saves/slot1.json");
 				}
-				else if(Manager.input.mouseInRect(1435, 125, 360, 107))
+				else if(Manager.input.mouseInRect(1304, 126, 358, 106))
 				{
 					data.load(1);
 					saveLoad = false;
 				}
-				else if(Manager.input.mouseInRect(1050, 383, 360, 107))
+				else if(Manager.input.mouseInRect(1688, 126, 106, 106))
+				{
+					data.clear(1);
+					saves[0] = ContentManager.load("/saves/slot1.json");
+				}
+				else if(Manager.input.mouseInRect(920, 384, 358, 106))
 				{
 					data.save(2);
+					saves[1] = ContentManager.load("/saves/slot2.json");
 				}
-				else if(Manager.input.mouseInRect(1435, 383, 360, 107))
+				else if(Manager.input.mouseInRect(1304, 384, 358, 106))
 				{
 					data.load(2);
 					saveLoad = false;
 				}
-				else if(Manager.input.mouseInRect(1050, 641, 360, 107))
+				else if(Manager.input.mouseInRect(1688, 384, 106, 106))
+				{
+					data.clear(2);
+					saves[1] = ContentManager.load("/saves/slot2.json");
+				}
+				else if(Manager.input.mouseInRect(920, 642, 358, 106))
 				{
 					data.save(3);
+					saves[2] = ContentManager.load("/saves/slot3.json");
 				}
-				else if(Manager.input.mouseInRect(1435, 641, 360, 107))
+				else if(Manager.input.mouseInRect(1304, 642, 358, 106))
 				{
 					data.load(3);
 					saveLoad = false;
 				}
-				else if(Manager.input.mouseInRect(100, 873, 360, 107))
+				else if(Manager.input.mouseInRect(1688, 642, 106, 106))
+				{
+					data.clear(3);
+					saves[2] = ContentManager.load("/saves/slot3.json");
+				}
+				else if(Manager.input.mouseInRect(100, 874, 358, 106))
 				{
 					saveLoad = false;
 				}
@@ -177,7 +195,7 @@ public class MenuState extends GameState
 		{
 			if(Manager.input.mouseLeftRelease())
 			{
-				if(Manager.input.mouseInRect(100, 873, 360, 107))
+				if(Manager.input.mouseInRect(100, 874, 358, 106))
 				{
 					credits = false;
 				}
@@ -187,27 +205,27 @@ public class MenuState extends GameState
 		{
 			if(Manager.input.mouseLeftRelease())
 			{
-				if(Manager.input.mouseInRect(360, 720, 360, 108))
+				if(Manager.input.mouseInRect(353, 720, 358, 106))
 				{
 					gsm.setState(GameStateManager.SELECT);
 				}
-				else if(Manager.input.mouseInRect(780, 720, 360, 108))
+				else if(Manager.input.mouseInRect(781, 720, 358, 106))
 				{
 					instructions = true;
 				}
-				else if(Manager.input.mouseInRect(1193, 720, 360, 108))
+				else if(Manager.input.mouseInRect(1209, 720, 358, 106))
 				{
 					gsm.setState(GameStateManager.DESIGN);
 				}
-				else if(Manager.input.mouseInRect(360, 869, 360, 108))
+				else if(Manager.input.mouseInRect(353, 876, 358, 106))
 				{
 					gsm.setOptions(true);
 				}
-				else if(Manager.input.mouseInRect(780, 869, 360, 108))
+				else if(Manager.input.mouseInRect(781, 876, 358, 106))
 				{
 					credits = true;
 				}
-				else if(Manager.input.mouseInRect(1193, 869, 360, 108))
+				else if(Manager.input.mouseInRect(1209, 876, 358, 106))
 				{
 					saveLoad = true;
 				}

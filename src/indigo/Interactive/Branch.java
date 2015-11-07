@@ -13,7 +13,7 @@ public class Branch extends Interactive
 {
 	public final static int WIDTH = 240;
 	public final static int HEIGHT = 75;
-	public final static int DURATION = 60;
+	public final static int DURATION = 30;
 
 	private int timer = 0;
 	private boolean breaking = false;

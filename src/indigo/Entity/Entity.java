@@ -106,7 +106,7 @@ public abstract class Entity implements Respawnable, Named
 		{
 			velY = Stage.TERMINAL_VELOCITY;
 		}
-		
+
 		// If the entity is grounded, take the y position corresponding to the ground
 		if(ground != null)
 		{
@@ -208,6 +208,15 @@ public abstract class Entity implements Respawnable, Named
 	// Used for entity-melee collision - Checks hitbox and travel line intersection
 	public boolean intersects(Weapon weapon)
 	{
+		Line2D.Double link = new Line2D.Double(getX(), getY(), weapon.getUser().getX(), weapon.getUser().getY());
+		for(Wall wall : stage.getWalls())
+		{
+			if(link.intersectsLine(wall.getLine()))
+			{
+				return false;
+			}
+		}
+		
 		boolean intersects = false;
 
 		if(getHitbox() instanceof Rectangle2D.Double)
@@ -371,7 +380,7 @@ public abstract class Entity implements Respawnable, Named
 	{
 		return maxHealth;
 	}
-	
+
 	public void setMaxHealth(int health)
 	{
 		maxHealth = health;
@@ -395,7 +404,7 @@ public abstract class Entity implements Respawnable, Named
 			die();
 		}
 	}
-	
+
 	public int getExperience()
 	{
 		return experience;
