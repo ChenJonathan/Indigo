@@ -72,13 +72,25 @@ public class MenuState extends GameState
 		{
 			// Draw instructions
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			if(Manager.input.mouseInRect(100, 874, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
+			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 		}
 		else if(saveLoad)
 		{
 			// Draw save and load menu
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			if(Manager.input.mouseInRect(100, 874, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
+			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
+			
+			// Draw save slots
 			for(int slot = 0; slot < saves.length; slot++)
 			{
 				g.drawImage(ContentManager.getImage(ContentManager.SAVE_LOAD_BAR), 100, 100 + 258 * slot, null);
@@ -103,26 +115,72 @@ public class MenuState extends GameState
 		{
 			// Draw credits
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			if(Manager.input.mouseInRect(100, 874, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
+			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 		}
 		else
 		{
 			// Draw main menu
 			g.drawImage(ContentManager.getImage(ContentManager.TITLE_BACKGROUND), 0, 0, null);
+			if(Manager.input.mouseInRect(353, 720, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 323, 690, null);
+			}
+			else if(Manager.input.mouseInRect(781, 720, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 751, 690, null);
+			}
+			else if(Manager.input.mouseInRect(1209, 720, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 1179, 690, null);
+			}
+			else if(Manager.input.mouseInRect(353, 873, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 323, 843, null);
+			}
+			else if(Manager.input.mouseInRect(781, 873, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 751, 843, null);
+			}
+			else if(Manager.input.mouseInRect(1209, 873, 358, 106))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 1179, 843, null);
+			}
+			else if(Manager.input.mouseInCirc(230, 926, 53))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_CIRCLE_CLICK
+						: ContentManager.GLOW_CIRCLE_HOVER), 147, 843, null);
+			}
+			else if(Manager.input.mouseInCirc(1690, 926, 53))
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_CIRCLE_CLICK
+						: ContentManager.GLOW_CIRCLE_HOVER), 1607, 843, null);
+			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 353, 720, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 781, 720, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1209, 720, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 876, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 876, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 876, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL), 20, 940, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_EXIT), 1780, 940, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 873, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 873, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 873, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL), 177, 873, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_EXIT), 1637, 873, null);
 
+			// Write player level
 			g.setColor(new Color(75, 94, 112));
 			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 			FontMetrics fontMetrics = g.getFontMetrics();
-			g.drawString(data.getLevel() + "", 79 - fontMetrics.stringWidth(data.getLevel() + "") / 2,
-					1000 + fontMetrics.getHeight() / 4);
+			g.drawString(data.getLevel() + "", 229 - fontMetrics.stringWidth(data.getLevel() + "") / 2,
+					926 + fontMetrics.getHeight() / 4);
 		}
 	}
 
@@ -223,19 +281,19 @@ public class MenuState extends GameState
 				{
 					gsm.setState(GameStateManager.DESIGN);
 				}
-				else if(Manager.input.mouseInRect(353, 876, 358, 106))
+				else if(Manager.input.mouseInRect(353, 873, 358, 106))
 				{
 					gsm.setOptions(true);
 				}
-				else if(Manager.input.mouseInRect(781, 876, 358, 106))
+				else if(Manager.input.mouseInRect(781, 873, 358, 106))
 				{
 					credits = true;
 				}
-				else if(Manager.input.mouseInRect(1209, 876, 358, 106))
+				else if(Manager.input.mouseInRect(1209, 873, 358, 106))
 				{
 					saveLoad = true;
 				}
-				else if(Manager.input.mouseInCirc(1840, 1000, 60))
+				else if(Manager.input.mouseInCirc(1690, 926, 53))
 				{
 					System.exit(0);
 				}

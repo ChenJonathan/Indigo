@@ -44,7 +44,12 @@ public class StageSelectState extends GameState
 	public void render(Graphics2D g)
 	{
 		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, null);
+		if(Manager.input.mouseInRect(100, 874, 358, 106))
+		{
+			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+					: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
+		}
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 
 		// Draw selection box
 		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 600, 100, null);
@@ -94,7 +99,7 @@ public class StageSelectState extends GameState
 				data.setStage(ContentManager.load("/levels/" + levelName + ".json"));
 				gsm.setState(GameStateManager.PLAY);
 			}
-			else if(Manager.input.mouseInRect(100, 873, 360, 107))
+			else if(Manager.input.mouseInRect(100, 874, 360, 106))
 			{
 				gsm.setState(GameStateManager.MENU);
 			}

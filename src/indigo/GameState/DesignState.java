@@ -1071,7 +1071,7 @@ public class DesignState extends GameState
 	 * 
 	 * @return Whether the String can be converted or not.
 	 */
-	public static boolean isInteger(String str)
+	public boolean isInteger(String str)
 	{
 		if(str == null)
 		{

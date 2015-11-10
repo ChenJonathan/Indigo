@@ -26,7 +26,7 @@ public class Mist extends Skill
 
 		if(castTime == 0)
 		{
-			player.setMana(player.getMana() - 10);
+			player.setMana(player.getMana() - 40);
 			player.shift();
 
 			double distance = Math.sqrt((Math.pow(stage.getMouseX() - player.getX(), 2) + Math.pow(stage.getMouseY()
@@ -132,7 +132,7 @@ public class Mist extends Skill
 
 	public boolean canCast()
 	{
-		return player.getMana() >= 10 && player.canAttack() && player.canMove() && player.canTurn();
+		return player.getMana() >= 40 && player.canAttack() && player.canMove() && player.canTurn();
 	}
 
 	public void endCast()

@@ -1,5 +1,6 @@
 package indigo.GameState;
 
+import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
@@ -32,20 +33,50 @@ public class PauseState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
-		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
-		g.drawString("GAME PAUSED", 150, 300);
+		// Draw pause menu and buttons
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+		if(Manager.input.mouseInRect(373, 100, 358, 106))
+		{
+			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+					: ContentManager.GLOW_RECTANGLE_HOVER), 343, 70, null);
+		}
+		else if(Manager.input.mouseInRect(781, 100, 358, 106))
+		{
+			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+					: ContentManager.GLOW_RECTANGLE_HOVER), 751, 70, null);
+		}
+		else if(Manager.input.mouseInRect(1189, 100, 358, 106))
+		{
+			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+					: ContentManager.GLOW_RECTANGLE_HOVER), 1159, 70, null);
+		}
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_RESUME), 373, 100, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 781, 100, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_QUIT), 1189, 100, null);
 	}
 
 	@Override
 	public void handleInput()
 	{
+		if(Manager.input.mouseLeftRelease())
+		{
+			if(Manager.input.mouseInRect(373, 100, 358, 106))
+			{
+				gsm.setPaused(false);
+			}
+			else if(Manager.input.mouseInRect(781, 100, 358, 106))
+			{
+				gsm.setOptions(true);
+			}
+			else if(Manager.input.mouseInRect(1189, 100, 358, 106))
+			{
+				gsm.setState(GameStateManager.MENU);
+				gsm.setPaused(false);
+			}
+		}
 		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			gsm.setPaused(false);
 		}
-		/*
-		 * Detect clicking resume, options, and quit gsm.setState(GameStateManager.MENU);
-		 */
 	}
 }

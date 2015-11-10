@@ -20,26 +20,6 @@ public class SoundManager
 	// Current Sound Volume (Between -50f and 10f)
 	private static float currVolume;
 
-	static
-	{
-		// TODO Load long sound files here to reduce wait time in-game.
-		// ContentManager.getSound(ContentManager.BACKGROUND_1);
-		// ContentManager.getSound(ContentManager.BACKGROUND_2);
-		// ContentManager.getSound(ContentManager.BACKGROUND_3);
-
-		/**
-		 * This thread acts like a monitor for the SoundManager, culling finished sounds from playingSounds so that we
-		 * don't hog all the RAM.
-		 */
-		/*
-		 * new Thread(new Runnable(){
-		 * 
-		 * @Override public void run() { synchronized(playingSounds) { for(int i = 0; i < playingSounds.size(); i++) {
-		 * if(!playingSounds.get(i).isRunning()) playingSounds.get(i).stop(); playingSounds.get(i).close();
-		 * playingSounds.remove(i); break; } } } }).start();
-		 */
-	}
-
 	/**
 	 * Retrieves the requested sound from the ContentManager and plays the sound.
 	 * 
@@ -50,11 +30,6 @@ public class SoundManager
 		try
 		{
 			byte[] SoundBytes = ContentManager.getSound(snd);
-			/*
-			 * File AudioFile = new File(SoundManager.class.getResource(snd.path()).getPath()); AudioInputStream ais =
-			 * AudioSystem.getAudioInputStream(AudioFile); Clip AudioClip = AudioSystem.getClip(); AudioClip.open(ais);
-			 * ais.close();
-			 */
 			Clip AudioClip = AudioSystem.getClip();
 			AudioFormat Format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 			AudioClip.open(Format, SoundBytes, 0, SoundBytes.length);
@@ -66,9 +41,6 @@ public class SoundManager
 			}
 			FloatControl ClipVolume = (FloatControl)AudioClip.getControl(FloatControl.Type.MASTER_GAIN);
 			ClipVolume.setValue(currVolume);
-			// System.out.printf("Minimum Volume: %f, Maximum Volume: %f", ClipVolume.getMinimum(),
-			// ClipVolume.getMaximum());
-			// Handles the removing of AudioClips when finished playing
 			AudioClip.addLineListener(new LineListener()
 			{
 				@Override

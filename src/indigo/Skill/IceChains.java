@@ -37,7 +37,7 @@ public class IceChains extends Skill
 			}
 			playState.getProjectiles().add(hook);
 
-			player.setMana(player.getMana() - 1);
+			player.setMana(player.getMana() - 40);
 			player.canAttack(false);
 			player.canTurn(false);
 		}
@@ -50,7 +50,7 @@ public class IceChains extends Skill
 
 	public boolean canCast()
 	{
-		return player.getMana() > 1 && player.canAttack();
+		return player.getMana() > 40 && player.canAttack();
 	}
 
 	public void endCast()

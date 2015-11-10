@@ -28,7 +28,7 @@ public class Pulse extends Skill
 		{
 			player.canMove(false);
 			player.canAttack(false);
-			player.setMana(player.getMana() - 20);
+			player.setMana(player.getMana() - 80);
 
 			// Create projectile, change pulseshot collide to affect projectile
 			pulse = new PulseWave(player, player.getX(), player.getY(), 0, 0, 0);
@@ -98,7 +98,7 @@ public class Pulse extends Skill
 
 	public boolean canCast()
 	{
-		return player.getMana() >= 20 && player.canAttack() && player.canMove();
+		return player.getMana() >= 80 && player.canAttack() && player.canMove();
 	}
 
 	public void endCast()

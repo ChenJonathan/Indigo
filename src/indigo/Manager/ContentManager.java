@@ -60,15 +60,18 @@ public class ContentManager
 	public static AnimationData BRANCH_RIGHT = new AnimationData("/images/interactives/branch/right.png", 240, 75, 1);
 
 	// Menus
+	public static ImageData ARROW_LEFT = new ImageData("/images/menus/arrow_left.png", 40, 60);
+	public static ImageData ARROW_RIGHT = new ImageData("/images/menus/arrow_right.png", 40, 60);
 	public static ImageData ARROW_LEFT_ACTIVE = new ImageData("/images/menus/arrow_left_active.png", 60, 75);
 	public static ImageData ARROW_LEFT_INACTIVE = new ImageData("/images/menus/arrow_left_inactive.png", 60, 75);
 	public static ImageData ARROW_RIGHT_ACTIVE = new ImageData("/images/menus/arrow_right_active.png", 60, 75);
 	public static ImageData ARROW_RIGHT_INACTIVE = new ImageData("/images/menus/arrow_right_inactive.png", 60, 75);
 	public static ImageData BUTTON_BACK = new ImageData("/images/menus/button_back.png", 358, 106);
-	public static ImageData BUTTON_LEVEL = new ImageData("/images/menus/button_level.png", 120, 120);
+	public static ImageData BUTTON_BLANK = new ImageData("/images/menus/button_blank.png", 400, 106);
+	public static ImageData BUTTON_LEVEL = new ImageData("/images/menus/button_level.png", 106, 106);
 	public static ImageData BUTTON_CLEAR = new ImageData("/images/menus/button_clear.png", 106, 106);
 	public static ImageData BUTTON_CREDITS = new ImageData("/images/menus/button_credits.png", 358, 106);
-	public static ImageData BUTTON_EXIT = new ImageData("/images/menus/button_exit.png", 120, 120);
+	public static ImageData BUTTON_EXIT = new ImageData("/images/menus/button_exit.png", 106, 106);
 	public static ImageData BUTTON_INSTRUCTIONS = new ImageData("/images/menus/button_instructions.png", 358, 106);
 	public static ImageData BUTTON_LEVEL_EDITOR = new ImageData("/images/menus/button_level_editor.png", 358, 106);
 	public static ImageData BUTTON_LOAD = new ImageData("/images/menus/button_load.png", 358, 106);
@@ -76,16 +79,22 @@ public class ContentManager
 	public static ImageData BUTTON_OPTIONS = new ImageData("/images/menus/button_options.png", 358, 106);
 	public static ImageData BUTTON_PLAY = new ImageData("/images/menus/button_play.png", 358, 106);
 	public static ImageData BUTTON_PREVIOUS = new ImageData("/images/menus/button_previous.png", 358, 106);
+	public static ImageData BUTTON_QUIT = new ImageData("/images/menus/button_quit.png", 358, 106);
+	public static ImageData BUTTON_RESUME = new ImageData("/images/menus/button_resume.png", 358, 106);
 	public static ImageData BUTTON_SAVE = new ImageData("/images/menus/button_save.png", 358, 106);
 	public static ImageData BUTTON_SAVE_LOAD = new ImageData("/images/menus/button_save_load.png", 358, 106);
 	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 175, 50);
 	public static ImageData DESCRIPTION_BOX = new ImageData("/images/menus/description_box.png", 300, 440);
+	public static ImageData GLOW_CIRCLE_CLICK = new ImageData("/images/menus/glow_circle_click.png", 166, 166);
+	public static ImageData GLOW_CIRCLE_HOVER = new ImageData("/images/menus/glow_circle_hover.png", 166, 166);
+	public static ImageData GLOW_RECTANGLE_CLICK = new ImageData("/images/menus/glow_rectangle_click.png", 418, 166);
+	public static ImageData GLOW_RECTANGLE_HOVER = new ImageData("/images/menus/glow_rectangle_hover.png", 418, 166);
 	public static ImageData MENU_BACKGROUND = new ImageData("/images/menus/menu_background.png", 1920, 1080);
+	public static ImageData OPTION_BAR = new ImageData("/images/menus/option_bar.png", 1720, 158);
 	public static ImageData SAVE_LOAD_BAR = new ImageData("/images/menus/save_load_bar.png", 1720, 158);
 	public static ImageData SELECTION_BOX = new ImageData("/images/menus/selection_box.png", 300, 75);
 	public static ImageData TITLE_BACKGROUND = new ImageData("/images/menus/title_background.png", 1920, 1080);
 	public static ImageData TOOLBAR = new ImageData("/images/menus/toolbar.png", 302, 402);
-	public static ImageData TRANSITION = new ImageData("/images/menus/transition.png", 1920, 1080);
 
 	// Projectiles
 	public static AnimationData BULLET = new AnimationData("/images/projectiles/bullet/default.png", 30, 10, 1);

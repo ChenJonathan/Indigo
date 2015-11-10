@@ -101,7 +101,7 @@ public class PlayState extends GameState
 		// Initialize timer
 		time = -1;
 		
-		// SoundManager.play(ContentManager.BACKGROUND_1);
+		SoundManager.play(ContentManager.BACKGROUND_1);
 	}
 
 	@Override
