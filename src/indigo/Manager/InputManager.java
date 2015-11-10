@@ -394,4 +394,16 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	{
 		return mouseX() >= x && mouseX() <= x + width && mouseY() >= y && mouseY() <= y + height;
 	}
+
+	/**
+	 * @param x The x-position of the center of the circle.
+	 * @param y The y-position of the center corner of the circle.
+	 * @param radius The radius of the circle.
+	 * 
+	 * @return Whether the mouse is in the specified circle.
+	 */
+	public boolean mouseInCirc(double x, double y, double radius)
+	{
+		return Math.sqrt(Math.pow(mouseX() - x, 2) + Math.pow(mouseY() - y, 2)) <= radius;
+	}
 }

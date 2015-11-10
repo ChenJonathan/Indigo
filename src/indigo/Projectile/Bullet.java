@@ -66,19 +66,17 @@ public class Bullet extends Projectile
 	{
 		if(currentAnimation == DEATH)
 		{
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-					(int)getWidth(), (int)getHeight(), null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 		}
 		else if(getX() > 0 && getX() < stage.getMapX() && timer < DURATION)
 		{
 			// Rotation breaks if x is negative
 			g.rotate(angle, getX(), getY());
-			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-					(int)getWidth(), (int)getHeight(), null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 			g.rotate(-angle, getX(), getY());
 		}
 	}
-	
+
 	public String getName()
 	{
 		return creator.getName();

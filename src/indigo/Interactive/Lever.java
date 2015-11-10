@@ -10,10 +10,10 @@ import java.awt.geom.Ellipse2D;
 public class Lever extends Interactive
 {
 	private int id;
-	
+
 	private boolean activated;
 	private boolean recentlyActivated;
-	
+
 	private final int IDLE = 0;
 	private final int DEATH = 2;
 
@@ -25,7 +25,7 @@ public class Lever extends Interactive
 		super(stage, x, y);
 		width = WIDTH;
 		height = HEIGHT;
-		
+
 		this.id = id;
 		this.activated = activated;
 
@@ -35,7 +35,7 @@ public class Lever extends Interactive
 	public void update()
 	{
 		super.update();
-		
+
 		if(recentlyActivated && !player.intersects(this))
 		{
 			recentlyActivated = false;
@@ -52,10 +52,9 @@ public class Lever extends Interactive
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 	}
-	
+
 	public String getName()
 	{
 		return "a lever";
@@ -76,7 +75,7 @@ public class Lever extends Interactive
 		{
 			activated = !activated;
 			recentlyActivated = true;
-			
+
 			for(Interactive interactive : stage.getInteractives())
 			{
 				if(interactive instanceof Gate)

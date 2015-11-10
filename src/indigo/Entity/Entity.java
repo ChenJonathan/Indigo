@@ -208,15 +208,18 @@ public abstract class Entity implements Respawnable, Named
 	// Used for entity-melee collision - Checks hitbox and travel line intersection
 	public boolean intersects(Weapon weapon)
 	{
-		Line2D.Double link = new Line2D.Double(getX(), getY(), weapon.getUser().getX(), weapon.getUser().getY());
-		for(Wall wall : stage.getWalls())
+		if(!(this instanceof Blockade))
 		{
-			if(link.intersectsLine(wall.getLine()))
+			Line2D.Double link = new Line2D.Double(getX(), getY(), weapon.getUser().getX(), weapon.getUser().getY());
+			for(Wall wall : stage.getWalls())
 			{
-				return false;
+				if(link.intersectsLine(wall.getLine()))
+				{
+					return false;
+				}
 			}
 		}
-		
+
 		boolean intersects = false;
 
 		if(getHitbox() instanceof Rectangle2D.Double)
@@ -401,7 +404,10 @@ public abstract class Entity implements Respawnable, Named
 		else if(health <= 0)
 		{
 			this.health = 0;
-			die();
+			if(isActive())
+			{
+				die();
+			}
 		}
 	}
 

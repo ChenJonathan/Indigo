@@ -197,15 +197,13 @@ public class IceSword extends Weapon
 		if(user.isFacingRight())
 		{
 			g.rotate(renderAngle, user.getX() + xOffset + 20, user.getY() + yOffset + 75);
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 138, 146,
-					null);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), null);
 			g.rotate(-renderAngle, user.getX() + xOffset + 20, user.getY() + yOffset + 75);
 		}
 		else
 		{
 			g.rotate(renderAngle, user.getX() + xOffset + 118, user.getY() + yOffset + 75);
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 138, 146,
-					null);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), null);
 			g.rotate(-renderAngle, user.getX() + xOffset + 118, user.getY() + yOffset + 75);
 		}
 	}

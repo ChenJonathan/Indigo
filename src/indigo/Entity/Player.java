@@ -381,8 +381,7 @@ public class Player extends Entity
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 
 		if(hasWeapon() && currentAnimation != MIST)
 		{
@@ -697,24 +696,6 @@ public class Player extends Entity
 
 	public void die()
 	{
-		uncrouch();
-		removeWeapon();
-
-		canAttack(false);
-		canMove(false);
-		canTurn(false);
-
-		flying = true;
-		if(currentAnimation == MIST)
-		{
-			dodging = false;
-			frictionless = false;
-			solid = true;
-		}
-		
-		setVelX(0);
-		setVelY(0);
-
 		if(isFacingRight())
 		{
 			if(iceArmor)
@@ -737,6 +718,26 @@ public class Player extends Entity
 				setAnimation(DEATH_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_DEATH_LEFT), 2);
 			}
 		}
+
+		uncrouch();
+		removeWeapon();
+
+		setHealth(0);
+
+		canAttack(false);
+		canMove(false);
+		canTurn(false);
+
+		flying = true;
+		if(currentAnimation == MIST)
+		{
+			dodging = false;
+			frictionless = false;
+			solid = true;
+		}
+
+		setVelX(0);
+		setVelY(0);
 
 		if(phase.skillSelected())
 		{
@@ -912,11 +913,6 @@ public class Player extends Entity
 	public void canDoubleJump(boolean canDoubleJump)
 	{
 		doubleJumpReady = canDoubleJump;
-	}
-
-	public boolean getIceArmor()
-	{
-		return iceArmor;
 	}
 
 	public void setIceArmor(boolean active)

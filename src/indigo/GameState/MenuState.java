@@ -71,26 +71,24 @@ public class MenuState extends GameState
 		if(instructions)
 		{
 			// Draw instructions
-			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 		}
 		else if(saveLoad)
 		{
 			// Draw save and load menu
-			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 			for(int slot = 0; slot < saves.length; slot++)
 			{
-				g.drawImage(ContentManager.getImage(ContentManager.SAVE_LOAD_BAR), 100, 100 + 258 * slot, 1720, 158,
-						null);
-				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 920, 126 + 258 * slot, 358, 106, null);
-				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1304, 126 + 258 * slot, 358, 106, null);
-				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CLEAR), 1688, 126 + 258 * slot, 106, 106,
-						null);
+				g.drawImage(ContentManager.getImage(ContentManager.SAVE_LOAD_BAR), 100, 100 + 258 * slot, null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 920, 126 + 258 * slot, null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LOAD), 1304, 126 + 258 * slot, null);
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CLEAR), 1688, 126 + 258 * slot, null);
 
 				if(saves[slot] != null)
 				{
-					g.setColor(new Color(75, 94, 112));
+					// TODO g.setColor(new Color(75, 94, 112));
 					g.setColor(Color.LIGHT_GRAY);
 					g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 					FontMetrics fontMetrics = g.getFontMetrics();
@@ -104,19 +102,27 @@ public class MenuState extends GameState
 		else if(credits)
 		{
 			// Draw credits
-			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 		}
 		else
 		{
 			// Draw main menu
-			g.drawImage(ContentManager.getImage(ContentManager.TITLE_BACKGROUND), 0, 0, 1920, 1080, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 353, 720, 358, 106, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 781, 720, 358, 106, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1209, 720, 358, 106, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 876, 358, 106, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 876, 358, 106, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 876, 358, 106, null);
+			g.drawImage(ContentManager.getImage(ContentManager.TITLE_BACKGROUND), 0, 0, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 353, 720, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 781, 720, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1209, 720, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 876, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 876, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 876, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL), 20, 940, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_EXIT), 1780, 940, null);
+
+			g.setColor(new Color(75, 94, 112));
+			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+			FontMetrics fontMetrics = g.getFontMetrics();
+			g.drawString(data.getLevel() + "", 79 - fontMetrics.stringWidth(data.getLevel() + "") / 2,
+					1000 + fontMetrics.getHeight() / 4);
 		}
 	}
 
@@ -228,6 +234,10 @@ public class MenuState extends GameState
 				else if(Manager.input.mouseInRect(1209, 876, 358, 106))
 				{
 					saveLoad = true;
+				}
+				else if(Manager.input.mouseInCirc(1840, 1000, 60))
+				{
+					System.exit(0);
 				}
 			}
 		}

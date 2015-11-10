@@ -1,12 +1,12 @@
 package indigo.Projectile;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 import indigo.Entity.Entity;
 import indigo.Landscape.Wall;
+import indigo.Manager.ContentManager;
 import indigo.Stage.Stage;
 
 public class SteelBeam extends Projectile
@@ -18,12 +18,12 @@ public class SteelBeam extends Projectile
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 100;
 	public static final double SPEED = 50;
-	
+
 	public SteelBeam(Stage stage, double x, double y)
 	{
 		this(stage, x, y, 0, 0, DAMAGE);
 	}
-	
+
 	public SteelBeam(Stage stage, double x, double y, double velX, double velY, int dmg)
 	{
 		super(stage, x, y, velX, velY, dmg);
@@ -31,31 +31,41 @@ public class SteelBeam extends Projectile
 		height = HEIGHT;
 		solid = true;
 		flying = false;
+
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.STEEL_BEAM), -1);
 	}
 
 	public void update()
 	{
-		// TODO: animation stuff
-		super.update();
+		if(currentAnimation != DEATH)
+		{
+			super.update();
+		}
+		else
+		{
+			animation.update();
+			if(animation.hasPlayedOnce())
+			{
+				dead = true;
+			}
+		}
 	}
 
 	public void render(Graphics2D g)
 	{
-		// TODO: Animation stuff
-		g.setColor(Color.GRAY);
-		g.fillRect((int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), (int)getWidth(), (int)getHeight());
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight()), null);
 	}
-	
+
 	public String getName()
 	{
 		return "a steel beam";
 	}
-	
+
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight(), getWidth(), getHeight());
 	}
-	
+
 	public void collide(Entity ent)
 	{
 		if(!ent.isDodging())
@@ -68,14 +78,25 @@ public class SteelBeam extends Projectile
 			die();
 		}
 	}
-	
+
 	public void collide(Wall wall)
 	{
 		die();
 	}
-	
+
 	public boolean isActive()
 	{
-		return currentAnimation != DEATH; // TODO: Fix if more animations are added
+		return currentAnimation != DEATH;
+	}
+
+	public void die()
+	{
+		setVelX(0);
+		setVelY(0);
+
+		if(currentAnimation != DEATH)
+		{
+			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.STEEL_BEAM_DEATH), 1);
+		}
 	}
 }

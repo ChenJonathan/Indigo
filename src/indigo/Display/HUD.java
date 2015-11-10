@@ -12,10 +12,12 @@ import indigo.Stage.Stage;
 import indigo.Stage.SurvivalStage;
 import indigo.Stage.TravelStage;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 // Shows information about the player
@@ -38,7 +40,9 @@ public class HUD
 	public static final int WIDTH = Game.WIDTH;
 	public static final int HEIGHT = Game.HEIGHT / 8;
 
-	public static final int BAR_LENGTH = 200;
+	public static final int HEALTH_BAR_LENGTH = 522;
+	public static final int MANA_BAR_LENGTH = 510;
+	public static final int EXPERIENCE_BAR_LENGTH = 502;
 
 	public HUD(PlayState playState, Stage stage)
 	{
@@ -64,34 +68,36 @@ public class HUD
 
 	public void render(Graphics2D g)
 	{
-		// Draws health, mana, and experience bars
-		int anchorX = 230;
-		int anchorY = 1020;
-		g.setColor(Color.BLACK);
-		g.fill(new Rectangle2D.Double(0, Game.HEIGHT - HEIGHT, WIDTH, HEIGHT));
-		g.setColor(Color.RED);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 25, health / player.getMaxHealth() * BAR_LENGTH, 11));
+		// Draws the phase swap cooldown
+		g.setColor(Color.WHITE);
+		g.fillRect(350, 950, 670, 130);
+		if(phase.canSwap())
+		{
+			g.setColor(Color.WHITE);
+		}
+		else
+		{
+			g.setColor(Color.BLACK);
+		}
+		g.fill(new Ellipse2D.Double(489, 1040, 32, 33));
 		g.setColor(Color.BLUE);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY - 12, mana / player.getMaxMana() * BAR_LENGTH, 11));
-		g.setColor(Color.YELLOW);
-		g.fill(new Rectangle2D.Double(anchorX + 34, anchorY + 1, experience / data.getMaxExperience() * BAR_LENGTH, 11));
-
-		// Draws the decorative indicator on the left
-		g.drawImage(ContentManager.getImage(ContentManager.INDICATOR), anchorX - 86, anchorY - 46, 100, 100, null);
-
-		// Draws the stamina pointer
-		double pointerAngle = Math.toRadians(55 * (((double)player.getStamina() - Player.BASE_STAMINA / 2) / 50));
-		g.rotate(pointerAngle, anchorX, anchorY);
-		g.drawImage(ContentManager.getImage(ContentManager.POINTER), anchorX - 90, anchorY - 3, 100, 7, null);
-		g.rotate(-pointerAngle, anchorX, anchorY);
-
-		// Draws the HUD
-		g.drawImage(ContentManager.getImage(ContentManager.PLAYER_HUD), anchorX - 88, anchorY - 50, 350, 100, null);
+		g.fill(new Arc2D.Double(489, 1040, 32, 33, 90, 360.0 * playState.getSwapCooldown()
+				/ playState.getMaxSwapCooldown(), Arc2D.PIE));
 
 		// Writes the player's level
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		g.setColor(Color.BLACK);
-		g.drawString(data.getLevel() + "", anchorX + 25 + 2, anchorY + 35);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+		FontMetrics fontMetrics = g.getFontMetrics();
+		String text = data.getLevel() + "";
+		g.drawString(text, 438 - fontMetrics.stringWidth(text) / 2, 1012 + fontMetrics.getHeight() / 4);
+
+		// Draws health, mana, and experience bars
+		g.setColor(Color.RED);
+		g.fill(new Rectangle2D.Double(490, 969, health / player.getMaxHealth() * HEALTH_BAR_LENGTH, 18));
+		g.setColor(Color.BLUE);
+		g.fill(new Rectangle2D.Double(502, 988, mana / player.getMaxMana() * MANA_BAR_LENGTH, 18));
+		g.setColor(Color.YELLOW);
+		g.fill(new Rectangle2D.Double(506, 1007, experience / data.getMaxExperience() * EXPERIENCE_BAR_LENGTH, 4));
 
 		// Draw skill icons and cooldowns
 		for(int i = 0; i < Data.NUM_SKILLS; i++)
@@ -99,70 +105,98 @@ public class HUD
 			if(phase.getSkillState(i) == Phase.SELECT)
 			{
 				g.setColor(Color.YELLOW);
-				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
+				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
 			}
 			else if(phase.getSkillState(i) == Phase.CAST)
 			{
 				g.setColor(Color.RED);
-				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
+				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
 			}
 			else
 			{
 				g.setColor(Color.GREEN);
-				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, 90));
-				g.setColor(Color.BLUE);
-				g.fill(new Rectangle2D.Double(anchorX + 300 + 150 * i, anchorY - 50, 90, (double)phase.getCooldown(i)
-						/ phase.getMaxCooldown(i) * 90));
+				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
+				Graphics2D gClip = (Graphics2D)g.create();
+				gClip.clipRect(1289 + 185 * i, 947, 131, 131);
+				gClip.setColor(Color.BLUE);
+				gClip.fill(new Arc2D.Double(1262 + 185 * i, 920, 186, 186, 90, 360.0 * (double)phase.getCooldown(i)
+						/ phase.getMaxCooldown(i), Arc2D.PIE));
 			}
 		}
 
-		// Draw phase state
-		if(phase.canSwap() && playState.getSwapCooldown() == 0)
+		// Draws main HUD bar
+		if(phase.id() == Phase.WATER)
 		{
-			g.setColor(Color.WHITE);
-			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, 50));
+			g.drawImage(ContentManager.getImage(ContentManager.HUD_WATER), 0, Game.HEIGHT - HEIGHT, null);
 		}
 		else
 		{
-			g.setColor(Color.GRAY);
-			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, 50));
-		}
-		if(playState.getSwapCooldown() > 0)
-		{
-			g.setColor(Color.BLUE);
-			g.fill(new Rectangle2D.Double(anchorX - 200, anchorY - 30, 50, (double)playState.getSwapCooldown()
-					/ playState.getMaxSwapCooldown() * 50));
+			g.drawImage(ContentManager.getImage(ContentManager.HUD_ICE), 0, Game.HEIGHT - HEIGHT, null);
 		}
 
+		// Draws the stamina spring
+		double staminaRatio = 1 - (double)player.getStamina() / player.getMaxStamina();
+		if(phase.id() == Phase.WATER)
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_WATER), 1040, (int)(976 + 67 * staminaRatio),
+					null);
+		}
+		else
+		{
+			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_ICE), 1040, (int)(976 + 67 * staminaRatio),
+					null);
+		}
+		g.drawImage(ContentManager.getImage(ContentManager.SPRING), 1040, (int)(986 + 67 * staminaRatio), 101,
+				1055 - (int)(986 + 67 * staminaRatio), null);
+
 		// Draw stage specific information
-		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		g.setStroke(new BasicStroke(4));
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		fontMetrics = g.getFontMetrics();
+		String[] objectiveText = new String[0];
 		if(stage instanceof BattleStage)
 		{
+			objectiveText = new String[3];
+			objectiveText[0] = "Name: " + stage.getName();
+			objectiveText[1] = "Objective: Battle";
 			BattleStage battleStage = (BattleStage)stage;
-			g.drawString("Enemies defeated: " + battleStage.getEnemiesDefeated(), Game.WIDTH - 250, Game.HEIGHT - 70);
-			g.drawString("Enemies to defeat: " + battleStage.getEnemiesToDefeat(), Game.WIDTH - 250, Game.HEIGHT - 40);
+			objectiveText[2] = "Enemies defeated: " + battleStage.getEnemiesDefeated() + " / "
+					+ battleStage.getEnemiesToDefeat();
 		}
 		else if(stage instanceof DefendStage)
 		{
+			objectiveText = new String[4];
+			objectiveText[0] = "Name: " + stage.getName();
+			objectiveText[1] = "Objective: Defend";
 			DefendStage defendStage = (DefendStage)stage;
-			g.drawString("Core health: " + defendStage.getCoreHealth() + " / " + defendStage.getCoreMaxHealth(),
-					Game.WIDTH - 250, Game.HEIGHT - 70);
-			g.drawString("Time remaining: " + ((defendStage.getSurvivalDuration() - playState.getTime()) / 30),
-					Game.WIDTH - 250, Game.HEIGHT - 40);
+			objectiveText[2] = "Core health: " + defendStage.getCoreHealth() + " / " + defendStage.getCoreMaxHealth();
+			objectiveText[3] = "Time remaining: " + ((defendStage.getSurvivalDuration() - playState.getTime()) / 30);
 		}
 		else if(stage instanceof SurvivalStage)
 		{
+			objectiveText = new String[3];
+			objectiveText[0] = "Name: " + stage.getName();
+			objectiveText[1] = "Objective: Survival";
 			SurvivalStage survivalStage = (SurvivalStage)stage;
-			g.drawString("Time remaining: " + ((survivalStage.getSurvivalDuration() - playState.getTime()) / 30),
-					Game.WIDTH - 250, Game.HEIGHT - 40);
+			objectiveText[2] = "Time remaining: " + ((survivalStage.getSurvivalDuration() - playState.getTime()) / 30);
 		}
 		else if(stage instanceof TravelStage)
 		{
+			objectiveText = new String[3];
+			objectiveText[0] = "Name: " + stage.getName();
+			objectiveText[1] = "Objective: Travel";
 			TravelStage travelStage = (TravelStage)stage;
-			g.drawString("Time remaining: " + ((travelStage.getTimeLimit() - playState.getTime()) / 30),
-					Game.WIDTH - 250, Game.HEIGHT - 40);
+			objectiveText[2] = "Time remaining: " + ((travelStage.getTimeLimit() - playState.getTime()) / 30);
+		}
+		for(int count = 0; count < objectiveText.length; count++)
+		{
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+			String[] line = objectiveText[count].split(":");
+			g.drawString(line[0] + ":", 30, 965 + (fontMetrics.getHeight() / 2 + 10) * (count + 1));
+
+			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+			g.drawString(line[1], 30 + fontMetrics.stringWidth(line[0] + ": "), 965
+					+ (fontMetrics.getHeight() / 2 + 10) * (count + 1));
 		}
 	}
 

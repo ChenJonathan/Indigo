@@ -31,6 +31,7 @@ public abstract class Stage
 	protected PlayState playState;
 	protected Data data;
 
+	protected String name;
 	protected Player player;
 
 	protected boolean suddenDeath;
@@ -393,7 +394,6 @@ public abstract class Stage
 					}
 					else if(ent.isActive())
 					{
-						ent.setHealth(0);
 						ent.die();
 					}
 				}
@@ -563,11 +563,9 @@ public abstract class Stage
 	public void render(Graphics2D g)
 	{
 		BufferedImage backgroundCrop = background.getSubimage(camBackX, camBackY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
-		g.drawImage(backgroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT, null);
-		// g.setColor(new Color(18, 100, 50));
-		// g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+		g.drawImage(backgroundCrop, 0, 0, null);
 		BufferedImage foregroundCrop = foreground.getSubimage(camForeX, camForeY, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT);
-		g.drawImage(foregroundCrop, 0, 0, Game.WIDTH, Game.HEIGHT - HUD.HEIGHT, null);
+		g.drawImage(foregroundCrop, 0, 0, null);
 
 		g.translate(-camForeX, -camForeY);
 		for(Interactive interactive : interactives)
@@ -703,6 +701,11 @@ public abstract class Stage
 	public void toggleCam()
 	{
 		camUnlocked = !camUnlocked;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 
 	public Entity getPlayer()

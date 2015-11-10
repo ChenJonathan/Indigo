@@ -186,20 +186,19 @@ public class IncendiaryTurret extends Entity
 			if(currentAnimation == DEATH)
 			{
 				g.drawImage(animationBarrel.getImage(), (int)(getX() - 65 + baseOffsetX),
-						(int)(getY() - 93 + baseOffsetY), 130, 130, null);
+						(int)(getY() - 93 + baseOffsetY), null);
 			}
 			else
 			{
 				g.drawImage(animationBarrel.getImage(), (int)(getX() - 65 + baseOffsetX),
-						(int)(getY() - 93 + baseOffsetY), 130, 130, null);
+						(int)(getY() - 93 + baseOffsetY), null);
 			}
 			g.rotate(angle - Math.PI / 2, getX() + baseOffsetX, getY() + baseOffsetY);
 		}
 
 		// Rotation breaks if x is negative
 		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
 	}
 

@@ -426,7 +426,7 @@ public class DesignState extends GameState
 		}
 
 		// Draw background
-		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, Game.WIDTH, Game.HEIGHT, null);
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
 
 		// Draw grid
 		g.setColor(Color.BLACK);
@@ -526,7 +526,7 @@ public class DesignState extends GameState
 		}
 
 		// Draw toolbar
-		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1579, 39, 302, 402, null);
+		g.drawImage(ContentManager.getImage(ContentManager.TOOLBAR), 1579, 39, null);
 
 		// Draw hover box
 		if(hoverValue != -1)
@@ -542,22 +542,22 @@ public class DesignState extends GameState
 		g.drawRect(1585 + (selectedTool % 3) * 100, 45 + (selectedTool / 3) * 100, 92, 92);
 
 		// Draw selection box
-		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 480, 300, 75, null);
+		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 1580, 480, null);
 		if(arrowLeft)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 480, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 1580, 480, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 480, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 1580, 480, null);
 		}
 		if(arrowRight)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 480, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 1820, 480, null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 480, 60, 75, null);
+			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 1820, 480, null);
 		}
 
 		// Draw tool type text
@@ -568,7 +568,7 @@ public class DesignState extends GameState
 		g.drawString(text, 1730 - fontMetrics.stringWidth(text) / 2, 520 + fontMetrics.getHeight() / 4);
 
 		// Draw description box
-		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 595, 300, 440, null);
+		g.drawImage(ContentManager.getImage(ContentManager.DESCRIPTION_BOX), 1580, 595, null);
 
 		// Draw description text
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 32));
@@ -609,7 +609,7 @@ public class DesignState extends GameState
 		// Draw confirm button
 		if(confirmBox)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.CONFIRM_BUTTON), 1642, 970, 175, 50, null);
+			g.drawImage(ContentManager.getImage(ContentManager.CONFIRM_BUTTON), 1642, 970, null);
 		}
 
 		// Draw hover tooltip

@@ -36,8 +36,8 @@ public class OptionState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
-		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, 1920, 1080, null);
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, 360, 107, null);
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 873, null);
 	}
 
 	/**

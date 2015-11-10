@@ -13,7 +13,7 @@ public class ElectricBall extends Projectile
 	private final int DEFAULT = 0;
 	private final int SPARK = 1;
 
-	public final static int DAMAGE = 2;
+	public final static int DAMAGE = 4;
 	public final static int WIDTH = 50;
 	public final static int HEIGHT = 50;
 	public final static double SPEED = 25;

@@ -41,9 +41,11 @@ public class ContentManager
 	public static ImageData STONE_TILE_RIGHT = new ImageData("/images/elements/stone_tile_right.png", 100, 30);
 
 	// HUD
-	public static ImageData INDICATOR = new ImageData("/images/hud/indicator.png", 100, 100);
-	public static ImageData PLAYER_HUD = new ImageData("/images/hud/player_hud.png", 350, 100);
-	public static ImageData POINTER = new ImageData("/images/hud/pointer.png", 100, 7);
+	public static ImageData HUD_ICE = new ImageData("/images/hud/hud_ice.png", 1920, 135);
+	public static ImageData HUD_WATER = new ImageData("/images/hud/hud_water.png", 1920, 135);
+	public static ImageData SPRING = new ImageData("/images/hud/spring.png", 101, 77);
+	public static ImageData SPRING_TOP_ICE = new ImageData("/images/hud/spring_top_ice.png", 101, 10);
+	public static ImageData SPRING_TOP_WATER = new ImageData("/images/hud/spring_top_water.png", 101, 10);
 
 	// Interactives
 	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/interactives/health_pickup/death.png",
@@ -63,8 +65,10 @@ public class ContentManager
 	public static ImageData ARROW_RIGHT_ACTIVE = new ImageData("/images/menus/arrow_right_active.png", 60, 75);
 	public static ImageData ARROW_RIGHT_INACTIVE = new ImageData("/images/menus/arrow_right_inactive.png", 60, 75);
 	public static ImageData BUTTON_BACK = new ImageData("/images/menus/button_back.png", 358, 106);
+	public static ImageData BUTTON_LEVEL = new ImageData("/images/menus/button_level.png", 120, 120);
 	public static ImageData BUTTON_CLEAR = new ImageData("/images/menus/button_clear.png", 106, 106);
 	public static ImageData BUTTON_CREDITS = new ImageData("/images/menus/button_credits.png", 358, 106);
+	public static ImageData BUTTON_EXIT = new ImageData("/images/menus/button_exit.png", 120, 120);
 	public static ImageData BUTTON_INSTRUCTIONS = new ImageData("/images/menus/button_instructions.png", 358, 106);
 	public static ImageData BUTTON_LEVEL_EDITOR = new ImageData("/images/menus/button_level_editor.png", 358, 106);
 	public static ImageData BUTTON_LOAD = new ImageData("/images/menus/button_load.png", 358, 106);
@@ -96,6 +100,8 @@ public class ContentManager
 	public static AnimationData MORTAR = new AnimationData("/images/projectiles/mortar.png", 50, 50, 1);
 	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100, 100,
 			1);
+	public static AnimationData STEEL_BEAM = new AnimationData("/images/projectiles/steel_beam/default.png", 50, 100, 1);
+	public static AnimationData STEEL_BEAM_DEATH = new AnimationData("/images/projectiles/steel_beam/death.png", 50, 100, 10);
 	public static AnimationData WATER_BOLT_DEATH = new AnimationData("/images/projectiles/water_bolt/death.png", 80,
 			73, 2);
 	public static AnimationData WATER_BOLT_DEATH_WALL = new AnimationData(
@@ -103,6 +109,7 @@ public class ContentManager
 	public static AnimationData WATER_BOLT = new AnimationData("/images/projectiles/water_bolt/default.png", 80, 73, 2);
 
 	// Sprites
+	public static AnimationData BLOCKADE_IDLE = new AnimationData("/images/sprites/blockade/idle.png", 200, 200, 4);
 	public static ImageData FLYING_BOT_CANNON = new ImageData("/images/sprites/flying_bot/cannon.png", 18, 11);
 	public static AnimationData FLYING_BOT_DEATH = new AnimationData("/images/sprites/flying_bot/death.png", 60, 60, 6);
 	public static AnimationData FLYING_BOT_IDLE = new AnimationData("/images/sprites/flying_bot/idle.png", 60, 60, 4);
@@ -203,6 +210,7 @@ public class ContentManager
 	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda Medley.mid", true);
 	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates of the Caribbean Medley.mid", true);
 
+	// Storage
 	private static HashMap<ImageData, BufferedImage> imageMap;
 	private static HashMap<AnimationData, BufferedImage[]> animationMap;
 	private static HashMap<SoundData, byte[]> soundMap;

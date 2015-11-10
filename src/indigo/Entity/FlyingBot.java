@@ -96,14 +96,13 @@ public class FlyingBot extends Entity
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 
 		// Rotation breaks if x is negative
 		if(getX() > 0 && getX() < stage.getMapX() && currentAnimation != DEATH)
 		{
 			g.rotate(angle, getX(), getY());
-			g.drawImage(ContentManager.getImage(ContentManager.FLYING_BOT_CANNON), (int)(getX() + 15), (int)(getY() - 5.5), 18, 11, null);
+			g.drawImage(ContentManager.getImage(ContentManager.FLYING_BOT_CANNON), (int)(getX() + 15), (int)(getY() - 5.5), null);
 			g.rotate(-angle, getX(), getY());
 		}
 	}

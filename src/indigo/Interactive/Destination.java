@@ -21,14 +21,14 @@ public class Destination extends Interactive
 		super(stage, x, y);
 		width = WIDTH;
 		height = HEIGHT;
-		
+
 		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.HEALTH_PICKUP_IDLE), 6);
 	}
 
 	public void update()
 	{
 		super.update();
-		
+
 		if(currentAnimation == DEATH && animation.hasPlayedOnce())
 		{
 			dead = true;
@@ -37,10 +37,9 @@ public class Destination extends Interactive
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2),
-				(int)getWidth(), (int)getHeight(), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 	}
-	
+
 	public String getName()
 	{
 		return "the destination";

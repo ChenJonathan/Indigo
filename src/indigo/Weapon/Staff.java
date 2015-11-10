@@ -122,17 +122,15 @@ public class Staff extends Weapon
 		if(user.isFacingRight())
 		{
 			g.rotate(renderAngle, user.getX() + xOffset + 26, user.getY() + yOffset + 29);
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), null);
 			g.rotate(-renderAngle, user.getX() + xOffset + 26, user.getY() + yOffset + 29);
 		}
 		else
 		{
 			g.rotate(renderAngle, user.getX() + xOffset + 73, user.getY() + yOffset + 29);
-			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
+			g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), null);
 			g.rotate(-renderAngle, user.getX() + xOffset + 73, user.getY() + yOffset + 29);
 		}
-
-		// g.drawImage(animation.getImage(), (int)(user.getX() + xOffset), (int)(user.getY() + yOffset), 100, 90, null);
 	}
 
 	// Not used

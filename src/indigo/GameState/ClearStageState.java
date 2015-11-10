@@ -1,6 +1,5 @@
 package indigo.GameState;
 
-import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
@@ -40,7 +39,7 @@ public class ClearStageState extends GameState
 	@Override
 	public void render(Graphics2D g)
 	{
-		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, Game.WIDTH, Game.HEIGHT, null);
+		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
 		
 		String message = "";
 		if(data.getVictory())
@@ -57,7 +56,6 @@ public class ClearStageState extends GameState
 		g.drawString(message, 150, 300);
 		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 		g.drawString("Time elapsed: " + Math.round(data.getClearTime() / 30.0) + " s", 150, 350);
-		// TODO Draw background and other things
 	}
 
 	@Override

@@ -39,6 +39,7 @@ public class Game extends JPanel implements Runnable
 
 	private BufferedImage image;
 	private Graphics2D g;
+	private AffineTransform defaultForm;
 
 	private GameStateManager gsm;
 
@@ -61,6 +62,7 @@ public class Game extends JPanel implements Runnable
 		g = (Graphics2D)image.getGraphics();
 		g.scale((double)resolutionWidth / WIDTH, (double)resolutionHeight / HEIGHT);
 		g.clipRect(0, 0, Game.WIDTH, Game.HEIGHT);
+		defaultForm = g.getTransform();
 		gsm = new GameStateManager(this);
 
 		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
@@ -150,7 +152,6 @@ public class Game extends JPanel implements Runnable
 	 */
 	private void render()
 	{
-		AffineTransform defaultForm = g.getTransform();
 		gsm.render(g);
 		g.setTransform(defaultForm);
 	}

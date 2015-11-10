@@ -47,13 +47,12 @@ public class PulseWave extends Projectile
 
 	public void render(Graphics2D g)
 	{
-		// TODO: If necessary, change to be that of the pulse shot
 		g.drawImage(animation.getImage(), (int)(getX() - (getWidth() / 2 * (1 - (double)timer / DURATION))),
 				(int)(getY() - (getHeight() / 2 * (1 - (double)timer / DURATION))),
 				(int)(getWidth() * (1 - (double)timer / DURATION)),
 				(int)(getHeight() * (1 - (double)timer / DURATION)), null);
 	}
-	
+
 	public String getName()
 	{
 		return creator.getName();

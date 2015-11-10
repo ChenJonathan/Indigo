@@ -54,11 +54,11 @@ public class Mortar extends Projectile
 	{
 		if(currentAnimation == DEATH)
 		{
-			g.drawImage(animation.getImage(), (int)getX() - WIDTH, (int)getY() - HEIGHT, WIDTH * 2, HEIGHT * 2, null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth()), (int)(getY() - getHeight()), null);
 		}
 		else if(timer > 1)
 		{
-			g.drawImage(animation.getImage(), (int)getX() - WIDTH / 2, (int)getY() - HEIGHT / 2, WIDTH, HEIGHT, null);
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth()), (int)(getY() - getHeight()), null);
 		}
 	}
 	
@@ -71,7 +71,6 @@ public class Mortar extends Projectile
 	{
 		if(currentAnimation == DEATH)
 		{
-			// Tweak these values
 			return new Ellipse2D.Double(getX() - getWidth(), getY() - getHeight(), getWidth() * 2, getHeight() * 2);
 		}
 		return new Ellipse2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
@@ -114,6 +113,8 @@ public class Mortar extends Projectile
 			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.MORTAR_DEATH), 3);
 			setVelX(0);
 			setVelY(0);
+			width *= 2;
+			height *= 2;
 		}
 	}
 }

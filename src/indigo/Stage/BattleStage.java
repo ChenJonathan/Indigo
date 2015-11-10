@@ -40,6 +40,7 @@ public class BattleStage extends Stage
 		int mana = Player.BASE_MANA + (data.getLevel() - 1) * 10;
 		player = new Player(this, startingX, startingY, health, mana, Player.BASE_STAMINA);
 		entities.add(0, player);
+		name = json.get("name") + "";
 
 		background = ContentManager.getImage(ContentManager.BACKGROUND);
 		try

@@ -149,7 +149,7 @@ public abstract class Land
 		ArrayList<Point2D> intersections = getHitboxIntersections(travelLine);
 		if(intersections.size() == 0)
 		{
-			return new Point2D.Double(0, 0);
+			return new Point2D.Double(travelLine.getX1(), travelLine.getY1());
 		}
 
 		Point2D minDistancePoint = intersections.get(0);
@@ -214,11 +214,24 @@ public abstract class Land
 		double px = line1.getX1(), py = line1.getY1(), rx = line1.getX2() - px, ry = line1.getY2() - py;
 		double qx = line2.getX1(), qy = line2.getY1(), sx = line2.getX2() - qx, sy = line2.getY2() - qy;
 
+		// Parallel lines
+		if(rx == sx)
+		{
+			if(line1.ptSegDist(new Point2D.Double(px, py)) == 0)
+			{
+				return new Point2D.Double(line1.getX1(), line1.getY1());
+			}
+			else
+			{
+				return new Point2D.Double(line1.getX2(), line1.getY2());
+			}
+		}
+		
 		double det = sx * ry - sy * rx;
 		double z = (sx * (qy - py) + sy * (px - qx)) / det;
 		if(z == 0 || z == 1)
 		{
-			// return null; // intersection at end point!
+			// Intersection at  end point
 		}
 		return new Point2D.Double((px + z * rx), (py + z * ry));
 	}
