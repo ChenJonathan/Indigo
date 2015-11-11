@@ -1,0 +1,43 @@
+{
+    "name":"Distant Planet",
+    "type":"Survival",
+
+    "mapX":5000,
+    "mapY":3000,
+
+    "startingX":2000,
+    "startingY":100,
+
+    "survivalDuration":1800,
+
+    "landscape":[
+        {"type":"Platform", "x1":2700, "y1":1500, "x2":3000, "y2":1500}
+        {"type":"Platform", "x1":3600, "y1":1500, "x2":3300, "y2":1500}
+        {"type":"Wall", "x1":0, "y1":1300, "x2":1000, "y2":1500}
+        {"type":"Wall", "x1":1000, "y1":1500, "x2":2000, "y2":1900}
+        {"type":"Wall", "x1":2000, "y1":1900, "x2":2500, "y2":2400}
+        {"type":"Wall", "x1":2500, "y1":2400, "x2":2800, "y2":2800}
+        {"type":"Wall", "x1":2800, "y1":2800, "x2":2900, "y2":3000}
+        {"type":"Platform", "x1":3900, "y1":1500, "x2":4200, "y2":1500}
+        {"type":"Platform", "x1":2300, "y1":1700, "x2":4600, "y2":1700}
+        {"type":"Wall", "x1":2300, "y1":0, "x2":2600, "y2":700}
+        {"type":"Wall", "x1":2200, "y1":700, "x2":1900, "y2":0}
+        {"type":"Force Field", "x1":2200, "y1":700, "x2":2600, "y2":700}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Flying Bot", "x":4500, "y":300, "respawnTime":120}
+        {"category":"Entity", "type":"Flying Bot", "x":4700, "y":600, "respawnTime":120}
+        {"category":"Entity", "type":"Incendiary Turret", "x":2900, "y":1400, "respawnTime":240}
+        {"category":"Entity", "type":"Incendiary Turret", "x":4000, "y":1400, "respawnTime":240}
+        {"category":"Entity", "type":"Gatling Turret", "x":3500, "y":1400, "respawnTime":360}
+        {"category":"Entity", "type":"Gatling Turret", "x":300, "y":1300, "respawnTime":540}
+        {"category":"Interactive", "type":"Health Pickup", "x":100, "y":1200, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":2900, "y":1900, "respawnTime":90}
+        {"category":"Entity", "type":"Flying Bot", "x":4000, "y":1900, "respawnTime":90}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1200, "y":1500, "respawnTime":390}
+        {"category":"Interactive", "type":"Health Pickup", "x":700, "y":1400, "respawnTime":300}
+        {"category":"Interactive", "type":"Health Pickup", "x":2300, "y":1600, "respawnTime":240}
+        {"category":"Interactive", "type":"Health Pickup", "x":4600, "y":1600, "respawnTime":240}
+    ]
+}

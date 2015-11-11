@@ -16,7 +16,8 @@ public class IceSword extends Weapon
 	private final int radialOffset = 30;
 	private final int verticalOffset = -10;
 
-	private boolean attacking = false; // TODO Replace with animation check
+	private boolean attacking = false; // TODO Consider replacing with animation check
+	private boolean whirlwind = false;
 
 	private double swordAngle;
 	private double renderAngle;
@@ -41,8 +42,9 @@ public class IceSword extends Weapon
 	private final int STAB_RIGHT = 7;
 
 	public static final int DAMAGE = 50;
-	public static final int STAB_DAMAGE_MULTIPLIER = 2;
 	public static final int SLASH_DURATION = 6;
+	public static final int STAB_DAMAGE_MULTIPLIER = 2;
+	public static final int WHIRLWIND_DAMAGE_MULTIPLIER = 2;
 
 	public IceSword(Entity user, int dmg)
 	{
@@ -191,6 +193,11 @@ public class IceSword extends Weapon
 
 	public void render(Graphics2D g)
 	{
+		if(whirlwind)
+		{
+			return;
+		}
+
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
 
@@ -213,7 +220,11 @@ public class IceSword extends Weapon
 		if(!entitiesHit.contains(ent))
 		{
 			ent.mark();
-			if(slashMode)
+			if(whirlwind)
+			{
+				ent.setHealth(ent.getHealth() - damage * WHIRLWIND_DAMAGE_MULTIPLIER);
+			}
+			else if(slashMode)
 			{
 				ent.setHealth(ent.getHealth() - damage);
 			}
@@ -227,7 +238,12 @@ public class IceSword extends Weapon
 
 	public Line2D.Double getHitbox()
 	{
-		if(attacking)
+		if(whirlwind)
+		{
+			return new Line2D.Double(user.getX() - user.getWidth() / 2, user.getY() - 40, user.getX() + user.getWidth()
+					/ 2, user.getY() - 40);
+		}
+		else if(attacking)
 		{
 			return new Line2D.Double(beginSwordX, beginSwordY, endSwordX, endSwordY);
 		}
@@ -304,5 +320,10 @@ public class IceSword extends Weapon
 	public boolean isAttacking()
 	{
 		return attacking;
+	}
+
+	public void setWhirlwind(boolean whirlwind)
+	{
+		this.whirlwind = whirlwind;
 	}
 }

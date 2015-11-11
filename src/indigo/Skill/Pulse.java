@@ -103,8 +103,9 @@ public class Pulse extends Skill
 
 	public void endCast()
 	{
-		super.endCast();
 		player.canAttack(true);
 		player.canMove(true);
+		phase.setAttackTimer(30);
+		super.endCast();
 	}
 }

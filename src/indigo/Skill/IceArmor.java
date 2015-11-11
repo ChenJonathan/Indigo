@@ -22,7 +22,7 @@ public class IceArmor extends Skill
 			player.setIceArmor(true);
 			phase.setAttackTimer(30);
 		}
-		else if(player.getMana() == 0 || Manager.input.keyPress(InputManager.K3))
+		else if(player.getMana() == 0 || (player.canMove() && Manager.input.keyPress(InputManager.K3)))
 		{
 			endCast();
 		}
@@ -30,12 +30,13 @@ public class IceArmor extends Skill
 
 	public boolean canCast()
 	{
-		return player.getMana() > 0 && player.canAttack();
+		return player.getMana() > 0 && player.canMove();
 	}
 
 	public void endCast()
 	{
-		super.endCast();
 		player.setIceArmor(false);
+		phase.setAttackTimer(30);
+		super.endCast();
 	}
 }

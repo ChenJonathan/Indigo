@@ -43,7 +43,7 @@ public class ContentManager
 	// HUD
 	public static ImageData HUD_ICE = new ImageData("/images/hud/hud_ice.png", 1920, 135);
 	public static ImageData HUD_WATER = new ImageData("/images/hud/hud_water.png", 1920, 135);
-	public static ImageData SPRING = new ImageData("/images/hud/spring.png", 101, 77);
+	public static ImageData SPRING = new ImageData("/images/hud/spring.png", 101, 89);
 	public static ImageData SPRING_TOP_ICE = new ImageData("/images/hud/spring_top_ice.png", 101, 10);
 	public static ImageData SPRING_TOP_WATER = new ImageData("/images/hud/spring_top_water.png", 101, 10);
 
@@ -110,7 +110,8 @@ public class ContentManager
 	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100, 100,
 			1);
 	public static AnimationData STEEL_BEAM = new AnimationData("/images/projectiles/steel_beam/default.png", 50, 100, 1);
-	public static AnimationData STEEL_BEAM_DEATH = new AnimationData("/images/projectiles/steel_beam/death.png", 50, 100, 10);
+	public static AnimationData STEEL_BEAM_DEATH = new AnimationData("/images/projectiles/steel_beam/death.png", 50,
+			100, 10);
 	public static AnimationData WATER_BOLT_DEATH = new AnimationData("/images/projectiles/water_bolt/death.png", 80,
 			73, 2);
 	public static AnimationData WATER_BOLT_DEATH_WALL = new AnimationData(
@@ -172,6 +173,14 @@ public class ContentManager
 			8);
 	public static AnimationData PLAYER_MOVE_RIGHT_ARMOR = new AnimationData(
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
+	public static AnimationData PLAYER_WHIRLWIND_LEFT = new AnimationData("/images/sprites/player/whirlwind_left.png",
+			200, 120, 8);
+	public static AnimationData PLAYER_WHIRLWIND_LEFT_ARMOR = new AnimationData("/images/sprites/player/whirlwind_left_armor.png",
+			200, 120, 8);
+	public static AnimationData PLAYER_WHIRLWIND_RIGHT = new AnimationData(
+			"/images/sprites/player/whirlwind_right.png", 200, 120, 8);
+	public static AnimationData PLAYER_WHIRLWIND_RIGHT_ARMOR = new AnimationData(
+			"/images/sprites/player/whirlwind_right_armor.png", 200, 120, 8);
 	public static AnimationData TREE_DEFAULT = new AnimationData("/images/sprites/tree/default.png", 660, 960, 1);
 	public static AnimationData TURRET_BASE_DEATH = new AnimationData("/images/sprites/turret/base_death.png", 130,
 			110, 7);

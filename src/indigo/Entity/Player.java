@@ -42,8 +42,10 @@ public class Player extends Entity
 	private final int BLOCK_LEFT = 8;
 	private final int BLOCK_RIGHT = 9;
 	private final int MIST = 10;
-	private final int DEATH_LEFT = 11;
-	private final int DEATH_RIGHT = 12;
+	private final int WHIRLWIND_LEFT = 11;
+	private final int WHIRLWIND_RIGHT = 12;
+	private final int DEATH_LEFT = 13;
+	private final int DEATH_RIGHT = 14;
 
 	// Movement constants
 	private final double ACCELERATION = 4;
@@ -146,6 +148,21 @@ public class Player extends Entity
 				flying = false;
 				frictionless = false;
 				solid = true;
+			}
+		}
+		else if(currentAnimation == WHIRLWIND_LEFT || currentAnimation == WHIRLWIND_RIGHT)
+		{
+			if(animation.hasPlayedOnce())
+			{
+				canAttack(true);
+				canMove(true);
+				canTurn(true);
+
+				dodging = false;
+				width = PLAYER_WIDTH;
+				height = PLAYER_HEIGHT;
+				
+				((IceSword)weapon).setWhirlwind(false);
 			}
 		}
 		else if(currentAnimation == DEATH_LEFT || currentAnimation == DEATH_RIGHT)
@@ -672,7 +689,44 @@ public class Player extends Entity
 		}
 		else if(phase.id() == Phase.ICE)
 		{
-			// TODO Ice whirlwind
+			canAttack(false);
+			canMove(false);
+			canTurn(false);
+
+			setVelX(0);
+			setVelY(0);
+			
+			((IceSword)weapon).setWhirlwind(true);
+
+			dodging = true;
+			width = 200;
+			height = 120;
+
+			jump();
+			jumpMore();
+
+			if(isFacingRight())
+			{
+				if(iceArmor)
+				{
+					setAnimation(WHIRLWIND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_RIGHT_ARMOR), 1);
+				}
+				else
+				{
+					setAnimation(WHIRLWIND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_RIGHT), 1);
+				}
+			}
+			else
+			{
+				if(iceArmor)
+				{
+					setAnimation(WHIRLWIND_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_LEFT_ARMOR), 1);
+				}
+				else
+				{
+					setAnimation(WHIRLWIND_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_LEFT), 1);
+				}
+			}
 		}
 	}
 
@@ -684,8 +738,8 @@ public class Player extends Entity
 		}
 		else
 		{
-			return true;
-			// TODO Ice whirlwind
+			return (currentAnimation == WHIRLWIND_LEFT || currentAnimation == WHIRLWIND_RIGHT)
+					&& animation.getFrame() == 7;
 		}
 	}
 

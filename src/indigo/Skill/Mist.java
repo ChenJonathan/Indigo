@@ -137,6 +137,7 @@ public class Mist extends Skill
 
 	public void endCast()
 	{
+		phase.setAttackTimer(30);
 		super.endCast();
 	}
 }

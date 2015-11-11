@@ -5,8 +5,6 @@ import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 
 /**

@@ -78,7 +78,6 @@ public abstract class Phase
 	{
 		skillStates[skill] = IDLE;
 		cooldowns[skill] = maxCooldowns[skill];
-		setAttackTimer(30);
 	}
 
 	public void setAttackTimer(int time)

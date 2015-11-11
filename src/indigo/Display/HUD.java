@@ -17,7 +17,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Arc2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 // Shows information about the player
@@ -68,30 +67,9 @@ public class HUD
 
 	public void render(Graphics2D g)
 	{
-		// Draws the phase swap cooldown
+		// Draws health, mana, and experience bars
 		g.setColor(Color.WHITE);
 		g.fillRect(350, 950, 670, 130);
-		if(phase.canSwap())
-		{
-			g.setColor(Color.WHITE);
-		}
-		else
-		{
-			g.setColor(Color.BLACK);
-		}
-		g.fill(new Ellipse2D.Double(489, 1040, 32, 33));
-		g.setColor(Color.BLUE);
-		g.fill(new Arc2D.Double(489, 1040, 32, 33, 90, 360.0 * playState.getSwapCooldown()
-				/ playState.getMaxSwapCooldown(), Arc2D.PIE));
-
-		// Writes the player's level
-		g.setColor(Color.BLACK);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
-		FontMetrics fontMetrics = g.getFontMetrics();
-		String text = data.getLevel() + "";
-		g.drawString(text, 438 - fontMetrics.stringWidth(text) / 2, 1012 + fontMetrics.getHeight() / 4);
-
-		// Draws health, mana, and experience bars
 		g.setColor(Color.RED);
 		g.fill(new Rectangle2D.Double(490, 969, health / player.getMaxHealth() * HEALTH_BAR_LENGTH, 18));
 		g.setColor(Color.BLUE);
@@ -105,21 +83,21 @@ public class HUD
 			if(phase.getSkillState(i) == Phase.SELECT)
 			{
 				g.setColor(Color.YELLOW);
-				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
+				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
 			}
 			else if(phase.getSkillState(i) == Phase.CAST)
 			{
 				g.setColor(Color.RED);
-				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
+				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
 			}
 			else
 			{
 				g.setColor(Color.GREEN);
-				g.fill(new Rectangle2D.Double(1289 + 185 * i, 947, 131, 131));
+				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
 				Graphics2D gClip = (Graphics2D)g.create();
-				gClip.clipRect(1289 + 185 * i, 947, 131, 131);
+				gClip.clipRect(1306 + 187 * i, 962, 101, 101);
 				gClip.setColor(Color.BLUE);
-				gClip.fill(new Arc2D.Double(1262 + 185 * i, 920, 186, 186, 90, 360.0 * (double)phase.getCooldown(i)
+				gClip.fill(new Arc2D.Double(1285 + 187 * i, 941, 143, 143, 90, 360.0 * (double)phase.getCooldown(i)
 						/ phase.getMaxCooldown(i), Arc2D.PIE));
 			}
 		}
@@ -134,20 +112,32 @@ public class HUD
 			g.drawImage(ContentManager.getImage(ContentManager.HUD_ICE), 0, Game.HEIGHT - HEIGHT, null);
 		}
 
+		// Draws the phase swap cooldown
+		g.setColor(Color.BLUE);
+		g.fill(new Arc2D.Double(489, 1040, 32, 33, 90, 360.0 * playState.getSwapCooldown()
+				/ playState.getMaxSwapCooldown(), Arc2D.PIE));
+
+		// Writes the player's level
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
+		FontMetrics fontMetrics = g.getFontMetrics();
+		String text = data.getLevel() + "";
+		g.drawString(text, 438 - fontMetrics.stringWidth(text) / 2, 1012 + fontMetrics.getHeight() / 4);
+
 		// Draws the stamina spring
 		double staminaRatio = 1 - (double)player.getStamina() / player.getMaxStamina();
 		if(phase.id() == Phase.WATER)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_WATER), 1040, (int)(976 + 67 * staminaRatio),
+			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_WATER), 1040, (int)(963 + 89 * staminaRatio),
 					null);
 		}
 		else
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_ICE), 1040, (int)(976 + 67 * staminaRatio),
+			g.drawImage(ContentManager.getImage(ContentManager.SPRING_TOP_ICE), 1040, (int)(963 + 89 * staminaRatio),
 					null);
 		}
-		g.drawImage(ContentManager.getImage(ContentManager.SPRING), 1040, (int)(986 + 67 * staminaRatio), 101,
-				1055 - (int)(986 + 67 * staminaRatio), null);
+		g.drawImage(ContentManager.getImage(ContentManager.SPRING), 1040, (int)(973 + 89 * staminaRatio), 101,
+				1062 - (int)(973 + 89 * staminaRatio), null);
 
 		// Draw stage specific information
 		g.setColor(Color.BLACK);

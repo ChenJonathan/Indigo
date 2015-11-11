@@ -6,6 +6,7 @@ import indigo.Skill.LockedSkill;
 import indigo.Skill.IceArmor;
 import indigo.Skill.IceChains;
 import indigo.Skill.Skill;
+import indigo.Skill.Whirlwind;
 
 public class Ice extends Phase
 {
@@ -14,10 +15,10 @@ public class Ice extends Phase
 		super(playState);
 		id = Phase.ICE;
 
-		maxCooldowns = new int[] {150, 150, 150};
+		maxCooldowns = new int[] {50, 150, 150};
 
 		int level = playState.getData().getLevel();
-		skills[0] = level >= 5? new IceChains(this, 0) : new LockedSkill(this, 0);
+		skills[0] = level >= 5? new Whirlwind(this, 0) : new LockedSkill(this, 0);
 		skills[1] = level >= 10? new IceChains(this, 1) : new LockedSkill(this, 1);
 		skills[2] = level >= 15? new IceArmor(this, 2) : new LockedSkill(this, 2);
 	}
@@ -49,7 +50,7 @@ public class Ice extends Phase
 	{
 		if(skills[0].id() == Skill.EMPTY)
 		{
-			skills[0] = new IceChains(this, 0);
+			skills[0] = new Whirlwind(this, 0);
 		}
 		else if(skills[1].id() == Skill.EMPTY)
 		{
