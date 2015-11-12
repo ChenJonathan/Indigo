@@ -66,6 +66,7 @@ public class ContentManager
 	public static ImageData ARROW_LEFT_INACTIVE = new ImageData("/images/menus/arrow_left_inactive.png", 60, 75);
 	public static ImageData ARROW_RIGHT_ACTIVE = new ImageData("/images/menus/arrow_right_active.png", 60, 75);
 	public static ImageData ARROW_RIGHT_INACTIVE = new ImageData("/images/menus/arrow_right_inactive.png", 60, 75);
+	public static ImageData BOOK = new ImageData("/images/menus/book.png", 900, 600);
 	public static ImageData BUTTON_BACK = new ImageData("/images/menus/button_back.png", 358, 106);
 	public static ImageData BUTTON_BLANK = new ImageData("/images/menus/button_blank.png", 400, 106);
 	public static ImageData BUTTON_LEVEL = new ImageData("/images/menus/button_level.png", 106, 106);

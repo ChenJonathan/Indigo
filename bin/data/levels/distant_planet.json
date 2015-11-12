@@ -39,5 +39,11 @@
         {"category":"Interactive", "type":"Health Pickup", "x":700, "y":1400, "respawnTime":300}
         {"category":"Interactive", "type":"Health Pickup", "x":2300, "y":1600, "respawnTime":240}
         {"category":"Interactive", "type":"Health Pickup", "x":4600, "y":1600, "respawnTime":240}
+        {"category":"Projectile", "type":"Steel Beam", "x":1700, "y":900, "respawnTime":90}
+        {"category":"Entity", "type":"Flying Bot", "x":1900, "y":2200, "respawnTime":60}
+        {"category":"Projectile", "type":"Steel Beam", "x":1800, "y":900, "respawnTime":60}
+        {"category":"Projectile", "type":"Steel Beam", "x":1900, "y":900, "respawnTime":90}
+        {"category":"Projectile", "type":"Steel Beam", "x":2000, "y":900, "respawnTime":60}
+        {"category":"Projectile", "type":"Steel Beam", "x":1600, "y":900, "respawnTime":60}
     ]
 }

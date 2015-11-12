@@ -1,12 +1,12 @@
 package indigo.GameState;
 
+import indigo.Display.Book;
+import indigo.Main.Game;
 import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
+import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 import org.json.simple.JSONObject;
@@ -17,8 +17,13 @@ import org.json.simple.JSONObject;
  */
 public class StageSelectState extends GameState
 {
+	private int bookIndex;
+
+	private Book currentBook;
+	private Book nextBook;
+
 	private String[] levels;
-	private int levelIndex;
+	private int books;
 
 	/**
 	 * Sets up the stage selection state.
@@ -31,18 +36,46 @@ public class StageSelectState extends GameState
 
 		JSONObject index = ContentManager.load("/index.json");
 		levels = (String[])index.values().toArray(new String[0]);
-		levelIndex = 0;
+		books = (levels.length - 1) / Book.LEVELS_PER_BOOK + 1;
+
+		bookIndex = 0;
+		currentBook = new Book(Game.WIDTH / 2, 450, 0, bookIndex, levels);
 	}
 
 	@Override
 	public void update()
 	{
+		currentBook.update();
+		if(nextBook != null)
+		{
+			nextBook.update();
+			if(currentBook.getX() > Game.WIDTH / 2 && nextBook.getX() > Game.WIDTH / 2)
+			{
+				bookIndex--;
+				currentBook = nextBook;
+				currentBook.setX(Game.WIDTH / 2);
+				currentBook.setVelX(0);
+				currentBook.setAccelX(0);
+				nextBook = null;
+			}
+			else if(currentBook.getX() < Game.WIDTH / 2 && nextBook.getX() < Game.WIDTH / 2)
+			{
+				bookIndex++;
+				currentBook = nextBook;
+				currentBook.setX(Game.WIDTH / 2);
+				currentBook.setVelX(0);
+				currentBook.setAccelX(0);
+				nextBook = null;
+			}
+		}
+
 		handleInput();
 	}
 
 	@Override
 	public void render(Graphics2D g)
 	{
+		// Background and back button
 		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
 		if(Manager.input.mouseInRect(100, 874, 358, 106))
 		{
@@ -51,31 +84,12 @@ public class StageSelectState extends GameState
 		}
 		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
 
-		// Draw selection box
-		g.drawImage(ContentManager.getImage(ContentManager.SELECTION_BOX), 600, 100, null);
-		if(levelIndex != 0)
+		// Drawing books
+		currentBook.render(g);
+		if(nextBook != null)
 		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_ACTIVE), 600, 100, null);
+			nextBook.render(g);
 		}
-		else
-		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_LEFT_INACTIVE), 600, 100, null);
-		}
-		if(levelIndex != levels.length - 1)
-		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_ACTIVE), 840, 100, null);
-		}
-		else
-		{
-			g.drawImage(ContentManager.getImage(ContentManager.ARROW_RIGHT_INACTIVE), 840, 100, null);
-		}
-
-		// Draw tool type text
-		g.setColor(Color.BLACK);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		FontMetrics fontMetrics = g.getFontMetrics();
-		String text = levels[levelIndex];
-		g.drawString(text, 750 - fontMetrics.stringWidth(text) / 2, 138 + fontMetrics.getHeight() / 4);
 	}
 
 	/**
@@ -83,26 +97,45 @@ public class StageSelectState extends GameState
 	 */
 	public void handleInput()
 	{
-		if(Manager.input.mouseLeftRelease())
+		if(nextBook == null)
 		{
-			if(Manager.input.mouseInRect(600, 100, 60, 75) && levelIndex != 0)
+			// Level select
+			if(Manager.input.mouseLeftRelease())
 			{
-				levelIndex--;
+				if(Manager.input.mouseInRect(510, 150, 450, 600))
+				{
+					String levelName = levels[bookIndex * 2].replace(" ", "_").toLowerCase();
+					data.setStage(ContentManager.load("/levels/" + levelName + ".json"));
+					gsm.setState(GameStateManager.PLAY);
+				}
+				else if(Manager.input.mouseInRect(960, 150, 450, 600) && bookIndex * 2 + 1 < levels.length)
+				{
+					String levelName = levels[bookIndex * 2 + 1].replace(" ", "_").toLowerCase();
+					data.setStage(ContentManager.load("/levels/" + levelName + ".json"));
+					gsm.setState(GameStateManager.PLAY);
+				}
 			}
-			else if(Manager.input.mouseInRect(840, 100, 60, 75) && levelIndex != levels.length - 1)
+
+			// Change book
+			if(((Manager.input.mouseLeftDown() && Manager.input.mouseInRect(0, 0, 500, 800)) || Manager.input
+					.keyDown(InputManager.A)) && bookIndex > 0)
 			{
-				levelIndex++;
+				currentBook.setAccelX(Book.ACCEL);
+				nextBook = new Book(0 - Book.WIDTH / 2, 450, Book.ACCEL, bookIndex - 1, levels);
 			}
-			else if(Manager.input.mouseInRect(660, 100, 180, 75))
+			else if(((Manager.input.mouseLeftDown() && Manager.input.mouseInRect(1420, 0, 500, 800)) || Manager.input
+					.keyDown(InputManager.D)) && bookIndex < books - 1)
 			{
-				String levelName = levels[levelIndex].replace(" ", "_").toLowerCase();
-				data.setStage(ContentManager.load("/levels/" + levelName + ".json"));
-				gsm.setState(GameStateManager.PLAY);
+				currentBook.setAccelX(-Book.ACCEL);
+				nextBook = new Book(Game.WIDTH + Book.WIDTH / 2, 450, -Book.ACCEL, bookIndex + 1,
+						levels);
 			}
-			else if(Manager.input.mouseInRect(100, 874, 360, 106))
-			{
-				gsm.setState(GameStateManager.MENU);
-			}
+		}
+
+		// Back button
+		if(Manager.input.mouseLeftRelease() && Manager.input.mouseInRect(100, 874, 358, 106))
+		{
+			gsm.setState(GameStateManager.MENU);
 		}
 	}
 }

@@ -572,15 +572,19 @@ public abstract class Stage
 		{
 			interactive.render(g);
 		}
-		for(int count = entities.size() - 1; count >= 0; count--)
+		for(Entity ent : entities)
 		{
-			// Render player last
-			entities.get(count).render(g);
+			if(ent instanceof Player)
+			{
+				continue;
+			}
+			ent.render(g);
 		}
 		for(Projectile proj : projectiles)
 		{
 			proj.render(g);
 		}
+		player.render(g);
 		g.translate(camForeX, camForeY);
 	}
 

@@ -141,17 +141,17 @@ public class MenuState extends GameState
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 						: ContentManager.GLOW_RECTANGLE_HOVER), 1179, 690, null);
 			}
-			else if(Manager.input.mouseInRect(353, 873, 358, 106))
+			else if(Manager.input.mouseInRect(353, 874, 358, 106))
 			{
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 						: ContentManager.GLOW_RECTANGLE_HOVER), 323, 843, null);
 			}
-			else if(Manager.input.mouseInRect(781, 873, 358, 106))
+			else if(Manager.input.mouseInRect(781, 874, 358, 106))
 			{
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 						: ContentManager.GLOW_RECTANGLE_HOVER), 751, 843, null);
 			}
-			else if(Manager.input.mouseInRect(1209, 873, 358, 106))
+			else if(Manager.input.mouseInRect(1209, 874, 358, 106))
 			{
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 						: ContentManager.GLOW_RECTANGLE_HOVER), 1179, 843, null);
@@ -169,11 +169,11 @@ public class MenuState extends GameState
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PLAY), 353, 720, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_INSTRUCTIONS), 781, 720, null);
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL_EDITOR), 1209, 720, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 873, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 873, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 873, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL), 177, 873, null);
-			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_EXIT), 1637, 873, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 353, 874, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_CREDITS), 781, 874, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE_LOAD), 1209, 874, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_LEVEL), 177, 874, null);
+			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_EXIT), 1637, 874, null);
 
 			// Write player level
 			g.setColor(new Color(75, 94, 112));
@@ -281,15 +281,15 @@ public class MenuState extends GameState
 				{
 					gsm.setState(GameStateManager.DESIGN);
 				}
-				else if(Manager.input.mouseInRect(353, 873, 358, 106))
+				else if(Manager.input.mouseInRect(353, 874, 358, 106))
 				{
 					gsm.setOptions(true);
 				}
-				else if(Manager.input.mouseInRect(781, 873, 358, 106))
+				else if(Manager.input.mouseInRect(781, 874, 358, 106))
 				{
 					credits = true;
 				}
-				else if(Manager.input.mouseInRect(1209, 873, 358, 106))
+				else if(Manager.input.mouseInRect(1209, 874, 358, 106))
 				{
 					saveLoad = true;
 				}
