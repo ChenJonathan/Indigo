@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import indigo.Entity.Entity;
+import indigo.Manager.ContentManager;
 
 public class HealthBar
 {
@@ -12,9 +13,9 @@ public class HealthBar
 	private double health;
 	private int timer;
 
-	public static final int WIDTH = 100;
-	public static final int HEIGHT = 10;
-	public static final int OFFSET = 30;
+	public static final int WIDTH = 110;
+	public static final int HEIGHT = 20;
+	public static final int OFFSET = 25;
 	public static final int DURATION = 300;
 
 	public HealthBar(Entity ent)
@@ -32,11 +33,16 @@ public class HealthBar
 
 	public void render(Graphics2D g)
 	{
-		g.setColor(Color.WHITE);
-		g.fillRect((int)(ent.getX() - WIDTH / 2), (int)(ent.getY() - ent.getHeight() / 2 - OFFSET), WIDTH, HEIGHT);
+		if(!ent.isActive())
+		{
+			return;
+		}
+		
+		g.drawImage(ContentManager.getImage(ContentManager.HEALTH_BAR), (int)(ent.getX() - WIDTH / 2), (int)(ent.getY()
+				- ent.getHeight() / 2 - OFFSET), null);
 		g.setColor(Color.RED);
-		g.fillRect((int)(ent.getX() - WIDTH / 2), (int)(ent.getY() - ent.getHeight() / 2 - OFFSET),
-				(int)(health / ent.getMaxHealth() * WIDTH), HEIGHT);
+		g.fillRect((int)(ent.getX() - WIDTH / 2 + 5), (int)(ent.getY() - ent.getHeight() / 2 - OFFSET + 5),
+				(int)(health / ent.getMaxHealth() * (WIDTH - 10)), HEIGHT - 10);
 	}
 
 	public boolean isActive()

@@ -2,6 +2,7 @@ package indigo.Skill;
 
 import indigo.Entity.Entity;
 import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.PulseWave;
 import indigo.Weapon.Staff;
@@ -37,6 +38,8 @@ public class Pulse extends Skill
 			playState.getProjectiles().add(pulse);
 
 			((Staff)player.getWeapon()).cast();
+
+			SoundManager.play(ContentManager.PULSE_EFFECT);
 		}
 		else if(castTime == 3)
 		{
@@ -107,7 +110,7 @@ public class Pulse extends Skill
 	{
 		player.canAttack(true);
 		player.canMove(true);
-		phase.setAttackTimer(30);
+		phase.setAttackTimer(10);
 		super.endCast();
 	}
 }

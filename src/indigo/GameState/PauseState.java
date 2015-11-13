@@ -34,24 +34,25 @@ public class PauseState extends GameState
 	{
 		// Draw pause menu and buttons
 		g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
-		if(Manager.input.mouseInRect(373, 100, 358, 106))
+		g.drawImage(ContentManager.getImage(ContentManager.PAUSE), 675, 150, null);
+		if(Manager.input.mouseInRect(373, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 					: ContentManager.GLOW_RECTANGLE_HOVER), 343, 70, null);
 		}
-		else if(Manager.input.mouseInRect(781, 100, 358, 106))
+		else if(Manager.input.mouseInRect(781, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 					: ContentManager.GLOW_RECTANGLE_HOVER), 751, 70, null);
 		}
-		else if(Manager.input.mouseInRect(1189, 100, 358, 106))
+		else if(Manager.input.mouseInRect(1189, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 					: ContentManager.GLOW_RECTANGLE_HOVER), 1159, 70, null);
 		}
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_RESUME), 373, 100, null);
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 781, 100, null);
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_QUIT), 1189, 100, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_RESUME), 373, 500, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 781, 500, null);
+		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_QUIT), 1189, 500, null);
 	}
 
 	@Override
@@ -59,15 +60,15 @@ public class PauseState extends GameState
 	{
 		if(Manager.input.mouseLeftRelease())
 		{
-			if(Manager.input.mouseInRect(373, 100, 358, 106))
+			if(Manager.input.mouseInRect(373, 500, 358, 106))
 			{
 				gsm.setPaused(false);
 			}
-			else if(Manager.input.mouseInRect(781, 100, 358, 106))
+			else if(Manager.input.mouseInRect(781, 500, 358, 106))
 			{
 				gsm.setOptions(true);
 			}
-			else if(Manager.input.mouseInRect(1189, 100, 358, 106))
+			else if(Manager.input.mouseInRect(1189, 500, 358, 106))
 			{
 				gsm.setState(GameStateManager.MENU);
 				gsm.setPaused(false);

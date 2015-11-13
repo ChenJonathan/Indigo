@@ -75,11 +75,28 @@
         {"category":"Entity", "type":"Tree", "x":11500, "y":4600, "respawnTime":300}
         {"category":"Entity", "type":"Tree", "x":8200, "y":4900, "respawnTime":300}
         {"category":"Entity", "type":"Tree", "x":12600, "y":4800, "respawnTime":300}
-        {"category":"Entity", "type":"Harvester", "x":4600, "y":4600, "respawnTime":2700}
         {"category":"Entity", "type":"Flying Bot", "x":11000, "y":4100, "respawnTime":1800}
         {"category":"Entity", "type":"Tree", "x":4400, "y":4600, "respawnTime":12000}
-        {"category":"Entity", "type":"Harvester", "x":6400, "y":4600, "respawnTime":12000}
         {"category":"Entity", "type":"Incendiary Turret", "x":14300, "y":4500, "respawnTime":12000}
         {"category":"Entity", "type":"Flying Bot", "x":2500, "y":4400, "respawnTime":3600}
+        {"category":"Entity", "type":"Flying Bot", "x":800, "y":4500, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":1200, "y":4300, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":1800, "y":4400, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":3500, "y":4400, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":2900, "y":3700, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":3600, "y":3800, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":4100, "y":3800, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":5000, "y":4200, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":5600, "y":3900, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":6300, "y":3900, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":10000, "y":4000, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":8900, "y":4000, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":8300, "y":4000, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":7500, "y":3600, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":6900, "y":3600, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":11800, "y":4100, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":12600, "y":4200, "respawnTime":2400}
+        {"category":"Entity", "type":"Flying Bot", "x":13300, "y":4100, "respawnTime":300}
+        {"category":"Entity", "type":"Flying Bot", "x":14000, "y":3900, "respawnTime":300}
     ]
 }

@@ -2,6 +2,7 @@ package indigo.Skill;
 
 import indigo.Manager.ContentManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.GeyserParticle;
 import indigo.Projectile.GeyserBase;
@@ -32,6 +33,9 @@ public class Geyser extends Skill
 				playState.getProjectiles().add(geyser);
 
 				((Staff)player.getWeapon()).cast();
+
+				SoundManager.play(ContentManager.GEYSER_START_EFFECT);
+				SoundManager.play(ContentManager.GEYSER_MID_EFFECT);
 			}
 
 			playState.getProjectiles().add(
@@ -45,6 +49,8 @@ public class Geyser extends Skill
 		else
 		{
 			endCast();
+			
+			SoundManager.removeSound(ContentManager.GEYSER_MID_EFFECT);
 		}
 	}
 
@@ -59,7 +65,7 @@ public class Geyser extends Skill
 		geyser = null;
 		player.canAttack(true);
 
-		phase.setAttackTimer(30);
+		phase.setAttackTimer(10);
 		super.endCast();
 	}
 }

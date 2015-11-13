@@ -90,7 +90,6 @@
         {"category":"Interactive", "type":"Health Pickup", "x":200, "y":100, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":300, "y":100, "respawnTime":9000}
         {"category":"Entity", "type":"Blockade", "x":600, "y":100, "respawnTime":-1}
-        {"category":"Entity", "type":"Harvester", "x":2200, "y":200, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":2500, "y":20, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7800, "y":100, "respawnTime":9000}
         {"category":"Entity", "type":"Flying Bot", "x":7900, "y":100, "respawnTime":9000}
@@ -106,7 +105,6 @@
         {"category":"Entity", "type":"Blockade", "x":3900, "y":100, "respawnTime":-1}
         {"category":"Entity", "type":"Gatling Turret", "x":4200, "y":0, "respawnTime":9000}
         {"category":"Entity", "type":"Gatling Turret", "x":4200, "y":300, "respawnTime":9000}
-        {"category":"Entity", "type":"Harvester", "x":3200, "y":200, "respawnTime":9000}
         {"category":"Interactive", "type":"Health Pickup", "x":3400, "y":200, "respawnTime":9000}
         {"category":"Entity", "type":"Incendiary Turret", "x":3800, "y":1400, "respawnTime":9000}
         {"category":"Entity", "type":"Incendiary Turret", "x":4300, "y":1400, "respawnTime":9000}

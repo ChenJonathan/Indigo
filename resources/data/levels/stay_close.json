@@ -19,7 +19,6 @@
         {"type":"Platform", "x1":2200, "y1":3300, "x2":2400, "y2":3300}
         {"type":"Platform", "x1":1300, "y1":2200, "x2":1800, "y2":2200}
         {"type":"Spike Wall", "x1":100, "y1":0, "x2":2400, "y2":0}
-        {"type":"Force Field", "x1":700, "y1":2600, "x2":1100, "y2":2600}
         {"type":"Platform", "x1":1300, "y1":2400, "x2":1800, "y2":2600}
         {"type":"Wall", "x1":100, "y1":100, "x2":100, "y2":3500}
         {"type":"Wall", "x1":2400, "y1":3500, "x2":2400, "y2":100}
@@ -37,13 +36,7 @@
         {"category":"Entity", "type":"Flying Bot", "x":1000, "y":100, "respawnTime":120}
         {"category":"Entity", "type":"Flying Bot", "x":1500, "y":100, "respawnTime":120}
         {"category":"Entity", "type":"Flying Bot", "x":1300, "y":100, "respawnTime":120}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":1900, "respawnTime":30}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":1800, "respawnTime":30}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":1700, "respawnTime":30}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":1600, "respawnTime":30}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":1500, "respawnTime":30}
         {"category":"Interactive", "type":"Steam Vent", "x":1300, "y":2100, "respawnTime":-1}
-        {"category":"Projectile", "type":"Steam Cloud", "x":1300, "y":2000, "respawnTime":30}
         {"category":"Interactive", "type":"Health Pickup", "x":1000, "y":300, "respawnTime":120}
         {"category":"Interactive", "type":"Health Pickup", "x":1200, "y":300, "respawnTime":120}
         {"category":"Interactive", "type":"Health Pickup", "x":1400, "y":300, "respawnTime":120}
@@ -54,14 +47,14 @@
         {"category":"Entity", "type":"Tree", "x":600, "y":3000, "respawnTime":150}
         {"category":"Entity", "type":"Incendiary Turret", "x":200, "y":3000, "respawnTime":300}
         {"category":"Interactive", "type":"Steam Vent", "x":1600, "y":3000, "respawnTime":-1}
-        {"category":"Entity", "type":"Incendiary Turret", "x":200, "y":3100, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":800, "y":2500, "respawnTime":210}
         {"category":"Entity", "type":"Flying Bot", "x":900, "y":2400, "respawnTime":210}
         {"category":"Entity", "type":"Flying Bot", "x":1000, "y":2500, "respawnTime":210}
         {"category":"Interactive", "type":"Health Pickup", "x":1900, "y":3000, "respawnTime":900}
         {"category":"Interactive", "type":"Health Pickup", "x":1000, "y":3300, "respawnTime":150}
         {"category":"Interactive", "type":"Health Pickup", "x":1500, "y":3300, "respawnTime":150}
-        {"category":"Entity", "type":"Gatling Turret", "x":200, "y":2900, "respawnTime":300}
         {"category":"Entity", "type":"Tree", "x":500, "y":3000, "respawnTime":240}
+        {"category":"Interactive", "type":"Steam Vent", "x":1400, "y":2100, "respawnTime":-1}
+        {"category":"Interactive", "type":"Steam Vent", "x":1500, "y":2100, "respawnTime":-1}
     ]
 }

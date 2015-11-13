@@ -90,6 +90,19 @@ public class SelectState extends GameState
 		{
 			nextBook.render(g);
 		}
+		
+		// Drawing arrows
+		if(nextBook == null)
+		{
+			if(bookIndex > 0)
+			{
+				g.drawImage(ContentManager.getImage(ContentManager.ARROW_BIG_LEFT), 100, 390, null);
+			}
+			if(bookIndex < books - 1)
+			{
+				g.drawImage(ContentManager.getImage(ContentManager.ARROW_BIG_RIGHT), 1620, 390, null);
+			}
+		}
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class SteamCloud extends Projectile
 		solid = true;
 		flying = true;
 		
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.STEAM_CLOUD), -1);
 	}
 	
 	public void update()

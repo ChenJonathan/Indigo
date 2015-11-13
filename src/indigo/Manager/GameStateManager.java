@@ -1,6 +1,6 @@
 package indigo.Manager;
 
-import indigo.GameState.ClearStageState;
+import indigo.GameState.ClearState;
 import indigo.GameState.DesignState;
 import indigo.GameState.GameState;
 import indigo.GameState.MenuState;
@@ -81,7 +81,7 @@ public class GameStateManager
 		}
 		else if(state == CLEAR)
 		{
-			currentState = new ClearStageState(this);
+			currentState = new ClearState(this);
 		}
 		else if(state == DESIGN)
 		{

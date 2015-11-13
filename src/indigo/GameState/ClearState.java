@@ -14,14 +14,14 @@ import java.awt.Graphics2D;
  * The state present when the player has ended a state. Shown after each level. Can display a variety of information
  * based on the stage; retrieves information from Data.
  */
-public class ClearStageState extends GameState
+public class ClearState extends GameState
 {
 	/**
 	 * Sets up the clear stage state.
 	 * 
 	 * @param gsm The game state manager.
 	 */
-	public ClearStageState(GameStateManager gsm)
+	public ClearState(GameStateManager gsm)
 	{
 		super(gsm);
 
@@ -49,14 +49,13 @@ public class ClearStageState extends GameState
 		}
 		else
 		{
-
 			message = data.getDeathMessage();
 		}
 		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
-		g.drawString(message, 150, 300);
-		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
-		g.drawString("Time elapsed: " + Math.round(data.getClearTime() / 30.0) + " s", 150, 350);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 72));
+		g.drawString(message, 400, 500);
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
+		g.drawString("Time elapsed: " + Math.round(data.getClearTime() / 30.0) + " s", 400, 600);
 	}
 
 	@Override

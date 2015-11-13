@@ -74,6 +74,11 @@ public class MenuState extends GameState
 		{
 			// Draw instructions
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			g.setColor(new Color(0, 0, 0.5f, 0.5f));
+			g.fillRect(0, 0, 1920, 100);
+			g.fillRect(0, 980, 1920, 100);
+			g.fillRect(0, 100, 100, 880);
+			g.fillRect(1820, 100, 100, 880);
 			switch(page)
 			{
 				case 0:

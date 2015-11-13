@@ -42,16 +42,17 @@ public class ContentManager
 
 	// HUD
 	public static ImageData HUD_ICE = new ImageData("/images/hud/hud_ice.png", 1920, 135);
+	public static ImageData HEALTH_BAR = new ImageData("/images/hud/health_bar.png", 110, 20);
 	public static ImageData HUD_WATER = new ImageData("/images/hud/hud_water.png", 1920, 135);
 	public static ImageData OVERLAY_CAST = new ImageData("/images/hud/overlay_cast.png", 125, 125);
 	public static ImageData OVERLAY_SELECT = new ImageData("/images/hud/overlay_select.png", 125, 125);
 	public static ImageData SKILL_GEYSER = new ImageData("/images/hud/skill_geyser.png", 125, 125);
 	public static ImageData SKILL_ICE_ARMOR = new ImageData("/images/hud/skill_mist.png", 125, 125);
 	public static ImageData SKILL_ICE_CHAINS = new ImageData("/images/hud/skill_mist.png", 125, 125);
-	public static ImageData SKILL_LOCKED = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_LOCKED = new ImageData("/images/hud/skill_locked.png", 125, 125);
 	public static ImageData SKILL_MIST = new ImageData("/images/hud/skill_mist.png", 125, 125);
 	public static ImageData SKILL_PULSE = new ImageData("/images/hud/skill_pulse.png", 125, 125);
-	public static ImageData SKILL_WHIRLWIND = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_WHIRLWIND = new ImageData("/images/hud/skill_whirlwind.png", 125, 125);
 	public static ImageData SPRING = new ImageData("/images/hud/spring.png", 101, 89);
 	public static ImageData SPRING_TOP_ICE = new ImageData("/images/hud/spring_top_ice.png", 101, 10);
 	public static ImageData SPRING_TOP_WATER = new ImageData("/images/hud/spring_top_water.png", 101, 10);
@@ -68,6 +69,8 @@ public class ContentManager
 	public static AnimationData STEAM_VENT = new AnimationData("/images/interactives/steam_vent/default.png", 100, 15, 1);
 
 	// Menus
+	public static ImageData ARROW_BIG_LEFT = new ImageData("/images/menus/arrow_big_left.png", 200, 300);
+	public static ImageData ARROW_BIG_RIGHT = new ImageData("/images/menus/arrow_big_right.png", 200, 300);
 	public static ImageData ARROW_LEFT = new ImageData("/images/menus/arrow_left.png", 40, 60);
 	public static ImageData ARROW_RIGHT = new ImageData("/images/menus/arrow_right.png", 40, 60);
 	public static ImageData ARROW_LEFT_ACTIVE = new ImageData("/images/menus/arrow_left_active.png", 60, 75);
@@ -104,6 +107,7 @@ public class ContentManager
 	public static ImageData INSTRUCTIONS_SKILLS = new ImageData("/images/menus/instructions_skills.png", 1720, 880);
 	public static ImageData MENU_BACKGROUND = new ImageData("/images/menus/menu_background.png", 1920, 1080);
 	public static ImageData OPTION_BAR = new ImageData("/images/menus/option_bar.png", 1720, 158);
+	public static ImageData PAUSE = new ImageData("/images/menus/pause.png", 570, 200);
 	public static ImageData SAVE_LOAD_BAR = new ImageData("/images/menus/save_load_bar.png", 1720, 158);
 	public static ImageData SELECTION_BOX = new ImageData("/images/menus/selection_box.png", 300, 75);
 	public static ImageData TITLE_BACKGROUND = new ImageData("/images/menus/title_background.png", 1920, 1080);
@@ -239,15 +243,14 @@ public class ContentManager
 
 	// Sounds
 	public static SoundData DEATH_EFFECT = new SoundData("/sounds/effects/death.wav", false);
-	public static SoundData DOUBLE_JUMP_EFFECT = new SoundData("/sounds/effects/double_jump.wav", false);
 	public static SoundData FROST_ORB_EFFECT = new SoundData("/sounds/effects/frost_orb.wav", false);
-	public static SoundData GEYSER_MID_EFFECT = new SoundData("/sounds/effects/geyser_mid.wav", false);
+	public static SoundData GEYSER_MID_EFFECT = new SoundData("/sounds/effects/geyser_mid.wav", true);
 	public static SoundData GEYSER_START_EFFECT = new SoundData("/sounds/effects/geyser_start.wav", false);
 	public static SoundData HEALTH_PICKUP_EFFECT = new SoundData("/sounds/effects/health_pickup.wav", false);
 	public static SoundData ICE_ARMOR_OFF_EFFECT = new SoundData("/sounds/effects/ice_armor_off.wav", false);
 	public static SoundData ICE_ARMOR_ON_EFFECT = new SoundData("/sounds/effects/ice_armor_on.wav", false);
 	public static SoundData ICE_CHAINS_END_EFFECT = new SoundData("/sounds/effects/ice_chains_end.wav", false);
-	public static SoundData ICE_CHAINS_MID_EFFECT = new SoundData("/sounds/effects/ice_chains_mid.wav", false);
+	public static SoundData ICE_CHAINS_MID_EFFECT = new SoundData("/sounds/effects/ice_chains_mid.wav", true);
 	public static SoundData ICE_CHAINS_START_EFFECT = new SoundData("/sounds/effects/ice_chains_start.wav", false);
 	public static SoundData JUMP_EFFECT = new SoundData("/sounds/effects/jump.wav", false);
 	public static SoundData PULSE_EFFECT = new SoundData("/sounds/effects/pulse.wav", false);

@@ -102,7 +102,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":700, "y":3800, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":9900, "y":1100, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":10700, "y":1100, "respawnTime":300}
-        {"category":"Entity", "type":"Harvester", "x":7100, "y":1000, "respawnTime":300}
         {"category":"Entity", "type":"Blockade", "x":11000, "y":1100, "respawnTime":-1}
         {"category":"Entity", "type":"Flying Bot", "x":4300, "y":600, "respawnTime":300}
         {"category":"Interactive", "type":"Health Pickup", "x":6900, "y":1300, "respawnTime":1800}

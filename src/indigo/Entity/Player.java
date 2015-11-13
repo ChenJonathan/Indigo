@@ -2,6 +2,7 @@ package indigo.Entity;
 
 import indigo.Landscape.Land;
 import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.FrostOrb;
 import indigo.Projectile.WaterBolt;
@@ -524,6 +525,8 @@ public class Player extends Entity
 			((Staff)weapon).attack();
 
 			phase.setAttackTimer(isCrouching()? 3 : 6);
+
+			SoundManager.play(ContentManager.WATER_BOLT_EFFECT);
 		}
 		else
 		{
@@ -531,6 +534,8 @@ public class Player extends Entity
 			((IceSword)weapon).slash();
 
 			phase.setAttackTimer(10);
+
+			SoundManager.play(ContentManager.SLASH_EFFECT);
 		}
 	}
 
@@ -553,6 +558,8 @@ public class Player extends Entity
 			((Staff)weapon).attack();
 
 			phase.setAttackTimer(isCrouching()? 20 : 40);
+
+			SoundManager.play(ContentManager.FROST_ORB_EFFECT);
 		}
 		else
 		{
@@ -560,6 +567,8 @@ public class Player extends Entity
 			((IceSword)weapon).stab();
 
 			phase.setAttackTimer(20);
+
+			SoundManager.play(ContentManager.STAB_EFFECT);
 		}
 	}
 
@@ -639,6 +648,8 @@ public class Player extends Entity
 		}
 
 		jumpTime = JUMP_TIME;
+
+		SoundManager.play(ContentManager.JUMP_EFFECT);
 	}
 
 	public boolean canJumpMore()
@@ -798,6 +809,8 @@ public class Player extends Entity
 		{
 			phase.deselectSkill();
 		}
+		
+		SoundManager.play(ContentManager.DEATH_EFFECT);
 	}
 
 	public void setHealth(int health)

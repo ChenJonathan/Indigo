@@ -23,8 +23,6 @@
     ],
 
     "spawns":[
-        {"category":"Entity", "type":"Harvester", "x":2800, "y":800, "respawnTime":900}
-        {"category":"Entity", "type":"Harvester", "x":4000, "y":800, "respawnTime":900}
         {"category":"Entity", "type":"Incendiary Turret", "x":1000, "y":1600, "respawnTime":1350}
         {"category":"Entity", "type":"Flying Bot", "x":1700, "y":700, "respawnTime":1800}
         {"category":"Entity", "type":"Flying Bot", "x":2100, "y":300, "respawnTime":1800}

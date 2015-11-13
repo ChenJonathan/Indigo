@@ -124,7 +124,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":6100, "y":900, "respawnTime":240}
         {"category":"Entity", "type":"Flying Bot", "x":6400, "y":900, "respawnTime":240}
         {"category":"Entity", "type":"Flying Bot", "x":6600, "y":900, "respawnTime":240}
-        {"category":"Entity", "type":"Flying Bot", "x":6700, "y":900, "respawnTime":240}
         {"category":"Entity", "type":"Flying Bot", "x":6800, "y":900, "respawnTime":240}
         {"category":"Entity", "type":"Flying Bot", "x":7000, "y":900, "respawnTime":240}
         {"category":"Entity", "type":"Flying Bot", "x":6200, "y":1900, "respawnTime":240}

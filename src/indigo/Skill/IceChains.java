@@ -1,6 +1,7 @@
 package indigo.Skill;
 
 import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.IceChainHook;
 
@@ -42,11 +43,17 @@ public class IceChains extends Skill
 			player.setMana(player.getMana() - 40);
 			player.canAttack(false);
 			player.canTurn(false);
+
+			SoundManager.play(ContentManager.ICE_CHAINS_START_EFFECT);
+			SoundManager.play(ContentManager.ICE_CHAINS_MID_EFFECT);
 		}
 		else if(hook.isDead() || !playState.getProjectiles().contains(hook))
 		{
 			hook = null;
 			endCast();
+
+			SoundManager.removeSound(ContentManager.ICE_CHAINS_MID_EFFECT);
+			SoundManager.play(ContentManager.ICE_CHAINS_END_EFFECT);
 		}
 	}
 

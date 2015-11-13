@@ -3,6 +3,7 @@ package indigo.Skill;
 import indigo.Manager.ContentManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 
 public class IceArmor extends Skill
@@ -23,10 +24,14 @@ public class IceArmor extends Skill
 		{
 			player.setIceArmor(true);
 			phase.setAttackTimer(30);
+
+			SoundManager.play(ContentManager.ICE_ARMOR_ON_EFFECT);
 		}
 		else if(player.getMana() == 0 || (player.canMove() && Manager.input.keyPress(InputManager.K3)))
 		{
 			endCast();
+
+			SoundManager.play(ContentManager.ICE_ARMOR_OFF_EFFECT);
 		}
 	}
 
@@ -38,7 +43,7 @@ public class IceArmor extends Skill
 	public void endCast()
 	{
 		player.setIceArmor(false);
-		phase.setAttackTimer(30);
+		phase.setAttackTimer(10);
 		super.endCast();
 	}
 }
