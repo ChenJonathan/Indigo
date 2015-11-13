@@ -1,5 +1,7 @@
 package indigo.Skill;
 
+import java.awt.image.BufferedImage;
+
 import indigo.Entity.Player;
 import indigo.GameState.PlayState;
 import indigo.Phase.Phase;
@@ -12,6 +14,7 @@ public abstract class Skill
 	protected Phase phase;
 
 	protected Player player;
+	protected BufferedImage icon;
 	protected int id; // Initialize in each skill constructor
 	protected int position;
 
@@ -49,6 +52,11 @@ public abstract class Skill
 	{
 		castTime = -1;
 		phase.endCast(position); // Resets skill icon and resets attack timer
+	}
+	
+	public BufferedImage icon()
+	{
+		return icon;
 	}
 
 	public int id()

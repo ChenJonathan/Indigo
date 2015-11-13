@@ -13,7 +13,7 @@ public class GeyserParticle extends Projectile
 	// Animation
 	private final int DEFAULT = 0;
 
-	public static final int DAMAGE = 2;
+	public static final int DAMAGE = 4;
 	public static final int WIDTH = 80;
 	public static final int HEIGHT = 50;
 	public static final double SPEED = 50;

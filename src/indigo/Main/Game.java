@@ -51,7 +51,7 @@ public class Game extends JPanel implements Runnable
 		JSONObject settings = ContentManager.load("/settings.json");
 		resolutionWidth = Integer.parseInt(settings.get("resolutionWidth") + "");
 		resolutionHeight = Integer.parseInt(settings.get("resolutionHeight") + "");
-		SoundManager.changeVolume(Integer.parseInt(settings.get("soundVolume") + ""));
+		SoundManager.changeVolume(Float.parseFloat(settings.get("soundVolume") + "f"));
 
 		setPreferredSize(new Dimension(resolutionWidth, resolutionHeight));
 		setFocusable(true);
@@ -63,9 +63,9 @@ public class Game extends JPanel implements Runnable
 		g.scale((double)resolutionWidth / WIDTH, (double)resolutionHeight / HEIGHT);
 		g.clipRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		defaultForm = g.getTransform();
-		gsm = new GameStateManager(this);
+		gsm = new GameStateManager();
 
-		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
+		setCursor(ContentManager.getImage(ContentManager.CURSOR));
 	}
 
 	/**

@@ -98,6 +98,8 @@ public class Blockade extends Entity
 	public void render(Graphics2D g)
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
+		
+		super.render(g);
 	}
 
 	public String getName()
@@ -112,7 +114,7 @@ public class Blockade extends Entity
 
 	public boolean isActive()
 	{
-		return true;
+		return !isDead();
 	}
 
 	public void die()

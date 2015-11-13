@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
  */
 public class MenuState extends GameState
 {
+	private int page; // Instructions pages
+
 	JSONObject[] saves;
 
 	// Whether certain subsections of the main menu are open or not
@@ -72,12 +74,42 @@ public class MenuState extends GameState
 		{
 			// Draw instructions
 			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			switch(page)
+			{
+				case 0:
+					g.drawImage(ContentManager.getImage(ContentManager.INSTRUCTIONS_CONTROLS), 100, 100, null);
+					break;
+				case 1:
+					g.drawImage(ContentManager.getImage(ContentManager.INSTRUCTIONS_SKILLS), 100, 100, null);
+					break;
+				case 2:
+					g.drawImage(ContentManager.getImage(ContentManager.INSTRUCTIONS_OBJECTIVES), 100, 100, null);
+					break;
+			}
 			if(Manager.input.mouseInRect(100, 874, 358, 106))
 			{
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 						: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
 			}
+			else if(Manager.input.mouseInRect(1084, 874, 358, 106) && page != 0)
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 1054, 844, null);
+			}
+			else if(Manager.input.mouseInRect(1462, 874, 358, 106) && page != 2)
+			{
+				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
+						: ContentManager.GLOW_RECTANGLE_HOVER), 1432, 844, null);
+			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
+			if(page != 0)
+			{
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_PREVIOUS), 1084, 874, null);
+			}
+			if(page != 2)
+			{
+				g.drawImage(ContentManager.getImage(ContentManager.BUTTON_NEXT), 1462, 874, null);
+			}
 		}
 		else if(saveLoad)
 		{
@@ -89,7 +121,7 @@ public class MenuState extends GameState
 						: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
 			}
 			g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
-			
+
 			// Draw save slots
 			for(int slot = 0; slot < saves.length; slot++)
 			{
@@ -114,7 +146,7 @@ public class MenuState extends GameState
 		else if(credits)
 		{
 			// Draw credits
-			g.drawImage(ContentManager.getImage(ContentManager.MENU_BACKGROUND), 0, 0, null);
+			g.drawImage(ContentManager.getImage(ContentManager.CREDITS), 0, 0, null);
 			if(Manager.input.mouseInRect(100, 874, 358, 106))
 			{
 				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
@@ -158,8 +190,7 @@ public class MenuState extends GameState
 			}
 			else if(Manager.input.mouseInCirc(230, 926, 53))
 			{
-				g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_CIRCLE_CLICK
-						: ContentManager.GLOW_CIRCLE_HOVER), 147, 843, null);
+				g.drawImage(ContentManager.getImage(ContentManager.GLOW_CIRCLE_HOVER), 147, 843, null);
 			}
 			else if(Manager.input.mouseInCirc(1690, 926, 53))
 			{
@@ -197,6 +228,14 @@ public class MenuState extends GameState
 				if(Manager.input.mouseInRect(100, 874, 358, 106))
 				{
 					instructions = false;
+				}
+				else if(Manager.input.mouseInRect(1084, 874, 358, 106) && page != 0)
+				{
+					page--;
+				}
+				else if(Manager.input.mouseInRect(1462, 874, 358, 106) && page != 2)
+				{
+					page++;
 				}
 			}
 		}
@@ -276,6 +315,7 @@ public class MenuState extends GameState
 				else if(Manager.input.mouseInRect(781, 720, 358, 106))
 				{
 					instructions = true;
+					page = 0;
 				}
 				else if(Manager.input.mouseInRect(1209, 720, 358, 106))
 				{

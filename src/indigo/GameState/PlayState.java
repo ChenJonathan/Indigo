@@ -25,6 +25,8 @@ import indigo.Stage.TravelStage;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import org.json.simple.JSONObject;
+
 /**
  * The state where the player is actively playing the game. Handles Manager.inputs (skill use) and sends the info to the
  * HUD, Stage, and Phase objects.
@@ -61,22 +63,23 @@ public class PlayState extends GameState
 	{
 		super(gsm);
 
-		gsm.setCursor(ContentManager.getImage(ContentManager.CURSOR));
-
 		// Initialize stage
-		switch(data.getStage().get("type") + "")
+		JSONObject index = ContentManager.load("/index.json");
+		String levelName = (index.get(data.getStage() + "") + "").replace(" ", "_").toLowerCase();
+		JSONObject json = ContentManager.load("/levels/" + levelName + ".json");
+		switch(json.get("type") + "")
 		{
 			case "Battle":
-				stage = new BattleStage(this, data.getStage());
+				stage = new BattleStage(this, json);
 				break;
 			case "Defend":
-				stage = new DefendStage(this, data.getStage());
+				stage = new DefendStage(this, json);
 				break;
 			case "Survival":
-				stage = new SurvivalStage(this, data.getStage());
+				stage = new SurvivalStage(this, json);
 				break;
 			case "Travel":
-				stage = new TravelStage(this, data.getStage());
+				stage = new TravelStage(this, json);
 				break;
 		}
 		data.resetLevelData();
@@ -101,7 +104,8 @@ public class PlayState extends GameState
 		// Initialize timer
 		time = -1;
 		
-		SoundManager.play(ContentManager.BACKGROUND_1);
+		SoundManager.stopAll();
+		SoundManager.play(ContentManager.BACKGROUND_THEME);
 	}
 
 	@Override

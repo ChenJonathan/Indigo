@@ -78,27 +78,24 @@ public class HUD
 		g.fill(new Rectangle2D.Double(506, 1007, experience / data.getMaxExperience() * EXPERIENCE_BAR_LENGTH, 4));
 
 		// Draw skill icons and cooldowns
-		for(int i = 0; i < Data.NUM_SKILLS; i++)
+		for(int skill = 0; skill < Data.NUM_SKILLS; skill++)
 		{
-			if(phase.getSkillState(i) == Phase.SELECT)
+			g.drawImage(phase.getSkill(skill).icon(), 1294 + 187 * skill, 950, null);
+			if(phase.getSkillState(skill) == Phase.SELECT)
 			{
-				g.setColor(Color.YELLOW);
-				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
+				g.drawImage(ContentManager.getImage(ContentManager.OVERLAY_SELECT), 1294 + 187 * skill, 950, null);
 			}
-			else if(phase.getSkillState(i) == Phase.CAST)
+			else if(phase.getSkillState(skill) == Phase.CAST)
 			{
-				g.setColor(Color.RED);
-				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
+				g.drawImage(ContentManager.getImage(ContentManager.OVERLAY_CAST), 1294 + 187 * skill, 950, null);
 			}
 			else
 			{
-				g.setColor(Color.GREEN);
-				g.fill(new Rectangle2D.Double(1306 + 187 * i, 962, 101, 101));
 				Graphics2D gClip = (Graphics2D)g.create();
-				gClip.clipRect(1306 + 187 * i, 962, 101, 101);
-				gClip.setColor(Color.BLUE);
-				gClip.fill(new Arc2D.Double(1285 + 187 * i, 941, 143, 143, 90, 360.0 * (double)phase.getCooldown(i)
-						/ phase.getMaxCooldown(i), Arc2D.PIE));
+				gClip.clipRect(1294 + 187 * skill, 950, 125, 125);
+				gClip.setColor(new Color(0, 0, 0.5f, 0.5f));
+				gClip.fill(new Arc2D.Double(1268 + 187 * skill, 924, 177, 177, 90, 360.0
+						* (double)phase.getCooldown(skill) / phase.getMaxCooldown(skill), Arc2D.PIE));
 			}
 		}
 
@@ -141,7 +138,7 @@ public class HUD
 
 		// Draw stage specific information
 		g.setColor(Color.BLACK);
-		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN + Font.ITALIC, 24));
 		fontMetrics = g.getFontMetrics();
 		String[] objectiveText = new String[0];
 		if(stage instanceof BattleStage)
@@ -180,12 +177,12 @@ public class HUD
 		}
 		for(int count = 0; count < objectiveText.length; count++)
 		{
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN + Font.ITALIC, 24));
 			String[] line = objectiveText[count].split(":");
-			g.drawString(line[0] + ":", 30, 965 + (fontMetrics.getHeight() / 2 + 10) * (count + 1));
+			g.drawString(line[0] + ":", 30, 955 + (fontMetrics.getHeight() / 2 + 10) * (count + 1));
 
-			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-			g.drawString(line[1], 30 + fontMetrics.stringWidth(line[0] + ": "), 965
+			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+			g.drawString(line[1], 30 + fontMetrics.stringWidth(line[0] + ": "), 955
 					+ (fontMetrics.getHeight() / 2 + 10) * (count + 1));
 		}
 	}

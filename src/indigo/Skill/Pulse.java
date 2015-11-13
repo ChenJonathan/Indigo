@@ -1,6 +1,7 @@
 package indigo.Skill;
 
 import indigo.Entity.Entity;
+import indigo.Manager.ContentManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.PulseWave;
 import indigo.Weapon.Staff;
@@ -17,6 +18,7 @@ public class Pulse extends Skill
 	{
 		super(phase, position);
 		id = Skill.PULSE;
+		icon = ContentManager.getImage(ContentManager.SKILL_PULSE);
 		castOnSelect = true;
 	}
 

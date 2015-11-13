@@ -1,5 +1,6 @@
 package indigo.Skill;
 
+import indigo.Manager.ContentManager;
 import indigo.Phase.Phase;
 
 public class Whirlwind extends Skill
@@ -8,6 +9,7 @@ public class Whirlwind extends Skill
 	{
 		super(phase, position);
 		id = Skill.WHIRLWIND;
+		icon = ContentManager.getImage(ContentManager.SKILL_WHIRLWIND);
 		castOnSelect = true;
 	}
 	

@@ -7,19 +7,16 @@ import indigo.GameState.MenuState;
 import indigo.GameState.OptionState;
 import indigo.GameState.PauseState;
 import indigo.GameState.PlayState;
-import indigo.GameState.StageSelectState;
+import indigo.GameState.SelectState;
 import indigo.GameState.TalentState;
-import indigo.Main.Game;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 /**
  * Manages the state of the game. Game state determines what is currently being updated and rendered.
  */
 public class GameStateManager
 {
-	private Game game;
 	private Data data;
 
 	private boolean paused;
@@ -42,9 +39,8 @@ public class GameStateManager
 	 * 
 	 * @param game The current game session.
 	 */
-	public GameStateManager(Game game)
+	public GameStateManager()
 	{
-		this.game = game;
 		data = new Data();
 
 		paused = false;
@@ -57,6 +53,9 @@ public class GameStateManager
 		talentState = new TalentState(this);
 
 		setState(MENU);
+
+		SoundManager.stopAll();
+		SoundManager.play(ContentManager.TITLE_THEME);
 	}
 
 	/**
@@ -74,7 +73,7 @@ public class GameStateManager
 		}
 		else if(state == SELECT)
 		{
-			currentState = new StageSelectState(this);
+			currentState = new SelectState(this);
 		}
 		else if(state == PLAY)
 		{
@@ -176,15 +175,5 @@ public class GameStateManager
 	public Data getData()
 	{
 		return data;
-	}
-
-	/**
-	 * Sets the cursor to a new image.
-	 * 
-	 * @param image The new cursor image.
-	 */
-	public void setCursor(BufferedImage image)
-	{
-		game.setCursor(image);
 	}
 }

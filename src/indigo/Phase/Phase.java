@@ -154,6 +154,11 @@ public abstract class Phase
 		}
 		selectedSkill = NO_SKILL_SELECTED;
 	}
+	
+	public Skill getSkill(int skill)
+	{
+		return skills[skill];
+	}
 
 	public int getCooldown(int skill)
 	{

@@ -43,21 +43,29 @@ public class ContentManager
 	// HUD
 	public static ImageData HUD_ICE = new ImageData("/images/hud/hud_ice.png", 1920, 135);
 	public static ImageData HUD_WATER = new ImageData("/images/hud/hud_water.png", 1920, 135);
+	public static ImageData OVERLAY_CAST = new ImageData("/images/hud/overlay_cast.png", 125, 125);
+	public static ImageData OVERLAY_SELECT = new ImageData("/images/hud/overlay_select.png", 125, 125);
+	public static ImageData SKILL_GEYSER = new ImageData("/images/hud/skill_geyser.png", 125, 125);
+	public static ImageData SKILL_ICE_ARMOR = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_ICE_CHAINS = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_LOCKED = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_MIST = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_PULSE = new ImageData("/images/hud/skill_pulse.png", 125, 125);
+	public static ImageData SKILL_WHIRLWIND = new ImageData("/images/hud/skill_mist.png", 125, 125);
 	public static ImageData SPRING = new ImageData("/images/hud/spring.png", 101, 89);
 	public static ImageData SPRING_TOP_ICE = new ImageData("/images/hud/spring_top_ice.png", 101, 10);
 	public static ImageData SPRING_TOP_WATER = new ImageData("/images/hud/spring_top_water.png", 101, 10);
 
 	// Interactives
+	public static AnimationData BRANCH_LEFT = new AnimationData("/images/interactives/branch/left.png", 240, 75, 1);
+	public static AnimationData BRANCH_RIGHT = new AnimationData("/images/interactives/branch/right.png", 240, 75, 1);
 	public static AnimationData HEALTH_PICKUP_DEATH = new AnimationData("/images/interactives/health_pickup/death.png",
 			110, 110, 5);
 	public static AnimationData HEALTH_PICKUP_IDLE = new AnimationData("/images/interactives/health_pickup/idle.png",
 			110, 110, 4);
 	public static AnimationData HEALTH_PICKUP_SPAWN = new AnimationData("/images/interactives/health_pickup/spawn.png",
 			110, 110, 5);
-	public static AnimationData MANA_PICKUP_IDLE = new AnimationData("/images/interactives/mana_pickup/idle.png", 100,
-			100, 1);
-	public static AnimationData BRANCH_LEFT = new AnimationData("/images/interactives/branch/left.png", 240, 75, 1);
-	public static AnimationData BRANCH_RIGHT = new AnimationData("/images/interactives/branch/right.png", 240, 75, 1);
+	public static AnimationData STEAM_VENT = new AnimationData("/images/interactives/steam_vent/default.png", 100, 15, 1);
 
 	// Menus
 	public static ImageData ARROW_LEFT = new ImageData("/images/menus/arrow_left.png", 40, 60);
@@ -85,11 +93,15 @@ public class ContentManager
 	public static ImageData BUTTON_SAVE = new ImageData("/images/menus/button_save.png", 358, 106);
 	public static ImageData BUTTON_SAVE_LOAD = new ImageData("/images/menus/button_save_load.png", 358, 106);
 	public static ImageData CONFIRM_BUTTON = new ImageData("/images/menus/confirm_button.png", 175, 50);
+	public static ImageData CREDITS = new ImageData("/images/menus/credits.png", 1920, 1080);
 	public static ImageData DESCRIPTION_BOX = new ImageData("/images/menus/description_box.png", 300, 440);
 	public static ImageData GLOW_CIRCLE_CLICK = new ImageData("/images/menus/glow_circle_click.png", 166, 166);
 	public static ImageData GLOW_CIRCLE_HOVER = new ImageData("/images/menus/glow_circle_hover.png", 166, 166);
 	public static ImageData GLOW_RECTANGLE_CLICK = new ImageData("/images/menus/glow_rectangle_click.png", 418, 166);
 	public static ImageData GLOW_RECTANGLE_HOVER = new ImageData("/images/menus/glow_rectangle_hover.png", 418, 166);
+	public static ImageData INSTRUCTIONS_CONTROLS = new ImageData("/images/menus/instructions_controls.png", 1720, 880);
+	public static ImageData INSTRUCTIONS_OBJECTIVES = new ImageData("/images/menus/instructions_objectives.png", 1720, 880);
+	public static ImageData INSTRUCTIONS_SKILLS = new ImageData("/images/menus/instructions_skills.png", 1720, 880);
 	public static ImageData MENU_BACKGROUND = new ImageData("/images/menus/menu_background.png", 1920, 1080);
 	public static ImageData OPTION_BAR = new ImageData("/images/menus/option_bar.png", 1720, 158);
 	public static ImageData SAVE_LOAD_BAR = new ImageData("/images/menus/save_load_bar.png", 1720, 158);
@@ -110,6 +122,8 @@ public class ContentManager
 	public static AnimationData MORTAR = new AnimationData("/images/projectiles/mortar.png", 50, 50, 1);
 	public static AnimationData PULSE_WAVE = new AnimationData("/images/projectiles/pulse_wave/default.png", 100, 100,
 			1);
+	public static AnimationData STEAM_CLOUD = new AnimationData("/images/projectiles/steam_cloud/default.png", 100, 50,
+			1);
 	public static AnimationData STEEL_BEAM = new AnimationData("/images/projectiles/steel_beam/default.png", 50, 100, 1);
 	public static AnimationData STEEL_BEAM_DEATH = new AnimationData("/images/projectiles/steel_beam/death.png", 50,
 			100, 10);
@@ -121,6 +135,7 @@ public class ContentManager
 
 	// Sprites
 	public static AnimationData BLOCKADE_IDLE = new AnimationData("/images/sprites/blockade/idle.png", 200, 200, 4);
+	public static AnimationData CORE_IDLE = new AnimationData("/images/sprites/core/idle.png", 124, 162, 1);
 	public static ImageData FLYING_BOT_CANNON = new ImageData("/images/sprites/flying_bot/cannon.png", 18, 11);
 	public static AnimationData FLYING_BOT_DEATH = new AnimationData("/images/sprites/flying_bot/death.png", 60, 60, 6);
 	public static AnimationData FLYING_BOT_IDLE = new AnimationData("/images/sprites/flying_bot/idle.png", 60, 60, 4);
@@ -176,8 +191,8 @@ public class ContentManager
 			"/images/sprites/player/move_right_armor.png", 68, 111, 8);
 	public static AnimationData PLAYER_WHIRLWIND_LEFT = new AnimationData("/images/sprites/player/whirlwind_left.png",
 			200, 120, 8);
-	public static AnimationData PLAYER_WHIRLWIND_LEFT_ARMOR = new AnimationData("/images/sprites/player/whirlwind_left_armor.png",
-			200, 120, 8);
+	public static AnimationData PLAYER_WHIRLWIND_LEFT_ARMOR = new AnimationData(
+			"/images/sprites/player/whirlwind_left_armor.png", 200, 120, 8);
 	public static AnimationData PLAYER_WHIRLWIND_RIGHT = new AnimationData(
 			"/images/sprites/player/whirlwind_right.png", 200, 120, 8);
 	public static AnimationData PLAYER_WHIRLWIND_RIGHT_ARMOR = new AnimationData(
@@ -223,11 +238,27 @@ public class ContentManager
 	public static AnimationData STAFF_IDLE_RIGHT = new AnimationData("/images/weapon/staff/idle_right.png", 100, 90, 1);
 
 	// Sounds
+	public static SoundData DEATH_EFFECT = new SoundData("/sounds/effects/death.wav", false);
+	public static SoundData DOUBLE_JUMP_EFFECT = new SoundData("/sounds/effects/double_jump.wav", false);
+	public static SoundData FROST_ORB_EFFECT = new SoundData("/sounds/effects/frost_orb.wav", false);
+	public static SoundData GEYSER_MID_EFFECT = new SoundData("/sounds/effects/geyser_mid.wav", false);
+	public static SoundData GEYSER_START_EFFECT = new SoundData("/sounds/effects/geyser_start.wav", false);
+	public static SoundData HEALTH_PICKUP_EFFECT = new SoundData("/sounds/effects/health_pickup.wav", false);
+	public static SoundData ICE_ARMOR_OFF_EFFECT = new SoundData("/sounds/effects/ice_armor_off.wav", false);
+	public static SoundData ICE_ARMOR_ON_EFFECT = new SoundData("/sounds/effects/ice_armor_on.wav", false);
+	public static SoundData ICE_CHAINS_END_EFFECT = new SoundData("/sounds/effects/ice_chains_end.wav", false);
+	public static SoundData ICE_CHAINS_MID_EFFECT = new SoundData("/sounds/effects/ice_chains_mid.wav", false);
+	public static SoundData ICE_CHAINS_START_EFFECT = new SoundData("/sounds/effects/ice_chains_start.wav", false);
+	public static SoundData JUMP_EFFECT = new SoundData("/sounds/effects/jump.wav", false);
+	public static SoundData PULSE_EFFECT = new SoundData("/sounds/effects/pulse.wav", false);
+	public static SoundData SLASH_EFFECT = new SoundData("/sounds/effects/slash.wav", false);
+	public static SoundData STAB_EFFECT = new SoundData("/sounds/effects/stab.wav", false);
+	public static SoundData TELEPORT_EFFECT = new SoundData("/sounds/effects/teleport.wav", false);
+	public static SoundData WATER_BOLT_EFFECT = new SoundData("/sounds/effects/water_bolt.wav", false);
 
 	// Music
-	public static SoundData BACKGROUND_1 = new SoundData("/sounds/background/Link and Zelda's Duet.mid", true);
-	public static SoundData BACKGROUND_2 = new SoundData("/sounds/background/Zelda Medley.mid", true);
-	public static SoundData BACKGROUND_3 = new SoundData("/sounds/background/Pirates of the Caribbean Medley.mid", true);
+	public static SoundData BACKGROUND_THEME = new SoundData("/sounds/music/background.wav", true);
+	public static SoundData TITLE_THEME = new SoundData("/sounds/music/skylights.wav", true);
 
 	// Storage
 	private static HashMap<ImageData, BufferedImage> imageMap;

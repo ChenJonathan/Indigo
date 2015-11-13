@@ -1,5 +1,6 @@
 package indigo.Entity;
 
+import indigo.Display.HealthBar;
 import indigo.Interactive.Interactive;
 import indigo.Landscape.Land;
 import indigo.Landscape.Wall;
@@ -33,6 +34,8 @@ public abstract class Entity implements Respawnable, Named
 
 	private int health, maxHealth;
 	private int experience;
+	
+	private HealthBar healthDisplay;
 
 	protected boolean facingRight;
 
@@ -76,6 +79,7 @@ public abstract class Entity implements Respawnable, Named
 		marked = false;
 
 		animation = new Animation();
+		healthDisplay = new HealthBar(this);
 	}
 
 	// Method used to change animation
@@ -179,9 +183,19 @@ public abstract class Entity implements Respawnable, Named
 		updateTravelLine();
 
 		animation.update();
+		if(healthDisplay.isActive())
+		{
+			healthDisplay.update();
+		}
 	}
 
-	public abstract void render(Graphics2D g); // Draws the entity
+	public void render(Graphics2D g)
+	{
+		if(healthDisplay.isActive())
+		{
+			healthDisplay.render(g);
+		}
+	}
 
 	public abstract Shape getHitbox(); // Returns hitbox
 
@@ -396,6 +410,11 @@ public abstract class Entity implements Respawnable, Named
 
 	public void setHealth(int health)
 	{
+		if(this.health > health)
+		{
+			healthDisplay.activate(this.health);
+		}
+		
 		this.health = health;
 		if(this.health > maxHealth)
 		{

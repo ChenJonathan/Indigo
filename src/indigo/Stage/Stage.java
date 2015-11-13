@@ -69,7 +69,7 @@ public abstract class Stage
 	public static final double PUSH_AMOUNT = 0.5;
 
 	// Speed at which camera moves when unlocked
-	public static final int CAMERA_SPEED = 80;
+	public static final int CAMERA_SPEED = 100;
 
 	public static final double GRAVITY = 3; // Non-flying entities and projectiles fall
 	public static final double FRICTION = 2; // Entities have their velocities reduced towards zero
@@ -283,8 +283,8 @@ public abstract class Stage
 				if(ent.isGrounded())
 				{
 					Land prevGround = ent.getGround();
-					if(ent.getX() + ent.getWidth() / 2 >= prevGround.getMinX()
-							&& ent.getX() - ent.getWidth() / 2 <= prevGround.getMaxX())
+					if(ent.getX() >= prevGround.getMinX()
+							&& ent.getX() <= prevGround.getMaxX())
 					{
 						ground = prevGround;
 					}

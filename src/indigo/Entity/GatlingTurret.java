@@ -34,7 +34,7 @@ public class GatlingTurret extends Entity
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int BASE_EXPERIENCE = 80;
-	public static final int FIRE_RATE = 4;
+	public static final int FIRE_RATE = 6;
 
 	public GatlingTurret(Stage stage, double x, double y)
 	{
@@ -197,6 +197,8 @@ public class GatlingTurret extends Entity
 			}
 			g.rotate(angle - Math.PI / 2, getX(), getY());
 		}
+		
+		super.render(g);
 	}
 
 	public void attack()

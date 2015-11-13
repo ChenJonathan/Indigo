@@ -133,12 +133,9 @@ public class DefendStage extends Stage
 
 	public void trackDeath(String killer, Entity killed)
 	{
-		if(killed.equals(player) || killed.equals(core))
+		if((killed.equals(player) & suddenDeath) || killed.equals(core))
 		{
-			if(suddenDeath)
-			{
-				data.setKiller(killer);
-			}
+			data.setKiller(killer);
 		}
 		else if(killed.isMarked())
 		{

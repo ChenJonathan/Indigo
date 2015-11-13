@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Displays a book used for level selection.
@@ -74,15 +73,14 @@ public class Book
 		float transparency = (float)Math.pow(1 - Math.abs(x - Game.WIDTH / 2) / (Game.WIDTH / 2 + WIDTH / 2), 10);
 		g.setColor(new Color(0, 0, 0, transparency));
 		g.setStroke(new BasicStroke(6));
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD + Font.ITALIC, 30));
 		FontMetrics fontMetrics = g.getFontMetrics();
 		for(int count = 0; count < LEVELS_PER_BOOK; count++)
 		{
 			if(levels[count] != null)
 			{
-				double stringX = x + (count == 0? (-WIDTH / 4) : (WIDTH / 4)) - fontMetrics.stringWidth(levels[count])
-						/ 2;
-				double stringY = y - 150;
+				double stringX = x + (count == 0? -185 : 185) - fontMetrics.stringWidth(levels[count]) / 2;
+				double stringY = y - 145;
 				g.drawString(levels[count], (int)stringX, (int)stringY);
 			}
 		}

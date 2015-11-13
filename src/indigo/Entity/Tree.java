@@ -38,6 +38,7 @@ public class Tree extends Entity
 		height = TREE_HEIGHT;
 
 		solid = false;
+		dodging = true;
 		flying = true;
 		friendly = true;
 
@@ -145,6 +146,8 @@ public class Tree extends Entity
 	public void render(Graphics2D g)
 	{
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
+		
+		super.render(g);
 	}
 
 	public String getName()

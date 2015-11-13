@@ -1,6 +1,7 @@
 package indigo.Interactive;
 
 import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Stage.Stage;
 
 import java.awt.Graphics2D;
@@ -68,6 +69,8 @@ public class HealthPickup extends Interactive
 		{
 			player.setHealth(player.getHealth() + HEALTH);
 			die();
+
+			SoundManager.play(ContentManager.HEALTH_PICKUP_EFFECT);
 		}
 	}
 

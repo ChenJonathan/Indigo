@@ -41,10 +41,10 @@ public class IceSword extends Weapon
 	private final int STAB_LEFT = 6;
 	private final int STAB_RIGHT = 7;
 
-	public static final int DAMAGE = 50;
+	public static final int DAMAGE = 25;
 	public static final int SLASH_DURATION = 6;
 	public static final int STAB_DAMAGE_MULTIPLIER = 2;
-	public static final int WHIRLWIND_DAMAGE_MULTIPLIER = 2;
+	public static final int WHIRLWIND_DAMAGE_MULTIPLIER = 4;
 
 	public IceSword(Entity user, int dmg)
 	{

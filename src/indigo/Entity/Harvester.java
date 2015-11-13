@@ -135,6 +135,8 @@ public class Harvester extends Entity
 		{
 			weapon.render(g);
 		}
+		
+		super.render(g);
 	}
 
 	public boolean inRange()

@@ -49,5 +49,15 @@
         {"category":"Entity", "type":"Incendiary Turret", "x":6335, "y":300, "respawnTime":200}
         {"category":"Entity", "type":"Flying Bot", "x":3470, "y":500, "respawnTime":60}
         {"category":"Interactive", "type":"Health Pickup", "x":2000, "y":920, "respawnTime":200}
+        {"category":"Entity", "type":"Flying Bot", "x":4200, "y":300, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":4700, "y":300, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":5200, "y":200, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":5700, "y":300, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":6100, "y":200, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":2800, "y":300, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":2200, "y":200, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":1600, "y":300, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":1100, "y":200, "respawnTime":150}
+        {"category":"Entity", "type":"Flying Bot", "x":600, "y":300, "respawnTime":150}
     ]
 }

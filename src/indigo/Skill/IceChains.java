@@ -1,5 +1,6 @@
 package indigo.Skill;
 
+import indigo.Manager.ContentManager;
 import indigo.Phase.Phase;
 import indigo.Projectile.IceChainHook;
 
@@ -11,6 +12,7 @@ public class IceChains extends Skill
 	{
 		super(phase, position);
 		id = Skill.CHAINS;
+		icon = ContentManager.getImage(ContentManager.SKILL_ICE_CHAINS);
 		castOnSelect = false;
 	}
 

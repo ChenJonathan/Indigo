@@ -22,7 +22,7 @@ public class OptionState extends GameState
 	private int resolutionWidth;
 	private int resolutionHeight;
 	private boolean autosave;
-	private int soundVolume;
+	private float soundVolume;
 
 	private int resolutionIndex;
 	private final int[] resolutionWidths = {800, 1280, 1366, 1600, 1920};
@@ -59,7 +59,7 @@ public class OptionState extends GameState
 				break;
 		}
 		autosave = Boolean.parseBoolean(settings.get("autosave") + "");
-		soundVolume = Integer.parseInt(settings.get("soundVolume") + "");
+		soundVolume = Float.parseFloat(settings.get("soundVolume") + "f");
 	}
 
 	@Override
@@ -83,13 +83,7 @@ public class OptionState extends GameState
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
 					: ContentManager.GLOW_RECTANGLE_HOVER), 70, 844, null);
 		}
-		else if(Manager.input.mouseInRect(1462, 874, 400, 106))
-		{
-			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
-					: ContentManager.GLOW_RECTANGLE_HOVER), 1432, 844, null);
-		}
 		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_BACK), 100, 874, null);
-		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_SAVE), 1462, 874, null);
 
 		for(int option = 0; option < 3; option++)
 		{
@@ -125,7 +119,7 @@ public class OptionState extends GameState
 		g.drawString(text, 1594 - fontMetrics.stringWidth(text) / 2, 179 + fontMetrics.getHeight() / 4);
 		text = autosave? "On" : "Off";
 		g.drawString(text, 1594 - fontMetrics.stringWidth(text) / 2, 437 + fontMetrics.getHeight() / 4);
-		text = soundVolume + "";
+		text = (soundVolume * 2 + 100) + "";
 		g.drawString(text, 1594 - fontMetrics.stringWidth(text) / 2, 695 + fontMetrics.getHeight() / 4);
 	}
 
@@ -163,24 +157,20 @@ public class OptionState extends GameState
 			{
 				if(soundVolume > -50)
 				{
-					soundVolume -= 5;
+					soundVolume -= 2.5;
 				}
 			}
 			else if(Manager.input.mouseInRect(1734, 642, 60, 106))
 			{
-				if(soundVolume < 10)
+				if(soundVolume < 0)
 				{
-					soundVolume +=5;
+					soundVolume +=2.5;
 				}
 			}
 			else if(Manager.input.mouseInRect(100, 874, 360, 106))
 			{
-				revert();
-				gsm.setOptions(false);
-			}
-			else if(Manager.input.mouseInRect(1462, 874, 360, 106))
-			{
 				save();
+				gsm.setOptions(false);
 			}
 		}
 	}
@@ -279,6 +269,6 @@ public class OptionState extends GameState
 				break;
 		}
 		autosave = Boolean.parseBoolean(settings.get("autosave") + "");
-		soundVolume = Integer.parseInt(settings.get("soundVolume") + "");
+		soundVolume = Float.parseFloat(settings.get("soundVolume") + "f");
 	}
 }

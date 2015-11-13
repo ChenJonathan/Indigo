@@ -33,6 +33,7 @@ public class IncendiaryTurret extends Entity
 	public static final double TURRET_HEIGHT = 110;
 	public static final int BASE_HEALTH = 250;
 	public static final int BASE_EXPERIENCE = 70;
+	public static final int MAX_RANGE = 2000;
 	public static final int FIRE_RATE = 60;
 
 	public IncendiaryTurret(Stage stage, double x, double y)
@@ -200,6 +201,8 @@ public class IncendiaryTurret extends Entity
 		g.rotate(groundAngle - Math.PI / 2, getX(), getY());
 		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 		g.rotate(-(groundAngle - Math.PI / 2), getX(), getY());
+		
+		super.render(g);
 	}
 
 	public void attack()
@@ -214,6 +217,11 @@ public class IncendiaryTurret extends Entity
 	{
 		double deltaX = stage.getPlayer().getX() - getX();
 		double deltaY = -(stage.getPlayer().getY() - getY());
+
+		if(Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) > MAX_RANGE)
+		{
+			return false;
+		}
 
 		if(deltaX == 0)
 		{

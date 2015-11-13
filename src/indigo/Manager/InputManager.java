@@ -46,13 +46,6 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 	public static final int ESCAPE = 18;
 
 	/**
-	 * Default constructor.
-	 */
-	public InputManager()
-	{
-	}
-
-	/**
 	 * Updates mouse and key states. Previous mouse position is tracked to help check for changes in mouse state.
 	 */
 	public void update()

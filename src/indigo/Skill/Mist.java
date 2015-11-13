@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import indigo.Landscape.Land;
 import indigo.Landscape.Platform;
 import indigo.Landscape.Wall;
+import indigo.Manager.ContentManager;
+import indigo.Manager.SoundManager;
 import indigo.Phase.Phase;
 import indigo.Stage.Stage;
 
@@ -17,6 +19,7 @@ public class Mist extends Skill
 	{
 		super(phase, position);
 		id = Skill.MIST;
+		icon = ContentManager.getImage(ContentManager.SKILL_MIST);
 		castOnSelect = true;
 	}
 
@@ -33,6 +36,8 @@ public class Mist extends Skill
 					- player.getY(), 2)));
 			deltaX = (stage.getMouseX() - player.getX()) / distance;
 			deltaY = (stage.getMouseY() - player.getY()) / distance;
+			
+			SoundManager.play(ContentManager.TELEPORT_EFFECT);
 		}
 		else if(player.shifted())
 		{

@@ -66,7 +66,6 @@ public class Player extends Entity
 	// Stamina costs - Crouch stamina is the minimum stamina required to start crouching
 	public static final int CROUCH_STAMINA_COST = 1;
 	public static final int CROUCH_STAMINA_REQUIREMENT = 25;
-	public static final int SHIFT_STAMINA_COST = 33;
 
 	// Amount regenerated
 	public static final int HEALTH_REGEN = 0;
@@ -75,13 +74,13 @@ public class Player extends Entity
 
 	// Time between each regeneration
 	public static final int HEALTH_REGEN_DELAY = 15;
-	public static final int MANA_REGEN_DELAY = 15;
+	public static final int MANA_REGEN_DELAY = 3;
 	public static final int STAMINA_REGEN_DELAY = 1;
 
 	// Time until next regeneration after corresponding value is lowered (through damage, skillcasting, or blocking)
 	public static final int HEALTH_REGEN_LONG_DELAY = 150;
 	public static final int MANA_REGEN_LONG_DELAY = 150;
-	public static final int STAMINA_REGEN_LONG_DELAY = 30;
+	public static final int STAMINA_REGEN_LONG_DELAY = 10;
 
 	public Player(Stage stage, double x, double y, int health, int mana, int stamina)
 	{
@@ -404,6 +403,8 @@ public class Player extends Entity
 		{
 			weapon.render(g);
 		}
+		
+		super.render(g);
 	}
 
 	public double getWeaponXOffset()

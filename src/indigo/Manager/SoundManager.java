@@ -17,7 +17,7 @@ public class SoundManager
 	// List of currently playing sounds
 	private static ArrayList<Clip> playingSounds = new ArrayList<>();
 
-	// Current Sound Volume (Between -50f and 10f)
+	// Current Sound Volume (Between -50f and 0f)
 	private static float currVolume;
 
 	/**
@@ -75,8 +75,6 @@ public class SoundManager
 
 	/**
 	 * Pauses every currently playing sound
-	 * 
-	 * @param snd The SoundData of the sound to be stopped
 	 */
 	public static void stopAll()
 	{
@@ -94,7 +92,7 @@ public class SoundManager
 	 * 
 	 * @param newVolume The new Volume of the Sound Clips
 	 */
-	public static void changeVolume(int newVolume)
+	public static void changeVolume(float newVolume)
 	{
 		currVolume = newVolume;
 		synchronized(playingSounds)

@@ -4,6 +4,7 @@ import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -65,7 +66,9 @@ public class ClearStageState extends GameState
 		if(Manager.input.keyPress(InputManager.ESCAPE))
 		{
 			gsm.setState(GameStateManager.MENU);
-			// Play sound
+
+			SoundManager.stopAll();
+			SoundManager.play(ContentManager.TITLE_THEME);
 		}
 		// TODO If the Data.victory is true and stage number is equal to Data.unlockedStages, increase
 		// Data.stagesToUnlock by one

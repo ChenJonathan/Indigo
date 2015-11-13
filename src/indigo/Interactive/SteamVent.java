@@ -22,8 +22,8 @@ public class SteamVent extends Interactive
 	private final int DEFAULT = 0;
 	private final int DEATH = 1;
 
-	public static final double WIDTH = 130;
-	public static final double HEIGHT = 110;
+	public static final double WIDTH = 100;
+	public static final double HEIGHT = 15;
 	public static final int DURATION = 60;
 
 	public SteamVent(Stage stage, double x, double y)
@@ -34,7 +34,7 @@ public class SteamVent extends Interactive
 
 		timer = 0;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.STEAM_VENT), -1);
 
 		// Finding closest wall
 		double minDistance = 500;

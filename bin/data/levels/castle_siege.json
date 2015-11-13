@@ -1,0 +1,56 @@
+{
+    "name":"Castle Siege",
+    "type":"Defend",
+
+    "mapX":6000,
+    "mapY":2000,
+
+    "startingX":5900,
+    "startingY":1800,
+
+    "survivalDuration":5400,
+
+    "coreX":3400,
+    "coreY":800,
+
+    "landscape":[
+        {"type":"Platform", "x1":6000, "y1":1900, "x2":0, "y2":1900}
+        {"type":"Platform", "x1":5100, "y1":1700, "x2":800, "y2":1700}
+        {"type":"Platform", "x1":4900, "y1":1500, "x2":1400, "y2":1500}
+        {"type":"Platform", "x1":4700, "y1":1300, "x2":1900, "y2":1300}
+        {"type":"Platform", "x1":4400, "y1":1100, "x2":2400, "y2":1100}
+        {"type":"Platform", "x1":4200, "y1":900, "x2":2700, "y2":900}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Harvester", "x":2800, "y":800, "respawnTime":900}
+        {"category":"Entity", "type":"Harvester", "x":4000, "y":800, "respawnTime":900}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1000, "y":1600, "respawnTime":1350}
+        {"category":"Entity", "type":"Flying Bot", "x":1700, "y":700, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":2100, "y":300, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":2300, "y":700, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":1100, "y":500, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":5500, "y":1600, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":5400, "y":1200, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":1500, "y":1200, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":1100, "y":800, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":5000, "y":500, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":4800, "y":300, "respawnTime":1800}
+        {"category":"Entity", "type":"Flying Bot", "x":4300, "y":300, "respawnTime":1800}
+        {"category":"Interactive", "type":"Health Pickup", "x":4000, "y":1200, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":3800, "y":1000, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":4200, "y":1400, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":4400, "y":1600, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":3000, "y":1000, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":2800, "y":1200, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":2500, "y":1400, "respawnTime":750}
+        {"category":"Interactive", "type":"Health Pickup", "x":2300, "y":1600, "respawnTime":750}
+        {"category":"Entity", "type":"Flying Bot", "x":2000, "y":1000, "respawnTime":900}
+        {"category":"Entity", "type":"Flying Bot", "x":2200, "y":600, "respawnTime":900}
+        {"category":"Entity", "type":"Flying Bot", "x":4700, "y":700, "respawnTime":900}
+        {"category":"Entity", "type":"Flying Bot", "x":4700, "y":1100, "respawnTime":900}
+        {"category":"Entity", "type":"Flying Bot", "x":4600, "y":500, "respawnTime":900}
+        {"category":"Entity", "type":"Incendiary Turret", "x":4100, "y":800, "respawnTime":1350}
+        {"category":"Entity", "type":"Incendiary Turret", "x":2700, "y":800, "respawnTime":1350}
+    ]
+}

@@ -105,6 +105,8 @@ public class FlyingBot extends Entity
 			g.drawImage(ContentManager.getImage(ContentManager.FLYING_BOT_CANNON), (int)(getX() + 15), (int)(getY() - 5.5), null);
 			g.rotate(-angle, getX(), getY());
 		}
+		
+		super.render(g);
 	}
 	
 	public String getName()

@@ -1,5 +1,6 @@
 package indigo.Skill;
 
+import indigo.Manager.ContentManager;
 import indigo.Manager.Manager;
 import indigo.Phase.Phase;
 import indigo.Projectile.GeyserParticle;
@@ -14,6 +15,7 @@ public class Geyser extends Skill
 	{
 		super(phase, position);
 		id = Skill.GEYSER;
+		icon = ContentManager.getImage(ContentManager.SKILL_GEYSER);
 	}
 
 	public void update()

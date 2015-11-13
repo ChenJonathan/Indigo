@@ -1,0 +1,92 @@
+{
+    "name":"Deep Forest",
+    "type":"Travel",
+
+    "mapX":2400,
+    "mapY":8000,
+
+    "startingX":100,
+    "startingY":7800,
+
+    "timeLimit":12000,
+
+    "destinationX":1200,
+    "destinationY":300,
+
+    "landscape":[
+        {"type":"Platform", "x1":1000, "y1":7400, "x2":1400, "y2":7400}
+        {"type":"Platform", "x1":1800, "y1":7400, "x2":1900, "y2":7400}
+        {"type":"Platform", "x1":1900, "y1":7400, "x2":2100, "y2":7200}
+        {"type":"Platform", "x1":2100, "y1":7200, "x2":2400, "y2":7200}
+        {"type":"Platform", "x1":700, "y1":7700, "x2":1000, "y2":7400}
+        {"type":"Platform", "x1":600, "y1":7800, "x2":700, "y2":7700}
+        {"type":"Platform", "x1":1700, "y1":7400, "x2":1800, "y2":7400}
+        {"type":"Platform", "x1":2000, "y1":7000, "x2":1800, "y2":7000}
+        {"type":"Platform", "x1":1800, "y1":7000, "x2":1500, "y2":6800}
+        {"type":"Platform", "x1":1500, "y1":6800, "x2":1000, "y2":6800}
+        {"type":"Platform", "x1":800, "y1":6800, "x2":500, "y2":6700}
+        {"type":"Platform", "x1":500, "y1":6300, "x2":700, "y2":6200}
+        {"type":"Platform", "x1":500, "y1":6700, "x2":0, "y2":6700}
+        {"type":"Platform", "x1":500, "y1":6300, "x2":300, "y2":6500}
+        {"type":"Platform", "x1":1100, "y1":6100, "x2":1400, "y2":6100}
+        {"type":"Platform", "x1":1100, "y1":5900, "x2":800, "y2":5900}
+        {"type":"Platform", "x1":1400, "y1":5900, "x2":1700, "y2":5900}
+        {"type":"Platform", "x1":800, "y1":5700, "x2":600, "y2":5700}
+        {"type":"Platform", "x1":1800, "y1":5800, "x2":2000, "y2":5600}
+        {"type":"Platform", "x1":2100, "y1":5500, "x2":2400, "y2":5500}
+        {"type":"Platform", "x1":600, "y1":5500, "x2":400, "y2":5500}
+        {"type":"Platform", "x1":300, "y1":5400, "x2":0, "y2":5400}
+        {"type":"Platform", "x1":1000, "y1":6200, "x2":700, "y2":6200}
+        {"type":"Platform", "x1":300, "y1":5200, "x2":500, "y2":5200}
+        {"type":"Platform", "x1":700, "y1":5100, "x2":900, "y2":5100}
+        {"type":"Platform", "x1":2100, "y1":5300, "x2":1800, "y2":5200}
+        {"type":"Platform", "x1":1800, "y1":5000, "x2":1500, "y2":5000}
+        {"type":"Platform", "x1":1000, "y1":5000, "x2":1200, "y2":5000}
+        {"type":"Wall", "x1":0, "y1":7900, "x2":2400, "y2":7900}
+        {"type":"Platform", "x1":2400, "y1":4800, "x2":0, "y2":4800}
+        {"type":"Platform", "x1":300, "y1":4700, "x2":0, "y2":4400}
+        {"type":"Platform", "x1":2100, "y1":4700, "x2":2400, "y2":4400}
+        {"type":"Platform", "x1":100, "y1":4200, "x2":400, "y2":4200}
+        {"type":"Platform", "x1":2300, "y1":4200, "x2":2000, "y2":4200}
+        {"type":"Platform", "x1":500, "y1":4000, "x2":800, "y2":3900}
+        {"type":"Platform", "x1":1900, "y1":4000, "x2":1600, "y2":3900}
+        {"type":"Platform", "x1":1000, "y1":3800, "x2":1400, "y2":3800}
+        {"type":"Wall", "x1":1100, "y1":3900, "x2":1300, "y2":3900}
+        {"type":"Platform", "x1":900, "y1":3600, "x2":700, "y2":3400}
+        {"type":"Platform", "x1":1400, "y1":3600, "x2":1600, "y2":3400}
+        {"type":"Platform", "x1":600, "y1":3300, "x2":400, "y2":3200}
+        {"type":"Platform", "x1":1700, "y1":3300, "x2":1900, "y2":3200}
+        {"type":"Platform", "x1":300, "y1":3100, "x2":0, "y2":3100}
+        {"type":"Platform", "x1":2000, "y1":3100, "x2":2400, "y2":3100}
+        {"type":"Platform", "x1":400, "y1":3000, "x2":600, "y2":3000}
+        {"type":"Platform", "x1":300, "y1":2800, "x2":100, "y2":2600}
+        {"type":"Platform", "x1":300, "y1":2500, "x2":600, "y2":2500}
+        {"type":"Platform", "x1":1000, "y1":2500, "x2":1400, "y2":2500}
+        {"type":"Platform", "x1":2200, "y1":2900, "x2":2400, "y2":2900}
+        {"type":"Platform", "x1":2000, "y1":2800, "x2":1800, "y2":2800}
+        {"type":"Platform", "x1":1700, "y1":2600, "x2":1600, "y2":2500}
+        {"type":"Platform", "x1":1100, "y1":2300, "x2":1300, "y2":2300}
+        {"type":"Platform", "x1":1100, "y1":2100, "x2":1300, "y2":2100}
+        {"type":"Platform", "x1":1400, "y1":1900, "x2":1800, "y2":1700}
+        {"type":"Platform", "x1":1800, "y1":1700, "x2":2100, "y2":1600}
+        {"type":"Platform", "x1":2100, "y1":1600, "x2":2400, "y2":1600}
+        {"type":"Platform", "x1":2000, "y1":1400, "x2":1700, "y2":1300}
+        {"type":"Platform", "x1":1700, "y1":1300, "x2":1300, "y2":1000}
+        {"type":"Platform", "x1":1300, "y1":1000, "x2":900, "y2":900}
+        {"type":"Platform", "x1":900, "y1":900, "x2":500, "y2":700}
+        {"type":"Platform", "x1":500, "y1":700, "x2":0, "y2":700}
+        {"type":"Platform", "x1":400, "y1":500, "x2":700, "y2":400}
+        {"type":"Platform", "x1":700, "y1":400, "x2":1500, "y2":400}
+        {"type":"Platform", "x1":0, "y1":1300, "x2":200, "y2":1300}
+    ],
+
+    "spawns":[
+        {"category":"Entity", "type":"Flying Bot", "x":1100, "y":5500, "respawnTime":600}
+        {"category":"Interactive", "type":"Checkpoint", "x":1200, "y":4700, "respawnTime":-1}
+        {"category":"Entity", "type":"Incendiary Turret", "x":1200, "y":4000, "respawnTime":900}
+        {"category":"Interactive", "type":"Health Pickup", "x":1200, "y":3700, "respawnTime":12000}
+        {"category":"Interactive", "type":"Health Pickup", "x":1200, "y":2000, "respawnTime":12000}
+        {"category":"Entity", "type":"Incendiary Turret", "x":100, "y":1200, "respawnTime":12000}
+        {"category":"Entity", "type":"Flying Bot", "x":1200, "y":3000, "respawnTime":1800}
+    ]
+}

@@ -4,6 +4,7 @@ import indigo.Manager.ContentManager;
 import indigo.Manager.GameStateManager;
 import indigo.Manager.InputManager;
 import indigo.Manager.Manager;
+import indigo.Manager.SoundManager;
 
 import java.awt.Graphics2D;
 
@@ -70,6 +71,9 @@ public class PauseState extends GameState
 			{
 				gsm.setState(GameStateManager.MENU);
 				gsm.setPaused(false);
+
+				SoundManager.stopAll();
+				SoundManager.play(ContentManager.TITLE_THEME);
 			}
 		}
 		if(Manager.input.keyPress(InputManager.ESCAPE))

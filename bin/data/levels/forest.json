@@ -1,0 +1,85 @@
+{
+    "name":"Forest",
+    "type":"Travel",
+
+    "mapX":16000,
+    "mapY":5000,
+
+    "startingX":100,
+    "startingY":4700,
+
+    "timeLimit":9000,
+
+    "destinationX":15700,
+    "destinationY":4000,
+
+    "landscape":[
+        {"type":"Wall", "x1":0, "y1":4800, "x2":1300, "y2":4800}
+        {"type":"Wall", "x1":1300, "y1":4800, "x2":1300, "y2":4700}
+        {"type":"Wall", "x1":1300, "y1":4700, "x2":2000, "y2":4700}
+        {"type":"Spike Wall", "x1":2000, "y1":5000, "x2":2300, "y2":5000}
+        {"type":"Wall", "x1":2000, "y1":4700, "x2":2000, "y2":5000}
+        {"type":"Wall", "x1":2300, "y1":4700, "x2":2300, "y2":5000}
+        {"type":"Wall", "x1":2300, "y1":4700, "x2":3800, "y2":4700}
+        {"type":"Platform", "x1":2700, "y1":4500, "x2":2900, "y2":4500}
+        {"type":"Platform", "x1":2900, "y1":4300, "x2":3100, "y2":4300}
+        {"type":"Platform", "x1":3100, "y1":4100, "x2":3300, "y2":4100}
+        {"type":"Wall", "x1":3900, "y1":4700, "x2":4900, "y2":4700}
+        {"type":"Platform", "x1":4500, "y1":4000, "x2":4900, "y2":4000}
+        {"type":"Wall", "x1":3800, "y1":4700, "x2":3800, "y2":4600}
+        {"type":"Wall", "x1":3900, "y1":4600, "x2":3800, "y2":4600}
+        {"type":"Wall", "x1":3900, "y1":4600, "x2":3900, "y2":4700}
+        {"type":"Wall", "x1":4900, "y1":4700, "x2":6000, "y2":4700}
+        {"type":"Wall", "x1":6000, "y1":4700, "x2":6300, "y2":4700}
+        {"type":"Wall", "x1":6300, "y1":4700, "x2":6500, "y2":4700}
+        {"type":"Spike Wall", "x1":7600, "y1":5000, "x2":13400, "y2":5000}
+        {"type":"Wall", "x1":6500, "y1":4700, "x2":6500, "y2":4200}
+        {"type":"Wall", "x1":6500, "y1":4200, "x2":7600, "y2":4200}
+        {"type":"Wall", "x1":7600, "y1":4200, "x2":7600, "y2":5000}
+        {"type":"Wall", "x1":8900, "y1":5000, "x2":8900, "y2":4900}
+        {"type":"Wall", "x1":8900, "y1":4900, "x2":9100, "y2":4900}
+        {"type":"Wall", "x1":9100, "y1":4900, "x2":9100, "y2":5000}
+        {"type":"Wall", "x1":9500, "y1":5000, "x2":9500, "y2":4800}
+        {"type":"Wall", "x1":9700, "y1":4800, "x2":9700, "y2":5000}
+        {"type":"Wall", "x1":9700, "y1":4800, "x2":9500, "y2":4800}
+        {"type":"Wall", "x1":13300, "y1":5000, "x2":13300, "y2":4900}
+        {"type":"Wall", "x1":13300, "y1":4900, "x2":13500, "y2":4900}
+        {"type":"Wall", "x1":13500, "y1":4900, "x2":13500, "y2":5000}
+        {"type":"Wall", "x1":13700, "y1":5000, "x2":13700, "y2":4600}
+        {"type":"Wall", "x1":13700, "y1":4600, "x2":13900, "y2":4600}
+        {"type":"Wall", "x1":13900, "y1":4600, "x2":13900, "y2":5000}
+        {"type":"Wall", "x1":10500, "y1":5000, "x2":10500, "y2":4900}
+        {"type":"Wall", "x1":10500, "y1":4900, "x2":10700, "y2":4900}
+        {"type":"Wall", "x1":10700, "y1":4900, "x2":10700, "y2":5000}
+        {"type":"Wall", "x1":11600, "y1":4700, "x2":11600, "y2":5000}
+        {"type":"Wall", "x1":11600, "y1":4700, "x2":11400, "y2":4700}
+        {"type":"Wall", "x1":11400, "y1":5000, "x2":11400, "y2":4700}
+        {"type":"Wall", "x1":12500, "y1":4900, "x2":12500, "y2":5000}
+        {"type":"Wall", "x1":12500, "y1":4900, "x2":12700, "y2":4900}
+        {"type":"Wall", "x1":12700, "y1":4900, "x2":12700, "y2":5000}
+        {"type":"Spike Wall", "x1":13400, "y1":5000, "x2":14100, "y2":5000}
+        {"type":"Wall", "x1":14400, "y1":4100, "x2":16000, "y2":4100}
+        {"type":"Wall", "x1":14400, "y1":4100, "x2":14400, "y2":4900}
+    ],
+
+    "spawns":[
+        {"category":"Interactive", "type":"Health Pickup", "x":3200, "y":4000, "respawnTime":15000}
+        {"category":"Interactive", "type":"Health Pickup", "x":4700, "y":3800, "respawnTime":15000}
+        {"category":"Entity", "type":"Tree", "x":6100, "y":4600, "respawnTime":300}
+        {"category":"Interactive", "type":"Checkpoint", "x":7000, "y":4100, "respawnTime":-1}
+        {"category":"Entity", "type":"Tree", "x":9000, "y":4800, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":9600, "y":4700, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":13400, "y":4800, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":13800, "y":4500, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":10600, "y":4800, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":11500, "y":4600, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":8200, "y":4900, "respawnTime":300}
+        {"category":"Entity", "type":"Tree", "x":12600, "y":4800, "respawnTime":300}
+        {"category":"Entity", "type":"Harvester", "x":4600, "y":4600, "respawnTime":2700}
+        {"category":"Entity", "type":"Flying Bot", "x":11000, "y":4100, "respawnTime":1800}
+        {"category":"Entity", "type":"Tree", "x":4400, "y":4600, "respawnTime":12000}
+        {"category":"Entity", "type":"Harvester", "x":6400, "y":4600, "respawnTime":12000}
+        {"category":"Entity", "type":"Incendiary Turret", "x":14300, "y":4500, "respawnTime":12000}
+        {"category":"Entity", "type":"Flying Bot", "x":2500, "y":4400, "respawnTime":3600}
+    ]
+}

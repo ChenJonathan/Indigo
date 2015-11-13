@@ -19,8 +19,9 @@ public class Data
 
 	private int[] talents;
 
-	private JSONObject currentStage;
 	private int unlockedStages;
+
+	private int currentStage;
 	private int clearTime;
 	private boolean victory;
 
@@ -46,7 +47,8 @@ public class Data
 		talents = new int[NUM_PHASES * NUM_TALENTS];
 
 		unlockedStages = 0;
-
+		currentStage = 0;
+		
 		killer = "";
 		deathMessage = "You were killed by _";
 
@@ -60,7 +62,6 @@ public class Data
 	 */
 	public void resetLevelData()
 	{
-		currentStage = null;
 		clearTime = 0;
 		victory = false;
 
@@ -137,7 +138,7 @@ public class Data
 	/**
 	 * @return The current stage.
 	 */
-	public JSONObject getStage()
+	public int getStage()
 	{
 		return currentStage;
 	}
@@ -145,7 +146,7 @@ public class Data
 	/**
 	 * @param stage The new stage.
 	 */
-	public void setStage(JSONObject stage)
+	public void setStage(int stage)
 	{
 		currentStage = stage;
 	}
@@ -335,7 +336,7 @@ public class Data
 			currentSlot = slot;
 		}
 	}
-	
+
 	/**
 	 * Clears a save slot.
 	 * 

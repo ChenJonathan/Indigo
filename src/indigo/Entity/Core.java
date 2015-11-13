@@ -9,11 +9,11 @@ import java.awt.geom.Rectangle2D;
 
 public class Core extends Entity
 {
-	private final int DEFAULT = 0;
+	private final int IDLE = 0;
 	private final int DEATH = 1;
 
-	public static final double CORE_WIDTH = 110;
-	public static final double CORE_HEIGHT = 130;
+	public static final double CORE_WIDTH = 124;
+	public static final double CORE_HEIGHT = 162;
 	public static final int BASE_HEALTH = 2000;
 
 	public Core(Stage stage, double x, double y, int health)
@@ -30,7 +30,7 @@ public class Core extends Entity
 
 		friendly = true;
 
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEFAULT), -1);
+		setAnimation(IDLE, ContentManager.getAnimation(ContentManager.CORE_IDLE), -1);
 	}
 
 	public void update()
@@ -50,7 +50,9 @@ public class Core extends Entity
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2 + 30), null);
+		
+		super.render(g);
 	}
 
 	public String getName()
@@ -60,19 +62,19 @@ public class Core extends Entity
 
 	public Shape getHitbox()
 	{
-		return new Rectangle2D.Double(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
+		return new Rectangle2D.Double(getX() - getWidth() / 8, getY() - getHeight() / 2 + 30, getWidth() / 2, getHeight() - 30);
 	}
 
 	public boolean isActive()
 	{
-		return currentAnimation != DEATH;
+		return !isDead();
 	}
 
 	public void die()
 	{
 		if(currentAnimation != DEATH)
 		{
-			setAnimation(DEATH, ContentManager.getAnimation(ContentManager.TURRET_BASE_DEATH), 2);
+			dead = true; // TODO Animation
 		}
 	}
 }

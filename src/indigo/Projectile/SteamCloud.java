@@ -1,6 +1,5 @@
 package indigo.Projectile;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -29,7 +28,7 @@ public class SteamCloud extends Projectile
 		solid = true;
 		flying = true;
 		
-		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.MORTAR), -1);
+		setAnimation(DEFAULT, ContentManager.getAnimation(ContentManager.STEAM_CLOUD), -1);
 	}
 	
 	public SteamCloud(Interactive interactive, double x, double y, double velX, double velY, int dmg)
@@ -53,8 +52,7 @@ public class SteamCloud extends Projectile
 
 	public void render(Graphics2D g)
 	{
-		g.setColor(Color.GRAY);
-		g.fill(getHitbox());
+		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
 	}
 	
 	public String getName()
