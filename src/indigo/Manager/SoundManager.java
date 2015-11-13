@@ -16,6 +16,7 @@ public class SoundManager
 {
 	// List of currently playing sounds
 	private static ArrayList<Clip> playingSounds = new ArrayList<>();
+	private static ArrayList<ContentManager.SoundData> playingData = new ArrayList<>();
 
 	// Current Sound Volume (Between -50f and 0f)
 	private static float currVolume;
@@ -49,20 +50,25 @@ public class SoundManager
 					if(arg0.getType() == LineEvent.Type.STOP)
 						synchronized(playingSounds)
 						{
-							for(int i = 0; i < playingSounds.size(); i++)
+							synchronized(playingData)
 							{
-								if(!playingSounds.get(i).isRunning())
+								for(int i = 0; i < playingSounds.size(); i++)
 								{
-									playingSounds.get(i).stop();
-									playingSounds.get(i).close();
-									playingSounds.remove(i);
-									break;
+									if(!playingSounds.get(i).isRunning())
+									{
+										playingSounds.get(i).stop();
+										playingSounds.get(i).close();
+										playingSounds.remove(i);
+										playingData.remove(i);
+										break;
+									}
 								}
 							}
 						}
 				}
 			});
 			playingSounds.add(AudioClip);
+			playingData.add(snd);
 			AudioClip.start();
 		}
 		catch(Exception Ex)
@@ -70,6 +76,29 @@ public class SoundManager
 			Ex.printStackTrace();
 			System.out.println("Error playing sound.");
 			System.exit(0);
+		}
+	}
+	
+	/**
+	 * Removes the specified SoundData from the currently playing sounds
+	 * 
+	 * @param snd The SoundData to remove
+	 */
+	public static void removeSound(ContentManager.SoundData snd)
+	{
+		synchronized(playingSounds)
+		{
+			synchronized(playingData)
+			{
+				while(playingData.lastIndexOf(snd) != -1)
+				{
+					int currIndex = playingData.lastIndexOf(snd);
+					playingSounds.get(currIndex).stop();
+					playingSounds.get(currIndex).close();
+					playingSounds.remove(currIndex);
+					playingData.remove(currIndex);
+				}
+			}
 		}
 	}
 
