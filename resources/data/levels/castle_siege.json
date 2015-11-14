@@ -8,7 +8,7 @@
     "startingX":5900,
     "startingY":1800,
 
-    "survivalDuration":5400,
+    "survivalDuration":2000,
 
     "coreX":3400,
     "coreY":800,
@@ -48,7 +48,5 @@
         {"category":"Entity", "type":"Flying Bot", "x":4700, "y":700, "respawnTime":900}
         {"category":"Entity", "type":"Flying Bot", "x":4700, "y":1100, "respawnTime":900}
         {"category":"Entity", "type":"Flying Bot", "x":4600, "y":500, "respawnTime":900}
-        {"category":"Entity", "type":"Incendiary Turret", "x":4100, "y":800, "respawnTime":1350}
-        {"category":"Entity", "type":"Incendiary Turret", "x":2700, "y":800, "respawnTime":1350}
     ]
 }

@@ -38,17 +38,17 @@ public class PauseState extends GameState
 		if(Manager.input.mouseInRect(373, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
-					: ContentManager.GLOW_RECTANGLE_HOVER), 343, 70, null);
+					: ContentManager.GLOW_RECTANGLE_HOVER), 343, 470, null);
 		}
 		else if(Manager.input.mouseInRect(781, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
-					: ContentManager.GLOW_RECTANGLE_HOVER), 751, 70, null);
+					: ContentManager.GLOW_RECTANGLE_HOVER), 751, 470, null);
 		}
 		else if(Manager.input.mouseInRect(1189, 500, 358, 106))
 		{
 			g.drawImage(ContentManager.getImage(Manager.input.mouseLeftDown()? ContentManager.GLOW_RECTANGLE_CLICK
-					: ContentManager.GLOW_RECTANGLE_HOVER), 1159, 70, null);
+					: ContentManager.GLOW_RECTANGLE_HOVER), 1159, 470, null);
 		}
 		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_RESUME), 373, 500, null);
 		g.drawImage(ContentManager.getImage(ContentManager.BUTTON_OPTIONS), 781, 500, null);

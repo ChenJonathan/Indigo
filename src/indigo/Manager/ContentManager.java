@@ -48,7 +48,7 @@ public class ContentManager
 	public static ImageData OVERLAY_SELECT = new ImageData("/images/hud/overlay_select.png", 125, 125);
 	public static ImageData SKILL_GEYSER = new ImageData("/images/hud/skill_geyser.png", 125, 125);
 	public static ImageData SKILL_ICE_ARMOR = new ImageData("/images/hud/skill_ice_armor.png", 125, 125);
-	public static ImageData SKILL_ICE_CHAINS = new ImageData("/images/hud/skill_mist.png", 125, 125);
+	public static ImageData SKILL_ICE_CHAINS = new ImageData("/images/hud/skill_ice_chains.png", 125, 125);
 	public static ImageData SKILL_LOCKED = new ImageData("/images/hud/skill_locked.png", 125, 125);
 	public static ImageData SKILL_MIST = new ImageData("/images/hud/skill_mist.png", 125, 125);
 	public static ImageData SKILL_PULSE = new ImageData("/images/hud/skill_pulse.png", 125, 125);

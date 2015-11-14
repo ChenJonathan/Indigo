@@ -19,7 +19,7 @@ public class Blockade extends Entity
 
 	public static final double BLOCKADE_WIDTH = 200;
 	public static final double BLOCKADE_HEIGHT = 200;
-	public static final int BASE_HEALTH = 500;
+	public static final int BASE_HEALTH = 300;
 	public static final int BASE_EXPERIENCE = 30;
 
 	public Blockade(Stage stage, double x, double y)

@@ -8,7 +8,7 @@
     "startingX":100,
     "startingY":300,
 
-    "timeLimit":4500,
+    "timeLimit":5500,
 
     "destinationX":200,
     "destinationY":3800,
@@ -78,27 +78,10 @@
         {"category":"Entity", "type":"Gatling Turret", "x":4800, "y":100, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":1600, "y":200, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":6900, "y":200, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":7600, "y":200, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":9200, "y":900, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":8700, "y":1200, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":7800, "y":1500, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":7400, "y":1800, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":6400, "y":2200, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":5000, "y":2800, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":4400, "y":3100, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":3900, "y":3300, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":3000, "y":3600, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":2500, "y":3700, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":900, "y":700, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":2900, "y":500, "respawnTime":600}
-        {"category":"Entity", "type":"Flying Bot", "x":5700, "y":2400, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":5400, "y":2600, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":4700, "y":2800, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":3500, "y":3300, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":2000, "y":3700, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":1500, "y":3700, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":1200, "y":3700, "respawnTime":300}
-        {"category":"Entity", "type":"Flying Bot", "x":900, "y":3700, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":700, "y":3800, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":9900, "y":1100, "respawnTime":300}
         {"category":"Entity", "type":"Flying Bot", "x":10700, "y":1100, "respawnTime":300}
@@ -111,22 +94,7 @@
         {"category":"Projectile", "type":"Steel Beam", "x":3600, "y":0, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":3800, "y":0, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":4000, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":4200, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":4400, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":4700, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":4900, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":5300, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":5500, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":6400, "y":0, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":6600, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":7100, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":7300, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":7900, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":8100, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":8300, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":8600, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":8800, "y":0, "respawnTime":30}
-        {"category":"Projectile", "type":"Steel Beam", "x":9000, "y":0, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":6500, "y":1000, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":6800, "y":1000, "respawnTime":30}
         {"category":"Entity", "type":"Flying Bot", "x":2100, "y":100, "respawnTime":600}
@@ -143,7 +111,6 @@
         {"category":"Entity", "type":"Flying Bot", "x":1000, "y":100, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":5700, "y":200, "respawnTime":600}
         {"category":"Entity", "type":"Flying Bot", "x":4100, "y":200, "respawnTime":600}
-        {"category":"Entity", "type":"Gatling Turret", "x":11300, "y":1100, "respawnTime":600}
         {"category":"Interactive", "type":"Health Pickup", "x":9600, "y":300, "respawnTime":900}
         {"category":"Projectile", "type":"Steel Beam", "x":6800, "y":900, "respawnTime":30}
         {"category":"Projectile", "type":"Steel Beam", "x":6500, "y":900, "respawnTime":30}

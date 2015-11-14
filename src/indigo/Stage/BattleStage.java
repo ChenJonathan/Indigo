@@ -97,7 +97,7 @@ public class BattleStage extends Stage
 	{
 		if(lastEnemy != null && !entities.contains(lastEnemy))
 		{
-			//playState.endGame(true);
+			playState.endGame(true);
 		}
 
 		// Check for dead respawnables and respawn them when time is up

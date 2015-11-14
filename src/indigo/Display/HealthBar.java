@@ -15,7 +15,7 @@ public class HealthBar
 
 	public static final int WIDTH = 110;
 	public static final int HEIGHT = 20;
-	public static final int OFFSET = 25;
+	public static final int OFFSET = 30;
 	public static final int DURATION = 300;
 
 	public HealthBar(Entity ent)
