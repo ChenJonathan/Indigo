@@ -75,7 +75,7 @@ public class HUD
 		g.setColor(Color.BLUE);
 		g.fill(new Rectangle2D.Double(502, 988, mana / player.getMaxMana() * MANA_BAR_LENGTH, 18));
 		g.setColor(Color.YELLOW);
-		g.fill(new Rectangle2D.Double(506, 1007, experience / data.getMaxExperience() * EXPERIENCE_BAR_LENGTH, 4));
+		g.fill(new Rectangle2D.Double(506, 1007, experience / data.getMaxExperience() * EXPERIENCE_BAR_LENGTH, 8));
 
 		// Draw skill icons and cooldowns
 		for(int skill = 0; skill < Data.NUM_SKILLS; skill++)
@@ -119,7 +119,7 @@ public class HUD
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 		FontMetrics fontMetrics = g.getFontMetrics();
 		String text = data.getLevel() + "";
-		g.drawString(text, 438 - fontMetrics.stringWidth(text) / 2, 1012 + fontMetrics.getHeight() / 4);
+		g.drawString(text, 439 - fontMetrics.stringWidth(text) / 2, 1012 + fontMetrics.getHeight() / 4);
 
 		// Draws the stamina spring
 		double staminaRatio = 1 - (double)player.getStamina() / player.getMaxStamina();

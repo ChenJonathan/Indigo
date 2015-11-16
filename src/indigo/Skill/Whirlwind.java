@@ -26,7 +26,7 @@ public class Whirlwind extends Skill
 		{
 			endCast();
 		}
-		else
+		else if(castTime % 2 == 0)
 		{
 			player.jumpMore();
 		}

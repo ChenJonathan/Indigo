@@ -152,16 +152,14 @@ public class Player extends Entity
 		}
 		else if(currentAnimation == WHIRLWIND_LEFT || currentAnimation == WHIRLWIND_RIGHT)
 		{
-			if(animation.hasPlayedOnce())
+			if(animation.hasPlayed(2))
 			{
 				canAttack(true);
 				canMove(true);
 				canTurn(true);
 
 				dodging = false;
-				width = PLAYER_WIDTH;
-				height = PLAYER_HEIGHT;
-				
+
 				((IceSword)weapon).setWhirlwind(false);
 			}
 		}
@@ -398,13 +396,21 @@ public class Player extends Entity
 
 	public void render(Graphics2D g)
 	{
-		g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
+		if(currentAnimation == WHIRLWIND_LEFT || currentAnimation == WHIRLWIND_RIGHT)
+		{
+			g.drawImage(animation.getImage(), (int)(getX() - 100), (int)(getY() - 60), null);
+		}
+		else
+		{
+			g.drawImage(animation.getImage(), (int)(getX() - getWidth() / 2), (int)(getY() - getHeight() / 2), null);
+		}
 
-		if(hasWeapon() && currentAnimation != MIST)
+		if(hasWeapon() && currentAnimation != MIST && currentAnimation != WHIRLWIND_LEFT
+				&& currentAnimation != WHIRLWIND_RIGHT)
 		{
 			weapon.render(g);
 		}
-		
+
 		super.render(g);
 	}
 
@@ -707,12 +713,10 @@ public class Player extends Entity
 
 			setVelX(0);
 			setVelY(0);
-			
+
 			((IceSword)weapon).setWhirlwind(true);
 
 			dodging = true;
-			width = 200;
-			height = 120;
 
 			jump();
 			jumpMore();
@@ -721,7 +725,8 @@ public class Player extends Entity
 			{
 				if(iceArmor)
 				{
-					setAnimation(WHIRLWIND_RIGHT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_RIGHT_ARMOR), 1);
+					setAnimation(WHIRLWIND_RIGHT,
+							ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_RIGHT_ARMOR), 1);
 				}
 				else
 				{
@@ -732,7 +737,8 @@ public class Player extends Entity
 			{
 				if(iceArmor)
 				{
-					setAnimation(WHIRLWIND_LEFT, ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_LEFT_ARMOR), 1);
+					setAnimation(WHIRLWIND_LEFT,
+							ContentManager.getAnimation(ContentManager.PLAYER_WHIRLWIND_LEFT_ARMOR), 1);
 				}
 				else
 				{
@@ -751,7 +757,7 @@ public class Player extends Entity
 		else
 		{
 			return (currentAnimation == WHIRLWIND_LEFT || currentAnimation == WHIRLWIND_RIGHT)
-					&& animation.getFrame() == 7;
+					&& animation.hasPlayedOnce() && animation.getFrame() == 7;
 		}
 	}
 
@@ -762,6 +768,29 @@ public class Player extends Entity
 
 	public void die()
 	{
+		uncrouch();
+		removeWeapon();
+
+		canAttack(false);
+		canMove(false);
+		canTurn(false);
+
+		flying = true;
+		if(currentAnimation == MIST)
+		{
+			dodging = false;
+			frictionless = false;
+			solid = true;
+		}
+
+		setVelX(0);
+		setVelY(0);
+
+		if(phase.skillSelected())
+		{
+			phase.deselectSkill();
+		}
+
 		if(isFacingRight())
 		{
 			if(iceArmor)
@@ -785,31 +814,8 @@ public class Player extends Entity
 			}
 		}
 
-		uncrouch();
-		removeWeapon();
-
 		setHealth(0);
 
-		canAttack(false);
-		canMove(false);
-		canTurn(false);
-
-		flying = true;
-		if(currentAnimation == MIST)
-		{
-			dodging = false;
-			frictionless = false;
-			solid = true;
-		}
-
-		setVelX(0);
-		setVelY(0);
-
-		if(phase.skillSelected())
-		{
-			phase.deselectSkill();
-		}
-		
 		SoundManager.play(ContentManager.DEATH_EFFECT);
 	}
 

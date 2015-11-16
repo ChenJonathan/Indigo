@@ -1,6 +1,5 @@
 package indigo.Stage;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 
 import javax.imageio.ImageIO;
@@ -43,8 +42,7 @@ public class SurvivalStage extends Stage
 		try
 		{
 			String fileName = ((String)json.get("name")).replace(" ", "_").toLowerCase();
-			foreground = ImageIO.read(new File(new File("").getAbsolutePath() + "/resources/images/stages/" + fileName
-					+ ".png"));
+			foreground = ImageIO.read(getClass().getResourceAsStream("/images/stages/" + fileName + ".png"));
 		}
 		catch(Exception e)
 		{

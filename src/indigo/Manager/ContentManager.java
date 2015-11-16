@@ -1,15 +1,14 @@
 package indigo.Manager;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileReader;
-import java.net.URLDecoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -386,7 +385,7 @@ public class ContentManager
 		BufferedImage img;
 		try
 		{
-			img = ImageIO.read(ContentManager.class.getResourceAsStream(path));
+			img = ImageIO.read(path.getClass().getResourceAsStream(path));
 			img = img.getSubimage(0, 0, width, height);
 			return img;
 		}
@@ -422,17 +421,15 @@ public class ContentManager
 
 	private static byte[] load(SoundData sd)
 	{
-		byte[] snd = new byte[0];
 		try
 		{
-			String FilePath = URLDecoder.decode(ContentManager.class.getResource(sd.path).getPath(), "UTF-8");
-			File AudioFile = new File(FilePath);
-			AudioInputStream ais = AudioSystem.getAudioInputStream(AudioFile);
-			AudioFormat Format = ais.getFormat();
-			snd = new byte[(int)(ais.getFrameLength() * Format.getFrameSize())];
-			ais.read(snd, 0, snd.length);
-			ais.close();
-			return snd;
+			InputStream is = new BufferedInputStream(sd.getClass().getResourceAsStream(sd.path));
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			for (int b; (b = is.read()) != -1;)
+			{
+			    out.write(b);
+			}
+			return out.toByteArray();
 		}
 		catch(Exception e)
 		{
@@ -447,8 +444,9 @@ public class ContentManager
 	{
 		try
 		{
-			path = new File("").getAbsolutePath().concat("/resources/data" + path);
-			return (JSONObject)parser.parse(new FileReader(path));
+			InputStream in = path.getClass().getResourceAsStream("/data" + path);
+			BufferedReader input = new BufferedReader(new InputStreamReader(in));
+			return (JSONObject)parser.parse(input);
 		}
 		catch(Exception e)
 		{

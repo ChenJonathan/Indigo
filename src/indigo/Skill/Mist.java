@@ -82,6 +82,8 @@ public class Mist extends Skill
 						{
 							player.die();
 							stage.trackDeath(((Wall)land).getName(), player);
+							endCast();
+							return;
 						}
 						if(((Wall)land).blocksEntities())
 						{

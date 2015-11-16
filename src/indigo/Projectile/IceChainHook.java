@@ -82,17 +82,17 @@ public class IceChainHook extends Projectile
 		{
 			// Sets velocity so that the hook travels towards the player
 			double dx = 0;
-			double dy = stage.getPlayer().getY() - getY();
+			double dy = stage.getEntities().get(0).getY() - getY();
 
-			if(getX() > stage.getPlayer().getX())
+			if(getX() > stage.getEntities().get(0).getX())
 			{
-				stage.getPlayer().setDirection(true);
-				dx = stage.getPlayer().getX() + EXTENSION_RANGE - getX();
+				stage.getEntities().get(0).setDirection(true);
+				dx = stage.getEntities().get(0).getX() + EXTENSION_RANGE - getX();
 			}
 			else
 			{
-				stage.getPlayer().setDirection(false);
-				dx = stage.getPlayer().getX() - EXTENSION_RANGE - getX();
+				stage.getEntities().get(0).setDirection(false);
+				dx = stage.getEntities().get(0).getX() - EXTENSION_RANGE - getX();
 			}
 			double scale = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
@@ -116,15 +116,15 @@ public class IceChainHook extends Projectile
 				// Set entity next to player if the hook reaches the player
 				if(attached != null)
 				{
-					if(getX() > stage.getPlayer().getX())
+					if(getX() > stage.getEntities().get(0).getX())
 					{
-						attached.setX(stage.getPlayer().getX() + EXTENSION_RANGE);
+						attached.setX(stage.getEntities().get(0).getX() + EXTENSION_RANGE);
 					}
 					else
 					{
-						attached.setX(stage.getPlayer().getX() - EXTENSION_RANGE);
+						attached.setX(stage.getEntities().get(0).getX() - EXTENSION_RANGE);
 					}
-					attached.setY(stage.getPlayer().getY() + stage.getPlayer().getHeight() / 2 - attached.getHeight()
+					attached.setY(stage.getEntities().get(0).getY() + stage.getEntities().get(0).getHeight() / 2 - attached.getHeight()
 							/ 2);
 
 					attached.canAttack(true);
@@ -231,7 +231,7 @@ public class IceChainHook extends Projectile
 		// Draw ranges from 0 to 1 in intervals of 0.05
 		g.setColor(new Color(0, 255, 255));
 		g.setStroke(new BasicStroke(3));
-		g.drawLine((int)stage.getPlayer().getX(), (int)stage.getPlayer().getY(), (int)getX(), (int)getY());
+		g.drawLine((int)stage.getEntities().get(0).getX(), (int)stage.getEntities().get(0).getY(), (int)getX(), (int)getY());
 
 		if(getX() > 0 && getX() < stage.getMapX())
 		{

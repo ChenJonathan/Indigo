@@ -49,8 +49,6 @@ public class Geyser extends Skill
 		else
 		{
 			endCast();
-			
-			SoundManager.removeSound(ContentManager.GEYSER_MID_EFFECT);
 		}
 	}
 
@@ -61,11 +59,13 @@ public class Geyser extends Skill
 
 	public void endCast()
 	{
+		super.endCast();
 		playState.getProjectiles().remove(geyser);
 		geyser = null;
 		player.canAttack(true);
 
 		phase.setAttackTimer(10);
-		super.endCast();
+		
+		SoundManager.removeSound(ContentManager.GEYSER_MID_EFFECT);
 	}
 }

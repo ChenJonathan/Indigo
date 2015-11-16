@@ -49,11 +49,7 @@ public class IceChains extends Skill
 		}
 		else if(hook.isDead() || !playState.getProjectiles().contains(hook))
 		{
-			hook = null;
 			endCast();
-
-			SoundManager.removeSound(ContentManager.ICE_CHAINS_MID_EFFECT);
-			SoundManager.play(ContentManager.ICE_CHAINS_END_EFFECT);
 		}
 	}
 
@@ -65,7 +61,11 @@ public class IceChains extends Skill
 	public void endCast()
 	{
 		super.endCast();
+		hook = null;
 		player.canAttack(true);
 		player.canTurn(true);
+
+		SoundManager.removeSound(ContentManager.ICE_CHAINS_MID_EFFECT);
+		SoundManager.play(ContentManager.ICE_CHAINS_END_EFFECT);
 	}
 }

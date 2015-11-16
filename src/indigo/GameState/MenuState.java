@@ -215,7 +215,7 @@ public class MenuState extends GameState
 			g.setColor(new Color(75, 94, 112));
 			g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
 			FontMetrics fontMetrics = g.getFontMetrics();
-			g.drawString(data.getLevel() + "", 229 - fontMetrics.stringWidth(data.getLevel() + "") / 2,
+			g.drawString(data.getLevel() + "", 230 - fontMetrics.stringWidth(data.getLevel() + "") / 2,
 					926 + fontMetrics.getHeight() / 4);
 		}
 	}

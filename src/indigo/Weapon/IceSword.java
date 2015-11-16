@@ -193,11 +193,6 @@ public class IceSword extends Weapon
 
 	public void render(Graphics2D g)
 	{
-		if(whirlwind)
-		{
-			return;
-		}
-
 		double xOffset = ((Player)user).getWeaponXOffset();
 		double yOffset = ((Player)user).getWeaponYOffset();
 
